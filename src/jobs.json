@@ -1,0 +1,57 @@
+[
+  {
+    "slug": "somerville-full-remodel",
+    "title": "Full Remodel · Somerville",
+    "desc": "2 bathrooms, kitchen, laundry on a 2-family double-decker",
+    "images": [
+      "/images/jobs/somerville-full-remodel-1.jpg",
+      "/images/jobs/somerville-full-remodel-2.jpg",
+      "/images/jobs/somerville-full-remodel-3.jpg",
+      "/images/jobs/somerville-full-remodel-4.jpg",
+      "/images/jobs/somerville-full-remodel-5.jpg",
+      "/images/jobs/somerville-full-remodel-6.jpg"
+    ]
+  },
+  {
+    "slug": "power-vent-water-heater",
+    "title": "Water Heater · 50-gal Power Vent",
+    "desc": "Out with the old, in with the new",
+    "images": [
+      "/images/jobs/power-vent-water-heater-1.jpg",
+      "/images/jobs/power-vent-water-heater-2.jpg"
+    ]
+  },
+  {
+    "slug": "atmospheric-water-heater",
+    "title": "Water Heater + Shower Trim Swap",
+    "desc": "40-gal atmospheric replacement plus new shower trim",
+    "images": [
+      "/images/jobs/atmospheric-water-heater-1.jpg",
+      "/images/jobs/atmospheric-water-heater-2.jpg",
+      "/images/jobs/atmospheric-water-heater-3.jpg",
+      "/images/jobs/atmospheric-water-heater-4.jpg",
+      "/images/jobs/atmospheric-water-heater-5.jpg"
+    ]
+  },
+  {
+    "slug": "somerville-turnover",
+    "title": "Bath Remodel · Somerville",
+    "desc": "Turnover-ready",
+    "images": [
+      "/images/jobs/somerville-turnover-1.jpg",
+      "/images/jobs/somerville-turnover-2.jpg",
+      "/images/jobs/somerville-turnover-3.jpg",
+      "/images/jobs/somerville-turnover-4.jpg"
+    ]
+  },
+  {
+    "slug": "saturday-emergency-boiler",
+    "title": "Emergency Boiler · Same-Day",
+    "desc": "Piped and wired in one shot — heat by end of day",
+    "images": [
+      "/images/jobs/saturday-emergency-boiler-1.jpg",
+      "/images/jobs/saturday-emergency-boiler-2.jpg",
+      "/images/jobs/saturday-emergency-boiler-3.jpg"
+    ]
+  }
+]
