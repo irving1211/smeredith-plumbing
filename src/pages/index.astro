@@ -55,8 +55,11 @@ const whyShane = [
   <header class="topbar" data-topbar>
     <div class="container topbar-row">
       <a class="brand" href="#top" aria-label="S. Meredith Plumbing & Heating — back to top">
-        <span class="brand-badge"><img src={`${base}images/logo-mark.png`} alt="" width="36" height="36" /></span>
-        <span class="brand-text">S. Meredith</span>
+        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="44" height="44" />
+        <span class="brand-wordmark">
+          <strong>S. Meredith</strong>
+          <em>Plumbing &amp; Heating</em>
+        </span>
       </a>
       <nav class="nav" aria-label="Main">
         <a href="#services" data-navlink="services">Services</a>
@@ -75,6 +78,7 @@ const whyShane = [
   <section class="hero" id="top">
     <div class="hero-noise" aria-hidden="true"></div>
     <div class="container hero-inner">
+      <img class="hero-logo" src={`${base}images/logo-full.png`} alt="S. Meredith Plumbing & Heating" width="220" height="217" />
       <span class="eyebrow">★★★★★ · 24/7 plumber · Saugus · North Shore &amp; Boston · Licensed &amp; Insured</span>
       <h1>The plumber <span class="display-serif">who answers</span> the phone.</h1>
       <p class="hero-lede">
@@ -361,7 +365,7 @@ const whyShane = [
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="brand-badge dark"><img src={`${base}images/logo-mark.png`} alt="" width="32" height="32" /></span>
+        <span class="footer-logo-tile"><img src={`${base}images/logo.png`} alt="S. Meredith Plumbing & Heating" width="72" height="71" /></span>
         <div>
           <strong>S. Meredith Plumbing &amp; Heating</strong>
           <span>Saugus, MA · Licensed &amp; Insured · Owner-operated</span>
@@ -468,15 +472,18 @@ const whyShane = [
     .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; transition: padding .25s ease; }
     .topbar.scrolled .topbar-row { padding: .55rem 1.75rem; }
 
-    /* Logo badge — turns the white-bg JPG into an intentional framed mark.
-       mix-blend-mode: multiply hides the white pixels against the cream tile. */
+    /* Brand: icon mark (house + wrenches, no text) paired with a real wordmark.
+       The full logo wordmark appears prominently in the hero where it can breathe. */
     .brand { display: flex; align-items: center; gap: .7rem; color: var(--black); }
-    .brand-badge { width: 44px; height: 44px; border-radius: 11px; background: var(--paper-2); display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); transition: transform .25s ease, box-shadow .2s ease, border-color .2s ease; }
-    .brand-badge.dark { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
-    .brand-badge img { width: 32px; height: 32px; mix-blend-mode: multiply; transition: transform .3s ease; }
-    .brand:hover .brand-badge { transform: rotate(-3deg); border-color: var(--line-2); box-shadow: 0 4px 14px rgba(42,31,20,.08); }
-    .brand:hover .brand-badge img { transform: scale(1.05); }
-    .brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .brand-icon { width: 44px; height: 44px; transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1); flex-shrink: 0; }
+    .brand:hover .brand-icon { transform: rotate(-4deg) scale(1.06); }
+    .brand-wordmark { display: flex; flex-direction: column; line-height: 1.05; }
+    .brand-wordmark strong { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--black); }
+    .brand-wordmark em { font-style: normal; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: .72rem; color: var(--ink-muted); letter-spacing: .04em; margin-top: 1px; }
+
+    /* Hero lockup — the FULL logo prominent so the wordmark + phone reads clearly. */
+    .hero-logo { width: 220px; height: auto; margin: 0 auto 2rem; display: block; filter: drop-shadow(0 4px 14px rgba(42,31,20,.10)); }
+    @media (max-width: 900px) { .hero-logo { width: 180px; margin-bottom: 1.6rem; } }
 
     .nav { display: flex; gap: 1.4rem; margin-left: auto; }
     .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; position: relative; padding: .25rem 0; transition: color .2s ease; }
@@ -635,8 +642,11 @@ const whyShane = [
 
     .site-footer { background: #0e0904; color: rgba(255,255,255,.55); padding: 3rem 0 2.5rem; font-size: .9rem; }
     .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem 2rem; align-items: center; }
-    .footer-brand { display: flex; align-items: center; gap: .8rem; color: #fff; }
-    .footer-brand .brand-badge.dark img { mix-blend-mode: screen; filter: brightness(1.4) contrast(1.1); }
+    .footer-brand { display: flex; align-items: center; gap: 1rem; color: #fff; }
+    /* Footer logo lives on a cream tile so the full-color brand stays readable on the dark bg.
+       No more black-on-black — the tile is the design-system answer to "logo on dark backgrounds". */
+    .footer-logo-tile { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; background: var(--paper); border-radius: 12px; padding: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.25); flex-shrink: 0; }
+    .footer-logo-tile img { width: 72px; height: auto; display: block; }
     .footer-brand strong { color: #fff; font-weight: 700; display: block; margin-bottom: .15rem; }
     .footer-brand span { color: rgba(255,255,255,.55); font-size: .82rem; }
     .footer-links { display: flex; gap: .55rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
@@ -664,9 +674,10 @@ const whyShane = [
 
     @media (max-width: 900px) {
       .nav { display: none; }
-      .topbar-row { padding: .65rem .9rem; gap: .7rem; }
-      .brand-badge { width: 38px; height: 38px; border-radius: 9px; }
-      .brand-badge img { width: 28px; height: 28px; }
+      .topbar-row { padding: .65rem .9rem; gap: .65rem; }
+      .brand-icon { width: 38px; height: 38px; }
+      .brand-wordmark strong { font-size: .98rem; }
+      .brand-wordmark em { font-size: .65rem; }
       .topbar-call { padding: .5rem .85rem; font-size: .88rem; }
       .hero { padding: 4rem 0 4rem; }
       .hero-cta { flex-direction: column; gap: .65rem; margin-bottom: .8rem; }

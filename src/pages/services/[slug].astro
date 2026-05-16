@@ -45,8 +45,11 @@ const breadcrumb = {
   <header class="topbar">
     <div class="container topbar-row">
       <a class="brand" href={base} aria-label="Back to home">
-        <span class="brand-badge"><img src={`${base}images/logo-mark.png`} alt="" width="32" height="32" /></span>
-        <span class="brand-text">S. Meredith</span>
+        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
+        <span class="brand-wordmark">
+          <strong>S. Meredith</strong>
+          <em>Plumbing &amp; Heating</em>
+        </span>
       </a>
       <nav class="nav" aria-label="Main">
         <a href={`${base}#services`}>Services</a>
@@ -112,9 +115,11 @@ const breadcrumb = {
     .topbar { background: rgba(250,247,242,.86); backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
     .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; }
     .brand { display: flex; align-items: center; gap: .65rem; color: var(--black); }
-    .brand-badge { width: 40px; height: 40px; border-radius: 10px; background: var(--paper-2); display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); }
-    .brand-badge img { width: 28px; height: 28px; mix-blend-mode: multiply; }
-    .brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .brand-icon { width: 40px; height: 40px; transition: transform .3s ease; flex-shrink: 0; }
+    .brand:hover .brand-icon { transform: rotate(-4deg) scale(1.06); }
+    .brand-wordmark { display: flex; flex-direction: column; line-height: 1.05; }
+    .brand-wordmark strong { font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); }
+    .brand-wordmark em { font-style: normal; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: .7rem; color: var(--ink-muted); letter-spacing: .04em; margin-top: 1px; }
     .nav { display: flex; gap: 1.6rem; margin-left: auto; }
     .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; }
     .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; }
