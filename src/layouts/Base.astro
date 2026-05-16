@@ -128,6 +128,7 @@ const faqJsonLd = {
     <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    <slot name="head" />
     <style is:global>
       :root {
         /* Warm-craft palette: cream base, warm dark ink, terracotta accent.

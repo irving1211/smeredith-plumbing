@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smeredithplumbing.com/sitemap.xml
+Sitemap: https://irving1211.github.io/smeredith-plumbing/sitemap.xml

@@ -1,0 +1,155 @@
+---
+import Base from '../../layouts/Base.astro';
+import areas from '../../areas.json';
+
+export function getStaticPaths() {
+  return areas.map((a) => ({ params: { town: a.slug }, props: { area: a } }));
+}
+
+const { area } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — calling from ${area.town}. `)}`;
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `https://irving1211.github.io${base}` },
+    { '@type': 'ListItem', position: 2, name: 'Service Area', item: `https://irving1211.github.io${base}#area` },
+    { '@type': 'ListItem', position: 3, name: area.town },
+  ],
+};
+---
+
+<Base title={`Plumber in ${area.town}, MA — S. Meredith Plumbing & Heating`} description={area.meta_desc}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
+
+  <header class="topbar">
+    <div class="container topbar-row">
+      <a class="brand" href={base} aria-label="Back to home">
+        <span class="brand-badge"><img src={`${base}images/logo-mark.png`} alt="" width="32" height="32" /></span>
+        <span class="brand-text">S. Meredith</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href={`${base}#services`}>Services</a>
+        <a href={`${base}#work`}>Work</a>
+        <a href={`${base}#about`}>About</a>
+        <a href={`${base}#faq`}>FAQ</a>
+      </nav>
+      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href={base}>Home</a> <span>›</span> <a href={`${base}#area`}>Service Area</a> <span>›</span> <span class="current">{area.town}</span>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>{area.h1}</h1>
+      <p class="tagline">{area.tagline}</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+        <a class="btn btn-ghost" href={smsHref}>Text Shane from {area.town}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="container">
+      <p class="intro">{area.intro}</p>
+
+      <h2>What we see in {area.town}</h2>
+      <div class="scenario-list">
+        {area.local_hooks.map((s) => (
+          <div class="scenario">
+            <h3>{s.h}</h3>
+            <p>{s.b}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>Common calls from {area.town}</h2>
+      <ul class="common-calls">
+        {area.common_calls.map((c) => <li>{c}</li>)}
+      </ul>
+
+      <div class="page-cta">
+        <h2>{area.town} homeowners — one number.</h2>
+        <p>Owner answers. Free written quote on every job. Same-day where possible.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
+        </div>
+      </div>
+
+      <p class="back-link"><a href={base}>← Back to home</a></p>
+    </div>
+  </section>
+
+  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
+
+  <style>
+    .topbar { background: rgba(250,247,242,.86); backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+    .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; }
+    .brand { display: flex; align-items: center; gap: .65rem; color: var(--black); }
+    .brand-badge { width: 40px; height: 40px; border-radius: 10px; background: var(--paper-2); display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); }
+    .brand-badge img { width: 28px; height: 28px; mix-blend-mode: multiply; }
+    .brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .nav { display: flex; gap: 1.6rem; margin-left: auto; }
+    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; }
+    .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; }
+    .topbar-call:hover { background: var(--red); color: #fff; opacity: 1; }
+
+    .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
+    .breadcrumb a { color: var(--ink-soft); }
+    .breadcrumb a:hover { color: var(--red); opacity: 1; }
+    .breadcrumb span { margin: 0 .35rem; color: var(--ink-muted); }
+    .breadcrumb .current { color: var(--ink); font-weight: 500; }
+
+    .page-hero { padding: 5rem 0 3rem; background: var(--paper); }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; max-width: 22ch; }
+    .page-hero .tagline { font-size: 1.15rem; color: var(--ink-soft); margin-bottom: 2rem; max-width: 60ch; }
+    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+    .page-body { padding: 3rem 0 7rem; background: var(--paper); }
+    .page-body .container { max-width: 800px; }
+    .intro { font-size: 1.15rem; line-height: 1.7; color: var(--ink); margin-bottom: 3rem; padding: 1.6rem 1.8rem; background: var(--paper-2); border-left: 3px solid var(--red); border-radius: 8px; }
+    .page-body h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 2.5rem 0 1.5rem; letter-spacing: -0.02em; }
+    .scenario-list { display: flex; flex-direction: column; gap: 1.4rem; margin-bottom: 3rem; }
+    .scenario { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem 1.7rem; transition: border-color .25s ease, transform .2s ease; }
+    .scenario:hover { border-color: var(--line-2); transform: translateX(2px); }
+    .scenario h3 { font-size: 1.1rem; margin-bottom: .55rem; letter-spacing: -0.015em; }
+    .scenario p { color: var(--ink-soft); margin: 0; line-height: 1.6; }
+
+    .common-calls { list-style: none; padding: 0; margin: 0 0 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .65rem; }
+    .common-calls li { background: var(--paper-2); border: 1px solid var(--line); border-radius: 8px; padding: .85rem 1.1rem; color: var(--ink); font-weight: 500; font-size: .95rem; }
+
+    .page-cta { background: var(--paper-2); border-radius: 16px; padding: 3rem 2rem; text-align: center; margin: 4rem 0 2rem; }
+    .page-cta h2 { margin-bottom: 1rem; }
+    .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }
+    .page-cta .hero-cta { justify-content: center; }
+    .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
+
+    .back-link { text-align: center; color: var(--ink-muted); margin-top: 2rem; }
+    .back-link a { color: var(--ink-soft); font-weight: 500; }
+    .back-link a:hover { color: var(--red); opacity: 1; }
+
+    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 1rem 1.8rem; border-radius: 999px; font-weight: 600; box-shadow: 0 12px 30px rgba(194,73,44,.4); z-index: 100; min-width: 240px; text-align: center; }
+    .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
+
+    @media (max-width: 900px) {
+      .nav { display: none; }
+      .page-hero { padding: 3rem 0 2rem; }
+      .hero-cta { flex-direction: column; gap: .65rem; }
+      .hero-cta .btn { justify-content: center; width: 100%; }
+      .sticky-call { display: block; }
+      body { padding-bottom: 5rem; }
+      .page-cta { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</Base>

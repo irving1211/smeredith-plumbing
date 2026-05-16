@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import jobsRaw from '../jobs.json';
+import services from '../services.json';
+import areas from '../areas.json';
 
 const base = import.meta.env.BASE_URL;
-// Prefix every job image path with the GitHub Pages base ('/smeredith-plumbing/' in prod, '/' in dev).
-// `base` always ends with '/', so strip the leading '/' from raw paths to avoid double-slashes.
 const jobs = jobsRaw.map((j) => ({
   ...j,
   images: j.images.map((src) => `${base}${src.replace(/^\//, '')}`),
@@ -13,59 +13,15 @@ const jobs = jobsRaw.map((j) => ({
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const email = 'ShaneMeredith17@gmail.com';
-
-const services = [
-  {
-    title: 'Plumbing Service & Repair',
-    body: 'The everyday stuff that ruins a day — leaks, clogs, low pressure, running toilets, frozen pipes, garbage disposals. Fast, fixed, done right.',
-  },
-  {
-    title: 'Water Heaters',
-    body: 'Tank, tankless, gas, electric, power-vent. Same-day replacements when yours quits. We pull the old, set the new, haul it away.',
-  },
-  {
-    title: 'High-Efficiency Boilers',
-    body: 'Service, repair, full replacements. Multi-zone systems, indirect tanks, Combi units. Heat back on the same day — even Saturdays.',
-  },
-  {
-    title: 'Kitchen & Bath Remodels',
-    body: 'Rough plumbing for renovations and additions. Fixtures, valves, drain lines, vanities. Done to code, done once.',
-  },
-  {
-    title: 'New Construction',
-    body: 'Plumbing for new builds and additions — rough-in to finish. Done right from the studs out, inspected and ready to occupy.',
-  },
-  {
-    title: 'Gas Installation',
-    body: 'Licensed gas line installation, repairs, and appliance hookups. Code-compliant, pressure-tested, signed off.',
-  },
-  {
-    title: '24/7 Emergency',
-    body: 'Frozen pipe at midnight. No hot water Saturday morning. Boiler out in January. Call — we answer.',
-  },
-  {
-    title: 'Service & Maintenance',
-    body: 'Annual inspections, preventive maintenance, peace-of-mind once-overs. Catch the small things before they become emergencies.',
-  },
-];
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+// Placeholder GBP search — Shane confirms his actual Google Business Profile URL, swap here.
+const googleReviewsUrl = 'https://www.google.com/search?q=S.+Meredith+Plumbing+%26+Heating+Saugus+MA';
 
 const reviews = [
-  {
-    name: 'Christina C.',
-    body: 'Reliable and quick to respond every single time. Shane has done extensive work for us and we won’t call anyone else.',
-  },
-  {
-    name: 'Rob F.',
-    body: 'Professional, responsive, and there when you need him — even after hours. Hard to find that anymore.',
-  },
-  {
-    name: 'Clare G.',
-    body: 'Fair, honest, and skilled. Friendly on top of it. Exactly what you want in a plumber.',
-  },
-  {
-    name: 'Sarah S.',
-    body: 'Quick, knowledgeable, and honest. Easy to work with from the first call to the finished job.',
-  },
+  { name: 'Christina C.', tag: 'Repeat customer', body: 'Reliable and quick to respond every single time. Shane has done extensive work for us and we won’t call anyone else.' },
+  { name: 'Rob F.', tag: 'After-hours emergency', body: 'Professional, responsive, and there when you need him — even after hours. Hard to find that anymore.' },
+  { name: 'Clare G.', tag: 'Fair pricing', body: 'Fair, honest, and skilled. Friendly on top of it. Exactly what you want in a plumber.' },
+  { name: 'Sarah S.', tag: 'Quick & honest', body: 'Quick, knowledgeable, and honest. Easy to work with from the first call to the finished job.' },
 ];
 
 const trustPillars = [
@@ -87,23 +43,28 @@ const faqs = [
   { q: 'Do you work weekends and holidays?', a: '24/7 for true emergencies. Same-day Saturday for boiler and water heater failures whenever possible. You call, Shane answers.' },
 ];
 
-// jobs imported from src/jobs.json — each job has multiple photos grouped together
+const whyShane = [
+  { h: 'You get Shane. Not a call center.', b: 'Big national chains route you through a dispatcher who books a sub-contractor who shows up when they show up. Here, you call the same person who shows up — every time.' },
+  { h: 'Upfront written quotes — never bait-and-switch.', b: 'Every job priced in writing before work starts. No “we found another problem” surprise add-ons. If something changes, we stop and talk through it before continuing.' },
+  { h: 'A decade of jobs in your town.', b: 'Saugus, Lynn, Revere, Malden, Peabody, Wakefield. We know the local housing stock, the common boiler models, the inspectors. That shows up in faster diagnosis and cleaner work.' },
+  { h: 'Parts on the truck — most jobs done same-visit.', b: 'Common boiler parts, water heater fittings, gas connectors, valves. We stock the truck for what the calls actually look like, not for what catalogs say to stock.' },
+];
 ---
 
 <Base>
-  <header class="topbar">
+  <header class="topbar" data-topbar>
     <div class="container topbar-row">
       <a class="brand" href="#top" aria-label="S. Meredith Plumbing & Heating — back to top">
-        <img src={`${base}images/logo.jpg`} alt="" width="44" height="44" />
+        <span class="brand-badge"><img src={`${base}images/logo-mark.png`} alt="" width="36" height="36" /></span>
         <span class="brand-text">S. Meredith</span>
       </a>
       <nav class="nav" aria-label="Main">
-        <a href="#services">Services</a>
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
+        <a href="#services" data-navlink="services">Services</a>
+        <a href="#work" data-navlink="work">Work</a>
+        <a href="#about" data-navlink="about">About</a>
+        <a href="#reviews" data-navlink="reviews">Reviews</a>
+        <a href="#faq" data-navlink="faq">FAQ</a>
+        <a href="#area" data-navlink="area">Area</a>
       </nav>
       <a class="topbar-call" href={`tel:${phoneTel}`}>
         <span class="topbar-call-num">{phone}</span>
@@ -112,16 +73,18 @@ const faqs = [
   </header>
 
   <section class="hero" id="top">
+    <div class="hero-noise" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <span class="eyebrow">★★★★★ · 10+ years on the Northshore · Licensed &amp; Insured</span>
+      <span class="eyebrow">★★★★★ · 24/7 plumber · Saugus · North Shore &amp; Boston · Licensed &amp; Insured</span>
       <h1>The plumber <span class="display-serif">who answers</span> the phone.</h1>
       <p class="hero-lede">
-        S. Meredith Plumbing &amp; Heating is owner-operated by Shane Meredith — every call, every job, every detail. Plumbing, heating, gas, and new construction across the Northshore and Boston. Same-day boilers. 24/7 emergencies. Free written quotes, every time.
+        Owner-operated by Shane Meredith — every call, every job, every detail. Plumbing, heating, gas, and new construction across <strong>Saugus, the North Shore, and Boston</strong>. Same-day boilers. 24/7 emergencies. Free written quotes, every time.
       </p>
       <div class="hero-cta">
         <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
-        <a class="btn btn-ghost" href="#services">See Services</a>
+        <a class="btn btn-ghost" href={smsHref}>Text photos for a quote</a>
       </div>
+      <p class="hero-sub-cta">Pipes don’t wait. Forms can.</p>
       <ul class="hero-stats">
         <li><strong>24/7</strong><span>Emergency service</span></li>
         <li><strong>10+</strong><span>Years on the Northshore</span></li>
@@ -143,6 +106,21 @@ const faqs = [
     </div>
   </section>
 
+  <section class="emergency" id="emergency" aria-label="Plumbing & heating emergencies">
+    <div class="container emergency-inner">
+      <div class="emergency-pulse" aria-hidden="true"></div>
+      <div class="emergency-copy">
+        <span class="emergency-kicker">Emergency · 24/7</span>
+        <h2>No heat? No hot water? Burst pipe?</h2>
+        <p>Call now — Shane comes out. Same-day Saturdays. After-hours included. Parts on the truck, ready to make it stop.</p>
+      </div>
+      <div class="emergency-actions">
+        <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
+        <a class="btn btn-ghost-light" href={smsHref}>Text photos to Shane</a>
+      </div>
+    </div>
+  </section>
+
   <section class="services" id="services">
     <div class="container">
       <div class="section-head">
@@ -152,11 +130,12 @@ const faqs = [
       </div>
       <div class="service-grid">
         {services.map((s, i) => (
-          <article class="service-card">
+          <a class="service-card" href={`${base}services/${s.slug}/`}>
             <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
             <h3>{s.title}</h3>
-            <p>{s.body}</p>
-          </article>
+            <p>{s.tagline}</p>
+            <span class="service-link">Read more →</span>
+          </a>
         ))}
       </div>
       <div class="services-cta">
@@ -203,28 +182,14 @@ const faqs = [
           const prev = card.querySelector('[data-prev]');
           const next = card.querySelector('[data-next]');
           const total = dots.length;
-          let idx = 0;
-          let startX = 0;
-          let currentX = 0;
-          let isDragging = false;
-          let dragMoved = false;
-          let cardWidth = 0;
+          let idx = 0, startX = 0, currentX = 0, isDragging = false, dragMoved = false, cardWidth = 0;
           const TRANSITION = 'transform .45s cubic-bezier(0.22, 0.61, 0.36, 1)';
-
           const update = () => {
             track.style.transition = TRANSITION;
             track.style.transform = `translateX(-${idx * 100}%)`;
             dots.forEach((d, i) => d.classList.toggle('active', i === idx));
           };
-
-          const onDown = (clientX) => {
-            isDragging = true;
-            dragMoved = false;
-            startX = clientX;
-            currentX = clientX;
-            cardWidth = card.getBoundingClientRect().width;
-            track.style.transition = 'none';
-          };
+          const onDown = (clientX) => { isDragging = true; dragMoved = false; startX = clientX; currentX = clientX; cardWidth = card.getBoundingClientRect().width; track.style.transition = 'none'; };
           const onMove = (clientX) => {
             if (!isDragging) return;
             currentX = clientX;
@@ -244,20 +209,16 @@ const faqs = [
             else if (delta > threshold && idx === 0) idx = total - 1;
             update();
           };
-
           card.addEventListener('touchstart', (e) => onDown(e.touches[0].clientX), { passive: true });
           card.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX), { passive: true });
           card.addEventListener('touchend', onUp);
-
           card.addEventListener('mousedown', (e) => { e.preventDefault(); onDown(e.clientX); });
           window.addEventListener('mousemove', (e) => { if (isDragging) onMove(e.clientX); });
           window.addEventListener('mouseup', onUp);
           card.addEventListener('mouseleave', () => { if (isDragging) onUp(); });
-
           prev?.addEventListener('click', (e) => { e.stopPropagation(); idx = (idx - 1 + total) % total; update(); });
           next?.addEventListener('click', (e) => { e.stopPropagation(); idx = (idx + 1) % total; update(); });
           dots.forEach((d) => d.addEventListener('click', (e) => { e.stopPropagation(); idx = parseInt(d.dataset.idx, 10); update(); }));
-
           card.addEventListener('click', (e) => {
             if (dragMoved) { e.preventDefault(); return; }
             if (e.target.closest('button') || e.target.closest('[data-dot]')) return;
@@ -290,6 +251,24 @@ const faqs = [
     </div>
   </section>
 
+  <section class="why" id="why">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Why Shane</span>
+        <h2>Why pick a craftsman over a <span class="display-serif">chain</span>.</h2>
+        <p class="section-sub">The thing the big-name dispatch companies can’t do, no matter how big their ad budget.</p>
+      </div>
+      <div class="why-grid">
+        {whyShane.map((w) => (
+          <article class="why-card">
+            <h3>{w.h}</h3>
+            <p>{w.b}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="reviews" id="reviews">
     <div class="container">
       <div class="section-head">
@@ -299,11 +278,17 @@ const faqs = [
       <div class="review-grid">
         {reviews.map((r) => (
           <article class="review-card">
-            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <div class="review-top">
+              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+              <span class="review-tag">{r.tag}</span>
+            </div>
             <blockquote>{r.body}</blockquote>
             <cite>— {r.name}</cite>
           </article>
         ))}
+      </div>
+      <div class="reviews-cta">
+        <a class="btn btn-ghost" href={googleReviewsUrl} target="_blank" rel="noopener">Read more on Google →</a>
       </div>
     </div>
   </section>
@@ -322,7 +307,7 @@ const faqs = [
               <span>{f.q}</span>
               <span class="faq-toggle" aria-hidden="true">+</span>
             </summary>
-            <p>{f.a}</p>
+            <div class="faq-body"><p>{f.a}</p></div>
           </details>
         ))}
       </div>
@@ -334,10 +319,22 @@ const faqs = [
       <div class="section-head">
         <span class="kicker">Service area</span>
         <h2>All of <span class="display-serif">Northshore</span> MA &amp; Boston.</h2>
-        <p class="section-sub">Based in Saugus. Working homes and job sites across:</p>
+        <p class="section-sub">Based in Saugus. Click a town for what we see locally:</p>
       </div>
       <ul class="towns">
-        <li>Saugus</li><li>Lynn</li><li>Revere</li><li>Malden</li><li>Melrose</li><li>Wakefield</li><li>Peabody</li><li>Stoneham</li><li>Everett</li><li>Somerville</li><li>Boston</li><li>Lexington</li><li>Tewksbury</li><li>Georgetown</li><li>Haverhill</li>
+        {areas.map((a) => (
+          <li><a href={`${base}areas/${a.slug}/`}>{a.town}</a></li>
+        ))}
+        <li class="town-plain">Melrose</li>
+        <li class="town-plain">Wakefield</li>
+        <li class="town-plain">Stoneham</li>
+        <li class="town-plain">Everett</li>
+        <li class="town-plain">Somerville</li>
+        <li class="town-plain">Boston</li>
+        <li class="town-plain">Lexington</li>
+        <li class="town-plain">Tewksbury</li>
+        <li class="town-plain">Georgetown</li>
+        <li class="town-plain">Haverhill</li>
       </ul>
       <p class="towns-note">Outside this list? Call anyway — if we’re close, we’ll help.</p>
     </div>
@@ -347,12 +344,10 @@ const faqs = [
     <div class="container contact-inner">
       <span class="kicker dark">Get in touch</span>
       <h2>The fastest way is a <span class="display-serif">phone call</span>.</h2>
-      <p>
-        Pipes don’t wait. No forms. No third-party dispatcher. No upsell scripts. Just Shane.
-      </p>
+      <p>Pipes don’t wait. No forms. No third-party dispatcher. No upsell scripts. Just Shane.</p>
       <div class="contact-cta">
         <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
-        <a class="btn btn-ghost-dark big" href={`mailto:${email}`}>Email Shane</a>
+        <a class="btn btn-ghost-dark big" href={smsHref}>Text Shane</a>
       </div>
       <ul class="contact-list">
         <li><span class="lbl">Phone</span><a href={`tel:${phoneTel}`}>{phone}</a></li>
@@ -366,7 +361,7 @@ const faqs = [
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <img src={`${base}images/logo.jpg`} alt="" width="40" height="40" />
+        <span class="brand-badge dark"><img src={`${base}images/logo-mark.png`} alt="" width="32" height="32" /></span>
         <div>
           <strong>S. Meredith Plumbing &amp; Heating</strong>
           <span>Saugus, MA · Licensed &amp; Insured · Owner-operated</span>
@@ -385,25 +380,25 @@ const faqs = [
     </div>
   </footer>
 
-  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
+  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>
+    <span class="sticky-pulse" aria-hidden="true"></span>
+    <span class="sticky-label">Call Shane · {phone}</span>
+  </a>
 
   <script is:inline>
-    // Sticky topbar scroll-state
+    // Sticky topbar shrink on scroll
     (() => {
-      const topbar = document.querySelector('.topbar');
+      const topbar = document.querySelector('[data-topbar]');
       if (!topbar) return;
-      const onScroll = () => {
-        if (window.scrollY > 30) topbar.classList.add('scrolled');
-        else topbar.classList.remove('scrolled');
-      };
+      const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 30);
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     })();
 
-    // Intersection-Observer scroll-reveal
+    // Restrained scroll-reveal — opacity + small Y lift, 1x only
     (() => {
       if (!('IntersectionObserver' in window)) return;
-      const targets = document.querySelectorAll('section, .work-card, .service-card, .review-card, .faq-item, .trust-grid li');
+      const targets = document.querySelectorAll('section, .work-card, .service-card, .review-card, .faq-item, .trust-grid li, .why-card');
       targets.forEach((el) => el.classList.add('reveal'));
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
@@ -413,7 +408,13 @@ const faqs = [
       targets.forEach((el) => io.observe(el));
     })();
 
-    // FAQ accordion — close siblings on open
+    // Hero stats — stagger reveal
+    (() => {
+      const items = document.querySelectorAll('.hero-stats li');
+      items.forEach((el, i) => el.style.setProperty('--stagger', `${i * 80}ms`));
+    })();
+
+    // FAQ — close siblings on open
     (() => {
       const items = document.querySelectorAll('.faq-item');
       items.forEach((item) => {
@@ -422,42 +423,110 @@ const faqs = [
         });
       });
     })();
+
+    // Active nav scroll-spy — highlights the section currently in view
+    (() => {
+      if (!('IntersectionObserver' in window)) return;
+      const links = Array.from(document.querySelectorAll('[data-navlink]'));
+      const sections = links.map((l) => document.getElementById(l.dataset.navlink)).filter(Boolean);
+      if (!sections.length) return;
+      const setActive = (id) => {
+        links.forEach((l) => l.classList.toggle('active', l.dataset.navlink === id));
+      };
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+      sections.forEach((s) => io.observe(s));
+    })();
+
+    // Smooth-scroll offset for in-page anchor links (account for sticky topbar)
+    (() => {
+      const offset = 80;
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href').slice(1);
+          if (!id) return;
+          const target = document.getElementById(id);
+          if (!target) return;
+          e.preventDefault();
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+          history.pushState(null, '', `#${id}`);
+        });
+      });
+    })();
   </script>
 
   <style>
+    /* Subtle SVG noise texture, encoded inline — adds organic depth without a network request */
+    .hero-noise { position: absolute; inset: 0; pointer-events: none; opacity: .045; mix-blend-mode: multiply; background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+
     .topbar { background: rgba(250,247,242,.78); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid transparent; position: sticky; top: 0; z-index: 50; transition: background .25s ease, border-color .25s ease, box-shadow .25s ease; }
-    .topbar.scrolled { background: rgba(250,247,242,.94); border-bottom-color: var(--line); box-shadow: 0 1px 0 rgba(0,0,0,.02), 0 6px 20px rgba(42,31,20,.05); }
+    .topbar.scrolled { background: rgba(250,247,242,.94); border-bottom-color: var(--line); box-shadow: 0 1px 0 rgba(42,31,20,.02), 0 6px 20px rgba(42,31,20,.05); }
     .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; transition: padding .25s ease; }
     .topbar.scrolled .topbar-row { padding: .55rem 1.75rem; }
-    .brand { display: flex; align-items: center; gap: .65rem; color: var(--black); }
-    .brand img { width: 36px; height: 36px; border-radius: 6px; object-fit: contain; background: #fff; }
+
+    /* Logo badge — turns the white-bg JPG into an intentional framed mark.
+       mix-blend-mode: multiply hides the white pixels against the cream tile. */
+    .brand { display: flex; align-items: center; gap: .7rem; color: var(--black); }
+    .brand-badge { width: 44px; height: 44px; border-radius: 11px; background: var(--paper-2); display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); transition: transform .25s ease, box-shadow .2s ease, border-color .2s ease; }
+    .brand-badge.dark { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
+    .brand-badge img { width: 32px; height: 32px; mix-blend-mode: multiply; transition: transform .3s ease; }
+    .brand:hover .brand-badge { transform: rotate(-3deg); border-color: var(--line-2); box-shadow: 0 4px 14px rgba(42,31,20,.08); }
+    .brand:hover .brand-badge img { transform: scale(1.05); }
     .brand-text { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; }
+
     .nav { display: flex; gap: 1.4rem; margin-left: auto; }
-    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; }
+    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; position: relative; padding: .25rem 0; transition: color .2s ease; }
+    .nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -.35rem; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: center; transition: transform .25s cubic-bezier(0.22, 0.61, 0.36, 1); border-radius: 2px; }
     .nav a:hover { color: var(--black); opacity: 1; }
+    .nav a:hover::after { transform: scaleX(.55); }
+    .nav a.active { color: var(--black); font-weight: 600; }
+    .nav a.active::after { transform: scaleX(1); }
+
     .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; letter-spacing: -0.01em; transition: background .18s ease, transform .18s ease; }
     .topbar-call:hover { background: var(--red); color: #fff; opacity: 1; transform: scale(1.03); }
     .topbar-call-num { color: #fff; }
 
-    .hero { padding: 8rem 0 7rem; background: var(--paper); position: relative; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top, rgba(244,228,201,.45), transparent 60%); pointer-events: none; }
+    .hero { padding: 8rem 0 7rem; background: var(--paper); position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(244,228,201,.55), transparent 70%); pointer-events: none; }
     .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; text-align: center; position: relative; z-index: 1; }
-    .eyebrow { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--ink-muted); letter-spacing: .02em; margin-bottom: 1.6rem; padding: .5rem 1rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); }
+    .eyebrow { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; margin-bottom: 1.6rem; padding: .55rem 1.1rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(42,31,20,.03); }
     .hero h1 { font-size: clamp(2.6rem, 7vw, 5.5rem); margin: 0 auto 1.4rem; max-width: 14ch; }
     .hero h1 .display-serif { color: var(--red); }
     .hero-lede { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-soft); max-width: 660px; margin: 0 auto 2.4rem; line-height: 1.6; font-weight: 400; }
-    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-bottom: 4rem; }
+    .hero-lede strong { color: var(--ink); font-weight: 600; }
+    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-bottom: .8rem; }
+    .hero-sub-cta { color: var(--ink-muted); font-size: .9rem; margin: 0 0 4rem; font-style: italic; }
     .hero-stats { list-style: none; padding: 0; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 720px; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: 2.4rem 0; }
-    .hero-stats li { display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+    .hero-stats li { display: flex; flex-direction: column; align-items: center; gap: .35rem; opacity: 0; transform: translateY(8px); transition: opacity .6s ease var(--stagger, 0ms), transform .6s ease var(--stagger, 0ms); }
+    .hero-stats.is-visible li, .reveal.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
+    section.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
     .hero-stats strong { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.04em; color: var(--black); line-height: 1; }
     .hero-stats span { font-size: .88rem; color: var(--ink-muted); letter-spacing: -0.005em; }
 
-    /* Trust band — sits between hero and services. 5 quick credentials. */
     .trust-band { padding: 3rem 0; background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .trust-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
-    .trust-grid li { display: flex; flex-direction: column; gap: .4rem; padding-left: 1rem; border-left: 2px solid var(--red); }
+    .trust-grid li { display: flex; flex-direction: column; gap: .4rem; padding-left: 1rem; border-left: 2px solid var(--red); transition: transform .25s ease; }
+    .trust-grid li:hover { transform: translateX(3px); }
     .trust-grid strong { font-size: 1rem; font-weight: 700; color: var(--black); letter-spacing: -0.01em; }
     .trust-grid span { font-size: .88rem; color: var(--ink-soft); line-height: 1.45; }
+
+    /* Emergency band — high-contrast urgency block. Black bg, terracotta + cream type. */
+    .emergency { padding: 4rem 0; background: linear-gradient(135deg, var(--black) 0%, #2c1f12 100%); color: #fff; position: relative; overflow: hidden; }
+    .emergency::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at right, rgba(194,73,44,.18), transparent 65%); pointer-events: none; }
+    .emergency-inner { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; position: relative; }
+    .emergency-pulse { display: none; }
+    .emergency-kicker { display: inline-block; font-size: .72rem; font-weight: 700; color: var(--red); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem; padding: .3rem .8rem; border: 1px solid var(--red); border-radius: 999px; background: rgba(194,73,44,.12); animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(194,73,44,.5); } 50% { opacity: .85; box-shadow: 0 0 0 6px rgba(194,73,44,0); } }
+    .emergency h2 { color: #fff; font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: .8rem; max-width: 22ch; }
+    .emergency p { color: rgba(255,255,255,.72); margin: 0; max-width: 50ch; line-height: 1.55; }
+    .emergency-actions { display: flex; flex-direction: column; gap: .65rem; min-width: 240px; }
+    .btn-ghost-light { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-ghost-light:hover { border-color: #fff; color: #fff; opacity: 1; background: rgba(255,255,255,.04); }
+    @media (prefers-reduced-motion: reduce) { .emergency-kicker { animation: none; } }
 
     .section-head { text-align: center; max-width: 760px; margin: 0 auto 4rem; }
     .kicker { font-size: .72rem; font-weight: 600; color: var(--red); letter-spacing: .12em; text-transform: uppercase; display: inline-block; margin-bottom: 1.2rem; }
@@ -468,20 +537,25 @@ const faqs = [
 
     .services { padding: 7rem 0; background: var(--paper); }
     .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-    .service-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.7rem; transition: transform .25s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .25s ease, border-color .25s ease; position: relative; box-shadow: 0 1px 2px rgba(42,31,20,.03); }
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(42,31,20,.08), 0 1px 3px rgba(42,31,20,.04); border-color: var(--line-2); }
-    .service-card::before { content: ''; display: block; width: 28px; height: 2px; background: var(--red); margin-bottom: 1.4rem; border-radius: 2px; }
+    .service-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.7rem; transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .3s ease, border-color .3s ease; position: relative; box-shadow: 0 1px 2px rgba(42,31,20,.03); display: flex; flex-direction: column; gap: .55rem; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(42,31,20,.08), 0 2px 6px rgba(42,31,20,.04); border-color: var(--red); opacity: 1; }
+    .service-card::before { content: ''; display: block; width: 28px; height: 2px; background: var(--red); margin-bottom: 1rem; border-radius: 2px; transition: width .3s ease; }
+    .service-card:hover::before { width: 48px; }
     .service-num { display: none; }
-    .service-card h3 { font-size: 1.18rem; margin-bottom: .55rem; letter-spacing: -0.02em; }
-    .service-card p { color: var(--ink-soft); margin: 0; font-size: .96rem; line-height: 1.55; }
+    .service-card h3 { font-size: 1.18rem; letter-spacing: -0.02em; color: var(--black); }
+    .service-card p { color: var(--ink-soft); margin: 0; font-size: .96rem; line-height: 1.55; flex: 1; }
+    .service-link { color: var(--red); font-weight: 600; font-size: .9rem; margin-top: .65rem; transition: transform .25s ease; display: inline-block; }
+    .service-card:hover .service-link { transform: translateX(4px); }
     .services-cta { text-align: center; margin-top: 4rem; }
     .services-cta p { color: var(--ink-soft); margin-bottom: 1.2rem; }
 
     .work { padding: 7rem 0; background: var(--paper-2); }
     .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; }
-    .work-card { margin: 0; position: relative; overflow: hidden; border-radius: 14px; aspect-ratio: 4/5; background: var(--paper-3); cursor: pointer; }
+    .work-card { margin: 0; position: relative; overflow: hidden; border-radius: 14px; aspect-ratio: 4/5; background: var(--paper-3); cursor: pointer; box-shadow: 0 1px 2px rgba(42,31,20,.03); transition: box-shadow .3s ease, transform .3s ease; }
+    .work-card:hover { box-shadow: 0 12px 32px rgba(42,31,20,.12); transform: translateY(-2px); }
     .carousel-track { display: flex; width: 100%; height: 100%; transition: transform .45s cubic-bezier(0.22, 0.61, 0.36, 1); }
-    .carousel-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; }
+    .carousel-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+    .work-card:hover .carousel-track img { transform: scale(1.03); }
     .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; background: rgba(250,247,242,.94); color: var(--black); border: none; font-size: 1.4rem; line-height: 1; cursor: pointer; opacity: 0; transition: opacity .25s ease, transform .15s ease, background .15s ease; box-shadow: 0 4px 14px rgba(0,0,0,.18); display: flex; align-items: center; justify-content: center; padding: 0; padding-bottom: 3px; font-weight: 600; z-index: 3; }
     .carousel-arrow.prev { left: .8rem; }
     .carousel-arrow.next { right: .8rem; }
@@ -496,40 +570,58 @@ const faqs = [
 
     .about { padding: 7rem 0; background: var(--paper); }
     .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4rem; align-items: center; }
-    .about-photo img { border-radius: 14px; aspect-ratio: 4/5; object-fit: cover; }
+    .about-photo img { border-radius: 14px; aspect-ratio: 4/5; object-fit: cover; box-shadow: 0 12px 36px rgba(42,31,20,.10); }
     .about-copy h2 { font-size: clamp(1.9rem, 3.5vw, 2.6rem); margin-bottom: 1.4rem; max-width: 18ch; }
     .about-copy h2 .display-serif { color: var(--red); font-weight: 700; }
     .about-copy p { font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 1.1rem; line-height: 1.65; }
     .about-pull { background: #fff; border-left: 3px solid var(--red); padding: 1.2rem 1.4rem; border-radius: 8px; font-size: 1.05rem !important; color: var(--ink) !important; font-weight: 500; }
     .about-pull .display-serif { color: var(--red); margin-right: .35rem; }
 
-    .reviews { padding: 7rem 0; background: var(--paper-2); }
-    .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .review-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.8rem 1.7rem; }
-    .stars { color: var(--red); font-size: 1rem; letter-spacing: .15em; margin-bottom: 1rem; }
+    .why { padding: 7rem 0; background: var(--paper-2); }
+    .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+    .why-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.8rem; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+    .why-card:hover { transform: translateY(-3px); border-color: var(--red); box-shadow: 0 8px 24px rgba(42,31,20,.08); }
+    .why-card h3 { font-size: 1.15rem; margin-bottom: .8rem; letter-spacing: -0.015em; line-height: 1.25; }
+    .why-card p { color: var(--ink-soft); margin: 0; line-height: 1.6; }
+
+    .reviews { padding: 7rem 0; background: var(--paper); }
+    .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    .review-card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; padding: 1.8rem 1.7rem; transition: border-color .25s ease, transform .25s ease; }
+    .review-card:hover { border-color: var(--line-2); transform: translateY(-2px); }
+    .review-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap; }
+    .stars { color: var(--red); font-size: 1rem; letter-spacing: .15em; }
+    .review-tag { font-size: .7rem; font-weight: 600; color: var(--ink-muted); letter-spacing: .04em; text-transform: uppercase; padding: .25rem .65rem; background: #fff; border: 1px solid var(--line); border-radius: 999px; }
     .review-card blockquote { margin: 0 0 1.2rem; color: var(--ink); font-size: 1rem; line-height: 1.6; }
     .review-card cite { font-style: normal; font-weight: 600; color: var(--ink-soft); font-size: .9rem; }
+    .reviews-cta { text-align: center; }
 
-    /* FAQ — native details/summary, styled. */
-    .faq { padding: 7rem 0; background: var(--paper); }
+    .faq { padding: 7rem 0; background: var(--paper-2); }
     .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: .75rem; }
-    .faq-item { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 0; overflow: hidden; transition: border-color .2s ease, box-shadow .2s ease; }
+    .faq-item { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 0; overflow: hidden; transition: border-color .25s ease, box-shadow .25s ease; }
     .faq-item:hover { border-color: var(--line-2); }
-    .faq-item[open] { border-color: var(--red); box-shadow: 0 4px 14px rgba(194,73,44,.08); }
-    .faq-item summary { list-style: none; padding: 1.3rem 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-weight: 600; color: var(--black); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .faq-item[open] { border-color: var(--red); box-shadow: 0 6px 18px rgba(194,73,44,.08); }
+    .faq-item summary { list-style: none; padding: 1.3rem 1.6rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-weight: 600; color: var(--black); font-size: 1.05rem; letter-spacing: -0.01em; transition: color .2s ease; }
     .faq-item summary::-webkit-details-marker { display: none; }
     .faq-item summary:hover { color: var(--red); }
-    .faq-toggle { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--paper-2); color: var(--red); font-weight: 700; font-size: 1.2rem; line-height: 1; transition: transform .25s cubic-bezier(0.22, 0.61, 0.36, 1), background .2s ease; flex-shrink: 0; }
+    .faq-toggle { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--paper-2); color: var(--red); font-weight: 700; font-size: 1.2rem; line-height: 1; transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1), background .25s ease; flex-shrink: 0; }
     .faq-item[open] .faq-toggle { transform: rotate(45deg); background: var(--red); color: #fff; }
-    .faq-item p { padding: 0 1.6rem 1.4rem; margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.65; }
+    .faq-body { padding: 0 1.6rem 1.4rem; }
+    .faq-body p { margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.65; }
 
-    .area { padding: 7rem 0; background: var(--paper-2); }
+    .area { padding: 7rem 0; background: var(--paper); }
     .towns { list-style: none; padding: 0; margin: 0 auto 1.8rem; max-width: 900px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .55rem; text-align: center; }
-    .towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .65rem .5rem; font-weight: 500; color: var(--ink); font-size: .92rem; }
+    .towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; font-weight: 500; color: var(--ink); font-size: .92rem; transition: border-color .2s ease, transform .2s ease, background .2s ease; }
+    .towns li:hover { border-color: var(--red); transform: translateY(-2px); background: var(--paper-2); }
+    .towns li a { display: block; padding: .65rem .5rem; color: var(--ink); width: 100%; }
+    .towns li a::after { content: ' →'; opacity: 0; margin-left: .2rem; transition: opacity .2s ease, margin-left .2s ease; color: var(--red); }
+    .towns li:hover a::after { opacity: 1; margin-left: .35rem; }
+    .towns li.town-plain { padding: .65rem .5rem; cursor: default; }
+    .towns li.town-plain:hover { transform: none; border-color: var(--line); background: #fff; }
     .towns-note { text-align: center; color: var(--ink-muted); font-size: .95rem; }
 
-    .contact { padding: 7rem 0; background: var(--black); color: #fff; }
-    .contact-inner { max-width: 720px; margin: 0 auto; padding: 0 1.75rem; text-align: center; }
+    .contact { padding: 7rem 0; background: var(--black); color: #fff; position: relative; overflow: hidden; }
+    .contact::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top, rgba(194,73,44,.10), transparent 60%); pointer-events: none; }
+    .contact-inner { max-width: 720px; margin: 0 auto; padding: 0 1.75rem; text-align: center; position: relative; z-index: 1; }
     .contact h2 { color: #fff; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.2rem; max-width: 16ch; margin-left: auto; margin-right: auto; }
     .contact h2 .display-serif { color: #f4b08e; font-weight: 700; }
     .contact-inner > p { color: rgba(255,255,255,.7); font-size: 1.08rem; margin: 0 0 2.4rem; }
@@ -544,7 +636,7 @@ const faqs = [
     .site-footer { background: #0e0904; color: rgba(255,255,255,.55); padding: 3rem 0 2.5rem; font-size: .9rem; }
     .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem 2rem; align-items: center; }
     .footer-brand { display: flex; align-items: center; gap: .8rem; color: #fff; }
-    .footer-brand img { border-radius: 6px; background: #fff; }
+    .footer-brand .brand-badge.dark img { mix-blend-mode: screen; filter: brightness(1.4) contrast(1.1); }
     .footer-brand strong { color: #fff; font-weight: 700; display: block; margin-bottom: .15rem; }
     .footer-brand span { color: rgba(255,255,255,.55); font-size: .82rem; }
     .footer-links { display: flex; gap: .55rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
@@ -553,35 +645,49 @@ const faqs = [
     .footer-links .dot { color: rgba(255,255,255,.25); }
     .footer-fineprint { grid-column: 1 / -1; text-align: center; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.08); margin-top: .5rem; font-size: .82rem; color: rgba(255,255,255,.4); }
 
-    /* Scroll-reveal */
+    /* Restrained scroll-reveal */
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(0.22, 0.61, 0.36, 1), transform .7s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: opacity, transform; }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
-    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 1rem 1.8rem; border-radius: 999px; text-align: center; font-weight: 600; font-size: .98rem; box-shadow: 0 12px 30px rgba(194,73,44,.45); z-index: 100; letter-spacing: -0.005em; min-width: 240px; max-width: calc(100vw - 2rem); }
+    /* Sticky mobile CTA — polished: pulse ring + clear label */
+    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: .95rem 1.7rem; border-radius: 999px; font-weight: 600; font-size: .95rem; box-shadow: 0 12px 30px rgba(194,73,44,.45); z-index: 100; letter-spacing: -0.005em; min-width: 240px; max-width: calc(100vw - 2rem); text-align: center; align-items: center; justify-content: center; gap: .55rem; }
     .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
+    .sticky-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0 rgba(255,255,255,.7); animation: sticky-pulse 2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes sticky-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,.5); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
+    .sticky-label { color: #fff; }
+    @media (prefers-reduced-motion: reduce) { .sticky-pulse { animation: none; } }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1100px) {
       .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
     }
 
     @media (max-width: 900px) {
       .nav { display: none; }
-      .topbar-row { padding: .7rem 1rem; gap: .8rem; }
+      .topbar-row { padding: .65rem .9rem; gap: .7rem; }
+      .brand-badge { width: 38px; height: 38px; border-radius: 9px; }
+      .brand-badge img { width: 28px; height: 28px; }
       .topbar-call { padding: .5rem .85rem; font-size: .88rem; }
       .hero { padding: 4rem 0 4rem; }
-      .hero-cta { flex-direction: column; gap: .65rem; margin-bottom: 3rem; }
+      .hero-cta { flex-direction: column; gap: .65rem; margin-bottom: .8rem; }
       .hero-cta .btn { justify-content: center; width: 100%; }
+      .hero-sub-cta { margin-bottom: 3rem; }
       .hero-stats { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 0; }
       .hero-stats strong { font-size: 2rem; }
       .trust-band { padding: 2.4rem 0; }
       .trust-grid { grid-template-columns: 1fr; gap: 1.2rem; }
-      .services, .work, .about, .reviews, .faq, .area, .contact { padding: 4.5rem 0; }
+      .emergency { padding: 3rem 0; }
+      .emergency-inner { grid-template-columns: 1fr; gap: 1.8rem; text-align: left; }
+      .emergency-actions { width: 100%; }
+      .emergency-actions .btn { justify-content: center; width: 100%; }
+      .services, .work, .about, .reviews, .why, .faq, .area, .contact { padding: 4.5rem 0; }
       .section-head { margin-bottom: 2.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .about-photo { max-width: 360px; margin: 0 auto; }
+      .why-grid { grid-template-columns: 1fr; }
       .faq-item summary { padding: 1.1rem 1.3rem; font-size: 1rem; }
-      .faq-item p { padding: 0 1.3rem 1.2rem; font-size: .94rem; }
+      .faq-body { padding: 0 1.3rem 1.2rem; }
+      .faq-body p { font-size: .94rem; }
       .contact-cta { flex-direction: column; gap: .65rem; }
       .contact-cta .btn { justify-content: center; width: 100%; }
       .contact-list { grid-template-columns: 1fr; }
@@ -590,8 +696,8 @@ const faqs = [
       .footer-inner { grid-template-columns: 1fr; text-align: center; }
       .footer-brand { justify-content: center; }
       .footer-links { justify-content: center; }
-      .sticky-call { display: block; }
-      body { padding-bottom: 5rem; }
+      .sticky-call { display: inline-flex; }
+      body { padding-bottom: 6.5rem; }
     }
   </style>
 </Base>

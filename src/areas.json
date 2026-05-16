@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "saugus",
+    "town": "Saugus",
+    "h1": "Plumber in Saugus, MA — 24/7 emergency, owner-operated",
+    "tagline": "Home base. Closest tools, fastest response.",
+    "meta_desc": "Local Saugus plumber — owner-operated, licensed and insured, 10+ years. 24/7 emergencies, water heaters, boilers, gas, remodels. Call 781-820-4592 — Shane answers.",
+    "intro": "Saugus is home. S. Meredith Plumbing & Heating is based here and runs every job in Saugus personally — Cliftondale, East Saugus, Pranker's Pond, Lynnhurst, Bristow, the Town Common neighborhoods, and out toward Route 1.",
+    "local_hooks": [
+      { "h": "Older housing stock around Cliftondale and East Saugus", "b": "Older homes mean older plumbing — cast iron stacks, galvanized supply lines, and 1960s-vintage water heaters that need watching. Pre-emptive replacement saves you from the 2 AM call." },
+      { "h": "Boiler season is long here", "b": "Heat runs from October through April most years. We service annually before the first cold snap and stay reachable on weekends through the heating season." },
+      { "h": "Saugus River flood-prone basements", "b": "Sump pumps and backwater valves matter more here than in inland towns. We install both and service them annually." }
+    ],
+    "common_calls": ["Water heater replacement", "Boiler service & repair", "Bath remodels", "Gas line for stove or dryer", "Emergency frozen pipe"]
+  },
+  {
+    "slug": "lynn",
+    "town": "Lynn",
+    "h1": "Plumber in Lynn, MA — North Shore boiler & water heater specialist",
+    "tagline": "Lynn's older housing stock, modern plumbing answers.",
+    "meta_desc": "Plumber serving Lynn, MA — boilers, water heaters, gas, emergencies. Owner-operated, licensed and insured. Same-day service most days. Call 781-820-4592.",
+    "intro": "Lynn has the densest stock of pre-war and triple-decker housing on the North Shore. That means cast iron drains, lead-to-galvanized water mains, and old boilers running well past their service life. We work Lynn weekly — most emergency calls on the North Shore come from this side of the line.",
+    "local_hooks": [
+      { "h": "Pre-war triple-deckers", "b": "Multi-family buildings throughout Lynn share waste stacks and old plumbing that hasn't been touched in decades. We've done full re-pipes and sectional repairs in dozens of these buildings." },
+      { "h": "Older boiler stock", "b": "1970s and 1980s cast iron boilers are still common in Lynn. Some are worth saving, many are not — we tell you straight." },
+      { "h": "Hard water means short water heater life", "b": "Lynn's water hardness shortens tank life. Tankless conversions and water-treatment options make sense for some homes — we'll quote both." }
+    ],
+    "common_calls": ["Boiler replacement", "Water heater repair", "Drain backup", "Bath remodel rough plumbing", "Emergency heat restoration"]
+  },
+  {
+    "slug": "revere",
+    "town": "Revere",
+    "h1": "Plumber in Revere, MA — coastal salt-air water heater specialist",
+    "tagline": "Revere homes face the ocean. Your plumbing should be ready.",
+    "meta_desc": "Plumber serving Revere, MA — coastal salt-air water heater corrosion, boilers, gas, emergencies. Owner-operated, licensed. Call 781-820-4592 — Shane answers.",
+    "intro": "Revere is a coastal town — and coastal towns chew through water heaters and outdoor plumbing faster than inland markets. Salt air corrodes power-vent terminations, copper supply lines, and tank exteriors. We service Revere weekly and stock the parts that the coast eats through.",
+    "local_hooks": [
+      { "h": "Salt-air corrosion on outdoor terminations", "b": "Power-vent terminations, condensate drains, and exterior gas piping corrode 2–3x faster on the coast. We use marine-grade fasteners and inspect the exterior side annually." },
+      { "h": "Older Beachmont and Point of Pines housing", "b": "Pre-war coastal cottages, many converted to year-round homes, often have plumbing that doesn't match their current use. We re-pipe and update without ripping the place apart." },
+      { "h": "Multi-family conversions", "b": "Many Revere two- and three-families share old waste stacks. We handle stack ties and pressure-test before close-up." }
+    ],
+    "common_calls": ["Water heater replacement (coastal)", "Boiler service", "Gas range hookup", "Drain & waste repair", "Sump pump install"]
+  },
+  {
+    "slug": "malden",
+    "town": "Malden",
+    "h1": "Plumber in Malden, MA — Linden, Edgeworth, & Maplewood",
+    "tagline": "Malden's mixed housing stock — one plumber for all of it.",
+    "meta_desc": "Plumber serving Malden, MA — Linden, Edgeworth, Maplewood, Faulkner. Boilers, water heaters, gas, emergencies. Owner-operated, licensed. Call 781-820-4592.",
+    "intro": "Malden runs the full range — Victorian-era homes near the Town Common, mid-century duplexes in Maplewood, and newer construction in Linden. Different vintages, different plumbing answers. We work all of them.",
+    "local_hooks": [
+      { "h": "Victorian-era supply line replacement", "b": "Older Malden homes still have galvanized supply lines that should be replaced before they fail. We re-pipe in copper or PEX, your choice." },
+      { "h": "Newer construction in Linden", "b": "PEX, modern boilers, tankless water heaters — but still needing real service when something fails. We work newer homes too." },
+      { "h": "Two-family conversions and rentals", "b": "Many Malden owners run rentals. We handle the unglamorous side — annual servicing, code compliance, no-surprise tenant turnover." }
+    ],
+    "common_calls": ["Boiler replacement", "Water heater swap", "Kitchen remodel rough plumbing", "Tenant turnover service", "Emergency drain backup"]
+  },
+  {
+    "slug": "peabody",
+    "town": "Peabody",
+    "h1": "Plumber in Peabody, MA — West, South & Centre",
+    "tagline": "Peabody's residential plumbing — done by a craftsman, not a chain.",
+    "meta_desc": "Plumber serving Peabody, MA — West Peabody, South Peabody, Peabody Centre. Boilers, water heaters, gas, emergencies. Owner-operated, licensed. Call 781-820-4592.",
+    "intro": "Peabody mixes residential neighborhoods — West, South, Peabody Centre — with the kind of homes that reward a craftsman over a national chain. We work Peabody regularly, on jobs ranging from emergency boiler swaps to full bathroom remodels.",
+    "local_hooks": [
+      { "h": "West Peabody single-family homes", "b": "Larger lots, often with attached or detached generators tied to a gas line we installed. We handle the gas-side of generator installs." },
+      { "h": "Mid-century homes in South Peabody", "b": "Many built in the 1950s and 60s — original plumbing, original boilers, often in need of upgrade before the next winter." },
+      { "h": "Peabody Centre two-families", "b": "Older multi-family stock with shared stacks. We handle stack ties and pressure tests cleanly." }
+    ],
+    "common_calls": ["Boiler service & replacement", "Generator gas line", "Bath remodel", "Water heater replacement", "Annual maintenance"]
+  }
+]
