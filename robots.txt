@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://smeredithplumbing.com/sitemap.xml
