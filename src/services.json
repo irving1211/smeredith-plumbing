@@ -13,7 +13,7 @@
       { "h": "Sewage or sump-pump failure", "b": "Backed-up drains, failed sump pumps, ejector pumps. Containment first, repair second, sanitation last." },
       { "h": "Gas smell or suspected leak", "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Licensed gas fitter, code-compliant repair, pressure-tested before sign-off." }
     ],
-    "guarantee": "All emergency labor backed by our 1-year workmanship guarantee. Manufacturer warranty applies to all parts and equipment (typically 5–12 years on boilers and water heaters)."
+    "guarantee": "Licensed Massachusetts plumber and gas fitter, fully insured. Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
   },
   {
     "slug": "water-heater-replacement",
@@ -29,7 +29,7 @@
       { "h": "Leaking tank, no hot water, pilot won't light", "b": "Diagnose first. If it's a thermocouple, control board, or element — repair. If the tank is rusted through, replacement is the only honest answer." },
       { "h": "Removal and disposal of the old unit", "b": "Pulled, drained, hauled away. No leftover hardware in your basement." }
     ],
-    "guarantee": "1-year guarantee on installation labor. Manufacturer warranty on the unit (6 years standard, 12 years on premium tier — we'll show you both quotes)."
+    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the units we install — we go over the warranty and the workmanship in writing before the job."
   },
   {
     "slug": "boiler-service",
@@ -45,7 +45,7 @@
       { "h": "Indirect-fired hot water tank", "b": "Paired with the boiler for unlimited hot water at high efficiency. Better than a standalone tank for most multi-bath homes." },
       { "h": "Multi-zone systems", "b": "New zone added for an addition or finished basement. Zone valve, thermostat, piping, controls — done right the first time." }
     ],
-    "guarantee": "1-year guarantee on installation labor. Manufacturer warranty on the boiler (typically 10–12 years on the heat exchanger, longer on premium tier)."
+    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job."
   },
   {
     "slug": "gas-installation",
@@ -61,7 +61,7 @@
       { "h": "Suspected leak or smell of gas", "b": "If you smell gas, leave the building and call the utility (National Grid 800-233-5325) first. Then call us for the repair side." },
       { "h": "Conversion from oil or propane to natural gas", "b": "Coordinated with the boiler/water heater swap when you upgrade the heating system." }
     ],
-    "guarantee": "1-year guarantee on gas-fitter labor. All work permitted and inspected per Massachusetts plumbing & gas code (248 CMR)."
+    "guarantee": "Licensed Massachusetts gas fitter. All work is permitted and inspected per Massachusetts plumbing & gas code (248 CMR), and pressure-tested before sign-off."
   },
   {
     "slug": "kitchen-bath-remodels",
@@ -77,7 +77,7 @@
       { "h": "Fixture upgrades", "b": "Replacing a tub, vanity, toilet, or shower trim without a full remodel. Most done in a day." },
       { "h": "Permits and inspections", "b": "All remodel plumbing is permitted and inspected. We handle the paperwork and the inspector visit." }
     ],
-    "guarantee": "1-year guarantee on installation labor. Manufacturer warranty on all fixtures and valves."
+    "guarantee": "Licensed and insured. All remodel plumbing is permitted and inspected. We go over fixture warranties and the workmanship in writing before the job."
   },
   {
     "slug": "new-construction-plumbing",
@@ -93,6 +93,6 @@
       { "h": "Permits and inspections", "b": "Permit pulled with the town, rough and final inspections coordinated, certificate of occupancy ready." },
       { "h": "Additions and dormers", "b": "Tying new plumbing into existing — including stack ties, vent extensions, and main upsize when warranted." }
     ],
-    "guarantee": "1-year guarantee on installation labor. Manufacturer warranty on all fixtures and equipment."
+    "guarantee": "Licensed and insured. Permits pulled, rough and final inspections passed. We go over warranties and the workmanship in writing before the job."
   }
 ]

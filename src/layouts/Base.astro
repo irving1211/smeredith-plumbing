@@ -13,23 +13,30 @@ const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const email = 'ShaneMeredith17@gmail.com';
 const business = 'S. Meredith Plumbing & Heating';
-const areaServed = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Georgetown', 'Haverhill'];
+const areaServed = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Haverhill'];
 
+// Verbatim (lightly trimmed) from Shane's verified 5-star Google reviews. Source screenshots
+// in _context/harvest/2026-05-28-owner-photo-drop/Reviews screenshot/.
 const reviewsList = [
-  { name: 'Christina C.', body: 'Reliable and quick to respond every single time. Shane has done extensive work for us and we won’t call anyone else.' },
-  { name: 'Rob F.', body: 'Professional, responsive, and there when you need him — even after hours. Hard to find that anymore.' },
-  { name: 'Clare G.', body: 'Fair, honest, and skilled. Friendly on top of it. Exactly what you want in a plumber.' },
-  { name: 'Sarah S.', body: 'Quick, knowledgeable, and honest. Easy to work with from the first call to the finished job.' },
+  { name: 'Steven B.', body: 'Shane did a great job with the plumbing for my bathroom remodel. On time, good communication, and minded every detail. Will definitely keep his name and number for the future.' },
+  { name: 'Daniel M.', body: 'Shane responded quickly to an urgent furnace repair in the middle of a winter deep freeze. Other plumbers said it could not be fixed — Shane said “I can fix it,” and he did. Highly recommend.' },
+  { name: 'Clare G.', body: 'We had a last-minute plumbing issue in our bathroom and Shane came out the same day without hesitation. Incredibly fair, honest, and responsive from start to finish. 10/10 service.' },
+  { name: 'Carly C.', body: 'Shane came out quickly and replaced the water heater without any delays. He was so understanding of my situation with four kids at home and got our hot water back as soon as possible.' },
+  { name: 'Luke B.', body: 'Same-day visit, and he arrived exactly when he said he would. Quickly diagnosed and resolved the problem, explained it in plain terms, and his pricing was very reasonable.' },
+  { name: 'Iva V.', body: 'Great job on a holiday morning for a plumbing emergency. Fast, quality work that started even before the visit via video, so we didn’t waste time. Very accommodating.' },
+  { name: 'Val K.', body: 'Very professional and pays close attention to detail. He added safety, functionality, and modernity to our plumbing at a very fair price, and explained red flags to watch for.' },
+  { name: 'Laura C.', body: 'After more than a week and multiple professionals trying to fix a complex problem in our building, Shane did it. Professional, knowledgeable, and willing to take the time to get it right.' },
+  { name: 'Amy C.', body: 'Excellent at his craft, smart, and a true problem solver. Honest, dependable, and operates with real integrity. I’ve used his services multiple times and referred him to others.' },
+  { name: 'Emilio D.', body: 'As a facilities manager responsible for multiple properties, I can confidently say S. Meredith Plumbing is one of the best in the business. Always prompt and dependable, and their pricing is very fair.' },
 ];
 
 const faqs = [
-  { q: 'Do you offer free estimates?', a: 'Yes — every job starts with a free, written estimate. No surprise pricing, no upsell scripts, no third-party dispatcher.' },
-  { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. License number provided on every written estimate and invoice.' },
-  { q: 'How fast do you respond?', a: 'Calls answered live during business hours, and returned within one hour after-hours. True emergencies (no heat in January, burst pipe, no hot water) — we come out, including nights and weekends.' },
-  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston — Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Georgetown, Haverhill, and beyond. Outside the list? Call — if we’re close, we’ll help.' },
-  { q: 'What payment methods do you take?', a: 'Cash, check, all major credit cards, and Venmo. Payment is due on completion of the work.' },
-  { q: 'Do you guarantee your work?', a: 'Yes. One-year guarantee on all labor. Manufacturer warranty covers parts and equipment (typically 5–12 years on boilers and water heaters — we’ll spell out the exact warranty before install).' },
-  { q: 'Do you handle new construction and additions?', a: 'Yes — rough-in to finish. Plumbing for new builds, additions, and gut renovations. Inspected, signed off, ready to occupy.' },
+  { q: 'Do you offer free estimates?', a: 'Yes. Every job starts with a free, written estimate. No surprise pricing, no upsell scripts, and no third-party dispatcher.' },
+  { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. MA license #9630040-PL-M is listed on every written estimate and invoice.' },
+  { q: 'How fast do you respond?', a: 'Calls are answered live during business hours and returned within one hour after-hours. For true emergencies like no heat in January, a burst pipe, or no hot water, we come out nights and weekends too.' },
+  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston, including Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Haverhill, and beyond. Outside the list? Call. If we’re close, we’ll help.' },
+  { q: 'Do you stand behind your work?', a: 'Yes. Shane is licensed and insured, and work is done to code and inspected where required. Manufacturer warranties apply to the equipment installed, and workmanship is gone over with you in writing for each job. No boilerplate.' },
+  { q: 'Do you handle new construction and additions?', a: 'Yes. From rough-in to finish, Shane handles plumbing for new builds, additions, and gut renovations. Inspected, signed off, and ready to occupy.' },
   { q: 'Do you work weekends and holidays?', a: '24/7 for true emergencies. Same-day Saturday for boiler and water heater failures whenever possible. You call, Shane answers.' },
 ];
 
@@ -69,7 +76,7 @@ const localBusinessJsonLd = {
     ratingValue: '5.0',
     reviewCount: String(reviewsList.length),
     bestRating: '5',
-    worstRating: '5',
+    worstRating: '1',
   },
   review: reviewsList.map((r) => ({
     '@type': 'Review',
@@ -93,6 +100,7 @@ const localBusinessJsonLd = {
 };
 
 const base = import.meta.env.BASE_URL;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://smeredithplumbing.com').href;
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -114,11 +122,11 @@ const faqJsonLd = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/logo.jpg" />
+    <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
     <meta name="theme-color" content="#1a120a" />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="apple-touch-icon" href={`${base}favicon.jpg`} />
-    <link rel="canonical" href="https://smeredithplumbing.com/" />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -131,21 +139,21 @@ const faqJsonLd = {
     <slot name="head" />
     <style is:global>
       :root {
-        /* Warm-craft palette: cream base, warm dark ink, terracotta accent.
-           Subtle shift from pure white — keeps trades-credibility, adds hand-feel. */
-        --black: #1a120a;
-        --ink: #2a1f14;
-        --ink-soft: #5a4a3a;
-        --ink-muted: #8a7867;
-        --line: rgba(42, 31, 20, 0.10);
-        --line-2: rgba(42, 31, 20, 0.18);
-        --paper: #faf7f2;
-        --paper-2: #f2ebe0;
-        --paper-3: #e8dfd2;
-        --highlight: #f4e4c9;
-        --red: #c2492c;
-        --red-dark: #9d3a23;
-        --gold: #b88a3a;
+        /* Tough, industrial-grade modern palette: deep soot charcoal base, solid masonry whites/greys, safety red.
+           Retains subtle paper texture for premium craft personality but increases visual contrast and trade authority. */
+        --black: #111111;
+        --ink: #1f2937;
+        --ink-soft: #4b5563;
+        --ink-muted: #6b7280;
+        --line: rgba(17, 17, 17, 0.08);
+        --line-2: rgba(17, 17, 17, 0.15);
+        --paper: #FAF9F6; /* premium linen warmth */
+        --paper-2: #F3F1EB; /* masonry grey-white */
+        --paper-3: #E7E4DC;
+        --highlight: #fee2e2; /* pale safety red tint */
+        --red: #d32f2f; /* safety red */
+        --red-dark: #b71c1c;
+        --gold: #c2902c;
       }
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
@@ -163,19 +171,23 @@ const faqJsonLd = {
       }
       h1, h2, h3, h4 {
         font-family: 'Inter', sans-serif;
-        font-weight: 800;
-        letter-spacing: -0.025em;
+        font-weight: 900;
+        letter-spacing: -0.03em;
         color: var(--black);
         margin: 0;
         line-height: 1.05;
       }
-      h1 { letter-spacing: -0.035em; line-height: 1.02; }
+      h1 { letter-spacing: -0.04em; line-height: 1.02; }
       .display-serif {
-        font-family: 'Fraunces', 'Source Serif Pro', Georgia, serif;
-        font-weight: 700;
-        font-style: italic;
-        letter-spacing: -0.02em;
-        font-variation-settings: "SOFT" 50, "opsz" 144;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.025em;
+        color: var(--red);
+        text-decoration: underline;
+        text-decoration-color: rgba(211, 47, 47, 0.25);
+        text-underline-offset: 4px;
+        text-decoration-thickness: 3px;
       }
       a { color: var(--black); text-decoration: none; transition: color .15s ease, opacity .15s ease; }
       a:hover { opacity: 0.7; }
@@ -184,25 +196,39 @@ const faqJsonLd = {
       .btn {
         display: inline-flex; align-items: center; gap: .55rem;
         padding: 1rem 1.7rem;
-        border-radius: 999px;
-        font-weight: 600;
+        border-radius: 6px;
+        font-weight: 700;
         font-size: 1rem;
         letter-spacing: -0.005em;
         transition: transform .18s ease, background .18s ease, box-shadow .18s ease, color .18s ease;
         cursor: pointer; border: none;
         font-family: inherit;
         text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
       }
       .btn-primary {
         background: var(--red); color: #fff;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        box-shadow: 0 2px 4px rgba(17, 17, 17, 0.08);
       }
-      .btn-primary:hover { background: var(--red-dark); color: #fff; opacity: 1; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(194,73,44,.28); }
+      .btn-primary:hover { background: var(--red-dark); color: #fff; opacity: 1; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(211,47,47,.28); }
       .btn-dark { background: var(--black); color: #fff; }
-      .btn-dark:hover { background: #2c1f12; color: #fff; opacity: 1; transform: translateY(-1px); }
-      .btn-ghost { background: transparent; color: var(--black); border: 1.5px solid var(--line-2); }
+      .btn-dark:hover { background: #000; color: #fff; opacity: 1; transform: translateY(-1px); }
+      .btn-ghost { background: transparent; color: var(--black); border: 2px solid var(--line-2); }
       .btn-ghost:hover { border-color: var(--black); opacity: 1; }
-      .btn-ghost-dark { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.3); }
+      .btn-secondary {
+        background: var(--paper-3);
+        color: var(--black);
+        border: 1px solid var(--line-2);
+        box-shadow: 0 1px 2px rgba(17, 17, 17, 0.05);
+      }
+      .btn-secondary:hover {
+        background: var(--paper-2);
+        border-color: var(--black);
+        transform: translateY(-1px);
+        opacity: 1;
+      }
+      .btn-ghost-dark { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.3); }
       .btn-ghost-dark:hover { border-color: #fff; color: #fff; opacity: 1; }
     </style>
   </head>

@@ -1,57 +1,52 @@
 [
   {
-    "slug": "somerville-full-remodel",
-    "title": "Full Remodel · Somerville",
-    "desc": "2 bathrooms, kitchen, laundry on a 2-family double-decker",
+    "slug": "bath-remodels",
+    "title": "Bathroom Remodels",
+    "desc": "Full bath rebuilds — tile, tub, vanity, fixtures",
     "images": [
-      "/images/jobs/somerville-full-remodel-1.jpg",
-      "/images/jobs/somerville-full-remodel-2.jpg",
-      "/images/jobs/somerville-full-remodel-3.jpg",
-      "/images/jobs/somerville-full-remodel-4.jpg",
-      "/images/jobs/somerville-full-remodel-5.jpg",
-      "/images/jobs/somerville-full-remodel-6.jpg"
+      "/images/jobs/bath-sage-tile.jpg",
+      "/images/jobs/bath-pinwheel-tub.jpg"
     ]
   },
   {
-    "slug": "power-vent-water-heater",
-    "title": "Water Heater · 50-gal Power Vent",
-    "desc": "Out with the old, in with the new",
+    "slug": "bath-marble-navy",
+    "title": "Bath Remodel · Marble & Navy",
+    "desc": "Subway accent, marble surround and floor",
     "images": [
-      "/images/jobs/power-vent-water-heater-1.jpg",
-      "/images/jobs/power-vent-water-heater-2.jpg"
+      "/images/jobs/bath-navy-marble.jpg"
     ]
   },
   {
-    "slug": "atmospheric-water-heater",
-    "title": "Water Heater + Shower Trim Swap",
-    "desc": "40-gal atmospheric replacement plus new shower trim",
+    "slug": "walk-in-shower",
+    "title": "Walk-In Shower · Stone Tile",
+    "desc": "Curbless walk-in, black fixtures, custom niche",
     "images": [
-      "/images/jobs/atmospheric-water-heater-1.jpg",
-      "/images/jobs/atmospheric-water-heater-2.jpg",
-      "/images/jobs/atmospheric-water-heater-3.jpg",
-      "/images/jobs/atmospheric-water-heater-4.jpg",
-      "/images/jobs/atmospheric-water-heater-5.jpg"
+      "/images/jobs/bath-marble-walkin.jpg"
     ]
   },
   {
-    "slug": "somerville-turnover",
-    "title": "Bath Remodel · Somerville",
-    "desc": "Turnover-ready",
+    "slug": "kitchen-remodel",
+    "title": "Kitchen Remodel · Quartz",
+    "desc": "Shaker cabinets, quartz counters, gas range",
     "images": [
-      "/images/jobs/somerville-turnover-1.jpg",
-      "/images/jobs/somerville-turnover-2.jpg",
-      "/images/jobs/somerville-turnover-3.jpg",
-      "/images/jobs/somerville-turnover-4.jpg"
+      "/images/jobs/kitchen-quartz.jpg"
     ]
   },
   {
-    "slug": "saturday-emergency-boiler",
-    "title": "Emergency Boiler · Same-Day",
-    "desc": "Piped and wired in one shot — heat by end of day",
+    "slug": "boiler-copper-piping",
+    "title": "Boiler & Near-Boiler Piping",
+    "desc": "Mod-con boiler, copper manifold, multi-zone heat",
     "images": [
-      "/images/jobs/saturday-emergency-boiler-1.jpg",
-      "/images/jobs/saturday-emergency-boiler-2.jpg",
-      "/images/jobs/saturday-emergency-boiler-3.jpg"
+      "/images/jobs/boiler-copper-manifold.jpg"
+    ]
+  },
+  {
+    "slug": "water-heater-installs",
+    "title": "Water Heater Installs",
+    "desc": "Power-vent and high-recovery gas — matched pairs",
+    "images": [
+      "/images/jobs/water-heaters-twin.jpg",
+      "/images/jobs/water-heaters-pair.jpg"
     ]
   }
 ]

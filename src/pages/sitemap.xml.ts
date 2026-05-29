@@ -4,7 +4,7 @@ import areas from '../areas.json';
 
 export const GET: APIRoute = ({ site }) => {
   const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-  const origin = (site?.toString() || 'https://irving1211.github.io').replace(/\/$/, '');
+  const origin = (site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
   const today = new Date().toISOString().slice(0, 10);
 
   const urls = [

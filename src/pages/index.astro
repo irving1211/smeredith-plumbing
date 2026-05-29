@@ -13,15 +13,25 @@ const jobs = jobsRaw.map((j) => ({
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const email = 'ShaneMeredith17@gmail.com';
+const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
+const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
-// Placeholder GBP search — Shane confirms his actual Google Business Profile URL, swap here.
-const googleReviewsUrl = 'https://www.google.com/search?q=S.+Meredith+Plumbing+%26+Heating+Saugus+MA';
+// Owner-confirmed Google Business Profile share link (2026-05-28).
+const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
 
+// Verbatim (lightly trimmed) from Shane's verified 5-star Google reviews. Source screenshots
+// in _context/harvest/2026-05-28-owner-photo-drop/Reviews screenshot/.
 const reviews = [
-  { name: 'Christina C.', tag: 'Repeat customer', body: 'Reliable and quick to respond every single time. Shane has done extensive work for us and we won’t call anyone else.' },
-  { name: 'Rob F.', tag: 'After-hours emergency', body: 'Professional, responsive, and there when you need him — even after hours. Hard to find that anymore.' },
-  { name: 'Clare G.', tag: 'Fair pricing', body: 'Fair, honest, and skilled. Friendly on top of it. Exactly what you want in a plumber.' },
-  { name: 'Sarah S.', tag: 'Quick & honest', body: 'Quick, knowledgeable, and honest. Easy to work with from the first call to the finished job.' },
+  { name: 'Steven B.', tag: 'Bathroom remodel', body: 'Shane did a great job with the plumbing for my bathroom remodel. On time, good communication, and minded every detail. Will definitely keep his name and number for the future.' },
+  { name: 'Daniel M.', tag: 'Winter furnace emergency', body: 'Shane responded quickly to an urgent furnace repair in the middle of a winter deep freeze. Other plumbers said it could not be fixed — Shane said “I can fix it,” and he did.' },
+  { name: 'Clare G.', tag: 'Last-minute issue', body: 'We had a last-minute plumbing issue in our bathroom and Shane came out the same day without hesitation. Incredibly fair, honest, and responsive from start to finish. 10/10 service.' },
+  { name: 'Carly C.', tag: 'Water heater replacement', body: 'Shane came out quickly and replaced the water heater without any delays. He was so understanding of my situation with four kids at home and got our hot water back as soon as possible.' },
+  { name: 'Luke B.', tag: 'Same-day emergency visit', body: 'Same-day visit, and he arrived exactly when he said he would. Quickly diagnosed and resolved the problem, explained it in plain terms, and his pricing was very reasonable.' },
+  { name: 'Iva V.', tag: 'Holiday morning emergency', body: 'Great job on a holiday morning for a plumbing emergency. Fast, quality work that started even before the visit via video, so we didn’t waste time. Very accommodating.' },
+  { name: 'Val K.', tag: 'Attention to detail', body: 'Very professional and pays close attention to detail. He added safety, functionality, and modernity to our plumbing at a very fair price, and explained red flags to watch for.' },
+  { name: 'Laura C.', tag: 'Complex system repair', body: 'After more than a week and multiple professionals trying to fix a complex problem in our building, Shane did it. Professional, knowledgeable, and willing to take the time to get it right.' },
+  { name: 'Amy C.', tag: 'Repeat customer', body: 'Excellent at his craft, smart, and a true problem solver. Honest, dependable, and operates with real integrity. I’ve used his services multiple times and referred him to others.' },
+  { name: 'Emilio D.', tag: 'Property manager', body: 'As a facilities manager responsible for multiple properties, I can say S. Meredith Plumbing is one of the best. Always prompt and dependable, and their pricing is very fair.' },
 ];
 
 const trustPillars = [
@@ -33,21 +43,20 @@ const trustPillars = [
 ];
 
 const faqs = [
-  { q: 'Do you offer free estimates?', a: 'Yes — every job starts with a free, written estimate. No surprise pricing, no upsell scripts, no third-party dispatcher.' },
-  { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. License number provided on every written estimate and invoice.' },
-  { q: 'How fast do you respond?', a: 'Calls answered live during business hours, and returned within one hour after-hours. True emergencies (no heat in January, burst pipe, no hot water) — we come out, including nights and weekends.' },
-  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston — Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Georgetown, Haverhill, and beyond. Outside the list? Call — if we’re close, we’ll help.' },
-  { q: 'What payment methods do you take?', a: 'Cash, check, all major credit cards, and Venmo. Payment is due on completion of the work.' },
-  { q: 'Do you guarantee your work?', a: 'Yes. One-year guarantee on all labor. Manufacturer warranty covers parts and equipment (typically 5–12 years on boilers and water heaters — we’ll spell out the exact warranty before install).' },
-  { q: 'Do you handle new construction and additions?', a: 'Yes — rough-in to finish. Plumbing for new builds, additions, and gut renovations. Inspected, signed off, ready to occupy.' },
+  { q: 'Do you offer free estimates?', a: 'Yes. Every job starts with a free, written estimate. No surprise pricing, no upsell scripts, and no third-party dispatcher.' },
+  { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. MA license #9630040-PL-M is listed on every written estimate and invoice.' },
+  { q: 'How fast do you respond?', a: 'Calls are answered live during business hours and returned within one hour after-hours. For true emergencies like no heat in January, a burst pipe, or no hot water, we come out nights and weekends too.' },
+  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston, including Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Haverhill, and beyond. Outside the list? Call. If we’re close, we’ll help.' },
+  { q: 'Do you stand behind your work?', a: 'Yes. Shane is licensed and insured, and work is done to code and inspected where required. Manufacturer warranties apply to the equipment installed, and workmanship is gone over with you in writing for each job. No boilerplate.' },
+  { q: 'Do you handle new construction and additions?', a: 'Yes. From rough-in to finish, Shane handles plumbing for new builds, additions, and gut renovations. Inspected, signed off, and ready to occupy.' },
   { q: 'Do you work weekends and holidays?', a: '24/7 for true emergencies. Same-day Saturday for boiler and water heater failures whenever possible. You call, Shane answers.' },
 ];
 
 const whyShane = [
-  { h: 'You get Shane. Not a call center.', b: 'Big national chains route you through a dispatcher who books a sub-contractor who shows up when they show up. Here, you call the same person who shows up — every time.' },
-  { h: 'Upfront written quotes — never bait-and-switch.', b: 'Every job priced in writing before work starts. No “we found another problem” surprise add-ons. If something changes, we stop and talk through it before continuing.' },
+  { h: 'You get Shane. Not a call center.', b: 'Big national chains route you through a dispatcher who books a sub-contractor who shows up when they show up. Here, you call the same person who shows up every time.' },
+  { h: 'Upfront written quotes. Never bait-and-switch.', b: 'Every job is priced in writing before work starts. No “we found another problem” surprise add-ons. If something changes, we stop and talk through it before continuing.' },
   { h: 'A decade of jobs in your town.', b: 'Saugus, Lynn, Revere, Malden, Peabody, Wakefield. We know the local housing stock, the common boiler models, the inspectors. That shows up in faster diagnosis and cleaner work.' },
-  { h: 'Parts on the truck — most jobs done same-visit.', b: 'Common boiler parts, water heater fittings, gas connectors, valves. We stock the truck for what the calls actually look like, not for what catalogs say to stock.' },
+  { h: 'Parts on the truck. Most jobs done same visit.', b: 'Common boiler parts, water heater fittings, gas connectors, and valves. We stock the truck for what the calls actually look like, not for what catalogs say to stock.' },
 ];
 ---
 
@@ -69,31 +78,152 @@ const whyShane = [
         <a href="#faq" data-navlink="faq">FAQ</a>
         <a href="#area" data-navlink="area">Area</a>
       </nav>
-      <a class="topbar-call" href={`tel:${phoneTel}`}>
-        <span class="topbar-call-num">{phone}</span>
-      </a>
+      <div class="topbar-actions">
+        <a class="topbar-call" href={`tel:${phoneTel}`}>
+          <span class="topbar-call-num">{phone}</span>
+        </a>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+          data-menu-toggle
+        >
+          <span class="menu-toggle-box" aria-hidden="true">
+            <span class="menu-toggle-line"></span>
+          </span>
+          <span class="menu-toggle-text">Menu</span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true">
+      <div class="mobile-menu-grid">
+        <a class="mobile-menu-link" href="#services" data-navlink="services" data-mobile-link>
+          <strong>Services</strong>
+          <span>Repairs, boilers & remodels</span>
+        </a>
+        <a class="mobile-menu-link" href="#work" data-navlink="work" data-mobile-link>
+          <strong>Our Work</strong>
+          <span>See recent local jobs</span>
+        </a>
+        <a class="mobile-menu-link" href="#about" data-navlink="about" data-mobile-link>
+          <strong>About Shane</strong>
+          <span>Licensed & owner-operated</span>
+        </a>
+        <a class="mobile-menu-link" href="#reviews" data-navlink="reviews" data-mobile-link>
+          <strong>Reviews</strong>
+          <span>Real neighbor feedback</span>
+        </a>
+        <a class="mobile-menu-link" href="#faq" data-navlink="faq" data-mobile-link>
+          <strong>FAQ</strong>
+          <span>Pricing & emergency info</span>
+        </a>
+        <a class="mobile-menu-link" href="#area" data-navlink="area" data-mobile-link>
+          <strong>Service Area</strong>
+          <span>North Shore & Boston</span>
+        </a>
+      </div>
+      <div class="mobile-menu-meta">
+        <p>MA License #9630040-PL-M · Fully insured</p>
+        <a href={`mailto:${email}`}>{email}</a>
+      </div>
     </div>
   </header>
+  <button class="mobile-menu-scrim" type="button" aria-label="Close navigation menu" data-menu-scrim></button>
 
   <section class="hero" id="top">
     <div class="hero-noise" aria-hidden="true"></div>
-    <div class="container hero-inner">
-      <img class="hero-logo" src={`${base}images/logo-full.png`} alt="S. Meredith Plumbing & Heating" width="220" height="217" />
-      <span class="eyebrow">★★★★★ · 24/7 plumber · Saugus · North Shore &amp; Boston · Licensed &amp; Insured</span>
-      <h1>The plumber <span class="display-serif">who answers</span> the phone.</h1>
-      <p class="hero-lede">
-        Owner-operated by Shane Meredith — every call, every job, every detail. Plumbing, heating, gas, and new construction across <strong>Saugus, the North Shore, and Boston</strong>. Same-day boilers. 24/7 emergencies. Free written quotes, every time.
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
-        <a class="btn btn-ghost" href={smsHref}>Text photos for a quote</a>
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-brand-line">
+            <img class="hero-mini-logo" src={`${base}images/logo-icon.png`} alt="" width="48" height="48" />
+            <span class="hero-brand-text">
+              <strong>S. MEREDITH</strong>
+              <span>PLUMBING & HEATING</span>
+            </span>
+          </div>
+
+          <div class="hero-badge">
+            <span class="hero-live-dot"></span>
+            <strong>24/7 EMERGENCY SERVICE · SAUGUS, NORTH SHORE & BOSTON</strong>
+          </div>
+
+          <h1>The plumber <span class="display-serif">who answers</span> the phone.</h1>
+          
+          <p class="hero-lede">
+            Owner-operated by Shane Meredith. Every call, every job, every detail. Plumbing, heating, gas & additions across <strong>Saugus, the North Shore & Boston</strong>. Same-day boilers. 24/7 emergencies. Free written quotes.
+          </p>
+
+          <div class="hero-trust-bullets">
+            <div class="trust-bullet">
+              <span class="bullet-icon">✓</span>
+              <div>
+                <strong>Direct Owner Line</strong>
+                <span class="hide-mobile">Shane answers directly. No call centers or dispatchers.</span>
+              </div>
+            </div>
+            <div class="trust-bullet">
+              <span class="bullet-icon">✓</span>
+              <div>
+                <strong>Licensed & Fully Insured</strong>
+                <span class="hide-mobile">MA License #9630040-PL-M. Work is built to code.</span>
+              </div>
+            </div>
+            <div class="trust-bullet">
+              <span class="bullet-icon">✓</span>
+              <div>
+                <strong>Stocked Van On-Site</strong>
+                <span class="hide-mobile">Common parts on the truck for single-visit repair.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-cta">
+            <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <a class="btn btn-secondary" href={smsHref}>Text photos for a quote</a>
+          </div>
+          <p class="hero-sub-cta">Pipes don’t wait. Forms can.</p>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="hero-image-wrap">
+              <img class="hero-owner-img" src={`${base}images/shane.jpg`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" />
+              <div class="hero-image-overlay">
+                <span class="badge-status">ON CALL 24/7</span>
+              </div>
+            </div>
+            <div class="hero-card-footer">
+              <div class="hero-card-meta">
+                <strong>Shane Meredith</strong>
+                <span>Owner-operated licensed plumber</span>
+              </div>
+              <div class="hero-card-stars">
+                <span class="star-rating">★★★★★</span>
+                <span>5.0 Rating · 10 Verified Reviews Excerpts</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="hero-sub-cta">Pipes don’t wait. Forms can.</p>
+
       <ul class="hero-stats">
         <li><strong>24/7</strong><span>Emergency service</span></li>
         <li><strong>10+</strong><span>Years on the Northshore</span></li>
         <li><strong>1:1</strong><span>You call, Shane answers</span></li>
       </ul>
+
+      <div class="hero-friction-free">
+        <span>No Dispatch Fees</span>
+        <span>•</span>
+        <span>Free Written Estimates</span>
+        <span>•</span>
+        <span>Check, Venmo & Cash Accepted</span>
+        <span>•</span>
+        <span>Fully Licensed & Insured</span>
+      </div>
     </div>
   </section>
 
@@ -110,13 +240,31 @@ const whyShane = [
     </div>
   </section>
 
+  <section class="why" id="why">
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Why Shane</span>
+        <h2>Why pick a craftsman over a <span class="display-serif">chain</span>.</h2>
+        <p class="section-sub">The thing the big-name dispatch companies can’t do, no matter how big their ad budget.</p>
+      </div>
+      <div class="why-grid">
+        {whyShane.map((w) => (
+          <article class="why-card">
+            <h3>{w.h}</h3>
+            <p>{w.b}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="emergency" id="emergency" aria-label="Plumbing & heating emergencies">
     <div class="container emergency-inner">
       <div class="emergency-pulse" aria-hidden="true"></div>
       <div class="emergency-copy">
         <span class="emergency-kicker">Emergency · 24/7</span>
         <h2>No heat? No hot water? Burst pipe?</h2>
-        <p>Call now — Shane comes out. Same-day Saturdays. After-hours included. Parts on the truck, ready to make it stop.</p>
+        <p>Call now. Shane comes out. Same-day Saturdays. After-hours included. Parts on the truck, ready to make it stop.</p>
       </div>
       <div class="emergency-actions">
         <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
@@ -128,9 +276,9 @@ const whyShane = [
   <section class="services" id="services">
     <div class="container">
       <div class="section-head">
-        <span class="kicker">Services</span>
-        <h2>Everything that <span class="display-serif">carries</span> water, gas, or heat.</h2>
-        <p class="section-sub">From a leaky faucet to a full new build — one number, one craftsman, one standard.</p>
+        <span class="kicker">Expert Services</span>
+        <h2>Plumbing, gas &amp; heating for <span class="display-serif">your</span> home.</h2>
+        <p class="section-sub">From a leaky faucet to a full new build, it’s one number, one craftsman, and one standard across the North Shore.</p>
       </div>
       <div class="service-grid">
         {services.map((s, i) => (
@@ -143,7 +291,7 @@ const whyShane = [
         ))}
       </div>
       <div class="services-cta">
-        <p>Don’t see what you need? Call — odds are we’ve fixed it before.</p>
+        <p>Don’t see what you need? Call. Odds are we’ve fixed it before.</p>
         <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
       </div>
     </div>
@@ -152,13 +300,17 @@ const whyShane = [
   <section class="work" id="work">
     <div class="container">
       <div class="section-head">
-        <span class="kicker">Recent work</span>
-        <h2>The <span class="display-serif">details</span>, every time.</h2>
-        <p class="section-sub">A look at jobs across the Northshore and Boston — remodels, boilers, water heaters, full builds.</p>
+        <span class="kicker">Recent Projects</span>
+        <h2>Real jobs on the <span class="display-serif">North Shore</span>.</h2>
+        <p class="section-sub">A look at jobs across Saugus, Peabody, and Boston, including remodels, high-efficiency boilers, water heaters, and additions.</p>
       </div>
       <div class="work-grid">
         {jobs.map((job, ji) => (
           <figure class="work-card" data-carousel data-job-idx={ji}>
+            <div class="gallery-badge">
+              <svg class="gallery-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21"/></svg>
+              <span>Swipe or Tap</span>
+            </div>
             <div class="carousel-track" data-track>
               {job.images.map((src, i) => (
                 <img src={src} alt={`${job.title} — photo ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />
@@ -246,29 +398,33 @@ const whyShane = [
           Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. Over ten years of water heaters in basements, boilers in January, gas hookups, full remodels, and the kind of everyday emergencies that don’t care what time it is.
         </p>
         <p>
-          No call centers. No bait-and-switch quotes. No subcontractor roulette. You call, Shane shows up — fully licensed, fully insured, parts on the truck, ready to work. The job gets done right the first time, the workspace gets cleaned up, and the work gets stood behind.
+          No call centers. No bait-and-switch quotes. No subcontractor roulette. You call, Shane shows up. He’s fully licensed, fully insured, and ready to work with parts on the truck. The job gets done right the first time, the workspace gets cleaned up, and the work gets stood behind.
         </p>
         <p class="about-pull">
-          <span class="display-serif">The promise:</span> if you can’t get me on the first ring, I’ll call you back. If it’s an emergency, I’ll come out — even if it’s 2 AM.
+          <span class="display-serif">The promise:</span> if you can’t get me on the first ring, I’ll call you back. If it’s an emergency, I’ll come out, even if it’s 2 AM.
         </p>
       </div>
     </div>
   </section>
 
-  <section class="why" id="why">
-    <div class="container">
-      <div class="section-head">
-        <span class="kicker">Why Shane</span>
-        <h2>Why pick a craftsman over a <span class="display-serif">chain</span>.</h2>
-        <p class="section-sub">The thing the big-name dispatch companies can’t do, no matter how big their ad budget.</p>
-      </div>
-      <div class="why-grid">
-        {whyShane.map((w) => (
-          <article class="why-card">
-            <h3>{w.h}</h3>
-            <p>{w.b}</p>
-          </article>
-        ))}
+  <section class="van" id="van" aria-label="On the road across the North Shore">
+    <div class="container van-inner">
+      <figure class="van-photo">
+        <img src={`${base}images/van/van-side.jpg`} alt="The S. Meredith Plumbing & Heating work van — fully stocked, owner-driven, serving the North Shore and Boston" width="1600" height="1200" loading="lazy" />
+      </figure>
+      <div class="van-copy">
+        <span class="kicker dark">On the road</span>
+        <h2>One van, <span class="display-serif">fully stocked</span>. Owner behind the wheel.</h2>
+        <p>When the S. Meredith van pulls up, it’s Shane who steps out, not a subcontractor. Common boiler parts, water-heater fittings, gas connectors, and valves ride on the truck, so most jobs are finished in a single visit.</p>
+        <ul class="van-points">
+          <li>Remodels · Boilers · Furnaces</li>
+          <li>Water heaters · Gas · New construction</li>
+          <li>Saugus · the North Shore &amp; Boston</li>
+        </ul>
+        <div class="van-cta">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-secondary" href="#work">Browse Recent Jobs</a>
+        </div>
       </div>
     </div>
   </section>
@@ -278,6 +434,7 @@ const whyShane = [
       <div class="section-head">
         <span class="kicker">From neighbors</span>
         <h2>What people in <span class="display-serif">Saugus</span> say.</h2>
+        <p class="reviews-badge"><span class="g-stars">★★★★★</span> 5.0 Rating · 10 Real, Verified Neighborhood Reviews Excerpts Below</p>
       </div>
       <div class="review-grid">
         {reviews.map((r) => (
@@ -297,12 +454,48 @@ const whyShane = [
     </div>
   </section>
 
+  <section class="social" id="social" aria-label="Follow S. Meredith Plumbing & Heating on social media">
+    <div class="container social-inner">
+      <div class="social-copy">
+        <span class="kicker">Follow the work</span>
+        <h2>See Shane on <span class="display-serif">Instagram</span> and Facebook.</h2>
+        <p>Recent jobs, boiler changeouts, remodel progress, and day-to-day work from Saugus and across the North Shore.</p>
+      </div>
+      <div class="social-links">
+        <a class="social-card" href={instagramUrl} target="_blank" rel="noopener">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4.2"></circle>
+              <circle cx="17.2" cy="6.8" r="1"></circle>
+            </svg>
+          </span>
+          <span class="social-text">
+            <strong>Instagram</strong>
+            <span>Photos and recent jobs</span>
+          </span>
+        </a>
+        <a class="social-card" href={facebookUrl} target="_blank" rel="noopener">
+          <span class="social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.5 21v-7h2.35l.35-2.73H13.5V9.53c0-.79.22-1.33 1.35-1.33h1.44V5.76c-.25-.03-1.11-.09-2.1-.09-2.08 0-3.5 1.27-3.5 3.6v2h-2.35V14h2.35v7h2.81Z"></path>
+            </svg>
+          </span>
+          <span class="social-text">
+            <strong>Facebook</strong>
+            <span>Updates and customer posts</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="faq" id="faq">
     <div class="container">
       <div class="section-head">
-        <span class="kicker">Questions</span>
-        <h2>What to <span class="display-serif">know</span> before you call.</h2>
-        <p class="section-sub">If you don’t see it answered here, dial — Shane will pick up.</p>
+        <span class="kicker">Plumbing &amp; Heating FAQ</span>
+        <h2>Answers to <span class="display-serif">common</span> questions.</h2>
+        <p class="section-sub">If you don’t see your question answered here, call directly. Shane will answer.</p>
       </div>
       <div class="faq-list">
         {faqs.map((f, i) => (
@@ -321,9 +514,9 @@ const whyShane = [
   <section class="area" id="area">
     <div class="container">
       <div class="section-head">
-        <span class="kicker">Service area</span>
-        <h2>All of <span class="display-serif">Northshore</span> MA &amp; Boston.</h2>
-        <p class="section-sub">Based in Saugus. Click a town for what we see locally:</p>
+        <span class="kicker">Service Area</span>
+        <h2>Plumbing &amp; heating in <span class="display-serif">your town</span>.</h2>
+        <p class="section-sub">Based in Saugus. Serving homes and commercial jobsites across Saugus, the North Shore, and Boston. Click a town for local context:</p>
       </div>
       <ul class="towns">
         {areas.map((a) => (
@@ -337,10 +530,9 @@ const whyShane = [
         <li class="town-plain">Boston</li>
         <li class="town-plain">Lexington</li>
         <li class="town-plain">Tewksbury</li>
-        <li class="town-plain">Georgetown</li>
         <li class="town-plain">Haverhill</li>
       </ul>
-      <p class="towns-note">Outside this list? Call anyway — if we’re close, we’ll help.</p>
+      <p class="towns-note">Outside this list? Call anyway. If we’re close, we’ll help.</p>
     </div>
   </section>
 
@@ -356,8 +548,9 @@ const whyShane = [
       <ul class="contact-list">
         <li><span class="lbl">Phone</span><a href={`tel:${phoneTel}`}>{phone}</a></li>
         <li><span class="lbl">Email</span><a href={`mailto:${email}`}>{email}</a></li>
-        <li><span class="lbl">Hours</span><span>24/7 — call anytime</span></li>
+        <li><span class="lbl">Hours</span><span>24/7 emergency service</span></li>
         <li><span class="lbl">Area</span><span>Northshore MA &amp; Boston</span></li>
+        <li><span class="lbl">Payment</span><span>Check, Venmo &amp; cash</span></li>
       </ul>
     </div>
   </section>
@@ -368,7 +561,7 @@ const whyShane = [
         <span class="footer-logo-tile"><img src={`${base}images/logo.png`} alt="S. Meredith Plumbing & Heating" width="72" height="71" /></span>
         <div>
           <strong>S. Meredith Plumbing &amp; Heating</strong>
-          <span>Saugus, MA · Licensed &amp; Insured · Owner-operated</span>
+          <span>Saugus, MA · MA Lic. #9630040-PL-M · Licensed &amp; Insured · Owner-operated</span>
         </div>
       </div>
       <div class="footer-links">
@@ -376,9 +569,9 @@ const whyShane = [
         <span class="dot">·</span>
         <a href={`mailto:${email}`}>{email}</a>
         <span class="dot">·</span>
-        <a href="https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/" rel="noopener" target="_blank">Facebook</a>
+        <a href={facebookUrl} rel="noopener" target="_blank">Facebook</a>
         <span class="dot">·</span>
-        <a href="https://www.instagram.com/s.meredith_plumbing_heating/" rel="noopener" target="_blank">Instagram</a>
+        <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a>
       </div>
       <div class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating · Built for the Northshore</div>
     </div>
@@ -397,6 +590,60 @@ const whyShane = [
       const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 30);
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+    })();
+
+    // Floating call button: reveal only once the hero has scrolled out of view
+    (() => {
+      const sticky = document.querySelector('.sticky-call');
+      const hero = document.getElementById('top');
+      if (!sticky || !hero) return;
+      if (!('IntersectionObserver' in window)) { sticky.classList.add('is-visible'); return; }
+      const io = new IntersectionObserver(
+        ([entry]) => sticky.classList.toggle('is-visible', !entry.isIntersecting),
+        { threshold: 0 }
+      );
+      io.observe(hero);
+    })();
+
+    (() => {
+      const topbar = document.querySelector('[data-topbar]');
+      const toggle = document.querySelector('[data-menu-toggle]');
+      const menu = document.querySelector('[data-mobile-menu]');
+      const scrim = document.querySelector('[data-menu-scrim]');
+      const mobileLinks = document.querySelectorAll('[data-mobile-link]');
+      if (!topbar || !toggle || !menu || !scrim) return;
+
+      const closeMenu = () => {
+        topbar.classList.remove('menu-open');
+        document.body.classList.remove('menu-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open navigation menu');
+        menu.setAttribute('aria-hidden', 'true');
+      };
+
+      const openMenu = () => {
+        topbar.classList.add('menu-open');
+        document.body.classList.add('menu-open');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close navigation menu');
+        menu.setAttribute('aria-hidden', 'false');
+      };
+
+      toggle.addEventListener('click', () => {
+        if (topbar.classList.contains('menu-open')) closeMenu();
+        else openMenu();
+      });
+
+      scrim.addEventListener('click', closeMenu);
+      mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) closeMenu();
+      });
     })();
 
     // Restrained scroll-reveal — opacity + small Y lift, 1x only
@@ -481,38 +728,246 @@ const whyShane = [
     .brand-wordmark strong { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.02em; color: var(--black); }
     .brand-wordmark em { font-style: normal; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: .72rem; color: var(--ink-muted); letter-spacing: .04em; margin-top: 1px; }
 
-    /* Hero lockup — the FULL logo prominent so the wordmark + phone reads clearly. */
-    .hero-logo { width: 220px; height: auto; margin: 0 auto 2rem; display: block; filter: drop-shadow(0 4px 14px rgba(42,31,20,.10)); }
-    @media (max-width: 900px) { .hero-logo { width: 180px; margin-bottom: 1.6rem; } }
-
+    /* Hero lockup & navigation layout */
     .nav { display: flex; gap: 1.4rem; margin-left: auto; }
-    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; position: relative; padding: .25rem 0; transition: color .2s ease; }
+    .nav a { color: var(--ink-soft); font-weight: 600; font-size: .95rem; position: relative; padding: .25rem 0; transition: color .2s ease; text-transform: uppercase; letter-spacing: 0.05em; }
     .nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -.35rem; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: center; transition: transform .25s cubic-bezier(0.22, 0.61, 0.36, 1); border-radius: 2px; }
     .nav a:hover { color: var(--black); opacity: 1; }
     .nav a:hover::after { transform: scaleX(.55); }
-    .nav a.active { color: var(--black); font-weight: 600; }
+    .nav a.active { color: var(--black); font-weight: 700; }
     .nav a.active::after { transform: scaleX(1); }
 
-    .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; letter-spacing: -0.01em; transition: background .18s ease, transform .18s ease; }
+    .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 4px; font-weight: 700; font-size: .92rem; letter-spacing: 0.02em; transition: background .18s ease, transform .18s ease; text-transform: uppercase; white-space: nowrap; }
     .topbar-call:hover { background: var(--red); color: #fff; opacity: 1; transform: scale(1.03); }
     .topbar-call-num { color: #fff; }
+    .topbar-actions { display: flex; align-items: center; gap: .6rem; }
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      gap: .45rem;
+      padding: .55rem .8rem;
+      border: 1px solid var(--line-2);
+      border-radius: 4px;
+      background: rgba(255,255,255,.7);
+      color: var(--black);
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .menu-toggle:hover { background: #fff; border-color: var(--red); opacity: 1; }
+    .menu-toggle:active { transform: scale(.98); }
+    .menu-toggle-box { position: relative; width: 18px; height: 14px; display: flex; align-items: center; justify-content: center; }
+    .menu-toggle-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 999px;
+      transform: translateY(-50%);
+      transition: background .15s ease;
+    }
+    .menu-toggle-line::before,
+    .menu-toggle-line::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 999px;
+      transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), top .25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .menu-toggle-line::before { top: -6px; }
+    .menu-toggle-line::after { top: 6px; }
 
-    .hero { padding: 8rem 0 7rem; background: var(--paper); position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(244,228,201,.55), transparent 70%); pointer-events: none; }
-    .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; text-align: center; position: relative; z-index: 1; }
-    .eyebrow { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--ink-soft); letter-spacing: .02em; margin-bottom: 1.6rem; padding: .55rem 1.1rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(42,31,20,.03); }
-    .hero h1 { font-size: clamp(2.6rem, 7vw, 5.5rem); margin: 0 auto 1.4rem; max-width: 14ch; }
-    .hero h1 .display-serif { color: var(--red); }
-    .hero-lede { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-soft); max-width: 660px; margin: 0 auto 2.4rem; line-height: 1.6; font-weight: 400; }
-    .hero-lede strong { color: var(--ink); font-weight: 600; }
-    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-bottom: .8rem; }
-    .hero-sub-cta { color: var(--ink-muted); font-size: .9rem; margin: 0 0 4rem; font-style: italic; }
-    .hero-stats { list-style: none; padding: 0; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 720px; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: 2.4rem 0; }
+    .topbar.menu-open .menu-toggle-line { background: transparent; }
+    .topbar.menu-open .menu-toggle-line::before { top: 0; transform: rotate(45deg); }
+    .topbar.menu-open .menu-toggle-line::after { top: 0; transform: rotate(-45deg); }
+    .menu-toggle-text { line-height: 1; }
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--paper-2);
+      border-top: 1px solid var(--line);
+      border-bottom: 2px solid var(--black);
+      box-shadow: 0 14px 36px rgba(17,17,17,.14);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .22s cubic-bezier(0.16, 1, 0.3, 1), visibility .22s ease;
+    }
+    .topbar.menu-open .mobile-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .mobile-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+    .mobile-menu-link {
+      display: flex;
+      flex-direction: column;
+      gap: .22rem;
+      padding: 1rem 1.05rem;
+      background: var(--paper-2);
+      min-height: 78px;
+      transition: background .16s ease, color .16s ease;
+    }
+    .mobile-menu-link:hover,
+    .mobile-menu-link:focus-visible,
+    .mobile-menu-link.active {
+      background: #fff;
+      opacity: 1;
+    }
+    .mobile-menu-link strong {
+      color: var(--black);
+      font-size: .95rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .mobile-menu-link span {
+      color: var(--ink-soft);
+      font-size: .76rem;
+      line-height: 1.35;
+    }
+    .mobile-menu-link.active strong { color: var(--red); }
+    .mobile-menu-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .28rem;
+      padding: .95rem 1rem 1.05rem;
+      background: var(--paper-3);
+      border-top: 1px solid var(--line-2);
+      text-align: center;
+    }
+    .mobile-menu-meta p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .mobile-menu-meta a {
+      color: var(--ink-soft);
+      font-size: .83rem;
+      text-decoration: underline;
+      text-decoration-color: rgba(42,31,20,.28);
+      text-underline-offset: .16em;
+    }
+    .mobile-menu-scrim {
+      display: none;
+      position: fixed;
+      inset: 0;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: rgba(17,17,17,.34);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .18s ease, visibility .18s ease;
+      z-index: 45;
+    }
+    body.menu-open .mobile-menu-scrim {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    body.menu-open { overflow: hidden; }
+
+    /* Industrial Asymmetric Hero Styles */
+    .hero { padding: 7rem 0 5rem; background: var(--paper); position: relative; overflow: hidden; border-bottom: 1px solid var(--line-2); }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(211,47,47,.04), transparent 70%); pointer-events: none; }
+    
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center; margin-bottom: 4.5rem; position: relative; z-index: 2; }
+    .hero-content { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+    
+    .hero-brand-line { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.8rem; }
+    .hero-mini-logo { width: 44px; height: 44px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06)); }
+    .hero-brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .hero-brand-text strong { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.02em; color: var(--black); }
+    .hero-brand-text span { font-size: .75rem; font-weight: 800; color: var(--ink-muted); letter-spacing: .08em; }
+    
+    .hero-badge { display: inline-flex; align-items: center; gap: .6rem; background: var(--highlight); color: var(--red-dark); font-size: .78rem; font-weight: 800; padding: .45rem .85rem; border-radius: 4px; border: 1px solid rgba(211, 47, 47, 0.18); margin-bottom: 1.8rem; letter-spacing: 0.03em; }
+    .hero-live-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; box-shadow: 0 0 0 0 rgba(211,47,47,0.7); animation: blink-dot 1.8s infinite; }
+    @keyframes blink-dot { 0%, 100% { transform: scale(0.95); opacity: 0.4; box-shadow: 0 0 0 0 rgba(211,47,47,0.7); } 50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(211,47,47,0); } }
+    
+    .hero h1 { font-size: clamp(2.4rem, 4.5vw, 3.8rem); margin: 0 0 1.6rem; max-width: 18ch; text-align: left; line-height: 1.05; }
+    .hero h1 .display-serif { color: var(--red); font-family: inherit; font-style: normal; font-weight: 900; }
+    
+    .hero-lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 620px; margin: 0 0 2rem; line-height: 1.6; text-align: left; }
+    .hero-lede strong { color: var(--black); font-weight: 700; }
+    
+    .hero-trust-bullets { display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 2.2rem; width: 100%; }
+    .trust-bullet { display: flex; gap: .85rem; align-items: flex-start; }
+    .bullet-icon { color: var(--red); font-weight: 900; font-size: 1.1rem; line-height: 1.25; background: var(--highlight); width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .8rem; }
+    .trust-bullet strong { font-size: .98rem; font-weight: 800; color: var(--black); display: block; margin-bottom: .1rem; }
+    .trust-bullet span { font-size: .88rem; color: var(--ink-soft); line-height: 1.4; }
+    
+    .hero-cta { display: flex; gap: .8rem; width: 100%; flex-wrap: wrap; }
+    .hero-cta .btn { border-radius: 4px; padding: 1.05rem 1.8rem; font-size: 1.02rem; }
+    .hero-sub-cta { color: var(--ink-muted); font-size: .88rem; margin: .8rem 0 0; font-style: italic; text-align: left; font-weight: 500; }
+    
+    .hero-visual { display: flex; justify-content: flex-end; position: relative; }
+    .hero-card { background: #fff; border: 2px solid var(--line-2); border-radius: 6px; padding: .85rem; box-shadow: 0 18px 45px rgba(0,0,0,0.08); width: 100%; max-width: 380px; transition: transform .3s ease, box-shadow .3s ease; }
+    .hero-card:hover { transform: translateY(-4px); box-shadow: 0 24px 50px rgba(0,0,0,0.12); }
+    .hero-image-wrap { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 4/5; background: var(--paper-3); }
+    .hero-owner-img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .hero-card:hover .hero-owner-img { transform: scale(1.02); }
+    .hero-image-overlay { position: absolute; top: .85rem; right: .85rem; z-index: 2; }
+    .badge-status { background: var(--red); color: #fff; font-size: .72rem; font-weight: 900; padding: .35rem .75rem; border-radius: 3px; letter-spacing: .08em; box-shadow: 0 2px 6px rgba(0,0,0,0.15); text-transform: uppercase; }
+    
+    .hero-card-footer { padding: .85rem .25rem .25rem; display: flex; flex-direction: column; gap: .5rem; }
+    .hero-card-meta { display: flex; flex-direction: column; line-height: 1.2; }
+    .hero-card-meta strong { font-size: 1.15rem; font-weight: 900; color: var(--black); letter-spacing: -0.01em; }
+    .hero-card-meta span { font-size: .85rem; color: var(--ink-muted); font-weight: 600; }
+    .hero-card-stars { display: flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--red); font-weight: 700; margin-top: .1rem; }
+    .star-rating { letter-spacing: 0.05em; font-size: .95rem; }
+
+    .hero-stats { list-style: none; padding: 0; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; width: 100%; border-top: 2px solid var(--line-2); border-bottom: 2px solid var(--line-2); padding: 2.4rem 0; position: relative; z-index: 2; }
     .hero-stats li { display: flex; flex-direction: column; align-items: center; gap: .35rem; opacity: 0; transform: translateY(8px); transition: opacity .6s ease var(--stagger, 0ms), transform .6s ease var(--stagger, 0ms); }
     .hero-stats.is-visible li, .reveal.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
     section.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
-    .hero-stats strong { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.04em; color: var(--black); line-height: 1; }
-    .hero-stats span { font-size: .88rem; color: var(--ink-muted); letter-spacing: -0.005em; }
+    .hero-stats strong { font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); line-height: 1; }
+    .hero-stats span { font-size: .9rem; color: var(--ink-soft); letter-spacing: -0.005em; font-weight: 600; text-transform: uppercase; }
+
+    .hide-mobile { display: inline; }
+    .hero-friction-free {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-friction-free span { display: inline-flex; align-items: center; }
+    .hero-friction-free span:nth-child(even) {
+      color: var(--red);
+      font-size: 1.1rem;
+    }
 
     .trust-band { padding: 3rem 0; background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .trust-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
@@ -526,8 +981,8 @@ const whyShane = [
     .emergency::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at right, rgba(194,73,44,.18), transparent 65%); pointer-events: none; }
     .emergency-inner { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; position: relative; }
     .emergency-pulse { display: none; }
-    .emergency-kicker { display: inline-block; font-size: .72rem; font-weight: 700; color: var(--red); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem; padding: .3rem .8rem; border: 1px solid var(--red); border-radius: 999px; background: rgba(194,73,44,.12); animation: pulse 2.4s ease-in-out infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(194,73,44,.5); } 50% { opacity: .85; box-shadow: 0 0 0 6px rgba(194,73,44,0); } }
+    .emergency-kicker { display: inline-block; font-size: .75rem; font-weight: 900; color: #fff; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem; padding: .35rem .85rem; border-radius: 3px; background: var(--red); animation: pulse 2.4s ease-in-out infinite; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(211,47,47,.5); } 50% { opacity: .85; box-shadow: 0 0 0 6px rgba(211,47,47,0); } }
     .emergency h2 { color: #fff; font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: .8rem; max-width: 22ch; }
     .emergency p { color: rgba(255,255,255,.72); margin: 0; max-width: 50ch; line-height: 1.55; }
     .emergency-actions { display: flex; flex-direction: column; gap: .65rem; min-width: 240px; }
@@ -536,19 +991,63 @@ const whyShane = [
     @media (prefers-reduced-motion: reduce) { .emergency-kicker { animation: none; } }
 
     .section-head { text-align: center; max-width: 760px; margin: 0 auto 4rem; }
-    .kicker { font-size: .72rem; font-weight: 600; color: var(--red); letter-spacing: .12em; text-transform: uppercase; display: inline-block; margin-bottom: 1.2rem; }
-    .kicker.dark { color: #f4b08e; }
+    .kicker {
+      font-size: .75rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--red);
+      padding: .35rem .7rem;
+      border-radius: 3px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .kicker.dark { background: var(--highlight); color: var(--red-dark); border: 1px solid rgba(211,47,47,0.15); box-shadow: none; }
     .section-head h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; max-width: 20ch; margin-left: auto; margin-right: auto; }
     .section-head h2 .display-serif { color: var(--red); font-weight: 700; }
     .section-sub { color: var(--ink-soft); font-size: 1.08rem; margin: 0 auto; max-width: 560px; }
 
     .services { padding: 7rem 0; background: var(--paper); }
     .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-    .service-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.7rem; transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .3s ease, border-color .3s ease; position: relative; box-shadow: 0 1px 2px rgba(42,31,20,.03); display: flex; flex-direction: column; gap: .55rem; }
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(42,31,20,.08), 0 2px 6px rgba(42,31,20,.04); border-color: var(--red); opacity: 1; }
-    .service-card::before { content: ''; display: block; width: 28px; height: 2px; background: var(--red); margin-bottom: 1rem; border-radius: 2px; transition: width .3s ease; }
+    .service-card {
+      background: #fff;
+      border: 1px solid var(--line-2);
+      border-radius: 8px; /* industrial-grade tighter radius */
+      padding: 2.2rem 1.8rem;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      transition: transform .3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .3s ease, border-color .3s ease, background .3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--red);
+      box-shadow: 0 12px 30px rgba(17,17,17,0.06);
+      background: var(--paper-2);
+      opacity: 1;
+    }
+    .service-card::before { content: ''; display: block; width: 28px; height: 3px; background: var(--red); margin-bottom: .8rem; border-radius: 2px; transition: width .3s ease; }
     .service-card:hover::before { width: 48px; }
-    .service-num { display: none; }
+    .service-num {
+      display: block;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--paper-3); /* very subtle light grey-warm */
+      font-family: 'Inter', sans-serif;
+      line-height: 1;
+      transition: color .3s ease, opacity .3s ease;
+    }
+    .service-card:hover .service-num {
+      color: var(--red);
+      opacity: 0.15;
+    }
     .service-card h3 { font-size: 1.18rem; letter-spacing: -0.02em; color: var(--black); }
     .service-card p { color: var(--ink-soft); margin: 0; font-size: .96rem; line-height: 1.55; flex: 1; }
     .service-link { color: var(--red); font-weight: 600; font-size: .9rem; margin-top: .65rem; transition: transform .25s ease; display: inline-block; }
@@ -574,6 +1073,33 @@ const whyShane = [
     .work-card figcaption { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.4rem 1.4rem 1.2rem; background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.45) 60%, rgba(0,0,0,0) 100%); color: #fff; letter-spacing: -0.005em; display: flex; flex-direction: column; gap: .15rem; z-index: 2; pointer-events: none; }
     .work-card figcaption strong { font-weight: 600; font-size: 1rem; }
     .work-card figcaption span { font-weight: 400; font-size: .85rem; color: rgba(255,255,255,.78); }
+    .gallery-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 10;
+      background: rgba(17, 17, 17, 0.75);
+      color: #fff;
+      padding: .4rem .7rem;
+      border-radius: 4px;
+      font-size: .72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .gallery-icon {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+    }
 
     .about { padding: 7rem 0; background: var(--paper); }
     .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4rem; align-items: center; }
@@ -584,6 +1110,20 @@ const whyShane = [
     .about-pull { background: #fff; border-left: 3px solid var(--red); padding: 1.2rem 1.4rem; border-radius: 8px; font-size: 1.05rem !important; color: var(--ink) !important; font-weight: 500; }
     .about-pull .display-serif { color: var(--red); margin-right: .35rem; }
 
+    /* Van trust band — dark band so the branded van + snow/sky pops. */
+    .van { padding: 6rem 0; background: linear-gradient(135deg, var(--black) 0%, #2c1f12 100%); color: #fff; position: relative; overflow: hidden; }
+    .van::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at left, rgba(194,73,44,.14), transparent 60%); pointer-events: none; }
+    .van-inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3.5rem; align-items: center; position: relative; z-index: 1; }
+    .van-photo { margin: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.4); }
+    .van-photo img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; display: block; }
+    .van-copy h2 { color: #fff; font-size: clamp(1.7rem, 3.2vw, 2.5rem); margin-bottom: 1.2rem; max-width: 18ch; }
+    .van-copy h2 .display-serif { color: #f4b08e; font-weight: 700; }
+    .van-copy > p { color: rgba(255,255,255,.74); font-size: 1.05rem; line-height: 1.65; margin: 0 0 1.6rem; max-width: 50ch; }
+    .van-points { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .6rem; }
+    .van-points li { color: rgba(255,255,255,.9); font-weight: 500; font-size: .98rem; padding-left: 1.5rem; position: relative; }
+    .van-points li::before { content: '✓'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+    .van-cta { display: flex; gap: .8rem; margin-top: 1.8rem; flex-wrap: wrap; }
+
     .why { padding: 7rem 0; background: var(--paper-2); }
     .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
     .why-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 2rem 1.8rem; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
@@ -592,6 +1132,8 @@ const whyShane = [
     .why-card p { color: var(--ink-soft); margin: 0; line-height: 1.6; }
 
     .reviews { padding: 7rem 0; background: var(--paper); }
+    .reviews-badge { display: flex; align-items: center; justify-content: center; gap: .55rem; margin: 1.1rem auto 0; color: var(--ink-soft); font-size: .98rem; font-weight: 600; letter-spacing: -0.01em; flex-wrap: wrap; }
+    .reviews-badge .g-stars { color: var(--red); letter-spacing: .12em; font-size: 1.02rem; }
     .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
     .review-card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; padding: 1.8rem 1.7rem; transition: border-color .25s ease, transform .25s ease; }
     .review-card:hover { border-color: var(--line-2); transform: translateY(-2px); }
@@ -601,6 +1143,19 @@ const whyShane = [
     .review-card blockquote { margin: 0 0 1.2rem; color: var(--ink); font-size: 1rem; line-height: 1.6; }
     .review-card cite { font-style: normal; font-weight: 600; color: var(--ink-soft); font-size: .9rem; }
     .reviews-cta { text-align: center; }
+
+    .social { padding: 5.5rem 0; background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .social-inner { display: grid; grid-template-columns: .95fr 1.05fr; gap: 2rem; align-items: center; }
+    .social-copy h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); margin-bottom: 1rem; max-width: 14ch; }
+    .social-copy p { margin: 0; max-width: 48ch; color: var(--ink-soft); font-size: 1rem; line-height: 1.6; }
+    .social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .social-card { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid var(--line-2); border-radius: 10px; padding: 1.1rem 1.15rem; box-shadow: 0 2px 8px rgba(17,17,17,0.04); transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+    .social-card:hover { transform: translateY(-2px); border-color: var(--red); box-shadow: 0 10px 24px rgba(17,17,17,0.08); opacity: 1; }
+    .social-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: var(--highlight); color: var(--red); flex-shrink: 0; }
+    .social-icon svg { width: 22px; height: 22px; }
+    .social-text { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+    .social-text strong { font-size: 1rem; color: var(--black); letter-spacing: -0.01em; }
+    .social-text span { color: var(--ink-soft); font-size: .9rem; line-height: 1.35; }
 
     .faq { padding: 7rem 0; background: var(--paper-2); }
     .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: .75rem; }
@@ -661,11 +1216,12 @@ const whyShane = [
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
     /* Sticky mobile CTA — polished: pulse ring + clear label */
-    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: .95rem 1.7rem; border-radius: 999px; font-weight: 600; font-size: .95rem; box-shadow: 0 12px 30px rgba(194,73,44,.45); z-index: 100; letter-spacing: -0.005em; min-width: 240px; max-width: calc(100vw - 2rem); text-align: center; align-items: center; justify-content: center; gap: .55rem; }
+    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%) translateY(140%); opacity: 0; pointer-events: none; transition: transform .32s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s ease; background: var(--red); color: #fff; padding: .95rem 1.7rem; border-radius: 999px; font-weight: 600; font-size: .95rem; box-shadow: 0 12px 30px rgba(194,73,44,.45); z-index: 100; letter-spacing: -0.005em; min-width: 0; max-width: calc(100vw - 2rem); text-align: center; align-items: center; justify-content: center; gap: .55rem; white-space: nowrap; }
+    .sticky-call.is-visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
     .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
     .sticky-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0 rgba(255,255,255,.7); animation: sticky-pulse 2s ease-in-out infinite; flex-shrink: 0; }
     @keyframes sticky-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,.5); } 50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); } }
-    .sticky-label { color: #fff; }
+    .sticky-label { color: #fff; white-space: nowrap; }
     @media (prefers-reduced-motion: reduce) { .sticky-pulse { animation: none; } }
 
     @media (max-width: 1100px) {
@@ -679,12 +1235,53 @@ const whyShane = [
       .brand-wordmark strong { font-size: .98rem; }
       .brand-wordmark em { font-size: .65rem; }
       .topbar-call { padding: .5rem .85rem; font-size: .88rem; }
-      .hero { padding: 4rem 0 4rem; }
-      .hero-cta { flex-direction: column; gap: .65rem; margin-bottom: .8rem; }
+      .topbar-actions { margin-left: auto; gap: .45rem; }
+      .menu-toggle { display: inline-flex; }
+      .menu-toggle-text { display: none; }
+      .mobile-menu { display: block; }
+      .mobile-menu-scrim { display: block; }
+      
+      .hide-mobile { display: none; }
+      .carousel-arrow { opacity: 0.85 !important; width: 34px !important; height: 34px !important; font-size: 1.18rem !important; }
+      .carousel-arrow.prev { left: .5rem !important; }
+      .carousel-arrow.next { right: .5rem !important; }
+      
+      .hero { padding: 4.2rem 0 3rem; }
+      .hero-grid { grid-template-columns: 1fr; gap: 1.8rem; margin-bottom: 2.2rem; }
+      .hero h1 { font-size: clamp(2.1rem, 6vw, 2.8rem) !important; margin-bottom: 1.2rem; }
+      .hero-lede { font-size: 1.05rem; margin-bottom: 1.5rem; }
+      .hero-trust-bullets { gap: .8rem; margin-bottom: 1.8rem; }
+      .trust-bullet strong { font-size: .94rem; margin-bottom: 0; }
+      .hero-content { align-items: center; text-align: center; }
+      .hero-brand-line { justify-content: center; }
+      .hero-badge { justify-content: center; text-align: center; }
+      .hero h1 { text-align: center; }
+      .hero-lede { text-align: center; }
+      .hero-trust-bullets { text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
+      .hero-cta { flex-direction: column; gap: .65rem; width: 100%; }
       .hero-cta .btn { justify-content: center; width: 100%; }
-      .hero-sub-cta { margin-bottom: 3rem; }
+      .hero-sub-cta { text-align: center; margin-bottom: 1.5rem; }
+      .hero-visual { width: 100%; max-width: 320px; margin: 0 auto; justify-content: center; }
       .hero-stats { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 0; }
-      .hero-stats strong { font-size: 2rem; }
+      .hero-stats strong { font-size: 2.2rem; }
+      .hero-friction-free {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .65rem;
+        max-width: 560px;
+        margin: 1.35rem auto 0;
+      }
+      .hero-friction-free span:nth-child(even) { display: none; }
+      .hero-friction-free span:nth-child(odd) {
+        justify-content: center;
+        text-align: center;
+        padding: .6rem .8rem;
+        min-height: 44px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--line);
+        box-shadow: 0 1px 3px rgba(17,17,17,.04);
+      }
       .trust-band { padding: 2.4rem 0; }
       .trust-grid { grid-template-columns: 1fr; gap: 1.2rem; }
       .emergency { padding: 3rem 0; }
@@ -696,6 +1293,13 @@ const whyShane = [
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .about-photo { max-width: 360px; margin: 0 auto; }
       .why-grid { grid-template-columns: 1fr; }
+      .van { padding: 4rem 0; }
+      .van-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .social { padding: 4rem 0; }
+      .social-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+      .social-copy { text-align: center; }
+      .social-copy h2, .social-copy p { margin-left: auto; margin-right: auto; }
+      .social-links { grid-template-columns: 1fr; }
       .faq-item summary { padding: 1.1rem 1.3rem; font-size: 1rem; }
       .faq-body { padding: 0 1.3rem 1.2rem; }
       .faq-body p { font-size: .94rem; }
@@ -707,8 +1311,12 @@ const whyShane = [
       .footer-inner { grid-template-columns: 1fr; text-align: center; }
       .footer-brand { justify-content: center; }
       .footer-links { justify-content: center; }
-      .sticky-call { display: inline-flex; }
+      .sticky-call { display: inline-flex; border-radius: 4px; padding: .85rem 1.2rem; font-size: .88rem; font-weight: 700; }
       body { padding-bottom: 6.5rem; }
+    }
+    @media (max-width: 520px) {
+      .mobile-menu-grid { grid-template-columns: 1fr; }
+      .hero-friction-free { grid-template-columns: 1fr; }
     }
   </style>
 </Base>

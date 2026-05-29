@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
+const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_REPOSITORY?.includes('smeredith-plumbing');
+
 export default defineConfig({
-  // GitHub Pages preview lives at irving1211.github.io/smeredith-plumbing/.
-  // When smeredithplumbing.com cuts over, drop `base` and switch `site` back.
-  site: 'https://irving1211.github.io',
-  base: '/smeredith-plumbing/',
+  // Production: served at the root of smeredithplumbing.com (Vercel).
+  // GitHub Pages preview can be enabled via env override or automatically in GitHub actions.
+  site: isGithubPages ? 'https://irving1211.github.io' : 'https://smeredithplumbing.com',
+  base: isGithubPages ? '/smeredith-plumbing/' : '/',
   trailingSlash: 'always',
   server: {
     host: '0.0.0.0',
