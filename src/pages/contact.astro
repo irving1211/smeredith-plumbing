@@ -1,0 +1,430 @@
+---
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const email = 'ShaneMeredith17@gmail.com';
+---
+
+<Base title="Request Service — S. Meredith Plumbing & Heating" description="Need a reliable plumber fast? Fill out our mobile-friendly request form or call Shane directly. Licensed, insured, owner-operated plumbing and heating.">
+  <header class="topbar">
+    <div class="container topbar-row">
+      <a class="brand" href={base} aria-label="Back to home">
+        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
+        <span class="brand-wordmark">
+          <strong>S. Meredith</strong>
+          <em>Plumbing &amp; Heating</em>
+        </span>
+      </a>
+      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
+    </div>
+  </header>
+
+  <main class="contact-main">
+    <div class="container">
+      <div class="contact-layout">
+        
+        <!-- Trust & Information Column -->
+        <div class="contact-info">
+          <span class="trust-badge">Licensed & Insured · MA #9630040-PL-M</span>
+          <h1>Need service? <span class="display-serif">Shane will call</span> you back fast.</h1>
+          
+          <p class="lede">
+            No automated switchboards or third-party call centers. When you request service below, the details go directly to Shane's phone so he can review and call you back shortly.
+          </p>
+
+          <div class="owner-card">
+            <div class="owner-header">
+              <img class="owner-image" src={`${base}images/shane.jpg`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" />
+              <div class="owner-meta">
+                <strong>Shane Meredith</strong>
+                <span>Owner & Licensed Plumber</span>
+              </div>
+            </div>
+            <p class="owner-quote">
+              "I pride myself on clean craftsmanship, honest advice, and upfront pricing. I carry common parts on my truck to handle most boiler, water heater, and general plumbing repairs on the first visit."
+            </p>
+            <div class="owner-rating">
+              <span class="stars">★★★★★</span>
+              <span>100% 5-Star Local Reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Column -->
+        <div class="form-card">
+          <form
+            action="https://formsubmit.co/ShaneMeredith17@gmail.com"
+            method="POST"
+            enctype="multipart/form-data"
+            data-base={base}
+          >
+            <!-- FormSubmit Configuration Fields -->
+            <input type="hidden" name="_subject" value="New service request — S. Meredith Plumbing" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="text" name="_honey" style="display:none" />
+            <input type="hidden" name="_next" id="next-input" value="" />
+
+            <div class="form-group">
+              <label for="name">Your Name <span class="required">*</span></label>
+              <input type="text" id="name" name="name" required placeholder="Your full name" autocomplete="name" />
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" required placeholder="(781) 820-4592" autocomplete="tel" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email <span class="optional">(Optional)</span></label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Town or Address <span class="required">*</span></label>
+              <input type="text" id="address" name="address" required placeholder="Where do you need service?" />
+            </div>
+
+            <div class="form-group">
+              <label for="service_type">What do you need?</label>
+              <select id="service_type" name="service_type">
+                <option value="Emergency">Emergency — no heat / burst pipe / no hot water</option>
+                <option value="Water heater">Water heater replacement / repair</option>
+                <option value="Boiler / heating">Boiler / heating system</option>
+                <option value="General plumbing" selected>General plumbing service</option>
+                <option value="Remodel / new construction">Remodel / new construction</option>
+                <option value="Something else">Something else</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Describe the problem <span class="required">*</span></label>
+              <textarea id="message" name="message" required rows="4" placeholder="Tell Shane what's going on (e.g. leaking pipe, boiler has no pressure, upgrading water heater)..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="photo">Add a photo <span class="optional">(Optional — helps Shane triage)</span></label>
+              <input type="file" id="photo" name="photo" accept="image/*" />
+              <span class="file-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster.</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn">
+              Send Request to Shane
+            </button>
+          </form>
+
+          <div class="direct-call-alt">
+            <p>Immediate emergency? Call directly for 24/7 priority response:</p>
+            <a class="btn btn-dark call-btn" href={`tel:${phoneTel}`}>Call {phone}</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    // Ensure the redirect URL includes the correct origin and base path at runtime
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      const nextInput = document.getElementById('next-input');
+      if (form && nextInput) {
+        const base = form.getAttribute('data-base') || '/';
+        nextInput.value = window.location.origin + base + 'contact/thanks/';
+      }
+    });
+  </script>
+
+  <style>
+    .topbar {
+      background: rgba(250, 247, 242, 0.86);
+      backdrop-filter: saturate(160%) blur(14px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0.8rem 1.75rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--black);
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .brand:hover .brand-icon {
+      transform: rotate(-4deg) scale(1.06);
+    }
+    .brand-wordmark {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+    }
+    .brand-wordmark strong {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+    .brand-wordmark em {
+      font-style: normal;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+      margin-top: 1px;
+    }
+    .topbar-call {
+      padding: 0.55rem 1rem;
+      background: var(--black);
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .topbar-call:hover {
+      background: var(--red);
+      color: #fff;
+      opacity: 1;
+    }
+
+    .contact-main {
+      padding: 4rem 0 6rem;
+      background: var(--paper);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info {
+      max-width: 500px;
+    }
+    .trust-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--red);
+      background: var(--highlight);
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+    .contact-info h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .lede {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      margin-bottom: 2.5rem;
+    }
+
+    .owner-card {
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .owner-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .owner-image {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(17, 17, 17, 0.08);
+    }
+    .owner-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .owner-meta strong {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--black);
+    }
+    .owner-meta span {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+    .owner-quote {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--ink);
+      font-style: italic;
+      margin: 0 0 1.25rem 0;
+    }
+    .owner-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+    .owner-rating .stars {
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.02), 0 16px 40px rgba(17, 17, 17, 0.04);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+      min-width: 0;
+    }
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-soft);
+    }
+    .form-group label .required {
+      color: var(--red);
+    }
+    .form-group label .optional {
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="email"],
+    .form-group select,
+    .form-group textarea {
+      font-family: inherit;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--line-2);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--black);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+    }
+    .form-group select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%234b5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      background-size: 1.1rem;
+      padding-right: 2.5rem;
+    }
+    .form-group input[type="file"] {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    .file-help {
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: var(--ink-muted);
+    }
+    .submit-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 1.1rem;
+      font-size: 1.05rem;
+      margin-top: 0.5rem;
+    }
+
+    .direct-call-alt {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line-2);
+      text-align: center;
+    }
+    .direct-call-alt p {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 0.85rem;
+    }
+    .call-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .contact-main {
+        padding: 2rem 0 4rem;
+      }
+      .contact-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+      .contact-info {
+        max-width: 100%;
+      }
+      .lede {
+        margin-bottom: 1.5rem;
+      }
+      .form-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+      }
+    }
+  </style>
+</Base>

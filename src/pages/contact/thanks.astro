@@ -1,0 +1,204 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+---
+
+<Base title="Request Received — S. Meredith Plumbing & Heating" description="Thank you for your service request. Shane will be in touch with you shortly.">
+  <header class="topbar">
+    <div class="container topbar-row">
+      <a class="brand" href={base} aria-label="Back to home">
+        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
+        <span class="brand-wordmark">
+          <strong>S. Meredith</strong>
+          <em>Plumbing &amp; Heating</em>
+        </span>
+      </a>
+      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
+    </div>
+  </header>
+
+  <main class="thanks-main">
+    <div class="container">
+      <div class="thanks-card">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        
+        <h1>We've got it.</h1>
+        <p class="thanks-message">
+          Shane has received your service request directly on his phone. He will review the details and call you back shortly.
+        </p>
+
+        <div class="thanks-actions">
+          <a class="btn btn-primary call-btn" href={`tel:${phoneTel}`}>
+            Call Shane Now
+          </a>
+          <a class="btn btn-ghost home-btn" href={base}>
+            ← Back to Home
+          </a>
+        </div>
+
+        <div class="trust-footer">
+          <p>Licensed & Insured · MA License #9630040-PL-M · Owner-Operated</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .topbar {
+      background: rgba(250, 247, 242, 0.86);
+      backdrop-filter: saturate(160%) blur(14px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0.8rem 1.75rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--black);
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .brand:hover .brand-icon {
+      transform: rotate(-4deg) scale(1.06);
+    }
+    .brand-wordmark {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+    }
+    .brand-wordmark strong {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+    .brand-wordmark em {
+      font-style: normal;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+      margin-top: 1px;
+    }
+    .topbar-call {
+      padding: 0.55rem 1rem;
+      background: var(--black);
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .topbar-call:hover {
+      background: var(--red);
+      color: #fff;
+      opacity: 1;
+    }
+
+    .thanks-main {
+      padding: 6rem 0 8rem;
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 73px);
+    }
+    .thanks-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 3.5rem 2.5rem;
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.02), 0 16px 40px rgba(17, 17, 17, 0.04);
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--highlight);
+      color: var(--red);
+      font-size: 1.75rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      box-shadow: 0 4px 10px rgba(211, 47, 47, 0.08);
+    }
+
+    .thanks-card h1 {
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      color: var(--black);
+    }
+    .thanks-message {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      margin-bottom: 2.5rem;
+    }
+
+    .thanks-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-width: 320px;
+      margin: 0 auto 2.5rem;
+    }
+    .thanks-actions .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+    }
+
+    .trust-footer {
+      border-top: 1px solid var(--line-2);
+      padding-top: 1.5rem;
+    }
+    .trust-footer p {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .thanks-main {
+        padding: 3rem 0;
+      }
+      .thanks-card {
+        padding: 2.5rem 1.5rem;
+        border-radius: 12px;
+      }
+      .thanks-card h1 {
+        font-size: 1.8rem;
+      }
+      .thanks-message {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</Base>
