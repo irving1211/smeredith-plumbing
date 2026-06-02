@@ -4,7 +4,8 @@ import Base from '../layouts/Base.astro';
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
-const email = 'ShaneMeredith17@gmail.com';
+const publicEmail = 'shane@smeredithplumbing.com';
+const publicEmailHref = `mailto:${publicEmail}`;
 ---
 
 <Base title="Request Service — S. Meredith Plumbing & Heating" description="Need a reliable plumber fast? Fill out our mobile-friendly request form or call Shane directly. Licensed, insured, owner-operated plumbing and heating.">
@@ -31,12 +32,12 @@ const email = 'ShaneMeredith17@gmail.com';
           <h1>Need service? <span class="display-serif">Shane will call</span> you back fast.</h1>
           
           <p class="lede">
-            No automated switchboards or third-party call centers. When you request service below, the details go directly to Shane's phone so he can review and call you back shortly.
+            No automated switchboards or third-party call centers. When you request service below, the details go directly to Shane so he can review them and call you back shortly.
           </p>
 
           <div class="owner-card">
             <div class="owner-header">
-              <img class="owner-image" src={`${base}images/shane.jpg`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" />
+              <img class="owner-image" src={`${base}images/shane.webp`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" width="112" height="112" loading="lazy" decoding="async" />
               <div class="owner-meta">
                 <strong>Shane Meredith</strong>
                 <span>Owner & Licensed Plumber</span>
@@ -54,18 +55,16 @@ const email = 'ShaneMeredith17@gmail.com';
 
         <!-- Form Column -->
         <div class="form-card">
+          <div class="form-status" id="form-status" hidden aria-live="polite"></div>
           <form
-            action="https://formsubmit.co/ShaneMeredith17@gmail.com"
+            action={`${base}api/contact`}
             method="POST"
             enctype="multipart/form-data"
             data-base={base}
           >
-            <!-- FormSubmit Configuration Fields -->
-            <input type="hidden" name="_subject" value="New service request — S. Meredith Plumbing" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
             <input type="text" name="_honey" style="display:none" />
-            <input type="hidden" name="_next" id="next-input" value="" />
+            <input type="hidden" name="success_url" id="success-url-input" value="" />
+            <input type="hidden" name="error_url" id="error-url-input" value="" />
 
             <div class="form-group">
               <label for="name">Your Name <span class="required">*</span></label>
@@ -119,6 +118,7 @@ const email = 'ShaneMeredith17@gmail.com';
           <div class="direct-call-alt">
             <p>Immediate emergency? Call directly for 24/7 priority response:</p>
             <a class="btn btn-dark call-btn" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <p class="direct-email-alt">Prefer email? <a href={publicEmailHref}>{publicEmail}</a></p>
           </div>
         </div>
 
@@ -127,13 +127,28 @@ const email = 'ShaneMeredith17@gmail.com';
   </main>
 
   <script is:inline>
-    // Ensure the redirect URL includes the correct origin and base path at runtime
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.querySelector('form');
-      const nextInput = document.getElementById('next-input');
-      if (form && nextInput) {
+      const successInput = document.getElementById('success-url-input');
+      const errorInput = document.getElementById('error-url-input');
+      if (form && successInput && errorInput) {
         const base = form.getAttribute('data-base') || '/';
-        nextInput.value = window.location.origin + base + 'contact/thanks/';
+        successInput.value = window.location.origin + base + 'contact/thanks/';
+        errorInput.value = window.location.origin + base + 'contact/';
+      }
+
+      const statusBox = document.getElementById('form-status');
+      if (!statusBox) return;
+
+      const status = new URLSearchParams(window.location.search).get('status');
+      const messages = {
+        validation: 'Please check the form fields and try again. If the photo upload keeps failing, text Shane the photo directly.',
+        delivery: 'The request could not be delivered right now. Call or text Shane directly and try the form again in a few minutes.',
+      };
+
+      if (status && messages[status]) {
+        statusBox.textContent = messages[status];
+        statusBox.hidden = false;
       }
     });
   </script>
@@ -309,6 +324,17 @@ const email = 'ShaneMeredith17@gmail.com';
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 1.25rem;
     }
+    .form-status {
+      margin-bottom: 1rem;
+      padding: 0.9rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(183, 28, 28, 0.18);
+      background: #fff1f1;
+      color: #7f1d1d;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
     .form-group {
       display: flex;
       flex-direction: column;
@@ -393,6 +419,22 @@ const email = 'ShaneMeredith17@gmail.com';
       font-weight: 600;
       color: var(--ink-soft);
       margin-bottom: 0.85rem;
+    }
+    .direct-email-alt {
+      margin: 1rem 0 0;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+    .direct-email-alt a {
+      color: var(--black);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+    .direct-email-alt a:hover {
+      color: var(--red);
+      opacity: 1;
     }
     .call-btn {
       width: 100%;

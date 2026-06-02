@@ -1,52 +1,90 @@
 [
   {
-    "slug": "bath-remodels",
-    "title": "Bathroom Remodels",
-    "desc": "Full bath rebuilds — tile, tub, vanity, fixtures",
+    "slug": "kitchen-bath-remodel",
+    "title": "Kitchen & Bath Remodel",
+    "desc": "Finished kitchen and bath first. The original rough stage is the last slide.",
     "images": [
-      "/images/jobs/bath-sage-tile.jpg",
-      "/images/jobs/bath-pinwheel-tub.jpg"
+      "/images/jobs/kitchen-bath-remodel/shot-1.jpg",
+      "/images/jobs/kitchen-bath-remodel/shot-2.jpg",
+      "/images/jobs/kitchen-bath-remodel/shot-3.jpg"
     ]
   },
   {
-    "slug": "bath-marble-navy",
-    "title": "Bath Remodel · Marble & Navy",
-    "desc": "Subway accent, marble surround and floor",
+    "slug": "compact-water-heater-cabinet",
+    "title": "Compact Water Heater Cabinet",
+    "desc": "Tight cabinet install shown from the finished angle first, then the alternate view.",
     "images": [
-      "/images/jobs/bath-navy-marble.jpg"
+      "/images/jobs/compact-water-heater-cabinet/shot-1.jpg",
+      "/images/jobs/compact-water-heater-cabinet/shot-2.jpg"
     ]
   },
   {
-    "slug": "walk-in-shower",
-    "title": "Walk-In Shower · Stone Tile",
-    "desc": "Curbless walk-in, black fixtures, custom niche",
+    "slug": "boiler-manifold-room",
+    "title": "Boiler Manifold Mechanical Room",
+    "desc": "Lead shot first, then the wider mechanical room view.",
     "images": [
-      "/images/jobs/bath-marble-walkin.jpg"
+      "/images/jobs/boiler-manifold-room/shot-1.jpg",
+      "/images/jobs/boiler-manifold-room/shot-2.jpg"
     ]
   },
   {
-    "slug": "kitchen-remodel",
-    "title": "Kitchen Remodel · Quartz",
-    "desc": "Shaker cabinets, quartz counters, gas range",
+    "slug": "boiler-room-upgrades",
+    "title": "Boiler Room Upgrades",
+    "desc": "Finished boiler room details with the second angle on the next slide.",
     "images": [
-      "/images/jobs/kitchen-quartz.jpg"
+      "/images/jobs/boiler-room-upgrades/shot-2.jpg",
+      "/images/jobs/boiler-room-upgrades/shot-1.jpg"
     ]
   },
   {
-    "slug": "boiler-copper-piping",
-    "title": "Boiler & Near-Boiler Piping",
-    "desc": "Mod-con boiler, copper manifold, multi-zone heat",
+    "slug": "single-water-heater-open-basement",
+    "title": "Open Basement Water Heater",
+    "desc": "Single finished install in an open basement mechanical space.",
     "images": [
-      "/images/jobs/boiler-copper-manifold.jpg"
+      "/images/jobs/single-water-heater-open-basement/shot-1.jpg"
     ]
   },
   {
-    "slug": "water-heater-installs",
-    "title": "Water Heater Installs",
-    "desc": "Power-vent and high-recovery gas — matched pairs",
+    "slug": "twin-water-heaters",
+    "title": "Twin Water Heaters",
+    "desc": "Two finished views of the same paired water heater setup.",
     "images": [
-      "/images/jobs/water-heaters-twin.jpg",
-      "/images/jobs/water-heaters-pair.jpg"
+      "/images/jobs/twin-water-heaters/shot-1.jpg",
+      "/images/jobs/twin-water-heaters/shot-2.jpg"
+    ]
+  },
+  {
+    "slug": "single-water-heater-brick-cellar",
+    "title": "Brick Cellar Water Heater",
+    "desc": "Finished shot first, then the alternate angle of the same cellar install.",
+    "images": [
+      "/images/jobs/single-water-heater-brick-cellar/shot-2.jpg",
+      "/images/jobs/single-water-heater-brick-cellar/shot-1.jpg"
+    ]
+  },
+  {
+    "slug": "pattern-tile-bath",
+    "title": "Pattern Tile Bath",
+    "desc": "Tub and tile detail first, then the matching vanity side of the same bathroom.",
+    "images": [
+      "/images/jobs/pattern-tile-bath/shot-1.jpg",
+      "/images/jobs/pattern-tile-bath/shot-2.jpg"
+    ]
+  },
+  {
+    "slug": "black-tile-bath",
+    "title": "Black Tile Bath",
+    "desc": "Finished bathroom with dark feature tile and clean fixture lines.",
+    "images": [
+      "/images/jobs/black-tile-bath/shot-1.jpg"
+    ]
+  },
+  {
+    "slug": "dark-tile-bath",
+    "title": "Dark Tile Bathroom",
+    "desc": "Finished bath with darker vertical tile and updated vanity.",
+    "images": [
+      "/images/jobs/dark-tile-bath/shot-1.jpg"
     ]
   }
 ]

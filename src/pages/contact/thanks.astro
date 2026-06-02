@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
+const publicEmail = 'shane@smeredithplumbing.com';
+const publicEmailHref = `mailto:${publicEmail}`;
 ---
 
 <Base title="Request Received — S. Meredith Plumbing & Heating" description="Thank you for your service request. Shane will be in touch with you shortly.">
@@ -41,6 +43,7 @@ const phoneTel = '+17818204592';
 
         <div class="trust-footer">
           <p>Licensed & Insured · MA License #9630040-PL-M · Owner-Operated</p>
+          <p class="trust-email">Need to send follow-up details? <a href={publicEmailHref}>{publicEmail}</a></p>
         </div>
       </div>
     </div>
@@ -183,6 +186,23 @@ const phoneTel = '+17818204592';
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin: 0;
+    }
+    .trust-email {
+      margin-top: 0.85rem !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      font-size: 0.9rem !important;
+      font-weight: 500 !important;
+    }
+    .trust-email a {
+      color: var(--black);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+    .trust-email a:hover {
+      color: var(--red);
+      opacity: 1;
     }
 
     @media (max-width: 600px) {

@@ -12,9 +12,21 @@ const jobs = jobsRaw.map((j) => ({
 
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
-const email = 'ShaneMeredith17@gmail.com';
+const publicEmail = 'shane@smeredithplumbing.com';
+const publicEmailHref = `mailto:${publicEmail}`;
 const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
 const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
+const builderInstagramUrl = 'https://www.instagram.com/icbizsystems/';
+const contactPage = `${base}contact/`;
+const heroImageSrc = `${base}images/shane.webp`;
+const heroImageSmallSrc = `${base}images/shane-640.webp`;
+const heroImageSrcSet = `${heroImageSmallSrc} 640w, ${heroImageSrc} 960w`;
+const heroImageSizes = '(max-width: 900px) 88vw, (max-width: 1240px) 42vw, 430px';
+const aboutImageSizes = '(max-width: 900px) 86vw, 360px';
+const vanImageSrc = `${base}images/van/van-side.webp`;
+const vanImageSmallSrc = `${base}images/van/van-side-800.webp`;
+const vanImageSrcSet = `${vanImageSmallSrc} 800w, ${vanImageSrc} 1100w`;
+const vanImageSizes = '(max-width: 900px) 92vw, (max-width: 1240px) 48vw, 560px';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
 // Owner-confirmed Google Business Profile share link (2026-05-28).
 const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
@@ -61,6 +73,9 @@ const whyShane = [
 ---
 
 <Base>
+  <Fragment slot="head">
+    <link rel="preload" as="image" href={heroImageSrc} type="image/webp" imagesrcset={heroImageSrcSet} imagesizes={heroImageSizes} fetchpriority="high" />
+  </Fragment>
   <header class="topbar" data-topbar>
     <div class="container topbar-row">
       <a class="brand" href="#top" aria-label="S. Meredith Plumbing & Heating — back to top">
@@ -126,7 +141,7 @@ const whyShane = [
       </div>
       <div class="mobile-menu-meta">
         <p>MA License #9630040-PL-M · Fully insured</p>
-        <a href={`mailto:${email}`}>{email}</a>
+        <a href={contactPage}>Request service form</a>
       </div>
     </div>
   </header>
@@ -190,7 +205,7 @@ const whyShane = [
         <div class="hero-visual">
           <div class="hero-card">
             <div class="hero-image-wrap">
-              <img class="hero-owner-img" src={`${base}images/shane.jpg`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" />
+              <img class="hero-owner-img" src={heroImageSrc} srcset={heroImageSrcSet} sizes={heroImageSizes} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" width="960" height="1280" loading="eager" fetchpriority="high" decoding="sync" />
               <div class="hero-image-overlay">
                 <span class="badge-status">ON CALL 24/7</span>
               </div>
@@ -388,9 +403,9 @@ const whyShane = [
 
   <section class="about" id="about">
     <div class="container about-grid">
-      <div class="about-photo">
-        <img src={`${base}images/shane.jpg`} alt="Shane Meredith, owner of S. Meredith Plumbing & Heating" loading="lazy" />
-      </div>
+      <figure class="about-photo">
+        <img src={heroImageSrc} srcset={heroImageSrcSet} sizes={aboutImageSizes} alt="Shane Meredith, owner of S. Meredith Plumbing & Heating" width="960" height="1280" loading="lazy" decoding="async" />
+      </figure>
       <div class="about-copy">
         <span class="kicker">About Shane</span>
         <h2>One craftsman. One <span class="display-serif">standard</span>. A decade of it.</h2>
@@ -410,7 +425,7 @@ const whyShane = [
   <section class="van" id="van" aria-label="On the road across the North Shore">
     <div class="container van-inner">
       <figure class="van-photo">
-        <img src={`${base}images/van/van-side.jpg`} alt="The S. Meredith Plumbing & Heating work van — fully stocked, owner-driven, serving the North Shore and Boston" width="1600" height="1200" loading="lazy" />
+        <img src={`${base}images/van/van-side.webp`} alt="The S. Meredith Plumbing & Heating work van — fully stocked, owner-driven, serving the North Shore and Boston" width="1100" height="825" loading="lazy" decoding="async" />
       </figure>
       <div class="van-copy">
         <span class="kicker dark">On the road</span>
@@ -540,14 +555,15 @@ const whyShane = [
     <div class="container contact-inner">
       <span class="kicker dark">Get in touch</span>
       <h2>The fastest way is a <span class="display-serif">phone call</span>.</h2>
-      <p>Pipes don’t wait. No forms. No third-party dispatcher. No upsell scripts. Just Shane.</p>
+      <p>Pipes don’t wait. Phone first. Text works too. If you need to send details, use the service form.</p>
       <div class="contact-cta">
         <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
         <a class="btn btn-ghost-dark big" href={smsHref}>Text Shane</a>
       </div>
       <ul class="contact-list">
         <li><span class="lbl">Phone</span><a href={`tel:${phoneTel}`}>{phone}</a></li>
-        <li><span class="lbl">Email</span><a href={`mailto:${email}`}>{email}</a></li>
+        <li><span class="lbl">Email</span><a href={publicEmailHref}>{publicEmail}</a></li>
+        <li><span class="lbl">Request form</span><a href={contactPage}>Open service form</a></li>
         <li><span class="lbl">Hours</span><span>24/7 emergency service</span></li>
         <li><span class="lbl">Area</span><span>Northshore MA &amp; Boston</span></li>
         <li><span class="lbl">Payment</span><span>Check, Venmo &amp; cash</span></li>
@@ -558,7 +574,7 @@ const whyShane = [
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo-tile"><img src={`${base}images/logo.png`} alt="S. Meredith Plumbing & Heating" width="72" height="71" /></span>
+        <span class="footer-logo-tile"><img src={`${base}images/logo-footer.webp`} alt="S. Meredith Plumbing & Heating" width="72" height="71" loading="lazy" decoding="async" /></span>
         <div>
           <strong>S. Meredith Plumbing &amp; Heating</strong>
           <span>Saugus, MA · MA Lic. #9630040-PL-M · Licensed &amp; Insured · Owner-operated</span>
@@ -567,13 +583,19 @@ const whyShane = [
       <div class="footer-links">
         <a href={`tel:${phoneTel}`}>{phone}</a>
         <span class="dot">·</span>
-        <a href={`mailto:${email}`}>{email}</a>
+        <a href={publicEmailHref}>{publicEmail}</a>
+        <span class="dot">·</span>
+        <a href={contactPage}>Service form</a>
         <span class="dot">·</span>
         <a href={facebookUrl} rel="noopener" target="_blank">Facebook</a>
         <span class="dot">·</span>
         <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a>
       </div>
       <div class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating · Built for the Northshore</div>
+      <div class="footer-credit">
+        <span>Website by <strong>IC Business Systems</strong>.</span>
+        <a href={builderInstagramUrl} rel="noopener" target="_blank">Want one like this? DM us on Instagram.</a>
+      </div>
     </div>
   </footer>
 
@@ -1103,7 +1125,15 @@ const whyShane = [
 
     .about { padding: 7rem 0; background: var(--paper); }
     .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4rem; align-items: center; }
-    .about-photo img { border-radius: 14px; aspect-ratio: 4/5; object-fit: cover; box-shadow: 0 12px 36px rgba(42,31,20,.10); }
+    .about-photo {
+      margin: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      box-shadow: 0 12px 36px rgba(42,31,20,.10);
+      background: var(--paper-3);
+    }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
     .about-copy h2 { font-size: clamp(1.9rem, 3.5vw, 2.6rem); margin-bottom: 1.4rem; max-width: 18ch; }
     .about-copy h2 .display-serif { color: var(--red); font-weight: 700; }
     .about-copy p { font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 1.1rem; line-height: 1.65; }
@@ -1174,7 +1204,9 @@ const whyShane = [
     .towns { list-style: none; padding: 0; margin: 0 auto 1.8rem; max-width: 900px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .55rem; text-align: center; }
     .towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; font-weight: 500; color: var(--ink); font-size: .92rem; transition: border-color .2s ease, transform .2s ease, background .2s ease; }
     .towns li:hover { border-color: var(--red); transform: translateY(-2px); background: var(--paper-2); }
-    .towns li a { display: block; padding: .65rem .5rem; color: var(--ink); width: 100%; }
+    .towns li a { display: flex; align-items: center; justify-content: center; text-align: center; padding: .65rem .5rem; color: var(--ink); width: 100%; position: relative; }
+    .towns li a::after { position: absolute; right: .8rem; margin-left: 0; transform: translateX(-4px); transition: opacity .2s ease, transform .2s ease; }
+    .towns li:hover a::after { transform: translateX(0); margin-left: 0; }
     .towns li a::after { content: ' →'; opacity: 0; margin-left: .2rem; transition: opacity .2s ease, margin-left .2s ease; color: var(--red); }
     .towns li:hover a::after { opacity: 1; margin-left: .35rem; }
     .towns li.town-plain { padding: .65rem .5rem; cursor: default; }
@@ -1209,6 +1241,10 @@ const whyShane = [
     .footer-links a:hover { color: #fff; opacity: 1; }
     .footer-links .dot { color: rgba(255,255,255,.25); }
     .footer-fineprint { grid-column: 1 / -1; text-align: center; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.08); margin-top: .5rem; font-size: .82rem; color: rgba(255,255,255,.4); }
+    .footer-credit { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: .5rem .75rem; flex-wrap: wrap; text-align: center; font-size: .82rem; color: rgba(255,255,255,.5); }
+    .footer-credit strong { color: rgba(255,255,255,.82); font-weight: 600; }
+    .footer-credit a { color: rgba(255,255,255,.78); text-decoration: underline; text-underline-offset: .18em; }
+    .footer-credit a:hover { color: #fff; opacity: 1; }
 
     /* Restrained scroll-reveal */
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(0.22, 0.61, 0.36, 1), transform .7s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: opacity, transform; }
@@ -1291,7 +1327,7 @@ const whyShane = [
       .services, .work, .about, .reviews, .why, .faq, .area, .contact { padding: 4.5rem 0; }
       .section-head { margin-bottom: 2.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-photo { max-width: 360px; margin: 0 auto; }
+      .about-photo { max-width: 360px; margin: 0 auto; width: 100%; }
       .why-grid { grid-template-columns: 1fr; }
       .van { padding: 4rem 0; }
       .van-inner { grid-template-columns: 1fr; gap: 2rem; }
