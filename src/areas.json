@@ -25,7 +25,7 @@
       { "h": "Older boiler stock", "b": "1970s and 1980s cast iron boilers are still common in Lynn. Some are worth saving, many are not — we tell you straight." },
       { "h": "Hard water means short water heater life", "b": "Lynn's water hardness shortens tank life. Tankless conversions and water-treatment options make sense for some homes — we'll quote both." }
     ],
-    "common_calls": ["Boiler replacement", "Water heater repair", "Drain backup", "Bath remodel rough plumbing", "Emergency heat restoration"]
+    "common_calls": ["Boiler replacement", "Water heater repair", "Frozen or burst pipe repair", "Bath remodel rough plumbing", "Emergency heat restoration"]
   },
   {
     "slug": "revere",
@@ -53,7 +53,7 @@
       { "h": "Newer construction in Linden", "b": "PEX, modern boilers, tankless water heaters — but still needing real service when something fails. We work newer homes too." },
       { "h": "Two-family conversions and rentals", "b": "Many Malden owners run rentals. We handle the unglamorous side — annual servicing, code compliance, no-surprise tenant turnover." }
     ],
-    "common_calls": ["Boiler replacement", "Water heater swap", "Kitchen remodel rough plumbing", "Tenant turnover service", "Emergency drain backup"]
+    "common_calls": ["Boiler replacement", "Water heater swap", "Kitchen remodel rough plumbing", "Tenant turnover service", "Emergency burst pipe repair"]
   },
   {
     "slug": "peabody",

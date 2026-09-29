@@ -5,12 +5,12 @@
     "h1": "Emergency plumber, North Shore & Boston — 24/7",
     "tagline": "No heat. No hot water. Burst pipe. Call — Shane comes out.",
     "meta_desc": "24/7 emergency plumber serving Saugus, the North Shore, and Boston. Frozen pipes, burst lines, no-heat boiler failures, water heater leaks. Call 781-820-4592 — Shane answers.",
-    "intro": "Plumbing and heating emergencies don't wait for business hours. Burst pipes, no heat in January, no hot water Saturday morning, gas leaks, sewage backups — Shane Meredith comes out personally, with parts on the truck, ready to make the call to fix and the call to wait until Monday.",
+    "intro": "Plumbing and heating emergencies don't wait for business hours. Burst pipes, no heat in January, no hot water Saturday morning, gas leaks, and failed sump pumps — Shane Meredith comes out personally, with parts on the truck, ready to make the call to fix and the call to wait until Monday.",
     "scenarios": [
       { "h": "No heat in January", "b": "Boiler down, pilot out, circulator failed, no-fire. Same-day Saturday is the rule, not the exception. Most repairs done on the first visit." },
       { "h": "No hot water", "b": "Tank failure, pilot out, thermocouple, control board. We diagnose first, swap the part if it's fixable, replace the unit same-day if it's not." },
       { "h": "Burst or frozen pipe", "b": "We shut it down, thaw what's salvageable, repair or replace what isn't. Insurance-ready photos and invoicing every time." },
-      { "h": "Sewage or sump-pump failure", "b": "Backed-up drains, failed sump pumps, ejector pumps. Containment first, repair second, sanitation last." },
+      { "h": "Sump-pump or ejector-pump failure", "b": "Failed sump pumps and ejector pumps can flood a basement fast. We isolate the failed equipment, repair or replace it, and restore safe operation." },
       { "h": "Gas smell or suspected leak", "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Licensed gas fitter, code-compliant repair, pressure-tested before sign-off." }
     ],
     "guarantee": "Licensed Massachusetts plumber and gas fitter, fully insured. Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
