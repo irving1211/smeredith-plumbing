@@ -2,9 +2,10 @@
   {
     "slug": "saugus",
     "town": "Saugus",
+    "seo_title": "Plumber in Saugus, MA | S. Meredith Plumbing & Heating",
     "h1": "Plumber in Saugus, MA — 24/7 emergency, owner-operated",
     "tagline": "Home base. Closest tools, fastest response.",
-    "meta_desc": "Local Saugus plumber — owner-operated, licensed and insured, 10+ years. 24/7 emergencies, water heaters, boilers, gas, remodels. Call 781-820-4592 — Shane answers.",
+    "meta_desc": "Saugus plumber, owner-operated and licensed: water heaters, boilers, gas lines, remodels and 24/7 emergency service. Call 781-820-4592 and Shane answers.",
     "intro": "Saugus is home. S. Meredith Plumbing & Heating is based here and runs every job in Saugus personally — Cliftondale, East Saugus, Pranker's Pond, Lynnhurst, Bristow, the Town Common neighborhoods, and out toward Route 1.",
     "local_hooks": [
       { "h": "Older housing stock around Cliftondale and East Saugus", "b": "Older homes mean older plumbing — cast iron stacks, galvanized supply lines, and 1960s-vintage water heaters that need watching. Pre-emptive replacement saves you from the 2 AM call." },
@@ -16,9 +17,10 @@
   {
     "slug": "lynn",
     "town": "Lynn",
+    "seo_title": "Plumber in Lynn, MA | S. Meredith Plumbing & Heating",
     "h1": "Plumber in Lynn, MA — North Shore boiler & water heater specialist",
     "tagline": "Lynn's older housing stock, modern plumbing answers.",
-    "meta_desc": "Plumber serving Lynn, MA — boilers, water heaters, gas, emergencies. Owner-operated, licensed and insured. Same-day service most days. Call 781-820-4592.",
+    "meta_desc": "Plumber serving Lynn, MA: boilers, water heaters, gas lines and emergency repairs. Owner-operated and licensed, based next door in Saugus. Call 781-820-4592.",
     "intro": "Lynn has the densest stock of pre-war and triple-decker housing on the North Shore. That means cast iron drains, lead-to-galvanized water mains, and old boilers running well past their service life. We work Lynn weekly — most emergency calls on the North Shore come from this side of the line.",
     "local_hooks": [
       { "h": "Pre-war triple-deckers", "b": "Multi-family buildings throughout Lynn share waste stacks and old plumbing that hasn't been touched in decades. We've done full re-pipes and sectional repairs in dozens of these buildings." },
@@ -30,9 +32,10 @@
   {
     "slug": "revere",
     "town": "Revere",
+    "seo_title": "Plumber in Revere, MA | S. Meredith Plumbing & Heating",
     "h1": "Plumber in Revere, MA — coastal salt-air water heater specialist",
     "tagline": "Revere homes face the ocean. Your plumbing should be ready.",
-    "meta_desc": "Plumber serving Revere, MA — coastal salt-air water heater corrosion, boilers, gas, emergencies. Owner-operated, licensed. Call 781-820-4592 — Shane answers.",
+    "meta_desc": "Plumber serving Revere, MA: water heaters, boilers, gas lines and emergency repairs for coastal homes. Owner-operated, based in Saugus. Call 781-820-4592.",
     "intro": "Revere is a coastal town — and coastal towns chew through water heaters and outdoor plumbing faster than inland markets. Salt air corrodes power-vent terminations, copper supply lines, and tank exteriors. We service Revere weekly and stock the parts that the coast eats through.",
     "local_hooks": [
       { "h": "Salt-air corrosion on outdoor terminations", "b": "Power-vent terminations, condensate drains, and exterior gas piping corrode 2–3x faster on the coast. We use marine-grade fasteners and inspect the exterior side annually." },
@@ -44,9 +47,10 @@
   {
     "slug": "malden",
     "town": "Malden",
+    "seo_title": "Plumber in Malden, MA | S. Meredith Plumbing & Heating",
     "h1": "Plumber in Malden, MA — Linden, Edgeworth, & Maplewood",
     "tagline": "Malden's mixed housing stock — one plumber for all of it.",
-    "meta_desc": "Plumber serving Malden, MA — Linden, Edgeworth, Maplewood, Faulkner. Boilers, water heaters, gas, emergencies. Owner-operated, licensed. Call 781-820-4592.",
+    "meta_desc": "Plumber serving Malden, MA: boilers, water heaters, gas lines, remodels and emergency repairs. Owner-operated and licensed, based in Saugus. Call 781-820-4592.",
     "intro": "Malden runs the full range — Victorian-era homes near the Town Common, mid-century duplexes in Maplewood, and newer construction in Linden. Different vintages, different plumbing answers. We work all of them.",
     "local_hooks": [
       { "h": "Victorian-era supply line replacement", "b": "Older Malden homes still have galvanized supply lines that should be replaced before they fail. We re-pipe in copper or PEX, your choice." },
@@ -58,9 +62,10 @@
   {
     "slug": "peabody",
     "town": "Peabody",
+    "seo_title": "Plumber in Peabody, MA | S. Meredith Plumbing & Heating",
     "h1": "Plumber in Peabody, MA — West, South & Centre",
     "tagline": "Peabody's residential plumbing — done by a craftsman, not a chain.",
-    "meta_desc": "Plumber serving Peabody, MA — West Peabody, South Peabody, Peabody Centre. Boilers, water heaters, gas, emergencies. Owner-operated, licensed. Call 781-820-4592.",
+    "meta_desc": "Plumber serving Peabody, MA: boilers, water heaters, generator gas lines, remodels and emergencies. Owner-operated, based in Saugus. Call 781-820-4592.",
     "intro": "Peabody mixes residential neighborhoods — West, South, Peabody Centre — with the kind of homes that reward a craftsman over a national chain. We work Peabody regularly, on jobs ranging from emergency boiler swaps to full bathroom remodels.",
     "local_hooks": [
       { "h": "West Peabody single-family homes", "b": "Larger lots, often with attached or detached generators tied to a gas line we installed. We handle the gas-side of generator installs." },

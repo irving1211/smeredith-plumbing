@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects. Legacy WordPress URLs inventoried from the harvested
+# pre-2026 site (owner page, contact page, WP core endpoints). /contact/ is a live page now.
+# Unknown paths fall through to the real 404 page (src/pages/404.astro).
+/owner           /              301
+/owner/          /              301
+/wp-sitemap.xml  /sitemap.xml   301

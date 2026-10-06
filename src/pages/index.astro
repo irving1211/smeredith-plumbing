@@ -7,7 +7,7 @@ import areas from '../areas.json';
 const base = import.meta.env.BASE_URL;
 const jobs = jobsRaw.map((j) => ({
   ...j,
-  images: j.images.map((src) => `${base}${src.replace(/^\//, '')}`),
+  photos: j.photos.map((p) => ({ ...p, src: `${base}${p.src.replace(/^\//, '')}` })),
 }));
 
 const phone = '781-820-4592';
@@ -72,7 +72,12 @@ const whyShane = [
 ];
 ---
 
-<Base>
+<Base
+  title="S. Meredith Plumbing & Heating | Saugus, MA Plumber"
+  description="The plumber who answers the phone. Owner-operated plumbing and heating in Saugus, the North Shore and Boston. Licensed and insured. Call 781-820-4592."
+  pageType="home"
+  faqs={faqs}
+>
   <Fragment slot="head">
     <link rel="preload" as="image" href={heroImageSrc} type="image/webp" imagesrcset={heroImageSrcSet} imagesizes={heroImageSizes} fetchpriority="high" />
   </Fragment>
@@ -147,6 +152,7 @@ const whyShane = [
   </header>
   <button class="mobile-menu-scrim" type="button" aria-label="Close navigation menu" data-menu-scrim></button>
 
+  <main id="main">
   <section class="hero" id="top">
     <div class="hero-noise" aria-hidden="true"></div>
     <div class="container">
@@ -217,7 +223,7 @@ const whyShane = [
               </div>
               <div class="hero-card-stars">
                 <span class="star-rating">★★★★★</span>
-                <span>5.0 Rating · 10 Verified Reviews Excerpts</span>
+                <span>5-star Google reviews</span>
               </div>
             </div>
           </div>
@@ -298,13 +304,14 @@ const whyShane = [
       <div class="service-grid">
         {services.map((s, i) => (
           <a class="service-card" href={`${base}services/${s.slug}/`}>
-            <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="service-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <h3>{s.title}</h3>
             <p>{s.tagline}</p>
             <span class="service-link">Read more →</span>
           </a>
         ))}
       </div>
+      <p class="services-all"><a href={`${base}services/`}>See all plumbing &amp; heating services →</a></p>
       <div class="services-cta">
         <p>Don’t see what you need? Call. Odds are we’ve fixed it before.</p>
         <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
@@ -327,14 +334,14 @@ const whyShane = [
               <span>Swipe or Tap</span>
             </div>
             <div class="carousel-track" data-track>
-              {job.images.map((src, i) => (
-                <img src={src} alt={`${job.title} — photo ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />
+              {job.photos.map((photo, i) => (
+                <img src={photo.src} alt={`${job.title} — photo ${i + 1}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
               ))}
             </div>
             <button class="carousel-arrow prev" data-prev aria-label="Previous photo">‹</button>
             <button class="carousel-arrow next" data-next aria-label="Next photo">›</button>
             <div class="carousel-dots" data-dots>
-              {job.images.map((_, i) => (
+              {job.photos.map((_, i) => (
                 <span class={i === 0 ? 'dot active' : 'dot'} data-dot data-idx={i}></span>
               ))}
             </div>
@@ -448,8 +455,8 @@ const whyShane = [
     <div class="container">
       <div class="section-head">
         <span class="kicker">From neighbors</span>
-        <h2>What people in <span class="display-serif">Saugus</span> say.</h2>
-        <p class="reviews-badge"><span class="g-stars">★★★★★</span> 5.0 Rating · 10 Real, Verified Neighborhood Reviews Excerpts Below</p>
+        <h2>What <span class="display-serif">customers</span> say.</h2>
+        <p class="reviews-badge"><span class="g-stars">★★★★★</span> Excerpts from Shane’s 5-star Google reviews</p>
       </div>
       <div class="review-grid">
         {reviews.map((r) => (
@@ -570,6 +577,8 @@ const whyShane = [
       </ul>
     </div>
   </section>
+
+  </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -1074,6 +1083,8 @@ const whyShane = [
     .service-card p { color: var(--ink-soft); margin: 0; font-size: .96rem; line-height: 1.55; flex: 1; }
     .service-link { color: var(--red); font-weight: 600; font-size: .9rem; margin-top: .65rem; transition: transform .25s ease; display: inline-block; }
     .service-card:hover .service-link { transform: translateX(4px); }
+    .services-all { text-align: center; margin: 2.5rem 0 0; font-weight: 700; }
+    .services-all a { color: var(--black); text-decoration: underline; text-decoration-color: rgba(211, 47, 47, 0.35); text-underline-offset: .2em; }
     .services-cta { text-align: center; margin-top: 4rem; }
     .services-cta p { color: var(--ink-soft); margin-bottom: 1.2rem; }
 

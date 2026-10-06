@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHeader from '../../components/SubpageHeader.astro';
 import areas from '../../areas.json';
+import services from '../../services.json';
 
 export function getStaticPaths() {
   return areas.map((a) => ({ params: { town: a.slug }, props: { area: a } }));
@@ -12,46 +14,31 @@ const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').repla
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — calling from ${area.town}. `)}`;
+const otherTowns = areas.filter((a) => a.slug !== area.slug);
 
+// Breadcrumb schema only references real pages; the visible "Service area" link is a homepage section.
 const breadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
-    { '@type': 'ListItem', position: 2, name: 'Service Area', item: `${origin}${base}#area` },
-    { '@type': 'ListItem', position: 3, name: area.town },
+    { '@type': 'ListItem', position: 2, name: `Plumber in ${area.town}`, item: `${origin}${base}areas/${area.slug}/` },
   ],
 };
 ---
 
-<Base title={`Plumber in ${area.town}, MA — S. Meredith Plumbing & Heating`} description={area.meta_desc}>
+<Base title={area.seo_title} description={area.meta_desc} pageType="town" pageMeta={{ town: area.slug }}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
 
-  <header class="topbar">
-    <div class="container topbar-row">
-      <a class="brand" href={base} aria-label="Back to home">
-        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
-        <span class="brand-wordmark">
-          <strong>S. Meredith</strong>
-          <em>Plumbing &amp; Heating</em>
-        </span>
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href={`${base}#services`}>Services</a>
-        <a href={`${base}#work`}>Work</a>
-        <a href={`${base}#about`}>About</a>
-        <a href={`${base}#faq`}>FAQ</a>
-      </nav>
-      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
-    </div>
-  </header>
+  <SubpageHeader />
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
-      <a href={base}>Home</a> <span>›</span> <a href={`${base}#area`}>Service Area</a> <span>›</span> <span class="current">{area.town}</span>
+      <a href={base}>Home</a> <span aria-hidden="true">›</span> <a href={`${base}#area`}>Service area</a> <span aria-hidden="true">›</span> <span class="current" aria-current="page">{area.town}</span>
     </div>
   </nav>
 
+  <main>
   <section class="page-hero">
     <div class="container">
       <h1>{area.h1}</h1>
@@ -60,6 +47,7 @@ const breadcrumb = {
         <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
         <a class="btn btn-ghost" href={smsHref}>Text Shane from {area.town}</a>
       </div>
+      <p class="hero-alt"><a href={`${base}contact/`}>Or request service online →</a></p>
     </div>
   </section>
 
@@ -82,37 +70,42 @@ const breadcrumb = {
         {area.common_calls.map((c) => <li>{c}</li>)}
       </ul>
 
-      <div class="page-cta">
+      <section class="town-services" id="town-services" aria-labelledby="town-services-h">
+        <h2 id="town-services-h">Services in {area.town}</h2>
+        <ul class="link-pills">
+          {services.map((s) => <li><a href={`${base}services/${s.slug}/`}>{s.title}</a></li>)}
+        </ul>
+        <p class="more-link"><a href={`${base}#work`}>See recent jobs →</a></p>
+      </section>
+
+      <div class="page-cta" id="town-cta">
         <h2>{area.town} homeowners — one number.</h2>
         <p>Owner answers. Free written quote on every job. Same-day where possible. Licensed &amp; insured — MA license #9630040-PL-M.</p>
         <div class="hero-cta">
           <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
           <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
+          <a class="btn btn-ghost big" href={`${base}contact/`}>Request service</a>
         </div>
       </div>
 
-      <p class="back-link"><a href={base}>← Back to home</a></p>
+      <section class="nearby" id="nearby-towns" aria-labelledby="nearby-h">
+        <h2 id="nearby-h">Nearby towns</h2>
+        <ul class="link-pills">
+          {otherTowns.map((a) => <li><a href={`${base}areas/${a.slug}/`}>Plumber in {a.town}</a></li>)}
+        </ul>
+      </section>
+
+      <p class="back-link"><a href={`${base}services/`}>← All services</a></p>
     </div>
   </section>
+
+  </main>
 
   <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
 
   <style>
-    .topbar { background: rgba(250,247,242,.86); backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
-    .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; }
-    .brand { display: flex; align-items: center; gap: .65rem; color: var(--black); }
-    .brand-icon { width: 40px; height: 40px; transition: transform .3s ease; flex-shrink: 0; }
-    .brand:hover .brand-icon { transform: rotate(-4deg) scale(1.06); }
-    .brand-wordmark { display: flex; flex-direction: column; line-height: 1.05; }
-    .brand-wordmark strong { font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); }
-    .brand-wordmark em { font-style: normal; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: .7rem; color: var(--ink-muted); letter-spacing: .04em; margin-top: 1px; }
-    .nav { display: flex; gap: 1.6rem; margin-left: auto; }
-    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; }
-    .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; }
-    .topbar-call:hover { background: var(--red); color: #fff; opacity: 1; }
-
     .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
-    .breadcrumb a { color: var(--ink-soft); }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
     .breadcrumb a:hover { color: var(--red); opacity: 1; }
     .breadcrumb span { margin: 0 .35rem; color: var(--ink-muted); }
     .breadcrumb .current { color: var(--ink); font-weight: 500; }
@@ -141,6 +134,19 @@ const breadcrumb = {
     .page-cta .hero-cta { justify-content: center; }
     .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
 
+    .hero-alt { margin: 1rem 0 0; font-weight: 600; }
+    .hero-alt a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
+    .link-pills { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
+    .link-pills a:hover { border-color: var(--red); color: var(--red); opacity: 1; }
+    .where p, .related-services p { color: var(--ink-soft); line-height: 1.65; }
+    .job-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+    .job-thumb { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .job-thumb img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+    .job-thumb figcaption { padding: .7rem .9rem; font-weight: 600; font-size: .92rem; }
+    .more-link { margin-top: 1rem; }
+    .more-link a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+
     .back-link { text-align: center; color: var(--ink-muted); margin-top: 2rem; }
     .back-link a { color: var(--ink-soft); font-weight: 500; }
     .back-link a:hover { color: var(--red); opacity: 1; }
@@ -149,7 +155,6 @@ const breadcrumb = {
     .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
 
     @media (max-width: 900px) {
-      .nav { display: none; }
       .page-hero { padding: 3rem 0 2rem; }
       .hero-cta { flex-direction: column; gap: .65rem; }
       .hero-cta .btn { justify-content: center; width: 100%; }

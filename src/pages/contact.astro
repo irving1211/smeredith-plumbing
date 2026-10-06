@@ -6,9 +6,20 @@ const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const publicEmail = 'shane@smeredithplumbing.com';
 const publicEmailHref = `mailto:${publicEmail}`;
+const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
+    { '@type': 'ListItem', position: 2, name: 'Request service', item: `${origin}${base}contact/` },
+  ],
+};
 ---
 
-<Base title="Request Service — S. Meredith Plumbing & Heating" description="Need a reliable plumber fast? Fill out our mobile-friendly request form or call Shane directly. Licensed, insured, owner-operated plumbing and heating.">
+<Base title="Request Plumbing Service in Saugus, MA | S. Meredith" description="Request plumbing or heating service from Shane Meredith in Saugus, MA. Send the details and a photo, or call 781-820-4592 for 24/7 emergency service." pageType="contact">
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
   <header class="topbar">
     <div class="container topbar-row">
       <a class="brand" href={base} aria-label="Back to home">
@@ -48,7 +59,7 @@ const publicEmailHref = `mailto:${publicEmail}`;
             </p>
             <div class="owner-rating">
               <span class="stars">★★★★★</span>
-              <span>100% 5-Star Local Reviews</span>
+              <span>5-star Google reviews</span>
             </div>
           </div>
         </div>
@@ -65,6 +76,11 @@ const publicEmailHref = `mailto:${publicEmail}`;
             <input type="text" name="_honey" style="display:none" />
             <input type="hidden" name="success_url" id="success-url-input" value="" />
             <input type="hidden" name="error_url" id="error-url-input" value="" />
+            <input type="hidden" name="utm_source" value="" data-attr />
+            <input type="hidden" name="utm_medium" value="" data-attr />
+            <input type="hidden" name="utm_campaign" value="" data-attr />
+            <input type="hidden" name="landing_page" value="" data-attr />
+            <input type="hidden" name="referrer" value="" data-attr />
 
             <div class="form-group">
               <label for="name">Your Name <span class="required">*</span></label>
@@ -110,6 +126,21 @@ const publicEmailHref = `mailto:${publicEmail}`;
               <span class="file-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster.</span>
             </div>
 
+            <div class="form-group">
+              <label for="heard_about">How did you hear about us? <span class="optional">(Optional)</span></label>
+              <select id="heard_about" name="heard_about">
+                <option value="">Choose one</option>
+                <option>Google Search</option>
+                <option>Google Maps</option>
+                <option>Referral</option>
+                <option>Facebook</option>
+                <option>Instagram</option>
+                <option>Contractor or property manager</option>
+                <option>Previous customer</option>
+                <option>Other</option>
+              </select>
+            </div>
+
             <button type="submit" class="btn btn-primary submit-btn">
               Send Request to Shane
             </button>
@@ -135,6 +166,33 @@ const publicEmailHref = `mailto:${publicEmail}`;
         const base = form.getAttribute('data-base') || '/';
         successInput.value = window.location.origin + base + 'contact/thanks/';
         errorInput.value = window.location.origin + base + 'contact/';
+      }
+
+      // Lead attribution (first touch this session) travels with the request to Shane's inbox.
+      if (form) {
+        let attr = {};
+        try { attr = JSON.parse(sessionStorage.getItem('sm_attr') || '{}'); } catch (_) {}
+        form.querySelectorAll('[data-attr]').forEach((input) => { input.value = attr[input.name] || ''; });
+
+        const track = (event, params) => window.smTrack && window.smTrack(event, params);
+        track('request_form_open');
+        let started = false;
+        form.addEventListener('focusin', () => {
+          if (started) return;
+          started = true;
+          track('form_start', { form_id: 'service_request' });
+        });
+        form.addEventListener('submit', () => {
+          const service = form.querySelector('[name="service_type"]');
+          const heard = form.querySelector('[name="heard_about"]');
+          try {
+            sessionStorage.setItem('sm_lead_pending', JSON.stringify({
+              service_type: service ? service.value : '',
+              heard_about: heard ? heard.value : '',
+            }));
+          } catch (_) {}
+          track('form_submit', { form_id: 'service_request' });
+        });
       }
 
       const statusBox = document.getElementById('form-status');
@@ -239,7 +297,7 @@ const publicEmailHref = `mailto:${publicEmail}`;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--red);
+      color: var(--red-dark);
       background: var(--highlight);
       padding: 0.35rem 0.75rem;
       border-radius: 4px;

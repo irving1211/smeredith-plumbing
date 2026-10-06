@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import SubpageHeader from '../components/SubpageHeader.astro';
+import services from '../services.json';
+
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+---
+
+<Base
+  title="Page Not Found | S. Meredith Plumbing & Heating"
+  description="This page doesn't exist. Find plumbing and heating services from S. Meredith Plumbing & Heating in Saugus, MA, or call Shane at 781-820-4592."
+  noindex
+  pageType="not-found"
+>
+  <SubpageHeader />
+
+  <main class="nf">
+    <div class="container">
+      <p class="nf-code">404</p>
+      <h1>That page isn’t here.</h1>
+      <p class="nf-lede">The link may be old or mistyped. If you need a plumber, the fastest way is still a phone call. Shane answers.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+        <a class="btn btn-ghost" href={`${base}contact/`}>Request service</a>
+      </div>
+      <h2>Looking for one of these?</h2>
+      <ul class="nf-links">
+        <li><a href={base}>Home</a></li>
+        <li><a href={`${base}services/`}>All services</a></li>
+        {services.map((s) => <li><a href={`${base}services/${s.slug}/`}>{s.title}</a></li>)}
+      </ul>
+    </div>
+  </main>
+
+  <style>
+    .nf { padding: 5rem 0 7rem; background: var(--paper); }
+    .nf .container { max-width: 760px; }
+    .nf-code { font-weight: 900; font-size: 1rem; letter-spacing: .12em; color: var(--red); margin: 0 0 .75rem; }
+    .nf h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; }
+    .nf-lede { font-size: 1.15rem; color: var(--ink-soft); margin: 0 0 2rem; }
+    .nf h2 { font-size: 1.35rem; margin: 3rem 0 1rem; }
+    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .nf-links { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+    .nf-links a { color: var(--black); font-weight: 600; text-decoration: underline; text-underline-offset: .18em; }
+    @media (max-width: 900px) {
+      .nf { padding: 3rem 0 5rem; }
+      .hero-cta { flex-direction: column; }
+      .hero-cta .btn { justify-content: center; width: 100%; }
+    }
+  </style>
+</Base>

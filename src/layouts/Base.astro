@@ -9,58 +9,54 @@ import "@fontsource/fraunces/latin-500.css";
 import "@fontsource/fraunces/latin-700.css";
 import "@fontsource/fraunces/latin-900.css";
 
+import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import inter900Url from '@fontsource/inter/files/inter-latin-900-normal.woff2?url';
+import services from '../services.json';
+
 export interface Props {
   title?: string;
   description?: string;
+  /** Utility pages (thank-you, 404) stay out of the index and carry no canonical. */
+  noindex?: boolean;
+  /** Used by the event layer: home | services-hub | service | town | contact | lead-confirmation | not-found */
+  pageType?: string;
+  /** Extra event parameters, e.g. { service: 'boiler-service' } */
+  pageMeta?: Record<string, string>;
+  /** FAQ entries that are VISIBLY rendered on this page. Only then is FAQPage schema emitted. */
+  faqs?: { q: string; a: string }[];
 }
 
 const {
-  title = 'S. Meredith Plumbing & Heating — Saugus, MA Plumber | 24/7 Emergency · Northshore & Boston',
-  description = 'Owner-operated plumbing, heating, gas & new construction across the Northshore & Boston. Licensed, insured, 10+ years. The plumber who answers the phone. Call 781-820-4592.',
+  title = 'S. Meredith Plumbing & Heating | Saugus, MA Plumber',
+  description = 'Owner-operated plumber in Saugus, MA. Water heaters, boilers, gas lines, remodels and 24/7 emergency service. Licensed and insured. Call 781-820-4592.',
+  noindex = false,
+  pageType = 'page',
+  pageMeta = {},
+  faqs = [],
 } = Astro.props;
 
+const site = 'https://smeredithplumbing.com';
 const phone = '781-820-4592';
-const phoneTel = '+17818204592';
 const publicEmail = 'shane@smeredithplumbing.com';
 const business = 'S. Meredith Plumbing & Heating';
+// Approved website service-area set (owner boundary map, 2026-05-28). Must match the GBP service areas.
 const areaServed = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Haverhill'];
 
-// Verbatim (lightly trimmed) from Shane's verified 5-star Google reviews. Source screenshots
-// in _context/harvest/2026-05-28-owner-photo-drop/Reviews screenshot/.
-const reviewsList = [
-  { name: 'Steven B.', body: 'Shane did a great job with the plumbing for my bathroom remodel. On time, good communication, and minded every detail. Will definitely keep his name and number for the future.' },
-  { name: 'Daniel M.', body: 'Shane responded quickly to an urgent furnace repair in the middle of a winter deep freeze. Other plumbers said it could not be fixed — Shane said “I can fix it,” and he did. Highly recommend.' },
-  { name: 'Clare G.', body: 'We had a last-minute plumbing issue in our bathroom and Shane came out the same day without hesitation. Incredibly fair, honest, and responsive from start to finish. 10/10 service.' },
-  { name: 'Carly C.', body: 'Shane came out quickly and replaced the water heater without any delays. He was so understanding of my situation with four kids at home and got our hot water back as soon as possible.' },
-  { name: 'Luke B.', body: 'Same-day visit, and he arrived exactly when he said he would. Quickly diagnosed and resolved the problem, explained it in plain terms, and his pricing was very reasonable.' },
-  { name: 'Iva V.', body: 'Great job on a holiday morning for a plumbing emergency. Fast, quality work that started even before the visit via video, so we didn’t waste time. Very accommodating.' },
-  { name: 'Val K.', body: 'Very professional and pays close attention to detail. He added safety, functionality, and modernity to our plumbing at a very fair price, and explained red flags to watch for.' },
-  { name: 'Laura C.', body: 'After more than a week and multiple professionals trying to fix a complex problem in our building, Shane did it. Professional, knowledgeable, and willing to take the time to get it right.' },
-  { name: 'Amy C.', body: 'Excellent at his craft, smart, and a true problem solver. Honest, dependable, and operates with real integrity. I’ve used his services multiple times and referred him to others.' },
-  { name: 'Emilio D.', body: 'As a facilities manager responsible for multiple properties, I can confidently say S. Meredith Plumbing is one of the best in the business. Always prompt and dependable, and their pricing is very fair.' },
-];
-
-const faqs = [
-  { q: 'Do you offer free estimates?', a: 'Yes. Every job starts with a free, written estimate. No surprise pricing, no upsell scripts, and no third-party dispatcher.' },
-  { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. MA license #9630040-PL-M is listed on every written estimate and invoice.' },
-  { q: 'How fast do you respond?', a: 'Calls are answered live during business hours and returned within one hour after-hours. For true emergencies like no heat in January, a burst pipe, or no hot water, we come out nights and weekends too.' },
-  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston, including Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Haverhill, and beyond. Outside the list? Call. If we’re close, we’ll help.' },
-  { q: 'Do you stand behind your work?', a: 'Yes. Shane is licensed and insured, and work is done to code and inspected where required. Manufacturer warranties apply to the equipment installed, and workmanship is gone over with you in writing for each job. No boilerplate.' },
-  { q: 'Do you handle new construction and additions?', a: 'Yes. From rough-in to finish, Shane handles plumbing for new builds, additions, and gut renovations. Inspected, signed off, and ready to occupy.' },
-  { q: 'Do you work weekends and holidays?', a: '24/7 for true emergencies. Same-day Saturday for boiler and water heater failures whenever possible. You call, Shane answers.' },
-];
-
+// Service-area business: locality only, never a street address. No aggregateRating/review markup
+// (self-serving LocalBusiness reviews are not eligible for review snippets) and no regular
+// openingHours until Shane confirms routine hours beyond 24/7 emergency availability.
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Plumber',
+  '@id': `${site}/#business`,
   name: business,
-  image: 'https://smeredithplumbing.com/images/logo.jpg',
-  '@id': 'https://smeredithplumbing.com',
-  url: 'https://smeredithplumbing.com',
-  telephone: phone,
+  url: `${site}/`,
+  image: `${site}/images/logo.jpg`,
+  logo: `${site}/images/logo.jpg`,
+  telephone: '+1-781-820-4592',
   email: publicEmail,
-  priceRange: '$$',
-  description,
+  description: 'Owner-operated plumbing and heating company based in Saugus, MA, serving the North Shore and Boston: water heaters, boilers, gas lines, remodel and new-construction plumbing, and 24/7 emergency service.',
+  founder: { '@type': 'Person', name: 'Shane Meredith' },
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Saugus',
@@ -68,59 +64,43 @@ const localBusinessJsonLd = {
     postalCode: '01906',
     addressCountry: 'US',
   },
-  areaServed: [...new Set(areaServed)].map((city) => ({ '@type': 'City', name: `${city}, MA` })),
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      opens: '00:00',
-      closes: '23:59',
-    },
-  ],
+  areaServed: areaServed.map((city) => ({ '@type': 'City', name: `${city}, MA` })),
   sameAs: [
     'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/',
     'https://www.instagram.com/s.meredith_plumbing_heating/',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '5.0',
-    reviewCount: String(reviewsList.length),
-    bestRating: '5',
-    worstRating: '1',
-  },
-  review: reviewsList.map((r) => ({
-    '@type': 'Review',
-    author: { '@type': 'Person', name: r.name },
-    reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-    reviewBody: r.body,
-  })),
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Plumbing & Heating Services',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Plumbing Service & Repair' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Water Heater Replacement & Repair' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'High-Efficiency Boiler Service & Replacement' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Kitchen & Bathroom Remodels' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'New Construction Plumbing' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Gas Installation' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '24/7 Emergency Plumbing & Heating' } },
+      ...services.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: s.title, url: `${site}/services/${s.slug}/` },
+      })),
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'General Plumbing Service & Repair' } },
     ],
   },
 };
 
 const base = import.meta.env.BASE_URL;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://smeredithplumbing.com').href;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? site).href;
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
+const faqJsonLd = faqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : null;
+
+// Optional analytics. Nothing third-party loads unless an ID is configured at build time
+// (and the privacy notice has been updated to disclose it).
+const gtmId = import.meta.env.PUBLIC_GTM_ID || '';
+const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
 ---
 
 <!doctype html>
@@ -128,19 +108,41 @@ const faqJsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && <link rel="canonical" href={canonicalURL} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {!noindex && <meta property="og:url" content={canonicalURL} />}
+    <meta property="og:site_name" content={business} />
     <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
     <meta name="theme-color" content="#1a120a" />
+    <!-- Body + headline weights: preloaded so the font swap doesn't reflow the hero (CLS). -->
+    <link rel="preload" href={inter400Url} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={inter900Url} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
-    <link rel="canonical" href={canonicalURL} />
-    <title>{title}</title>
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    {faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
     <slot name="head" />
+    {gtmId && (
+      <script is:inline define:vars={{ gtmId }}>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);
+      </script>
+    )}
+    {ga4Id && !gtmId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+        <script is:inline define:vars={{ ga4Id }}>
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function(){ window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', ga4Id);
+        </script>
+      </>
+    )}
     <style is:global>
       :root {
         /* Tough, industrial-grade modern palette: deep soot charcoal base, solid masonry whites/greys, safety red.
@@ -236,7 +238,55 @@ const faqJsonLd = {
       .btn-ghost-dark:hover { border-color: #fff; color: #fff; opacity: 1; }
     </style>
   </head>
-  <body>
+  <body data-track-events data-page-type={pageType} data-page-meta={JSON.stringify(pageMeta)}>
     <slot />
+    <script is:inline>
+      // First-party event layer. Pushes conversion events to window.dataLayer (consumed by GTM/GA4
+      // only when configured) and remembers first-touch attribution for the service form.
+      (() => {
+        const w = window;
+        const body = document.body;
+        const pageType = body.dataset.pageType || 'page';
+        let pageMeta = {};
+        try { pageMeta = JSON.parse(body.dataset.pageMeta || '{}'); } catch (_) {}
+        w.dataLayer = w.dataLayer || [];
+        const track = (event, params) => {
+          const payload = Object.assign({ page_type: pageType, page_path: location.pathname }, pageMeta, params || {});
+          w.dataLayer.push(Object.assign({ event }, payload));
+          if (typeof w.gtag === 'function') w.gtag('event', event, payload);
+        };
+        w.smTrack = track;
+
+        // First touch of the session, unless a later landing carries UTM tags (e.g. the GBP website link).
+        try {
+          const q = new URLSearchParams(location.search);
+          if (!sessionStorage.getItem('sm_attr') || q.get('utm_source')) {
+            const ref = document.referrer && !document.referrer.startsWith(location.origin) ? document.referrer : '';
+            sessionStorage.setItem('sm_attr', JSON.stringify({
+              utm_source: q.get('utm_source') || '',
+              utm_medium: q.get('utm_medium') || '',
+              utm_campaign: q.get('utm_campaign') || '',
+              landing_page: location.pathname,
+              referrer: ref,
+            }));
+          }
+        } catch (_) {}
+
+        if (pageType === 'service') track('service_page_view');
+        if (pageType === 'town') track('town_page_view');
+
+        document.addEventListener('click', (e) => {
+          const link = e.target.closest && e.target.closest('a[href]');
+          if (!link) return;
+          const href = link.getAttribute('href') || '';
+          const section = link.closest('[id], section, header, footer');
+          const where = section ? section.id || section.className.split(' ')[0] || section.tagName.toLowerCase() : 'page';
+          const params = { link_location: where };
+          if (href.startsWith('tel:')) track('phone_click', params);
+          else if (href.startsWith('sms:')) track('sms_click', params);
+          else if (/\/contact\/?$/.test(href)) track('request_form_click', params);
+        });
+      })();
+    </script>
   </body>
 </html>

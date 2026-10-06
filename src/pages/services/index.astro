@@ -1,0 +1,150 @@
+---
+import Base from '../../layouts/Base.astro';
+import SubpageHeader from '../../components/SubpageHeader.astro';
+import services from '../../services.json';
+import areas from '../../areas.json';
+
+const base = import.meta.env.BASE_URL;
+const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+const hubUrl = `${origin}${base}services/`;
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: hubUrl },
+  ],
+};
+
+const serviceList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Plumbing & heating services',
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: s.title,
+    url: `${origin}${base}services/${s.slug}/`,
+  })),
+};
+---
+
+<Base
+  title="Plumbing & Heating Services in Saugus, MA | S. Meredith"
+  description="Plumbing and heating services from Saugus, MA: emergency repair, water heaters, boilers, gas lines, remodel and new construction plumbing. Call 781-820-4592."
+  pageType="services-hub"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(serviceList)} slot="head" />
+
+  <SubpageHeader />
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href={base}>Home</a> <span aria-hidden="true">›</span> <span class="current" aria-current="page">Services</span>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero" id="services-hero">
+      <div class="container">
+        <h1>Plumbing &amp; heating services in Saugus &amp; the North Shore</h1>
+        <p class="tagline">One licensed, owner-operated plumber for repairs, replacements and new work. You call, Shane answers.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost" href={smsHref}>Text photos to Shane</a>
+          <a class="btn btn-ghost" href={`${base}contact/`}>Request service</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-body" id="service-list">
+      <div class="container">
+        <ul class="hub-grid">
+          {services.map((s) => (
+            <li>
+              <a class="hub-card" href={`${base}services/${s.slug}/`}>
+                <h2>{s.title}</h2>
+                <p>{s.tagline}</p>
+                <span class="hub-link" aria-hidden="true">See details →</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="hub-note">
+          <h2>Also handled</h2>
+          <p>General plumbing service and repair: leaks, fixtures, valves and the everyday problems that don’t fit a category. Not sure if it’s something Shane does? <a href={`tel:${phoneTel}`}>Call {phone}</a> and ask.</p>
+        </div>
+
+        <div class="hub-note" id="hub-areas">
+          <h2>Where Shane works</h2>
+          <p>Based in Saugus and serving the North Shore and Boston. Local pages:</p>
+          <ul class="town-links">
+            {areas.map((a) => <li><a href={`${base}areas/${a.slug}/`}>Plumber in {a.town}</a></li>)}
+          </ul>
+        </div>
+
+        <div class="page-cta" id="hub-cta">
+          <h2>Ready when you are.</h2>
+          <p>Free written quote on every job. Licensed &amp; insured — MA license #9630040-PL-M.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <a class="btn btn-ghost big" href={`${base}contact/`}>Request service online</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
+
+  <style>
+    .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
+    .breadcrumb a:hover { color: var(--red); opacity: 1; }
+    .breadcrumb span { margin: 0 .35rem; color: var(--ink-muted); }
+    .breadcrumb .current { color: var(--ink); font-weight: 500; }
+
+    .page-hero { padding: 5rem 0 3rem; background: var(--paper); }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; max-width: 22ch; }
+    .page-hero .tagline { font-size: 1.15rem; color: var(--ink-soft); margin-bottom: 2rem; max-width: 60ch; }
+    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+    .page-body { padding: 2rem 0 7rem; background: var(--paper); }
+    .hub-grid { list-style: none; margin: 0 0 3rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+    .hub-card { display: flex; flex-direction: column; gap: .6rem; height: 100%; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem 1.7rem; color: var(--ink); transition: border-color .25s ease, transform .2s ease; }
+    .hub-card:hover { border-color: var(--red); transform: translateY(-2px); opacity: 1; }
+    .hub-card h2 { font-size: 1.25rem; letter-spacing: -0.02em; }
+    .hub-card p { margin: 0; color: var(--ink-soft); line-height: 1.55; }
+    .hub-link { margin-top: auto; color: var(--red); font-weight: 700; font-size: .92rem; }
+
+    .hub-note { max-width: 800px; margin: 0 0 2.5rem; }
+    .hub-note h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); margin-bottom: .8rem; }
+    .hub-note p { color: var(--ink-soft); line-height: 1.65; }
+    .hub-note a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+    .town-links { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .town-links a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1rem; text-decoration: none; font-weight: 600; font-size: .92rem; }
+
+    .page-cta { background: var(--paper-2); border-radius: 16px; padding: 3rem 2rem; text-align: center; margin: 3rem 0 0; }
+    .page-cta h2 { margin-bottom: 1rem; }
+    .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }
+    .page-cta .hero-cta { justify-content: center; }
+    .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
+
+    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 1rem 1.8rem; border-radius: 999px; font-weight: 600; box-shadow: 0 12px 30px rgba(194,73,44,.4); z-index: 100; min-width: 240px; text-align: center; }
+
+    @media (max-width: 900px) {
+      .page-hero { padding: 3rem 0 2rem; }
+      .hero-cta { flex-direction: column; gap: .65rem; }
+      .hero-cta .btn { justify-content: center; width: 100%; }
+      .sticky-call { display: block; }
+      body { padding-bottom: 5rem; }
+      .page-cta { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</Base>

@@ -8,6 +8,21 @@ interface Env {
   RESEND_FROM_EMAIL?: string;
 }
 
+type LeadPayload = {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  serviceType: string;
+  message: string;
+  heardAbout: string;
+  utmSource: string;
+  utmMedium: string;
+  utmCampaign: string;
+  landingPage: string;
+  referrer: string;
+};
+
 type EmailAttachment = {
   filename: string;
   content: string;
@@ -43,13 +58,19 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     return redirect(successUrl);
   }
 
-  const payload = {
+  const payload: LeadPayload = {
     name: getString(formData, "name", 120),
     phone: getString(formData, "phone", 50),
     email: getString(formData, "email", 160),
     address: getString(formData, "address", 200),
     serviceType: getString(formData, "service_type", 120) || "General plumbing service",
     message: getString(formData, "message", 4000),
+    heardAbout: getString(formData, "heard_about", 80),
+    utmSource: getString(formData, "utm_source", 100),
+    utmMedium: getString(formData, "utm_medium", 100),
+    utmCampaign: getString(formData, "utm_campaign", 100),
+    landingPage: getString(formData, "landing_page", 300),
+    referrer: getString(formData, "referrer", 300),
   };
 
   if (isInvalidPayload(payload)) {
@@ -89,14 +110,7 @@ function getString(formData: FormData, key: string, maxLength = 0): string {
   return maxLength ? trimmed.slice(0, maxLength) : trimmed;
 }
 
-function isInvalidPayload(payload: {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceType: string;
-  message: string;
-}): boolean {
+function isInvalidPayload(payload: LeadPayload): boolean {
   if (!payload.name || !payload.phone || !payload.address || !payload.message) {
     return true;
   }
@@ -268,14 +282,20 @@ async function sendViaResend(
   }
 }
 
-function buildHtmlEmail(payload: {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceType: string;
-  message: string;
-}): string {
+// Lead-source rows are only included when the visitor's browser supplied a value.
+function attributionRows(payload: LeadPayload): Array<[string, string]> {
+  const rows: Array<[string, string]> = [
+    ["How they heard about us", payload.heardAbout],
+    ["UTM source", payload.utmSource],
+    ["UTM medium", payload.utmMedium],
+    ["UTM campaign", payload.utmCampaign],
+    ["Landing page", payload.landingPage],
+    ["Referrer", payload.referrer],
+  ];
+  return rows.filter(([, value]) => value);
+}
+
+function buildHtmlEmail(payload: LeadPayload): string {
   const rows = [
     ["Name", payload.name],
     ["Phone", payload.phone],
@@ -283,6 +303,7 @@ function buildHtmlEmail(payload: {
     ["Town / address", payload.address],
     ["Service type", payload.serviceType],
     ["Message", payload.message],
+    ...attributionRows(payload),
   ]
     .map(
       ([label, value]) =>
@@ -304,14 +325,8 @@ function buildHtmlEmail(payload: {
 </html>`;
 }
 
-function buildTextEmail(payload: {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  serviceType: string;
-  message: string;
-}): string {
+function buildTextEmail(payload: LeadPayload): string {
+  const attribution = attributionRows(payload).map(([label, value]) => `${label}: ${value}`);
   return [
     "New website service request",
     "",
@@ -323,6 +338,7 @@ function buildTextEmail(payload: {
     "",
     "Message:",
     payload.message,
+    ...(attribution.length ? ["", "Lead source:", ...attribution] : []),
   ].join("\n");
 }
 
@@ -335,10 +351,12 @@ function escapeHtml(value: string): string {
     .replaceAll("'", "&#39;");
 }
 
+// Only same-origin redirect targets are honored; anything else falls back (prevents open redirects).
 function normalizeRedirectUrl(value: FormDataEntryValue | null, fallback: URL): URL {
   if (typeof value === "string" && value.trim()) {
     try {
-      return new URL(value, fallback);
+      const candidate = new URL(value, fallback);
+      if (candidate.origin === fallback.origin) return candidate;
     } catch {
       return fallback;
     }

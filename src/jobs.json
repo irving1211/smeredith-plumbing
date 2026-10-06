@@ -3,88 +3,188 @@
     "slug": "kitchen-bath-remodel",
     "title": "Kitchen & Bath Remodel",
     "desc": "Finished kitchen and bath first. The original rough stage is the last slide.",
-    "images": [
-      "/images/jobs/kitchen-bath-remodel/shot-1.jpg",
-      "/images/jobs/kitchen-bath-remodel/shot-2.jpg",
-      "/images/jobs/kitchen-bath-remodel/shot-3.jpg"
+    "service": "kitchen-bath-remodels",
+    "photos": [
+      {
+        "src": "/images/jobs/kitchen-bath-remodel/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/kitchen-bath-remodel/shot-1.jpg"
+      },
+      {
+        "src": "/images/jobs/kitchen-bath-remodel/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/kitchen-bath-remodel/shot-2.jpg"
+      },
+      {
+        "src": "/images/jobs/kitchen-bath-remodel/shot-3-900.webp",
+        "width": 900,
+        "height": 675,
+        "original": "/images/jobs/kitchen-bath-remodel/shot-3.jpg"
+      }
     ]
   },
   {
     "slug": "compact-water-heater-cabinet",
     "title": "Compact Water Heater Cabinet",
     "desc": "Tight cabinet install shown from the finished angle first, then the alternate view.",
-    "images": [
-      "/images/jobs/compact-water-heater-cabinet/shot-1.jpg",
-      "/images/jobs/compact-water-heater-cabinet/shot-2.jpg"
+    "service": "water-heater-replacement",
+    "photos": [
+      {
+        "src": "/images/jobs/compact-water-heater-cabinet/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/compact-water-heater-cabinet/shot-1.jpg"
+      },
+      {
+        "src": "/images/jobs/compact-water-heater-cabinet/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/compact-water-heater-cabinet/shot-2.jpg"
+      }
     ]
   },
   {
     "slug": "boiler-manifold-room",
     "title": "Boiler Manifold Mechanical Room",
     "desc": "Lead shot first, then the wider mechanical room view.",
-    "images": [
-      "/images/jobs/boiler-manifold-room/shot-1.jpg",
-      "/images/jobs/boiler-manifold-room/shot-2.jpg"
+    "service": "boiler-service",
+    "photos": [
+      {
+        "src": "/images/jobs/boiler-manifold-room/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/boiler-manifold-room/shot-1.jpg"
+      },
+      {
+        "src": "/images/jobs/boiler-manifold-room/shot-2-900.webp",
+        "width": 880,
+        "height": 1168,
+        "original": "/images/jobs/boiler-manifold-room/shot-2.jpg"
+      }
     ]
   },
   {
     "slug": "boiler-room-upgrades",
     "title": "Boiler Room Upgrades",
     "desc": "Finished boiler room details with the second angle on the next slide.",
-    "images": [
-      "/images/jobs/boiler-room-upgrades/shot-2.jpg",
-      "/images/jobs/boiler-room-upgrades/shot-1.jpg"
+    "service": "boiler-service",
+    "photos": [
+      {
+        "src": "/images/jobs/boiler-room-upgrades/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/boiler-room-upgrades/shot-2.jpg"
+      },
+      {
+        "src": "/images/jobs/boiler-room-upgrades/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/boiler-room-upgrades/shot-1.jpg"
+      }
     ]
   },
   {
     "slug": "single-water-heater-open-basement",
     "title": "Open Basement Water Heater",
     "desc": "Single finished install in an open basement mechanical space.",
-    "images": [
-      "/images/jobs/single-water-heater-open-basement/shot-1.jpg"
+    "service": "water-heater-replacement",
+    "photos": [
+      {
+        "src": "/images/jobs/single-water-heater-open-basement/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/single-water-heater-open-basement/shot-1.jpg"
+      }
     ]
   },
   {
     "slug": "twin-water-heaters",
     "title": "Twin Water Heaters",
     "desc": "Two finished views of the same paired water heater setup.",
-    "images": [
-      "/images/jobs/twin-water-heaters/shot-1.jpg",
-      "/images/jobs/twin-water-heaters/shot-2.jpg"
+    "service": "water-heater-replacement",
+    "photos": [
+      {
+        "src": "/images/jobs/twin-water-heaters/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/twin-water-heaters/shot-1.jpg"
+      },
+      {
+        "src": "/images/jobs/twin-water-heaters/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/twin-water-heaters/shot-2.jpg"
+      }
     ]
   },
   {
     "slug": "single-water-heater-brick-cellar",
     "title": "Brick Cellar Water Heater",
     "desc": "Finished shot first, then the alternate angle of the same cellar install.",
-    "images": [
-      "/images/jobs/single-water-heater-brick-cellar/shot-2.jpg",
-      "/images/jobs/single-water-heater-brick-cellar/shot-1.jpg"
+    "service": "water-heater-replacement",
+    "photos": [
+      {
+        "src": "/images/jobs/single-water-heater-brick-cellar/shot-2-900.webp",
+        "width": 900,
+        "height": 1332,
+        "original": "/images/jobs/single-water-heater-brick-cellar/shot-2.jpg"
+      },
+      {
+        "src": "/images/jobs/single-water-heater-brick-cellar/shot-1-900.webp",
+        "width": 900,
+        "height": 1185,
+        "original": "/images/jobs/single-water-heater-brick-cellar/shot-1.jpg"
+      }
     ]
   },
   {
     "slug": "pattern-tile-bath",
     "title": "Pattern Tile Bath",
     "desc": "Tub and tile detail first, then the matching vanity side of the same bathroom.",
-    "images": [
-      "/images/jobs/pattern-tile-bath/shot-1.jpg",
-      "/images/jobs/pattern-tile-bath/shot-2.jpg"
+    "service": "kitchen-bath-remodels",
+    "photos": [
+      {
+        "src": "/images/jobs/pattern-tile-bath/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/pattern-tile-bath/shot-1.jpg"
+      },
+      {
+        "src": "/images/jobs/pattern-tile-bath/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/pattern-tile-bath/shot-2.jpg"
+      }
     ]
   },
   {
     "slug": "black-tile-bath",
     "title": "Black Tile Bath",
     "desc": "Finished bathroom with dark feature tile and clean fixture lines.",
-    "images": [
-      "/images/jobs/black-tile-bath/shot-1.jpg"
+    "service": "kitchen-bath-remodels",
+    "photos": [
+      {
+        "src": "/images/jobs/black-tile-bath/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/black-tile-bath/shot-1.jpg"
+      }
     ]
   },
   {
     "slug": "dark-tile-bath",
     "title": "Dark Tile Bathroom",
     "desc": "Finished bath with darker vertical tile and updated vanity.",
-    "images": [
-      "/images/jobs/dark-tile-bath/shot-1.jpg"
+    "service": "kitchen-bath-remodels",
+    "photos": [
+      {
+        "src": "/images/jobs/dark-tile-bath/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/dark-tile-bath/shot-1.jpg"
+      }
     ]
   }
 ]

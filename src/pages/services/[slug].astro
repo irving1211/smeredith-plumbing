@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
+import SubpageHeader from '../../components/SubpageHeader.astro';
 import services from '../../services.json';
+import areas from '../../areas.json';
+import jobs from '../../jobs.json';
 
 export function getStaticPaths() {
   return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
@@ -12,6 +15,11 @@ const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').repla
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+const pageUrl = `${origin}${base}services/${service.slug}/`;
+const hubUrl = `${origin}${base}services/`;
+const relatedJobs = jobs.filter((j) => j.service === service.slug).slice(0, 3);
+const relatedServices = services.filter((s) => s.slug !== service.slug);
+const approvedTowns = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Haverhill'];
 
 const serviceJsonLd = {
   '@context': 'https://schema.org',
@@ -19,13 +27,14 @@ const serviceJsonLd = {
   serviceType: service.title,
   name: service.title,
   description: service.meta_desc,
+  url: pageUrl,
   provider: {
     '@type': 'Plumber',
+    '@id': `${origin}/#business`,
     name: 'S. Meredith Plumbing & Heating',
-    telephone: phone,
-    address: { '@type': 'PostalAddress', addressLocality: 'Saugus', addressRegion: 'MA', addressCountry: 'US' },
+    telephone: '+1-781-820-4592',
   },
-  areaServed: 'North Shore MA & Boston',
+  areaServed: approvedTowns.map((town) => ({ '@type': 'City', name: `${town}, MA` })),
 };
 
 const breadcrumb = {
@@ -33,41 +42,25 @@ const breadcrumb = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: `${origin}${base}services/` },
-    { '@type': 'ListItem', position: 3, name: service.title },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: hubUrl },
+    { '@type': 'ListItem', position: 3, name: service.title, item: pageUrl },
   ],
 };
 ---
 
-<Base title={`${service.title} — S. Meredith Plumbing & Heating · Saugus, MA`} description={service.meta_desc}>
+<Base title={service.seo_title} description={service.meta_desc} pageType="service" pageMeta={{ service: service.slug }}>
   <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
 
-  <header class="topbar">
-    <div class="container topbar-row">
-      <a class="brand" href={base} aria-label="Back to home">
-        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
-        <span class="brand-wordmark">
-          <strong>S. Meredith</strong>
-          <em>Plumbing &amp; Heating</em>
-        </span>
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href={`${base}#services`}>Services</a>
-        <a href={`${base}#work`}>Work</a>
-        <a href={`${base}#about`}>About</a>
-        <a href={`${base}#faq`}>FAQ</a>
-      </nav>
-      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
-    </div>
-  </header>
+  <SubpageHeader />
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
-      <a href={base}>Home</a> <span>›</span> <a href={`${base}#services`}>Services</a> <span>›</span> <span class="current">{service.title}</span>
+      <a href={base}>Home</a> <span aria-hidden="true">›</span> <a href={`${base}services/`}>Services</a> <span aria-hidden="true">›</span> <span class="current" aria-current="page">{service.title}</span>
     </div>
   </nav>
 
+  <main>
   <section class="page-hero">
     <div class="container">
       <h1>{service.h1}</h1>
@@ -76,6 +69,7 @@ const breadcrumb = {
         <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
         <a class="btn btn-ghost" href={smsHref}>Text photos to Shane</a>
       </div>
+      <p class="hero-alt"><a href={`${base}contact/`}>Or request service online →</a></p>
     </div>
   </section>
 
@@ -97,37 +91,57 @@ const breadcrumb = {
         <strong>Licensed &amp; code-compliant.</strong> {service.guarantee}
       </div>
 
-      <div class="page-cta">
+      {relatedJobs.length > 0 && (
+        <section class="related-work" id="related-work" aria-labelledby="related-work-h">
+          <h2 id="related-work-h">Recent jobs like this</h2>
+          <div class="job-row">
+            {relatedJobs.map((job) => (
+              <figure class="job-thumb">
+                <img src={`${base}${job.photos[0].src.replace(/^\//, '')}`} alt={`${job.title} by S. Meredith Plumbing & Heating`} width={job.photos[0].width} height={job.photos[0].height} loading="lazy" decoding="async" />
+                <figcaption>{job.title}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p class="more-link"><a href={`${base}#work`}>See more recent jobs →</a></p>
+        </section>
+      )}
+
+      <section class="where" id="service-towns" aria-labelledby="service-towns-h">
+        <h2 id="service-towns-h">Where Shane does this work</h2>
+        <p>Based in Saugus and serving {approvedTowns.slice(1, -1).join(', ')} and {approvedTowns.at(-1)}.</p>
+        <ul class="link-pills">
+          {areas.map((a) => <li><a href={`${base}areas/${a.slug}/`}>Plumber in {a.town}</a></li>)}
+        </ul>
+      </section>
+
+      <div class="page-cta" id="service-cta">
         <h2>Ready when you are.</h2>
         <p>One number. Owner answers. Free written quote on every job. Licensed &amp; insured — MA license #9630040-PL-M.</p>
         <div class="hero-cta">
           <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
           <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
+          <a class="btn btn-ghost big" href={`${base}contact/`}>Request service</a>
         </div>
       </div>
 
-      <p class="back-link"><a href={base}>← Back to all services</a></p>
+      <section class="related-services" id="related-services" aria-labelledby="related-services-h">
+        <h2 id="related-services-h">Related services</h2>
+        <ul class="link-pills">
+          {relatedServices.map((s) => <li><a href={`${base}services/${s.slug}/`}>{s.title}</a></li>)}
+        </ul>
+      </section>
+
+      <p class="back-link"><a href={`${base}services/`}>← All services</a></p>
     </div>
   </section>
+
+  </main>
 
   <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
 
   <style>
-    .topbar { background: rgba(250,247,242,.86); backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
-    .topbar-row { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.75rem; }
-    .brand { display: flex; align-items: center; gap: .65rem; color: var(--black); }
-    .brand-icon { width: 40px; height: 40px; transition: transform .3s ease; flex-shrink: 0; }
-    .brand:hover .brand-icon { transform: rotate(-4deg) scale(1.06); }
-    .brand-wordmark { display: flex; flex-direction: column; line-height: 1.05; }
-    .brand-wordmark strong { font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--black); }
-    .brand-wordmark em { font-style: normal; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: .7rem; color: var(--ink-muted); letter-spacing: .04em; margin-top: 1px; }
-    .nav { display: flex; gap: 1.6rem; margin-left: auto; }
-    .nav a { color: var(--ink-soft); font-weight: 500; font-size: .95rem; }
-    .topbar-call { padding: .55rem 1rem; background: var(--black); color: #fff; border-radius: 999px; font-weight: 600; font-size: .92rem; }
-    .topbar-call:hover { background: var(--red); color: #fff; opacity: 1; }
-
     .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
-    .breadcrumb a { color: var(--ink-soft); }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
     .breadcrumb a:hover { color: var(--red); opacity: 1; }
     .breadcrumb span { margin: 0 .35rem; color: var(--ink-muted); }
     .breadcrumb .current { color: var(--ink); font-weight: 500; }
@@ -156,6 +170,19 @@ const breadcrumb = {
     .page-cta .hero-cta { justify-content: center; }
     .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
 
+    .hero-alt { margin: 1rem 0 0; font-weight: 600; }
+    .hero-alt a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
+    .link-pills { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
+    .link-pills a:hover { border-color: var(--red); color: var(--red); opacity: 1; }
+    .where p, .related-services p { color: var(--ink-soft); line-height: 1.65; }
+    .job-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+    .job-thumb { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .job-thumb img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+    .job-thumb figcaption { padding: .7rem .9rem; font-weight: 600; font-size: .92rem; }
+    .more-link { margin-top: 1rem; }
+    .more-link a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+
     .back-link { text-align: center; color: var(--ink-muted); margin-top: 2rem; }
     .back-link a { color: var(--ink-soft); font-weight: 500; }
     .back-link a:hover { color: var(--red); opacity: 1; }
@@ -164,7 +191,6 @@ const breadcrumb = {
     .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
 
     @media (max-width: 900px) {
-      .nav { display: none; }
       .page-hero { padding: 3rem 0 2rem; }
       .hero-cta { flex-direction: column; gap: .65rem; }
       .hero-cta .btn { justify-content: center; width: 100%; }

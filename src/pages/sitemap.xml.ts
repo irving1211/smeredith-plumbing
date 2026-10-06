@@ -2,13 +2,15 @@ import type { APIRoute } from 'astro';
 import services from '../services.json';
 import areas from '../areas.json';
 
+// Indexable pages only. Utility pages (thank-you, 404) are excluded. No <lastmod>:
+// a build date is not a content-change date, and a fabricated lastmod gets ignored.
 export const GET: APIRoute = ({ site }) => {
   const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const origin = (site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
-  const today = new Date().toISOString().slice(0, 10);
 
   const urls = [
     { loc: `${origin}${base}/`, priority: '1.0', changefreq: 'weekly' },
+    { loc: `${origin}${base}/services/`, priority: '0.9', changefreq: 'monthly' },
     ...services.map((s) => ({
       loc: `${origin}${base}/services/${s.slug}/`,
       priority: '0.9',
@@ -19,6 +21,7 @@ export const GET: APIRoute = ({ site }) => {
       priority: '0.8',
       changefreq: 'monthly',
     })),
+    { loc: `${origin}${base}/contact/`, priority: '0.7', changefreq: 'monthly' },
   ];
 
   const xml =
@@ -27,7 +30,7 @@ export const GET: APIRoute = ({ site }) => {
     urls
       .map(
         (u) =>
-          `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`,
+          `  <url>\n    <loc>${u.loc}</loc>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`,
       )
       .join('\n') +
     `\n</urlset>\n`;

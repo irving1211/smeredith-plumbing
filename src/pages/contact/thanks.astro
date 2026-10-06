@@ -8,7 +8,7 @@ const publicEmail = 'shane@smeredithplumbing.com';
 const publicEmailHref = `mailto:${publicEmail}`;
 ---
 
-<Base title="Request Received — S. Meredith Plumbing & Heating" description="Thank you for your service request. Shane will be in touch with you shortly.">
+<Base title="Request Received | S. Meredith Plumbing & Heating" description="Thank you for your service request. Shane will be in touch with you shortly." noindex pageType="lead-confirmation">
   <header class="topbar">
     <div class="container topbar-row">
       <a class="brand" href={base} aria-label="Back to home">
@@ -48,6 +48,20 @@ const publicEmailHref = `mailto:${publicEmail}`;
       </div>
     </div>
   </main>
+
+  <script is:inline>
+    // Count a lead only when this visit came from a real form submission (flag set on submit),
+    // so refreshes or direct visits to this URL don't inflate conversions.
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const pending = sessionStorage.getItem('sm_lead_pending');
+        if (!pending) return;
+        sessionStorage.removeItem('sm_lead_pending');
+        const lead = JSON.parse(pending);
+        if (window.smTrack) window.smTrack('generate_lead', { form_id: 'service_request', service_type: lead.service_type || '', heard_about: lead.heard_about || '' });
+      } catch (_) {}
+    });
+  </script>
 
   <style>
     .topbar {
