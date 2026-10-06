@@ -4,3 +4,4 @@
 /owner           /              301
 /owner/          /              301
 /wp-sitemap.xml  /sitemap.xml   301
+/wp-sitemap-*    /sitemap.xml   301

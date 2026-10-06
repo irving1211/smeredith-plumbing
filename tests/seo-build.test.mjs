@@ -104,6 +104,8 @@ test('legacy WordPress URLs redirect permanently', () => {
     assert.equal(rule[2], '301');
   }
   assert.deepEqual(find('/wp-sitemap.xml')?.slice(1), ['/sitemap.xml', '301']);
+  // Google still follows the old WordPress sub-sitemaps (e.g. wp-sitemap-posts-page-1.xml).
+  assert.deepEqual(find('/wp-sitemap-*')?.slice(1), ['/sitemap.xml', '301']);
 });
 
 test('/services/ is a real hub listing all six services', () => {
