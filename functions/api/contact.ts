@@ -15,7 +15,7 @@ type EmailAttachment = {
 };
 
 const DEFAULT_TO_EMAIL = "shane@smeredithplumbing.com";
-const DEFAULT_FROM_EMAIL = "forms@smeredithplumbing.com";
+const DEFAULT_FROM_EMAIL = "shane@smeredithplumbing.com";
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_FILE_TYPES = new Set([
