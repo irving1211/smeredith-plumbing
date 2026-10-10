@@ -5,6 +5,7 @@ import "../styles/fonts.css";
 import "@fontsource/fraunces/latin-500.css";
 
 import interVariableUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import frauncesUrl from '@fontsource/fraunces/files/fraunces-latin-500-normal.woff2?url';
 import services from '../services.json';
 import { TOWNS } from '../lib/service-area.js';
 
@@ -118,6 +119,9 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <meta name="theme-color" content="#1a120a" />
     <!-- The one body + headline font file, preloaded so the swap doesn't reflow the hero (CLS). -->
     <link rel="preload" href={interVariableUrl} as="font" type="font/woff2" crossorigin />
+    <!-- The wordmark subline font is above the fold on every page; without a preload it is only found
+         during layout and the first paint waits for it on slow connections. -->
+    <link rel="preload" href={frauncesUrl} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
