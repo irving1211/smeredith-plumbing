@@ -6,6 +6,7 @@ import "../../design/tokens.css";
 import "../styles/fonts.css";
 import "../styles/site.css";
 
+import interVariableUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import barlowUrl from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url';
 import services from '../services.json';
 import { TOWNS } from '../lib/service-area.js';
@@ -128,10 +129,11 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <meta property="og:site_name" content={business} />
     <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
     <meta name="theme-color" content="#313131" />
-    <!-- Only the heading/wordmark font is preloaded: it is the brand face above the fold on every page, so it must not
-         swap in after first paint. The body font (Inter) is deliberately NOT preloaded: measured with an interleaved A/B on
-         a throttled phone (4x CPU, 9 Mbps), preloading it made first paint about 100 ms later with no layout-shift benefit.
-         The two font files together stay well under 100 KB either way. -->
+    <!-- Both fonts are preloaded so neither swaps in after first paint: that swap is what moved text (and buttons) on
+         pages measured without the Inter preload (layout shift 0.02-0.03; zero with it). On a throttled phone (4x CPU,
+         9 Mbps) the preloads cost roughly 90 ms of first paint in one A/B and gained about the same in the simulated
+         mobile model; the choice favours no movement. Total font weight: 48 KB + 22 KB. See design/DESIGN.md decision log. -->
+    <link rel="preload" href={interVariableUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={barlowUrl} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />

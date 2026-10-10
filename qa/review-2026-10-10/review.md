@@ -1,7 +1,7 @@
 # Frontend quality review — objective checks
 
 - Target: dist
-- Audited: 2026-10-10T22:41:18.548Z
+- Audited: 2026-10-10T22:59:51.334Z
 - Breakpoints: 390, 768, 1280, 1920 px (screenshots in `screens/`)
 - **Verdict: SHIP** (P0 0 · P1 0 · P2 0 · P3 0)
 
