@@ -534,8 +534,9 @@ const breadcrumb = {
     .form-status { margin: 0 0 1.25rem; padding: 1rem 1.1rem; background: var(--color-tint); border: 2px solid var(--color-action-hover); border-radius: var(--radius-sm); color: var(--color-text); }
     .form-status:focus { outline: 3px solid var(--color-focus); outline-offset: 2px; }
     .status-title { margin: 0; font-weight: 700; }
-    .status-list { margin: .6rem 0 0; padding-left: 1.2rem; }
-    :global(.status-list a) { color: var(--color-action-hover); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; display: inline-block; padding: 3px 0; }
+    .status-list { margin: .5rem 0 0; padding: 0; list-style: none; }
+    :global(.status-list li) { display: flex; align-items: center; min-height: 44px; }
+    :global(.status-list a) { color: var(--color-action-hover); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
     .status-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .85rem; }
     .status-actions .btn { flex: 1 1 8rem; }
     .prefill-note { margin: -.15rem 0 .6rem; }
