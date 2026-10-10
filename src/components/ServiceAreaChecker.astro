@@ -212,9 +212,9 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
           const map = new Map(mapEl, { center: { lat: 42.47, lng: -71.03 }, zoom: 10, gestureHandling: 'cooperative', mapTypeControl: false, streetViewControl: false, clickableIcons: false });
           map.data.addGeoJson(geojson);
           const style = (feature: any) => ({
-            fillColor: '#d32f2f',
+            fillColor: '#D32B2C',
             fillOpacity: feature.getProperty('slug') === selectedSlug ? 0.5 : 0.16,
-            strokeColor: '#b71c1c',
+            strokeColor: '#B11F20',
             strokeWeight: 1.2,
           });
           map.data.setStyle(style);
@@ -237,39 +237,38 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
 
 <style>
   .area-checker { display: grid; gap: 1.5rem; }
-  .area-form { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: end; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; }
-  @media (min-width: 700px) { .area-form { grid-template-columns: 1fr 1fr auto; } }
-  .area-field { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
-  .area-field label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
-  .area-field select, .area-field input { font: inherit; font-size: 1rem; width: 100%; height: 3.4rem; padding: .85rem 1rem; border: 2px solid var(--line-2); border-radius: 6px; background: #fff; color: var(--black); }
-  .area-field select:focus, .area-field input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(211, 47, 47, .12); }
-  .area-result { background: var(--paper-2); border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 10px; padding: 1.2rem 1.3rem; }
-  .area-message { margin: 0 0 .35rem; font-weight: 700; font-size: 1.08rem; color: var(--black); }
-  .area-note { margin: 0 0 .6rem; color: var(--ink-soft); font-size: .92rem; }
+  .area-form { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: end; max-width: 44rem; }
+  @media (min-width: 700px) { .area-form { grid-template-columns: 1fr 1fr auto; max-width: none; } }
+  .area-field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+  .area-field label { font-weight: 700; }
+  .area-field select, .area-field input { font: inherit; font-size: 1rem; width: 100%; min-height: 50px; padding: .65rem .85rem; border: 2px solid var(--color-control); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+  .area-field select:focus, .area-field input:focus { border-color: var(--color-text); }
+  .area-result { max-width: 44rem; background: var(--color-surface); border: 1px solid var(--color-border); border-left: 4px solid var(--color-action); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
+  .area-message { margin: 0 0 .35rem; font-weight: 700; font-size: 1.08rem; }
+  .area-note { margin: 0 0 .6rem; color: var(--color-text-muted); font-size: .95rem; }
   .area-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; }
-  .area-actions .btn { padding: .85rem 1.2rem; }
-  .area-form .btn { height: 3.4rem; justify-content: center; padding-block: 0; }
+  .area-actions .btn { flex: 1 1 11rem; }
+  .area-form .btn { min-height: 50px; }
   .area-map { margin: 0; display: grid; gap: .8rem; justify-items: center; }
-  .area-svg { width: 100%; max-width: 440px; height: auto; max-height: 600px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; }
-  .area-svg .ctx { fill: var(--paper-3); stroke: #fff; stroke-width: .8; }
-  .area-svg .town { fill: #f6c9c6; stroke: var(--red-dark); stroke-width: 1; stroke-linejoin: round; cursor: pointer; transition: fill .15s ease; }
-  .area-svg .town:hover { fill: #ee9a95; }
-  .area-svg .town.is-selected { fill: var(--red); }
-  .area-svg .lbl { font: 800 17px 'Inter Variable', 'Inter', system-ui, sans-serif; fill: var(--black); paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
+  .area-svg { width: 100%; max-width: 440px; height: auto; max-height: 600px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .area-svg .ctx { fill: var(--color-border); stroke: var(--color-surface); stroke-width: .8; }
+  .area-svg .town { fill: var(--color-tint); stroke: var(--color-action-hover); stroke-width: 1.2; stroke-linejoin: round; cursor: pointer; }
+  .area-svg .town:hover { fill: #EDC3BF; }
+  .area-svg .town.is-selected { fill: var(--color-action); }
+  .area-svg .lbl { font: 700 17px 'Inter Variable', 'Inter', system-ui, sans-serif; fill: var(--color-text); paint-order: stroke; stroke: var(--color-surface); stroke-width: 4px; pointer-events: none; }
   .area-svg .lbl.is-selected { font-size: 20px; }
-  .area-map figcaption { font-size: .88rem; color: var(--ink-soft); line-height: 1.6; max-width: 56ch; text-align: center; }
-  .area-map .key { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin: 0 .3rem 0 .6rem; border: 1px solid var(--red-dark); }
-  .area-map .key-served { background: #f6c9c6; }
-  .area-map .key-other { background: var(--paper-3); border-color: var(--line-2); }
-  .area-map .credit { display: block; margin-top: .35rem; font-size: .8rem; color: var(--ink-muted); }
+  .area-map figcaption { font-size: .9rem; color: var(--color-text-muted); line-height: 1.6; max-width: 56ch; text-align: center; }
+  .area-map .key { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin: 0 .3rem 0 .6rem; border: 1px solid var(--color-action-hover); }
+  .area-map .key-served { background: var(--color-tint); }
+  .area-map .key-other { background: var(--color-border); border-color: var(--color-control); }
+  .area-map .credit { display: block; margin-top: .35rem; font-size: .82rem; }
   .gmap-wrap { width: 100%; max-width: 640px; display: grid; gap: .6rem; justify-items: center; }
-  .gmap { width: 100%; height: 420px; border-radius: 14px; border: 1px solid var(--line); }
-  .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--ink-soft); }
+  .gmap { width: 100%; height: 420px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
+  .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--color-text-muted); }
   .area-towns { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
-  .area-towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; font-weight: 600; font-size: .92rem; }
+  .area-towns li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-weight: 600; font-size: .95rem; }
   .area-towns li a, .area-towns li.town-plain { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; }
-  .area-towns li a { color: var(--ink); }
-  .area-towns li a:hover { color: var(--red); opacity: 1; }
-  .area-towns li.town-plain { color: var(--ink-soft); }
-  .area-confirmed { margin: 0; text-align: center; color: var(--ink-muted); font-size: .88rem; }
+  .area-towns li a { text-decoration: underline; text-underline-offset: .2em; }
+  .area-towns li.town-plain { color: var(--color-text-muted); }
+  .area-confirmed { margin: 0; text-align: center; color: var(--color-text-muted); font-size: .9rem; }
 </style>

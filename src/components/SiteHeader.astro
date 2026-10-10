@@ -1,0 +1,89 @@
+---
+// One header for every page. Call and request actions stay in the header; on phones the page links
+// live behind a native <details> menu (works without JavaScript; a few lines below add Escape/outside-click closing).
+interface Props {
+  /** Which nav item is the current section: services | work | about | service-area */
+  current?: string;
+}
+const { current = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const links = [
+  { id: 'services', href: `${base}services/`, label: 'Services' },
+  { id: 'work', href: `${base}work/`, label: 'Our work' },
+  { id: 'about', href: `${base}about/`, label: 'About Shane' },
+  { id: 'service-area', href: `${base}service-area/`, label: 'Service area' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href={base}>
+      <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="40" height="40" />
+      <span class="brand-wordmark">
+        <strong>S. Meredith</strong>
+        <em>Plumbing &amp; Heating</em>
+      </span>
+    </a>
+    <nav class="header-nav" aria-label="Main">
+      {links.map((l) => <a href={l.href} aria-current={current === l.id ? 'page' : undefined}>{l.label}</a>)}
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-primary btn-sm header-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call<span class="call-number">&nbsp;{phone}</span></a>
+      <a class="btn btn-secondary btn-sm header-request" href={`${base}contact/`}>Request service</a>
+      <details class="menu" data-menu>
+        <summary class="btn btn-secondary btn-sm">Menu</summary>
+        <div class="menu-panel">
+          <nav aria-label="Pages">
+            {links.map((l) => <a href={l.href} aria-current={current === l.id ? 'page' : undefined}>{l.label}</a>)}
+            <a href={`${base}contact/`}>Request service</a>
+          </nav>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var menu = document.querySelector('[data-menu]');
+    if (!menu) return;
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary').focus(); } });
+    document.addEventListener('click', function (e) { if (menu.open && !menu.contains(e.target)) menu.open = false; });
+  })();
+</script>
+
+<style>
+  .site-header { background: var(--color-surface); border-bottom: 1px solid var(--color-border); position: relative; z-index: 40; }
+  .header-row { display: flex; align-items: center; gap: .75rem; min-height: 64px; }
+  .brand { display: flex; align-items: center; gap: .6rem; color: var(--color-text); text-decoration: none; min-width: 0; min-height: 44px; }
+  .brand:hover { text-decoration: none; }
+  .brand-icon { width: 40px; height: 40px; flex-shrink: 0; }
+  .brand-wordmark { display: flex; flex-direction: column; line-height: 1; min-width: 0; }
+  .brand-wordmark strong { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: .01em; text-transform: uppercase; color: var(--color-text); }
+  .brand-wordmark em { font-style: normal; font-weight: 600; font-size: .62rem; letter-spacing: .13em; text-transform: uppercase; color: var(--color-text-muted); margin-top: 3px; white-space: nowrap; }
+  .header-nav { display: none; }
+  .header-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; }
+  .header-request { display: none; }
+  .call-number { display: none; }
+  .menu { position: static; }
+  .menu > summary { list-style: none; cursor: pointer; }
+  .menu > summary::-webkit-details-marker { display: none; }
+  .menu-panel { position: absolute; left: 0; right: 0; top: 100%; background: var(--color-surface); border-bottom: 1px solid var(--color-border); box-shadow: var(--shadow-sm); }
+  .menu-panel nav { display: flex; flex-direction: column; max-width: 72rem; margin: 0 auto; padding: .25rem 1rem .75rem; }
+  .menu-panel a { display: flex; align-items: center; min-height: 52px; border-bottom: 1px solid var(--color-border); font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: .02em; color: var(--color-text); text-decoration: none; }
+  .menu-panel a:last-child { border-bottom: 0; color: var(--color-action); }
+  .menu-panel a[aria-current='page'] { box-shadow: inset 4px 0 0 var(--color-action); padding-left: .75rem; }
+  @media (min-width: 560px) { .call-number { display: inline; } }
+  @media (min-width: 900px) {
+    .site-header { position: sticky; top: 0; }
+    .header-nav { display: flex; gap: 1.5rem; margin-left: auto; }
+    .header-nav a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; font-size: .95rem; color: var(--color-text); text-decoration: none; border-bottom: 3px solid transparent; }
+    .header-nav a:hover { border-bottom-color: var(--color-text); }
+    .header-nav a[aria-current='page'] { border-bottom-color: var(--color-action); }
+    .header-actions { margin-left: 0; }
+    .header-request { display: inline-flex; }
+    .menu { display: none; }
+  }
+</style>

@@ -1,0 +1,63 @@
+/* Shared page patterns for the redesigned pages (home, about, work, service area). Everything reads design tokens. */
+
+.section { padding: 2rem 0; border-top: 1px solid var(--color-border); }
+@media (min-width: 768px) { .section { padding: 3.25rem 0; } }
+.section-title { margin-bottom: .6rem; }
+.section-note { margin: 0 0 1.1rem; max-width: 40rem; color: var(--color-text-muted); }
+.prose { max-width: 40rem; }
+.prose p { margin: 0 0 1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.actions .btn { flex: 1 1 11rem; }
+@media (min-width: 560px) { .actions .btn { flex: 0 1 auto; } }
+.more-link { margin: 1rem 0 0; }
+.more-link a { font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
+
+/* Page head for secondary pages */
+.page-head { padding: 1.5rem 0 1.25rem; }
+.page-head .breadcrumb { margin: 0 0 .75rem; font-size: .9rem; color: var(--color-text-muted); }
+.page-head .breadcrumb a { text-decoration: underline; text-underline-offset: .18em; }
+.page-head .lede { margin: .75rem 0 0; max-width: 40rem; color: var(--color-text-muted); font-size: 1.05rem; }
+@media (min-width: 768px) { .page-head { padding: 2.5rem 0 1.5rem; } }
+
+/* Ruled service list: Shane's own list from the van, each line opens the request form with the service chosen */
+.vanlist { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--color-text); }
+.vanlist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; border-bottom: 1px solid var(--color-border); }
+.vanlist .row-main { display: flex; flex-direction: column; justify-content: center; min-height: 62px; padding: .5rem 0; color: var(--color-text); text-decoration: none; }
+.vanlist .row-name { font-family: var(--font-display); font-weight: 700; font-size: 1.75rem; line-height: 1.05; text-transform: uppercase; letter-spacing: .01em; text-decoration: underline; text-decoration-color: var(--color-action); text-decoration-thickness: 3px; text-underline-offset: 5px; width: fit-content; }
+.vanlist .row-main:hover .row-name { background: var(--color-tint); }
+.vanlist .row-note { font-size: .9rem; color: var(--color-text-muted); margin-top: 3px; }
+.vanlist .row-more { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0 0 1rem; font-size: .92rem; font-weight: 600; color: var(--color-text); text-decoration: underline; text-underline-offset: .2em; }
+
+/* Customer quotes */
+.quotes { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 768px) { .quotes.cols { grid-template-columns: 1fr 1fr; gap: 1.25rem 2rem; } }
+.quote { margin: 0; padding: .1rem 0 .1rem 1rem; border-left: 4px solid var(--color-action); }
+.quote blockquote { margin: 0 0 .4rem; font-size: 1.05rem; line-height: 1.5; }
+.quote figcaption, .quote cite { font-style: normal; font-size: .9rem; color: var(--color-text-muted); }
+.quote .stars { color: var(--color-star); letter-spacing: 2px; margin-right: .4rem; }
+
+/* Notice: colour only where it carries information */
+.notice { margin: 0; padding: .85rem 1rem; background: var(--color-tint); border-left: 4px solid var(--color-action); border-radius: var(--radius-sm); color: var(--color-text); }
+.notice p { margin: 0; }
+.notice a { font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+
+/* Closing contact band */
+.band { background: var(--color-dark); color: var(--color-ink-on-dark); padding: 2.25rem 0; margin-top: 2rem; }
+.band h2 { color: var(--color-ink-on-dark); margin-bottom: .6rem; }
+.band p { margin: 0 0 1.1rem; max-width: 38rem; }
+.band a:not(.btn) { color: var(--color-ink-on-dark); text-decoration: underline; text-underline-offset: .2em; }
+.band .contact-meta { display: grid; gap: 0; margin: 1.25rem 0 0; padding: 0; list-style: none; font-size: .95rem; }
+.band .contact-meta li { padding: .25rem 0; }
+.band .contact-meta a { display: inline-flex; align-items: center; min-height: 44px; }
+.band .contact-meta .lbl { display: inline-block; min-width: 4.5rem; color: rgba(255, 255, 255, .78); }
+@media (min-width: 768px) { .band { padding: 3.25rem 0; } }
+
+/* Disclosure list (FAQ) */
+.faq-list { margin: 0; padding: 0; border-top: 2px solid var(--color-text); }
+.faq-list details { border-bottom: 1px solid var(--color-border); }
+.faq-list summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 56px; padding: .4rem 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 1.05rem; }
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::after { content: '+'; font-family: var(--font-display); font-size: 1.8rem; line-height: 1; color: var(--color-action); }
+.faq-list details[open] summary::after { content: '\2212'; }
+.faq-list .faq-body { padding: 0 0 1rem; max-width: 40rem; }
+.faq-list .faq-body p { margin: 0; }

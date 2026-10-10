@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { after, before, describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { fillForm, launch, LEAD_ID, named, phoneContext, serve } from './helpers.mjs';
+import { chooseService, fillForm, launch, LEAD_ID, named, phoneContext, serve, serviceValue } from './helpers.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const axePath = createRequire(import.meta.url).resolve('axe-core/axe.min.js');
@@ -45,9 +45,10 @@ describe('service and town carry-through', () => {
     await page.goto(`${origin}/services/boiler-service/`);
     await page.getByRole('link', { name: 'Request service online' }).click();
     await page.waitForURL(/\/contact\/\?service=boiler-service$/);
-    assert.equal(await page.inputValue('#service_type'), 'boiler-service');
+    assert.equal(await serviceValue(page), 'boiler-service');
     assert.equal(await page.locator('#prefill-note').isVisible(), true, 'visitor is told it was pre-filled');
-    await page.selectOption('#service_type', 'other');
+    assert.equal(await page.locator('#service-tiles').isVisible(), false, 'the chosen service is shown as one line, not the whole list');
+    await chooseService(page, 'other');
     await fillForm(page);
     await page.click('#submit-btn');
     await page.waitForURL(/contact\/thanks/);
@@ -62,7 +63,7 @@ describe('service and town carry-through', () => {
       await page.goto(`${origin}/services/${id}/`);
       await page.locator('.hero-cta').getByRole('link', { name: 'Request service online' }).click();
       await page.waitForURL(`**/contact/?service=${id}`);
-      assert.equal(await page.inputValue('#service_type'), id, id);
+      assert.equal(await serviceValue(page), id, id);
     }
     await context.close();
   });
@@ -81,7 +82,7 @@ describe('service and town carry-through', () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/contact/?service=%3Cscript%3E&town=%3Cb%3Ex%3C%2Fb%3E&town_other=${'x'.repeat(200)}`);
-    assert.equal(await page.inputValue('#service_type'), 'general-plumbing');
+    assert.equal(await serviceValue(page), '', 'an unknown service is ignored: nothing is chosen for the visitor');
     assert.equal((await page.inputValue('#address')).length, 60, 'free-text town is capped');
     assert.equal(await page.locator('#address').evaluate((el) => el.value.includes('<')), false);
     await context.close();
@@ -92,10 +93,10 @@ describe('service and town carry-through', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/contact/`);
     assert.equal(await page.locator('#emergency-note').isVisible(), false);
-    await page.selectOption('#service_type', 'emergency-plumbing');
+    await chooseService(page, 'emergency-plumbing');
     assert.equal(await page.locator('#emergency-note').isVisible(), true);
     assert.match(await page.locator('#emergency-note a').getAttribute('href'), /^tel:\+17818204592$/);
-    await page.selectOption('#service_type', 'boiler-service');
+    await chooseService(page, 'boiler-service');
     assert.equal(await page.locator('#emergency-note').isVisible(), false);
     await context.close();
   });
@@ -121,7 +122,7 @@ describe('service-area checker', () => {
   test('a confirmed town gets a clear request CTA that carries the town (and the service on service pages)', async () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.selectOption('#area-town', 'lynn');
     const result = page.locator('#area [data-area-result]');
     assert.equal(await result.isVisible(), true);
@@ -147,7 +148,7 @@ describe('service-area checker', () => {
   test('an unlisted town is told to contact Shane — never rejected — and typed text is not sent to analytics', async () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.fill('#area-other', 'Andover');
     await page.press('#area-other', 'Enter');
     const result = page.locator('#area [data-area-result]');
@@ -171,7 +172,7 @@ describe('service-area checker', () => {
   test('keyboard only: the select works with arrow keys and the result follows', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.focus('#area-town');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
@@ -183,7 +184,7 @@ describe('service-area checker', () => {
   test('clicking a town on the map selects it', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.locator('#area path.town[data-town="malden"]').dispatchEvent('click');
     assert.equal(await page.inputValue('#area-town'), 'malden');
     assert.match(await page.locator('#area [data-area-message]').textContent(), /Shane serves Malden/);
@@ -193,7 +194,7 @@ describe('service-area checker', () => {
   test('Boston carries its "confirm your neighborhood" note', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.selectOption('#area-town', 'boston');
     assert.match(await page.locator('#area [data-area-note]').textContent(), /confirm your neighborhood/i);
     await context.close();
@@ -215,7 +216,7 @@ describe('service-area checker', () => {
     const page = await context.newPage();
     const external = [];
     page.on('request', (r) => { if (!r.url().startsWith(origin) && !r.url().startsWith('data:')) external.push(r.url()); });
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.waitForTimeout(500);
     assert.equal(await page.locator('[data-gmap-open]').count(), 0);
     assert.deepEqual(external, []);
@@ -404,14 +405,13 @@ describe('submission outcomes and conversion counting', () => {
     const page = await context.newPage();
     const seen = await mockContact(page, (route) => route.fulfill({ status: 303, headers: { location: `${origin}/contact/thanks/?lead=${LEAD_ID}&svc=boiler-service&src=direct_or_unknown` } }));
     await page.goto(`${origin}/contact/`);
-    await page.selectOption('#service_type', 'boiler-service');
+    await page.check('input[name="service_type"][value="boiler-service"]');
     await fillForm(page);
-    await page.waitForTimeout(1000); // smooth-scroll settles; Playwright's stability check cannot tick without JS
-    await page.click('#submit-btn', { force: true });
+    await page.click('#submit-btn');
     await page.waitForURL(/contact\/thanks/);
     assert.equal(field(seen[0].body, 'service_type'), 'boiler-service');
     assert.doesNotMatch(seen[0].headers.accept || '', /application\/json/);
-    assert.match(await page.locator('main').innerText(), /Your service request has been sent to Shane/);
+    assert.match(await page.locator('main').innerText(), /Your request has been sent to Shane/);
     await context.close();
   });
 
@@ -427,24 +427,34 @@ describe('submission outcomes and conversion counting', () => {
 });
 
 describe('accessibility (axe, WCAG 2 A/AA + best practice)', () => {
-  const IGNORED = new Set(['region']); // floating call button sits outside a landmark by design
-  for (const path of ['/', '/contact/', '/contact/thanks/', '/services/', '/services/boiler-service/', '/areas/lynn/']) {
+  const audit = async (page) => {
+    await page.addScriptTag({ path: axePath });
+    const results = await page.evaluate(() => axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }));
+    const bad = results.violations.filter((v) => ['serious', 'critical'].includes(v.impact));
+    return bad.map((v) => `${v.id}: ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`);
+  };
+  for (const path of ['/', '/contact/', '/contact/thanks/', '/services/', '/services/boiler-service/', '/areas/lynn/', '/about/', '/work/', '/service-area/', '/404.html']) {
     test(`no serious or critical violations on ${path}`, async () => {
       const { context } = await phoneContext(browser);
       const page = await context.newPage();
       await page.goto(`${origin}${path}`);
-      // render and reveal every section (off-screen ones are intentionally skipped/transparent until scrolled to)
-      await page.evaluate(() => { document.documentElement.classList.add('cv-off'); document.querySelectorAll('.reveal').forEach((e) => e.classList.add('is-visible')); });
-      await page.waitForTimeout(1200); // let the 0.7 s reveal transition finish; text sampled mid-fade reads as low contrast
-      await page.addScriptTag({ path: axePath });
-      const results = await page.evaluate(() => axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }));
-      // Faint decorative service numerals (aria-hidden watermark digits) are exempt as pure decoration.
-      const nodesOf = (v) => v.nodes.filter((n) => !(v.id === 'color-contrast' && n.target.join(' ').includes('.service-num')));
-      const bad = results.violations.filter((v) => ['serious', 'critical'].includes(v.impact) && !IGNORED.has(v.id) && nodesOf(v).length);
-      assert.deepEqual(bad.map((v) => `${v.id}: ${nodesOf(v).slice(0, 3).map((n) => n.target.join(' ')).join(' | ')}`), []);
+      assert.deepEqual(await audit(page), []);
       await context.close();
     });
   }
+
+  test('the request form is accessible with a service chosen, its questions open, and in its error state', async () => {
+    const { context } = await phoneContext(browser);
+    const page = await context.newPage();
+    await page.goto(`${origin}/contact/?service=water-heater-replacement&town=lynn`);
+    assert.deepEqual(await audit(page), [], 'collapsed service summary + questions');
+    await page.click('#service-change');
+    assert.deepEqual(await audit(page), [], 'full service list');
+    await page.click('#submit-btn');
+    await page.locator('#form-status-list').waitFor({ state: 'visible' });
+    assert.deepEqual(await audit(page), [], 'error summary and field messages');
+    await context.close();
+  });
 });
 
 describe('scrolling stability (content-visibility placeholders)', () => {
@@ -472,14 +482,15 @@ describe('scrolling stability (content-visibility placeholders)', () => {
     });
   }
 
-  test('in-page navigation lands on the right section even though sections below the fold are lazily laid out', async () => {
+  test('old in-page links (/#services, #reviews, #faq, #area, #contact) still land on their sections', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
-    await page.goto(`${origin}/`);
-    await page.locator('.mobile-menu-link[href="#faq"]').evaluate((el) => el.click());
-    await page.waitForTimeout(1800);
-    const top = await page.evaluate(() => Math.round(document.getElementById('faq').getBoundingClientRect().top));
-    assert.ok(top >= 0 && top <= 140, `FAQ heading should sit just below the header after navigating (top = ${top}px)`);
+    for (const id of ['services', 'reviews', 'about', 'work', 'faq', 'area', 'contact']) {
+      await page.goto(`${origin}/#${id}`);
+      await page.waitForTimeout(500);
+      const top = await page.evaluate((i) => Math.round(document.getElementById(i).getBoundingClientRect().top), id);
+      assert.ok(top >= -2 && top <= 140, `#${id} should sit just below the top after navigating (top = ${top}px)`);
+    }
     await context.close();
   });
 });

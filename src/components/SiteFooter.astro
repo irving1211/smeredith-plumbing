@@ -1,0 +1,65 @@
+---
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const publicEmail = 'shane@smeredithplumbing.com';
+const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
+const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
+const builderInstagramUrl = 'https://www.instagram.com/icbizsystems/';
+const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
+---
+
+<footer class="site-footer on-dark">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <span class="footer-logo-tile"><img src={`${base}images/logo-footer.webp`} alt="S. Meredith Plumbing & Heating" width="72" height="71" loading="lazy" decoding="async" /></span>
+      <p>
+        <strong>S. Meredith Plumbing &amp; Heating</strong>
+        Saugus, MA<br />
+        MA Lic. 9630040-PL-M · Owner-operated
+      </p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href={`${base}services/`}>Services</a>
+      <a href={`${base}work/`}>Our work</a>
+      <a href={`${base}about/`}>About Shane</a>
+      <a href={`${base}service-area/`}>Service area</a>
+      <a href={`${base}contact/`}>Request service</a>
+      {privacyPublished && <a href={`${base}privacy/`}>Privacy</a>}
+    </nav>
+    <div class="footer-contact">
+      <a class="footer-phone" href={`tel:${phoneTel}`}>{phone}</a>
+      <a href={`mailto:${publicEmail}`}>{publicEmail}</a>
+      <p>24/7 emergency service</p>
+      <p class="footer-social"><a href={facebookUrl} rel="noopener" target="_blank">Facebook</a> · <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a></p>
+    </div>
+    <p class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating</p>
+    <p class="footer-credit">Website by <strong>IC Business Systems</strong>. <a href={builderInstagramUrl} rel="noopener" target="_blank">Want one like this? DM us on Instagram.</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-dark); color: var(--color-ink-on-dark); padding: 2.5rem 0 2rem; margin-top: 3rem; }
+  .footer-grid { display: grid; gap: 1.75rem; }
+  .footer-brand { display: flex; gap: .9rem; align-items: center; }
+  .footer-brand p { margin: 0; line-height: 1.45; font-size: .95rem; }
+  .footer-brand strong { display: block; font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: .01em; text-transform: uppercase; }
+  .footer-logo-tile { background: var(--color-surface); border-radius: var(--radius-md); padding: 6px; display: inline-flex; flex-shrink: 0; }
+  .footer-logo-tile img { width: 56px; height: 55px; }
+  .site-footer a { color: var(--color-ink-on-dark); text-decoration: underline; text-underline-offset: .2em; }
+  .footer-links { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+  .footer-links a { display: flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, .22); }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-contact { display: grid; gap: .1rem; font-size: .95rem; }
+  .footer-contact a { display: inline-flex; align-items: center; min-height: 44px; }
+  .footer-contact p { margin: 0; }
+  .footer-phone { font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; text-decoration: none !important; letter-spacing: .02em; }
+  .footer-social a { display: inline-flex; align-items: center; min-height: 44px; }
+  .footer-fineprint, .footer-credit { margin: 0; font-size: .85rem; color: rgba(255, 255, 255, .78); }
+  .footer-credit a { display: inline-flex; align-items: center; min-height: 44px; }
+  @media (min-width: 900px) {
+    .footer-grid { grid-template-columns: 1.2fr 1fr 1fr; align-items: start; gap: 2rem 3rem; }
+    .footer-fineprint { grid-column: 1 / 2; }
+    .footer-credit { grid-column: 2 / 4; }
+  }
+</style>

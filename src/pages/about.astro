@@ -1,0 +1,126 @@
+---
+import { jsonLd } from '../lib/jsonld.js';
+import Base from '../layouts/Base.astro';
+import LiveReviews from '../components/LiveReviews.astro';
+import reviewData from '../reviews.json';
+
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const publicEmail = 'shane@smeredithplumbing.com';
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
+const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
+const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
+// Live Google reviews are built in only after Google approves Business Profile API access (see docs).
+const reviewsLive = import.meta.env.PUBLIC_REVIEWS_LIVE === '1';
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
+    { '@type': 'ListItem', position: 2, name: 'About Shane', item: `${origin}${base}about/` },
+  ],
+};
+---
+
+<Base
+  title="About Shane Meredith | S. Meredith Plumbing & Heating"
+  description="Shane Meredith runs S. Meredith Plumbing & Heating in Saugus, MA personally. See the van, read customer reviews and learn how to reach him. Call 781-820-4592."
+  pageType="about"
+  current="about"
+>
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
+  <main id="main">
+    <div class="container page-head">
+      <p class="breadcrumb"><a href={base}>Home</a> / About</p>
+      <h1>About Shane</h1>
+      <p class="lede">Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>
+    </div>
+
+    <section class="section" aria-labelledby="who-h">
+      <div class="container about-grid">
+        <figure class="about-photo">
+          <img src={`${base}images/shane-640.webp`} srcset={`${base}images/shane-640.webp 640w, ${base}images/shane.webp 960w`} sizes="(min-width: 768px) 360px, 100vw" alt="Shane Meredith, owner of S. Meredith Plumbing & Heating" width="960" height="1280" />
+        </figure>
+        <div class="prose">
+          <h2 class="section-title" id="who-h">Owner-operated</h2>
+          <p>S. Meredith Plumbing &amp; Heating is based in Saugus, MA. When you call or text 781-820-4592, you reach Shane. When you send a request, it goes to Shane by email and he follows up by phone.</p>
+          <p>Shane holds Massachusetts master plumber license 9630040-PL-M.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <a class="btn btn-secondary" href={`${base}contact/`}>Request service</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="van-h">
+      <div class="container about-grid">
+        <figure class="about-photo van">
+          <img src={`${base}images/van/van-side-800.webp`} srcset={`${base}images/van/van-side-800.webp 800w, ${base}images/van/van-side.webp 1100w`} sizes="(min-width: 768px) 560px, 100vw" alt="The S. Meredith Plumbing & Heating van, lettered with Shane's list of the work and his phone number" width="1100" height="825" loading="lazy" decoding="async" />
+        </figure>
+        <div class="prose">
+          <h2 class="section-title" id="van-h">The van</h2>
+          <p>The side of the van carries Shane's own list of the work and his phone number. The home page lists the work the same way, and every line opens the request form with that service chosen.</p>
+          <p class="more-link"><a href={`${base}services/`}>See what each service covers</a> · <a href={`${base}work/`}>See recent jobs</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reviews" aria-labelledby="rev-h">
+      <div class="container">
+        <h2 class="section-title" id="rev-h">What customers say</h2>
+        <p class="section-note">Excerpts from five-star Google reviews, quoted as written, with first names and last initials.</p>
+        {reviewsLive && <LiveReviews allReviewsUrl={googleReviewsUrl} />}
+        <ul class="quotes cols" data-curated>
+          {reviewData.reviews.map((r) => (
+            <li>
+              <figure class="quote review-card">
+                <blockquote>{r.body}</blockquote>
+                <figcaption><span class="stars" aria-hidden="true">★★★★★</span>{r.name}, {r.tag.toLowerCase()}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <p class="more-link"><a href={googleReviewsUrl} target="_blank" rel="noopener">Read all reviews on Google</a></p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="follow-h">
+      <div class="container prose">
+        <h2 class="section-title" id="follow-h">Follow the work</h2>
+        <p>Recent jobs and day-to-day work from Saugus and across the North Shore are on <a href={instagramUrl} target="_blank" rel="noopener">Instagram</a> and <a href={facebookUrl} target="_blank" rel="noopener">Facebook</a>.</p>
+      </div>
+    </section>
+
+    <section class="band on-dark" aria-labelledby="about-contact-h">
+      <div class="container">
+        <h2 id="about-contact-h">Call, text or send the details</h2>
+        <p>Phone first for anything urgent. For planned work, the request form takes a minute and can include a photo.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost-dark" href={smsHref}>Text Shane</a>
+          <a class="btn btn-ghost-dark" href={`${base}contact/`}>Request service</a>
+        </div>
+        <ul class="contact-meta">
+          <li><span class="lbl">Email</span><a href={`mailto:${publicEmail}`}>{publicEmail}</a></li>
+          <li><span class="lbl">Hours</span>24/7 emergency service</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .about-grid { display: grid; gap: 1.25rem; align-items: start; }
+  .about-photo { margin: 0; }
+  .about-photo img { width: 100%; height: auto; border-radius: var(--radius-sm); }
+  .about-photo:not(.van) img { max-width: 22rem; aspect-ratio: 3 / 4; object-fit: cover; }
+  @media (min-width: 768px) {
+    .about-grid { grid-template-columns: 22rem minmax(0, 1fr); gap: 3rem; }
+    .about-grid:has(.van) { grid-template-columns: minmax(0, 36rem) minmax(0, 1fr); }
+  }
+</style>

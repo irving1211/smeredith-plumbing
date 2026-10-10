@@ -18,6 +18,9 @@ const INDEXABLE = [
   '/services/',
   ...services.map((s) => `/services/${s.slug}/`),
   ...areas.map((a) => `/areas/${a.slug}/`),
+  '/service-area/',
+  '/work/',
+  '/about/',
   '/contact/',
 ];
 const NOINDEX = ['/contact/thanks/', '/404.html', '/privacy/'];
@@ -100,7 +103,7 @@ test('legacy WordPress URLs redirect permanently', () => {
   for (const from of ['/owner', '/owner/']) {
     const rule = find(from);
     assert.ok(rule, `missing redirect for ${from}`);
-    assert.equal(rule[1], '/');
+    assert.equal(rule[1], '/about/', 'the old owner page now lands on the About page');
     assert.equal(rule[2], '301');
   }
   assert.deepEqual(find('/wp-sitemap.xml')?.slice(1), ['/sitemap.xml', '301']);

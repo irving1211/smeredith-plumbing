@@ -2,6 +2,7 @@ import options from "../../src/service-options.json" with { type: "json" };
 import heardAbout from "../../src/heard-about.json" with { type: "json" };
 import { classifySource, cleanReferrer, cleanToken } from "../../src/lib/attribution.js";
 import { detectTowns, townBySlug } from "../../src/lib/service-area.js";
+import { ISSUE_SATISFIES_DESCRIPTION, isTiming, readAnswers, timingLabel } from "../../src/lib/request-questions.js";
 
 interface Env {
   CONTACT_MAIL_PROVIDER?: string;
@@ -34,6 +35,15 @@ type LeadPayload = Attribution & {
   serviceId: string;
   message: string;
   heardAboutId: string;
+  /** Optional street address; the required town stays in `address`. */
+  street: string;
+  /** now | soon | planning, or empty when the visitor did not say. */
+  timing: string;
+  /** Answers to the service-specific questions, already turned into labels. */
+  answers: { question: string; answer: string }[];
+  issueAnswered: boolean;
+  /** Random id the page generates once per load; lets a double tap or a retried post be recognised. */
+  requestId: string;
 };
 
 type UploadedPhoto = {
@@ -72,7 +82,10 @@ const RATE_WINDOW_SECONDS = 10 * 60;
 const MAX_LINKS_IN_MESSAGE = 2;
 
 const SERVICE_LABELS = new Map<string, string>(options.map((o) => [o.id, o.label]));
-const DEFAULT_SERVICE_ID = options.find((o) => (o as { default?: boolean }).default)?.id || "general-plumbing";
+// A request that names no service is recorded as "not sure": defaulting it to general plumbing would invent a choice the visitor never made.
+const DEFAULT_SERVICE_ID = options.find((o) => (o as { default?: boolean }).default)?.id || "not-sure";
+const REQUEST_ID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const REQUEST_MEMORY_SECONDS = 10 * 60;
 
 // Pages cached before the stable-ID rollout still post the old option text.
 const LEGACY_SERVICE_VALUES = new Map<string, string>([
@@ -131,6 +144,9 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   }
 
   const serviceId = resolveServiceId(getString(formData, "service_type", 120));
+  const { answers, issueAnswered } = serviceId ? readAnswers(serviceId, (name: string) => getString(formData, name, 80)) : { answers: [], issueAnswered: false };
+  const timing = getString(formData, "timing", 20);
+  const requestId = getString(formData, "request_id", 40).toLowerCase();
   const payload: LeadPayload | null = serviceId
     ? {
         // Single-line fields: line breaks are removed so a value can never forge extra lines in the email.
@@ -141,6 +157,11 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
         serviceId,
         message: getString(formData, "message", 4000),
         heardAboutId: resolveHeardAbout(getString(formData, "heard_about", 80)),
+        street: oneLine(getString(formData, "street", 200)),
+        timing: isTiming(timing) ? timing : "",
+        answers: answers.map((a: { question: string; answer: string }) => ({ question: a.question, answer: a.answer })),
+        issueAnswered,
+        requestId: REQUEST_ID_REGEX.test(requestId) ? requestId : "",
         utmSource: cleanToken(formData.get("utm_source"), 100),
         utmMedium: cleanToken(formData.get("utm_medium"), 100),
         utmCampaign: cleanToken(formData.get("utm_campaign"), 100),
@@ -153,6 +174,11 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     : null;
 
   if (!payload || isInvalidPayload(payload)) return fail("validation", 400);
+
+  // A double tap, a retried post or a back-and-resubmit carries the same request id: answer with the confirmation
+  // we already gave, without a second email. Best effort (edge cache, per data centre).
+  const earlier = payload.requestId ? await recallRequest(payload.requestId) : "";
+  if (earlier) return respondConfirmed(earlier, payload);
 
   const attachment = await readAttachment(formData.get("photo"));
   if (attachment instanceof Error) return fail("validation", 400);
@@ -194,15 +220,43 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     return fail("delivery", 502);
   }
 
-  // Analytics-safe confirmation: only enumerated ids and a random lead id travel in the URL.
-  const confirmed = new URL(successUrl.toString());
-  confirmed.searchParams.set("lead", leadId);
-  confirmed.searchParams.set("svc", payload.serviceId);
-  confirmed.searchParams.set("src", source.id);
-  if (payload.heardAboutId) confirmed.searchParams.set("ha", payload.heardAboutId);
+  if (payload.requestId) await rememberRequest(payload.requestId, leadId);
+  return respondConfirmed(leadId, payload);
 
-  return wantsJson ? json({ ok: true, leadId, redirect: confirmed.toString() }, 200) : redirect(confirmed);
+  function respondConfirmed(confirmedLeadId: string, lead: LeadPayload): Response {
+    // Analytics-safe confirmation: only enumerated ids and a random lead id travel in the URL.
+    const confirmed = new URL(successUrl.toString());
+    confirmed.searchParams.set("lead", confirmedLeadId);
+    confirmed.searchParams.set("svc", lead.serviceId);
+    confirmed.searchParams.set("src", classifySource(lead).id);
+    if (lead.heardAboutId) confirmed.searchParams.set("ha", lead.heardAboutId);
+    return wantsJson ? json({ ok: true, leadId: confirmedLeadId, redirect: confirmed.toString() }, 200) : redirect(confirmed);
+  }
 };
+
+// Remembers which lead id a request id already produced (best-effort, edge cache). Fails open: a cache outage
+// can at worst let a duplicate through, never block a real customer.
+const requestKey = (requestId: string) => new Request(`https://request-ids.invalid/${requestId}`);
+async function recallRequest(requestId: string): Promise<string> {
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  if (!cache) return "";
+  try {
+    const hit = await cache.match(requestKey(requestId));
+    const leadId = hit ? (await hit.text()).trim() : "";
+    return REQUEST_ID_REGEX.test(leadId) ? leadId : "";
+  } catch {
+    return "";
+  }
+}
+async function rememberRequest(requestId: string, leadId: string): Promise<void> {
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  if (!cache) return;
+  try {
+    await cache.put(requestKey(requestId), new Response(leadId, { headers: { "Cache-Control": `max-age=${REQUEST_MEMORY_SECONDS}` } }));
+  } catch {
+    /* best effort */
+  }
+}
 
 function getString(formData: FormData, key: string, maxLength = 0): string {
   const raw = formData.get(key);
@@ -237,7 +291,9 @@ function cleanLandingPage(value: FormDataEntryValue | null): string {
 }
 
 function isInvalidPayload(payload: LeadPayload): boolean {
-  if (!payload.name || !payload.phone || !payload.address || !payload.message) {
+  // The written description is required unless the visitor picked what the problem is (and it was not "something else").
+  const hasDescription = Boolean(payload.message) || (ISSUE_SATISFIES_DESCRIPTION && payload.issueAnswered);
+  if (!payload.name || !payload.phone || !payload.address || !hasDescription) {
     return true;
   }
 
@@ -471,12 +527,14 @@ function leadRows(payload: LeadPayload, leadId: string, sourceLabel: string, ser
     ["Lead ID", leadId],
     ["Received", receivedAt()],
     ["Service requested", `${serviceLabel} (${payload.serviceId})`],
+    ["How soon", payload.timing ? timingLabel(payload.timing) : "Not answered"],
+    ...payload.answers.map((a): [string, string] => [a.question, a.answer]),
     ["Name", payload.name],
     ["Phone", payload.phone],
     ["Email", payload.email || "Not provided"],
-    ["Town / address", payload.address],
-    ["Service area check", serviceAreaNote(payload.address)],
-    ["Message", payload.message],
+    ["Town / address", [payload.street, payload.address].filter(Boolean).join(", ")],
+    ["Service area check", serviceAreaNote([payload.street, payload.address].filter(Boolean).join(", "))],
+    ["Message", payload.message || "Not written (the customer answered the questions above)"],
     ["Customer said they heard about us", payload.heardAboutId ? HEARD_ABOUT.get(payload.heardAboutId) || "Not answered" : "Not answered"],
     ["Captured source", sourceLabel],
   ];

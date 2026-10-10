@@ -4,7 +4,6 @@
 // those features. Status: prepared, awaiting Shane's approval. Until PUBLIC_PRIVACY_PUBLISHED=1 is set at
 // build time the page is noindex, left out of the sitemap, and not linked from anywhere.
 import Base from '../layouts/Base.astro';
-import SubpageHeader from '../components/SubpageHeader.astro';
 
 const base = import.meta.env.BASE_URL;
 const published = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
@@ -22,8 +21,7 @@ const phone = '781-820-4592';
   noindex={!published}
   pageType="privacy"
 >
-  <SubpageHeader />
-  <main class="privacy">
+  <main id="main" class="privacy">
     <div class="container">
       <h1>Privacy</h1>
       <p class="updated">Last updated October 10, 2026. This page covers this website, not phone calls or texts.</p>

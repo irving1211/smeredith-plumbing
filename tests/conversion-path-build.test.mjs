@@ -28,7 +28,7 @@ test('every service page has a service id that exists in the shared option list'
   const ids = new Set(options.map((o) => o.id));
   for (const s of services) assert.ok(ids.has(s.slug), `${s.slug} missing from service-options.json`);
   for (const id of ids) {
-    if (!services.some((s) => s.slug === id)) assert.ok(['general-plumbing', 'other'].includes(id), `${id} has no page and is not a catch-all`);
+    if (!services.some((s) => s.slug === id)) assert.ok(['general-plumbing', 'other', 'not-sure'].includes(id), `${id} has no page and is not a catch-all`);
   }
   assert.equal(options.filter((o) => o.default).length, 1, 'exactly one default option');
 });
@@ -59,15 +59,15 @@ test('town-page CTAs carry the town into the request form', () => {
   }
 });
 
-test('the contact form offers exactly the shared service and heard-about ids, with one default', () => {
+test('the contact form offers exactly the shared service and heard-about ids; nothing is pre-chosen for the visitor', () => {
   const html = page('/contact');
-  const select = (name) => html.match(new RegExp(`<select[^>]*name="${name}"[^>]*>([\\s\\S]*?)</select>`))[1];
-  const values = (block) => [...block.matchAll(/<option[^>]*value="([^"]*)"/g)].map((m) => m[1]);
-  assert.deepEqual(values(select('service_type')), options.map((o) => o.id));
-  assert.deepEqual(values(select('heard_about')), ['', ...heard.map((h) => h.id)]);
-  const defaultOption = select('service_type').match(/<option[^>]*selected[^>]*value="([^"]*)"|<option[^>]*value="([^"]*)"[^>]*selected/);
-  assert.ok(defaultOption, 'a default service is preselected');
-  assert.equal(defaultOption[1] || defaultOption[2], options.find((o) => o.default).id);
+  const radios = [...html.matchAll(/<input type="radio" name="service_type" value="([^"]*)"[^>]*>/g)];
+  assert.deepEqual(radios.map((m) => m[1]).sort(), options.map((o) => o.id).sort());
+  assert.ok(radios.every((m) => !/\bchecked\b/.test(m[0])), 'no service is checked until the visitor (or the page they came from) chooses');
+  assert.equal(options.find((o) => o.default).id, 'not-sure', 'a request that names no service is recorded as not sure');
+  const select = html.match(/<select[^>]*name="heard_about"[^>]*>([\s\S]*?)<\/select>/)[1];
+  assert.deepEqual([...select.matchAll(/<option[^>]*value="([^"]*)"/g)].map((m) => m[1]), ['', ...heard.map((h) => h.id)]);
+  assert.ok(heard.some((h) => h.id === 'not-sure') && heard.some((h) => h.id === 'other'), 'attribution offers Not sure and Other');
   assert.match(html, /name="town_other"|data-towns=/, 'form knows how to map town slugs');
   for (const field of ['utm_source', 'utm_medium', 'utm_campaign', 'landing_page', 'referrer', 'latest_utm_source', 'latest_utm_medium', 'latest_utm_campaign']) {
     assert.match(html, new RegExp(`name="${field}"`), `${field} hidden field`);
@@ -96,7 +96,7 @@ test('one canonical town list drives schema, the checker and the FAQ', () => {
   assert.deepEqual(business.areaServed.map((a) => a.name.replace(/, MA$/, '')), names);
   for (const t of towns) {
     assert.ok(new RegExp(`<option value="${t.slug}"[^>]*>${t.name}</option>`).test(home), `checker option for ${t.slug}`);
-    assert.ok(new RegExp(`data-town="${t.slug}"`).test(home), `map outline for ${t.slug}`);
+    assert.ok(new RegExp(`data-town="${t.slug}"`).test(page('/service-area')), `map outline for ${t.slug}`);
   }
   const faq = blocks.find((b) => b['@type'] === 'FAQPage').mainEntity.find((q) => q.name === 'What areas do you serve?');
   for (const n of names.slice(1)) assert.ok(faq.acceptedAnswer.text.includes(n), `FAQ lists ${n}`);
@@ -116,7 +116,7 @@ test('the checker works without JavaScript: a GET form to the request page, with
 });
 
 test('the map shows real outlines for every confirmed town and states what the colours mean', () => {
-  const home = page('/');
+  const home = page('/service-area');
   for (const t of towns) {
     const d = home.match(new RegExp(`data-town="${t.slug}"[^>]*d="([^"]+)"`))?.[1] || home.match(new RegExp(`d="([^"]+)"[^>]*data-town="${t.slug}"`))?.[1];
     assert.ok(d && d.length > 60, `${t.slug} has a real outline path`);
@@ -166,22 +166,24 @@ test('static assets get long-lived caching and the site is not frameable by othe
   assert.match(headers, /X-Frame-Options: SAMEORIGIN/);
 });
 
-test('the homepage never hides the hero behind a reveal animation', () => {
+test('the homepage has no reveal animation: every section is readable as soon as it is painted', () => {
   const html = page('/');
-  assert.match(html, /main > section:not\(\.hero\)/);
-  assert.doesNotMatch(html, /querySelectorAll\('section, \.work-card/);
+  assert.doesNotMatch(html, /class="[^"]*\breveal\b/);
+  assert.doesNotMatch(html, /IntersectionObserver\(\[|querySelectorAll\('section, \.work-card/);
+  assert.doesNotMatch(html, /opacity:\s*0\b/);
 });
 
-test('webfonts: only the one variable Inter file and the wordmark font are preloaded; no static Inter weights ship', () => {
+test('webfonts: only the variable Inter file and the one Barlow Condensed weight are preloaded; no static Inter weights or retired serif ship', () => {
   for (const path of ['/', '/contact', '/services/boiler-service']) {
     const html = page(path);
     const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+\.woff2)"/g)].map((m) => m[1]);
     assert.equal(preloads.length, 2, `${path} preloads`);
     assert.match(preloads[0], /inter-latin-wght-normal/);
-    assert.match(preloads[1], /fraunces-latin-500-normal/);
+    assert.match(preloads[1], /barlow-condensed-latin-700-normal/);
   }
   const fonts = readdirSync(join(dist, '_astro')).filter((f) => /^inter-latin-\d{3}-normal/.test(f));
   assert.deepEqual(fonts, [], 'static Inter weights should not be in the build');
+  assert.deepEqual(readdirSync(join(dist, '_astro')).filter((f) => /fraunces/i.test(f)), [], 'the retired serif is not shipped');
 });
 
 test('priority service pages answer real customer questions without prices, promises or new claims', () => {

@@ -1,7 +1,6 @@
 ---
 import { jsonLd } from '../../lib/jsonld.js';
 import Base from '../../layouts/Base.astro';
-import SubpageHeader from '../../components/SubpageHeader.astro';
 import areas from '../../areas.json';
 import services from '../../services.json';
 
@@ -29,10 +28,8 @@ const breadcrumb = {
 };
 ---
 
-<Base title={area.seo_title} description={area.meta_desc} pageType="town" pageMeta={{ town: area.slug }}>
+<Base title={area.seo_title} description={area.meta_desc} pageType="town" current="service-area" pageMeta={{ town: area.slug }}>
   <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
-
-  <SubpageHeader />
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
@@ -40,7 +37,7 @@ const breadcrumb = {
     </div>
   </nav>
 
-  <main>
+  <main id="main">
   <section class="page-hero">
     <div class="container">
       <h1>{area.h1}</h1>
@@ -102,9 +99,6 @@ const breadcrumb = {
   </section>
 
   </main>
-
-  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
-
   <style>
     .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
     .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
@@ -153,15 +147,10 @@ const breadcrumb = {
     .back-link a { color: var(--ink-soft); font-weight: 500; }
     .back-link a:hover { color: var(--red); opacity: 1; }
 
-    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 1rem 1.8rem; border-radius: 999px; font-weight: 600; box-shadow: 0 12px 30px rgba(194,73,44,.4); z-index: 100; min-width: 240px; text-align: center; }
-    .sticky-call:hover { background: var(--red-dark); color: #fff; opacity: 1; }
-
     @media (max-width: 900px) {
       .page-hero { padding: 3rem 0 2rem; }
       .hero-cta { flex-direction: column; gap: .65rem; }
       .hero-cta .btn { justify-content: center; width: 100%; }
-      .sticky-call { display: block; }
-      body { padding-bottom: 5rem; }
       .page-cta { padding: 2.5rem 1.5rem; }
     }
   </style>

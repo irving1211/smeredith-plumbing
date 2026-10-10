@@ -1,14 +1,17 @@
 ---
 import { jsonLd } from '../lib/jsonld.js';
-// One variable Inter (400-900 in a single ~48 KB file) replaces six static weights, and only the
-// Fraunces weight the wordmark actually uses is loaded.
+// Design tokens are generated from design/tokens.json (client-design-system). Fonts: one variable Inter
+// (a single ~48 KB file) for reading text and one Barlow Condensed weight (22 KB) for headings and buttons.
+import "../../design/tokens.css";
 import "../styles/fonts.css";
-import "@fontsource/fraunces/latin-500.css";
+import "../styles/site.css";
 
 import interVariableUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import frauncesUrl from '@fontsource/fraunces/files/fraunces-latin-500-normal.woff2?url';
+import barlowUrl from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url';
 import services from '../services.json';
 import { TOWNS } from '../lib/service-area.js';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 export interface Props {
   title?: string;
@@ -21,15 +24,23 @@ export interface Props {
   pageMeta?: Record<string, string>;
   /** FAQ entries that are VISIBLY rendered on this page. Only then is FAQPage schema emitted. */
   faqs?: { q: string; a: string }[];
+  /** Highlighted item in the header navigation: services | work | about | service-area */
+  current?: string;
+  /** Pages that supply their own header/footer (none today) can switch the shared ones off. */
+  header?: boolean;
+  footer?: boolean;
 }
 
 const {
   title = 'S. Meredith Plumbing & Heating | Saugus, MA Plumber',
-  description = 'Owner-operated plumber in Saugus, MA. Water heaters, boilers, gas lines, remodels and 24/7 emergency service. Licensed and insured. Call 781-820-4592.',
+  description = 'Owner-operated plumber in Saugus, MA. Water heaters, boilers, gas lines, remodels and 24/7 emergency service. Call 781-820-4592.',
   noindex = false,
   pageType = 'page',
   pageMeta = {},
   faqs = [],
+  current = '',
+  header = true,
+  footer = true,
 } = Astro.props;
 
 const site = 'https://smeredithplumbing.com';
@@ -117,12 +128,12 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     {!noindex && <meta property="og:url" content={canonicalURL} />}
     <meta property="og:site_name" content={business} />
     <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
-    <meta name="theme-color" content="#1a120a" />
-    <!-- The one body + headline font file, preloaded so the swap doesn't reflow the hero (CLS). -->
+    <meta name="theme-color" content="#313131" />
+    <!-- The body font file, preloaded so the swap doesn't reflow the hero (CLS). -->
     <link rel="preload" href={interVariableUrl} as="font" type="font/woff2" crossorigin />
-    <!-- The wordmark subline font is above the fold on every page; without a preload it is only found
+    <!-- The heading/wordmark font is above the fold on every page; without a preload it is only found
          during layout and the first paint waits for it on slow connections. -->
-    <link rel="preload" href={frauncesUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={barlowUrl} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
     <script type="application/ld+json" set:html={jsonLd(localBusinessJsonLd)} />
@@ -159,110 +170,104 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     )}
     <style is:global>
       :root {
-        /* Tough, industrial-grade modern palette: deep soot charcoal base, solid masonry whites/greys, safety red.
-           Retains subtle paper texture for premium craft personality but increases visual contrast and trade authority. */
-        --black: #111111;
-        --ink: #1f2937;
-        --ink-soft: #4b5563;
-        --ink-muted: #6b7280;
-        --line: rgba(17, 17, 17, 0.08);
-        --line-2: rgba(17, 17, 17, 0.15);
-        --paper: #FAF9F6; /* premium linen warmth */
-        --paper-2: #F3F1EB; /* masonry grey-white */
-        --paper-3: #E7E4DC;
-        --highlight: #fee2e2; /* pale safety red tint */
-        --red: #d32f2f; /* safety red */
-        --red-dark: #b71c1c;
-        --gold: #c2902c;
+        /* The tokens come from design/tokens.json (rendered to design/tokens.css). The names below are the old
+           variable names that page-level styles still use; they now point at the design tokens so every page
+           shares one palette. */
+        --black: var(--color-dark);
+        --ink: var(--color-text);
+        --ink-soft: var(--color-text-muted);
+        --ink-muted: var(--color-text-muted);
+        --line: var(--color-border);
+        --line-2: var(--color-border);
+        --paper: var(--color-bg);
+        --paper-2: var(--color-surface);
+        --paper-3: var(--color-border);
+        --highlight: var(--color-tint);
+        --red: var(--color-action);
+        --red-dark: var(--color-action-hover);
+        --gold: var(--color-star);
       }
       * { box-sizing: border-box; }
       [hidden] { display: none !important; }
-      /* Touch targets: at least 44 px tall (the gallery arrows are sized in index.astro). */
-      .topbar-call { min-height: 44px; display: inline-flex; align-items: center; }
-      .menu-toggle { min-height: 44px; }
-      /* Stand-alone text links get a 44 px-tall hit area; breadcrumbs and links inside sentences get 24+ px (WCAG 2.5.8). */
-      .hero-alt a, .more-link a, .back-link a, .services-all a, .direct-email-alt a, .contact-list a, .footer-links a, .mobile-menu-meta a, .trust-email a, .nf-links a, .footer-credit a { display: inline-flex; align-items: center; min-height: 44px; }
-      .brand { min-height: 44px; }
-      .breadcrumb a { display: inline-block; padding: .35rem 0; }
-      .homeowner-qa p a, .qa-send a { padding-block: 3px; }
-      html { scroll-behavior: smooth; }
+      html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+      @media (min-width: 900px) { html { scroll-padding-top: 5rem; } }
       html, body {
         margin: 0;
         padding: 0;
-        background: var(--paper);
-        color: var(--ink);
-        font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
         font-size: 17px;
-        line-height: 1.55;
+        line-height: var(--leading-body);
         -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
-        letter-spacing: -0.011em;
       }
-      h1, h2, h3, h4 {
-        font-family: 'Inter Variable', 'Inter', sans-serif;
-        font-weight: 900;
-        letter-spacing: -0.03em;
-        color: var(--black);
-        margin: 0;
-        line-height: 1.05;
-      }
-      h1 { letter-spacing: -0.04em; line-height: 1.02; }
-      .display-serif {
-        font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
-        font-weight: 900;
-        font-style: normal;
-        letter-spacing: -0.025em;
-        color: var(--red);
-        text-decoration: underline;
-        text-decoration-color: rgba(211, 47, 47, 0.25);
-        text-underline-offset: 4px;
-        text-decoration-thickness: 3px;
-      }
-      a { color: var(--black); text-decoration: none; transition: color .15s ease, opacity .15s ease; }
-      a:hover { opacity: 0.7; }
-      img { max-width: 100%; display: block; }
-      .container { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
-      .btn {
-        display: inline-flex; align-items: center; gap: .55rem;
-        padding: 1rem 1.7rem;
-        border-radius: 6px;
+      .skip-link { position: absolute; left: .5rem; top: -4rem; z-index: 100; background: var(--color-dark); color: var(--color-ink-on-dark); padding: .75rem 1rem; border-radius: var(--radius-md); font-weight: 700; }
+      .skip-link:focus { top: .5rem; }
+      main:focus { outline: none; }
+      :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+      .on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--color-ink-on-dark); }
+      /* Touch targets: at least 44 px tall. Stand-alone text links get a 44 px hit area; links inside sentences get 24+ px (WCAG 2.5.8). */
+      .hero-alt a, .more-link a, .back-link a, .services-all a, .direct-email-alt a, .contact-list a, .trust-email a, .nf-links a { display: inline-flex; align-items: center; min-height: 44px; }
+      .breadcrumb a { display: inline-flex; align-items: center; min-height: 44px; }
+      .homeowner-qa p a, .qa-send a { padding-block: 3px; }
+      h1, h2 {
+        font-family: var(--font-display);
         font-weight: 700;
-        font-size: 1rem;
-        letter-spacing: -0.005em;
-        transition: transform .18s ease, background .18s ease, box-shadow .18s ease, color .18s ease;
-        cursor: pointer; border: none;
-        font-family: inherit;
-        text-decoration: none;
         text-transform: uppercase;
-        letter-spacing: 0.02em;
+        letter-spacing: .005em;
+        line-height: var(--leading-tight);
+        color: var(--color-text);
+        margin: 0;
       }
-      .btn-primary {
-        background: var(--red); color: #fff;
-        box-shadow: 0 2px 4px rgba(17, 17, 17, 0.08);
+      h3, h4 {
+        font-family: var(--font-body);
+        font-weight: 700;
+        letter-spacing: -.01em;
+        line-height: 1.25;
+        color: var(--color-text);
+        margin: 0;
       }
-      .btn-primary:hover { background: var(--red-dark); color: #fff; opacity: 1; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(211,47,47,.28); }
-      .btn-dark { background: var(--black); color: #fff; }
-      .btn-dark:hover { background: #000; color: #fff; opacity: 1; transform: translateY(-1px); }
-      .btn-ghost { background: transparent; color: var(--black); border: 2px solid var(--line-2); }
-      .btn-ghost:hover { border-color: var(--black); opacity: 1; }
-      .btn-secondary {
-        background: var(--paper-3);
-        color: var(--black);
-        border: 1px solid var(--line-2);
-        box-shadow: 0 1px 2px rgba(17, 17, 17, 0.05);
+      h1 { font-size: clamp(2.7rem, 9.5vw, 4.5rem); }
+      h2 { font-size: clamp(2rem, 6.5vw, 2.9rem); }
+      .display-serif { font: inherit; letter-spacing: inherit; color: inherit; text-decoration: none; }
+      a { color: var(--color-text); text-decoration: none; }
+      p a:not(.btn), figcaption a, li > a.inline, dd a { text-decoration: underline; text-underline-offset: .18em; text-decoration-thickness: 1px; }
+      p a:not(.btn):hover { text-decoration-thickness: 2px; }
+      img { max-width: 100%; display: block; }
+      .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+      @media (min-width: 768px) { .container { padding: 0 1.5rem; } }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+        min-height: 48px;
+        padding: .6rem 1.4rem;
+        border: 2px solid transparent;
+        border-radius: var(--radius-md);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.2rem;
+        line-height: 1.1;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
       }
-      .btn-secondary:hover {
-        background: var(--paper-2);
-        border-color: var(--black);
-        transform: translateY(-1px);
-        opacity: 1;
-      }
-      .btn-ghost-dark { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.3); }
-      .btn-ghost-dark:hover { border-color: #fff; color: #fff; opacity: 1; }
+      .btn-sm { min-height: 44px; padding: .4rem .9rem; font-size: 1.1rem; }
+      .btn-primary { background: var(--color-action); border-color: var(--color-action); color: var(--color-action-text); }
+      .btn-primary:hover { background: var(--color-action-hover); border-color: var(--color-action-hover); color: var(--color-action-text); }
+      .btn-dark { background: var(--color-dark); border-color: var(--color-dark); color: var(--color-ink-on-dark); }
+      .btn-dark:hover { background: var(--color-action); border-color: var(--color-action); color: var(--color-action-text); }
+      .btn-secondary, .btn-ghost { background: var(--color-surface); border-color: var(--color-text); color: var(--color-text); }
+      .btn-secondary:hover, .btn-ghost:hover { background: var(--color-text); color: var(--color-ink-on-dark); }
+      .btn-ghost-dark { background: transparent; border-color: var(--color-ink-on-dark); color: var(--color-ink-on-dark); }
+      .btn-ghost-dark:hover { background: var(--color-ink-on-dark); color: var(--color-dark); }
     </style>
   </head>
   <body data-track-events data-page-type={pageType} data-page-meta={JSON.stringify(pageMeta)}>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    {header && <SiteHeader current={current} />}
     <slot />
+    {footer && <SiteFooter />}
     <script is:inline>
       // First-party event layer. Pushes conversion events to window.dataLayer (consumed by GTM/GA4
       // only when configured) and remembers first-touch attribution for the service form.

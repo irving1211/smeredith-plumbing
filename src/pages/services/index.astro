@@ -1,7 +1,6 @@
 ---
 import { jsonLd } from '../../lib/jsonld.js';
 import Base from '../../layouts/Base.astro';
-import SubpageHeader from '../../components/SubpageHeader.astro';
 import services from '../../services.json';
 import areas from '../../areas.json';
 
@@ -38,11 +37,10 @@ const serviceList = {
   title="Plumbing & Heating Services in Saugus, MA | S. Meredith"
   description="Plumbing and heating services from Saugus, MA: emergency repair, water heaters, boilers, gas lines, remodel and new construction plumbing. Call 781-820-4592."
   pageType="services-hub"
+  current="services"
 >
   <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
   <script type="application/ld+json" set:html={jsonLd(serviceList)} slot="head" />
-
-  <SubpageHeader />
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
@@ -50,7 +48,7 @@ const serviceList = {
     </div>
   </nav>
 
-  <main>
+  <main id="main">
     <section class="page-hero" id="services-hero">
       <div class="container">
         <h1>Plumbing &amp; heating services in Saugus &amp; the North Shore</h1>
@@ -101,9 +99,6 @@ const serviceList = {
       </div>
     </section>
   </main>
-
-  <a class="sticky-call" href={`tel:${phoneTel}`} aria-label={`Call ${phone}`}>Call {phone}</a>
-
   <style>
     .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
     .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
@@ -137,14 +132,10 @@ const serviceList = {
     .page-cta .hero-cta { justify-content: center; }
     .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
 
-    .sticky-call { display: none; position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); background: var(--red); color: #fff; padding: 1rem 1.8rem; border-radius: 999px; font-weight: 600; box-shadow: 0 12px 30px rgba(194,73,44,.4); z-index: 100; min-width: 240px; text-align: center; }
-
     @media (max-width: 900px) {
       .page-hero { padding: 3rem 0 2rem; }
       .hero-cta { flex-direction: column; gap: .65rem; }
       .hero-cta .btn { justify-content: center; width: 100%; }
-      .sticky-call { display: block; }
-      body { padding-bottom: 5rem; }
       .page-cta { padding: 2.5rem 1.5rem; }
     }
   </style>

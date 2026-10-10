@@ -5,6 +5,7 @@
   { "id": "kitchen-bath-remodels", "label": "Kitchen or bath remodel plumbing", "short": "Kitchen / bath remodel" },
   { "id": "new-construction-plumbing", "label": "New construction or addition", "short": "New construction" },
   { "id": "gas-installation", "label": "Gas line installation or repair", "short": "Gas line" },
-  { "id": "general-plumbing", "label": "General plumbing repair", "short": "General plumbing", "default": true },
+  { "id": "general-plumbing", "label": "General plumbing repair", "short": "General plumbing" },
+  { "id": "not-sure", "label": "Not sure", "short": "Not sure", "default": true },
   { "id": "other", "label": "Something else", "short": "Other" }
 ]

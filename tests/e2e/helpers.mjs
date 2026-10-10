@@ -64,3 +64,12 @@ export async function fillForm(page, overrides = {}) {
 }
 
 export const LEAD_ID = '123e4567-e89b-42d3-a456-426614174000';
+
+/** The service id currently chosen on the request form ('' when nothing is chosen). */
+export const serviceValue = (page) => page.evaluate(() => (document.querySelector('input[name="service_type"]:checked') || {}).value || '');
+
+/** Choose a service on the request form, expanding the "Change" summary first when the service came from another page. */
+export async function chooseService(page, id) {
+  if (!(await page.locator('#service-tiles').isVisible())) await page.click('#service-change');
+  await page.check(`input[name="service_type"][value="${id}"]`);
+}

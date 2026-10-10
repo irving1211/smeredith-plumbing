@@ -1,0 +1,75 @@
+{
+  "_comment": "Verbatim (lightly trimmed) from Shane's verified 5-star Google reviews, first name + last initial. Source screenshots: _context/harvest/2026-05-28-owner-photo-drop/Reviews screenshot/. Do not edit wording; add or remove entries only.",
+  "reviews": [
+    {
+      "id": "review-1",
+      "name": "Steven B.",
+      "tag": "Bathroom remodel",
+      "body": "Shane did a great job with the plumbing for my bathroom remodel. On time, good communication, and minded every detail. Will definitely keep his name and number for the future.",
+      "service": "kitchen-bath-remodels"
+    },
+    {
+      "id": "review-2",
+      "name": "Daniel M.",
+      "tag": "Winter furnace emergency",
+      "body": "Shane responded quickly to an urgent furnace repair in the middle of a winter deep freeze. Other plumbers said it could not be fixed — Shane said “I can fix it,” and he did.",
+      "service": "emergency-plumbing"
+    },
+    {
+      "id": "review-3",
+      "name": "Clare G.",
+      "tag": "Last-minute issue",
+      "body": "We had a last-minute plumbing issue in our bathroom and Shane came out the same day without hesitation. Incredibly fair, honest, and responsive from start to finish. 10/10 service.",
+      "service": ""
+    },
+    {
+      "id": "review-4",
+      "name": "Carly C.",
+      "tag": "Water heater replacement",
+      "body": "Shane came out quickly and replaced the water heater without any delays. He was so understanding of my situation with four kids at home and got our hot water back as soon as possible.",
+      "service": "water-heater-replacement"
+    },
+    {
+      "id": "review-5",
+      "name": "Luke B.",
+      "tag": "Same-day emergency visit",
+      "body": "Same-day visit, and he arrived exactly when he said he would. Quickly diagnosed and resolved the problem, explained it in plain terms, and his pricing was very reasonable.",
+      "service": "emergency-plumbing"
+    },
+    {
+      "id": "review-6",
+      "name": "Iva V.",
+      "tag": "Holiday morning emergency",
+      "body": "Great job on a holiday morning for a plumbing emergency. Fast, quality work that started even before the visit via video, so we didn’t waste time. Very accommodating.",
+      "service": "emergency-plumbing"
+    },
+    {
+      "id": "review-7",
+      "name": "Val K.",
+      "tag": "Attention to detail",
+      "body": "Very professional and pays close attention to detail. He added safety, functionality, and modernity to our plumbing at a very fair price, and explained red flags to watch for.",
+      "service": ""
+    },
+    {
+      "id": "review-8",
+      "name": "Laura C.",
+      "tag": "Complex system repair",
+      "body": "After more than a week and multiple professionals trying to fix a complex problem in our building, Shane did it. Professional, knowledgeable, and willing to take the time to get it right.",
+      "service": ""
+    },
+    {
+      "id": "review-9",
+      "name": "Amy C.",
+      "tag": "Repeat customer",
+      "body": "Excellent at his craft, smart, and a true problem solver. Honest, dependable, and operates with real integrity. I’ve used his services multiple times and referred him to others.",
+      "service": ""
+    },
+    {
+      "id": "review-10",
+      "name": "Emilio D.",
+      "tag": "Property manager",
+      "body": "As a facilities manager responsible for multiple properties, I can say S. Meredith Plumbing is one of the best. Always prompt and dependable, and their pricing is very fair.",
+      "service": ""
+    }
+  ]
+}

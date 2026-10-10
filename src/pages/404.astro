@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import SubpageHeader from '../components/SubpageHeader.astro';
 import services from '../services.json';
 
 const base = import.meta.env.BASE_URL;
@@ -14,9 +13,8 @@ const phoneTel = '+17818204592';
   noindex
   pageType="not-found"
 >
-  <SubpageHeader />
 
-  <main class="nf">
+  <main id="main" class="nf">
     <div class="container">
       <p class="nf-code">404</p>
       <h1>That page isn’t here.</h1>

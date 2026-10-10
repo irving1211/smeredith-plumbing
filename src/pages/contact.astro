@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import serviceOptions from '../service-options.json';
 import heardAbout from '../heard-about.json';
 import { TOWNS } from '../lib/service-area.js';
+import { DEFAULT_PLACEHOLDER, ISSUE_SATISFIES_DESCRIPTION, TIMING, announceFor, fieldName, placeholderFor, questionsFor } from '../lib/request-questions.js';
+import questionData from '../request-questions.json';
 
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
@@ -18,6 +20,14 @@ const townNames = Object.fromEntries(TOWNS.map((t) => [t.slug, t.name]));
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
 const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
 
+// Tile order: the emergency tile first (it is full width), then Shane's priority work, then the catch-alls.
+const tileOrder = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels', 'new-construction-plumbing', 'gas-installation', 'general-plumbing', 'not-sure', 'other'];
+const byId = (id: string) => serviceOptions.find((o) => o.id === id)!;
+const emergency = byId('emergency-plumbing');
+const tiles = tileOrder.map((id) => byId(id));
+const tileText = (o: { id: string; label: string; short: string }) => (o.id === 'other' ? o.label : o.short);
+const questionServices = Object.keys(questionData.services);
+
 const breadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -28,161 +38,167 @@ const breadcrumb = {
 };
 ---
 
-<Base title="Request Plumbing Service in Saugus, MA | S. Meredith" description="Request plumbing or heating service from Shane Meredith in Saugus, MA. Send the details and a photo, or call 781-820-4592 for 24/7 emergency service." pageType="contact">
+<Base title="Request Plumbing Service in Saugus, MA | S. Meredith" description="Request plumbing or heating service from Shane Meredith in Saugus, MA. Choose the service and your town, or call 781-820-4592 for 24/7 emergency service." pageType="contact">
   <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
   <Fragment slot="head">{turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}</Fragment>
-  <header class="topbar">
-    <div class="container topbar-row">
-      <a class="brand" href={base}>
-        <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="40" height="40" />
-        <span class="brand-wordmark">
-          <strong>S. Meredith</strong>
-          <em>Plumbing &amp; Heating</em>
-        </span>
-      </a>
-      <a class="topbar-call" href={`tel:${phoneTel}`}>{phone}</a>
-    </div>
-  </header>
 
-  <main class="contact-main">
-    <div class="container">
-      <div class="contact-layout">
-
-        <!-- Trust & Information Column -->
-        <div class="contact-info">
-          <span class="trust-badge">Licensed & Insured · MA #9630040-PL-M</span>
-          <h1>Need service? <span class="display-serif">Shane will call</span> you back fast.</h1>
-
-          <p class="lede">
-            No automated switchboards or third-party call centers. When you request service below, the details go directly to Shane so he can review them and call you back shortly.
-          </p>
-
-          <div class="owner-card">
-            <div class="owner-header">
-              <img class="owner-image" src={`${base}images/shane.webp`} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" width="112" height="112" loading="lazy" decoding="async" />
-              <div class="owner-meta">
-                <strong>Shane Meredith</strong>
-                <span>Owner & Licensed Plumber</span>
-              </div>
-            </div>
-            <p class="owner-quote">
-              "I pride myself on clean craftsmanship, honest advice, and upfront pricing. I carry common parts on my truck to handle most boiler, water heater, and general plumbing repairs on the first visit."
-            </p>
-            <div class="owner-rating">
-              <span class="stars">★★★★★</span>
-              <span>5-star Google reviews</span>
-            </div>
-          </div>
+  <main id="main" class="request">
+    <div class="container request-wrap">
+      <div class="page-head">
+        <h1>Request service</h1>
+        <p class="lede">The details go straight to Shane, who reviews them and calls you back. If it can't wait, call or text.</p>
+        <div class="actions quick-contact">
+          <a class="btn btn-primary btn-sm" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-secondary btn-sm" href={smsHref} data-contact-text>Text photos</a>
         </div>
-
-        <!-- Form Column -->
-        <div class="form-card">
-          <div class="quick-contact">
-            <p><strong>Rather talk or text?</strong> Shane answers his phone.</p>
-            <div class="quick-contact-actions">
-              <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
-              <a class="btn btn-secondary" href={smsHref} data-contact-text>Text photos</a>
-            </div>
-          </div>
-
-          <div class="form-status" id="form-status" role="alert" tabindex="-1" hidden>
-            <p id="form-status-text"></p>
-            <div class="status-actions" id="form-status-actions" hidden>
-              <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
-              <a class="btn btn-secondary" href={smsHref} data-contact-text>Text Shane</a>
-              <a class="btn btn-secondary" id="mailto-fallback" href={publicEmailHref}>Email instead</a>
-            </div>
-          </div>
-          <p class="prefill-note" id="prefill-note" hidden>We filled in the service and town from the page you came from. Change anything that's wrong.</p>
-
-          <form
-            id="service-request-form"
-            action={`${base}api/contact`}
-            method="POST"
-            enctype="multipart/form-data"
-            data-towns={JSON.stringify(townNames)}
-          >
-            <div class="hp" aria-hidden="true">
-              <label>Leave this field empty <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
-            </div>
-            <input type="hidden" name="utm_source" value="" data-attr />
-            <input type="hidden" name="utm_medium" value="" data-attr />
-            <input type="hidden" name="utm_campaign" value="" data-attr />
-            <input type="hidden" name="landing_page" value="" data-attr />
-            <input type="hidden" name="referrer" value="" data-attr />
-            <input type="hidden" name="latest_utm_source" value="" data-attr />
-            <input type="hidden" name="latest_utm_medium" value="" data-attr />
-            <input type="hidden" name="latest_utm_campaign" value="" data-attr />
-
-            <div class="form-group">
-              <label for="name">Your Name <span class="required">*</span></label>
-              <input type="text" id="name" name="name" required placeholder="Your full name" autocomplete="name" />
-            </div>
-
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="phone">Phone Number <span class="required">*</span></label>
-                <input type="tel" id="phone" name="phone" required placeholder="(781) 820-4592" autocomplete="tel" />
-              </div>
-              <div class="form-group">
-                <label for="email">Email <span class="optional">(Optional)</span></label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="address">Town or Address <span class="required">*</span></label>
-              <input type="text" id="address" name="address" required placeholder="Where do you need service?" autocomplete="address-level2" list="town-list" />
-              <datalist id="town-list">
-                {TOWNS.map((t) => <option value={t.name}></option>)}
-              </datalist>
-            </div>
-
-            <div class="form-group">
-              <label for="service_type">What do you need?</label>
-              <select id="service_type" name="service_type">
-                {serviceOptions.map((o) => <option value={o.id} selected={Boolean((o as { default?: boolean }).default)}>{o.label}</option>)}
-              </select>
-              <p class="emergency-note" id="emergency-note" hidden>
-                <strong>No heat, a burst pipe or no hot water?</strong> Call Shane now at <a href={`tel:${phoneTel}`}>{phone}</a>. A form can wait; a flooded basement can't.
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label for="message">Describe the problem <span class="required">*</span></label>
-              <textarea id="message" name="message" required rows="4" placeholder="Tell Shane what's going on (e.g. leaking pipe, boiler has no pressure, upgrading water heater)..."></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="photo">Add a photo <span class="optional">(Optional — helps Shane triage)</span></label>
-              <input type="file" id="photo" name="photo" accept="image/*" aria-describedby="photo-help" />
-              <span class="file-help" id="photo-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster. Large photos are resized automatically.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="heard_about">How did you hear about us? <span class="optional">(Optional)</span></label>
-              <select id="heard_about" name="heard_about">
-                <option value="">Choose one</option>
-                {heardAbout.map((h) => <option value={h.id}>{h.label}</option>)}
-              </select>
-            </div>
-
-            {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-appearance="interaction-only"></div>}
-
-            <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
-              Send Request to Shane
-            </button>
-            <p class="form-privacy">What you enter is emailed to Shane so he can answer your request.{privacyPublished && <> <a href={`${base}privacy/`}>Privacy notice</a></>}</p>
-          </form>
-
-          <div class="direct-call-alt">
-            <p>Immediate emergency? Call directly for 24/7 priority response:</p>
-            <a class="btn btn-dark call-btn" href={`tel:${phoneTel}`}>Call {phone}</a>
-            <p class="direct-email-alt">Prefer email? <a href={publicEmailHref}>{publicEmail}</a></p>
-          </div>
-        </div>
-
       </div>
+
+      <div class="form-status" id="form-status" role="alert" tabindex="-1" hidden>
+        <p class="status-title" id="form-status-text"></p>
+        <ul class="status-list" id="form-status-list" hidden></ul>
+        <div class="status-actions" id="form-status-actions" hidden>
+          <a class="btn btn-primary btn-sm" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-secondary btn-sm" href={smsHref} data-contact-text>Text Shane</a>
+          <a class="btn btn-secondary btn-sm" id="mailto-fallback" href={publicEmailHref}>Email instead</a>
+        </div>
+      </div>
+
+      <form
+        id="service-request-form"
+        action={`${base}api/contact`}
+        method="POST"
+        enctype="multipart/form-data"
+        data-towns={JSON.stringify(townNames)}
+        data-issue-satisfies={String(ISSUE_SATISFIES_DESCRIPTION)}
+        data-default-placeholder={DEFAULT_PLACEHOLDER}
+      >
+        <div class="hp" aria-hidden="true">
+          <label>Leave this field empty <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <input type="hidden" name="request_id" value="" data-request-id />
+        <input type="hidden" name="utm_source" value="" data-attr />
+        <input type="hidden" name="utm_medium" value="" data-attr />
+        <input type="hidden" name="utm_campaign" value="" data-attr />
+        <input type="hidden" name="landing_page" value="" data-attr />
+        <input type="hidden" name="referrer" value="" data-attr />
+        <input type="hidden" name="latest_utm_source" value="" data-attr />
+        <input type="hidden" name="latest_utm_medium" value="" data-attr />
+        <input type="hidden" name="latest_utm_campaign" value="" data-attr />
+
+        <fieldset class="group" id="field-service">
+          <legend>What do you need?</legend>
+          <p class="hint prefill-note" id="prefill-note" hidden>Filled in from the page you came from. Change anything that's wrong.</p>
+          <div class="chosen" id="service-chosen" hidden>
+            <p class="chosen-text"><strong id="service-chosen-name"></strong></p>
+            <button type="button" class="chosen-change" id="service-change" aria-expanded="false" aria-controls="service-tiles">Change</button>
+          </div>
+          <div class="tiles" id="service-tiles">
+            <label class="tile tile-urgent">
+              <input type="radio" name="service_type" value={emergency.id} />
+              <span>{emergency.label}</span>
+            </label>
+            {tiles.map((o) => (
+              <label class="tile">
+                <input type="radio" name="service_type" value={o.id} />
+                <span>{tileText(o)}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <p class="visually-hidden" id="reveal-status" role="status" aria-live="polite"></p>
+        {questionServices.map((serviceId) => (
+          <div class="q-group" data-service-group={serviceId} data-announce={announceFor(serviceId)} data-placeholder={placeholderFor(serviceId)} hidden>
+            {questionsFor(serviceId).map((q) => (
+              <fieldset class="group q" data-issue={q.issue ? 'true' : undefined}>
+                <legend>{q.label} <span class="optional">(optional)</span></legend>
+                <div class="chips">
+                  {q.options.map((opt) => (
+                    <label class="chip">
+                      <input type="radio" name={fieldName(q.id)} value={opt.id} disabled />
+                      <span>{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            ))}
+          </div>
+        ))}
+
+        <fieldset class="group" id="field-timing">
+          <legend>How soon do you need help? <span class="optional">(optional)</span></legend>
+          <div class="chips">
+            {TIMING.map((t) => (
+              <label class="chip">
+                <input type="radio" name="timing" value={t.id} />
+                <span>{t.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <p class="notice emergency-note" id="emergency-note" hidden>
+          <strong>No heat, a burst pipe or no hot water?</strong> Call Shane now at <a href={`tel:${phoneTel}`}>{phone}</a>. A form can wait; a flooded basement can't. You can still send this request.
+        </p>
+
+        <div class="field" id="field-address-wrap">
+          <label for="address">Town</label>
+          <input type="text" id="address" name="address" required placeholder="e.g. Saugus" autocomplete="address-level2" list="town-list" aria-describedby="town-status" />
+          <datalist id="town-list">
+            {TOWNS.map((t) => <option value={t.name}></option>)}
+          </datalist>
+          <p class="hint town-status" id="town-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="field" id="field-name-wrap">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" required autocomplete="name" spellcheck="false" />
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="field-phone-wrap">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="(781) 820-4592" />
+          </div>
+          <div class="field" id="field-email-wrap">
+            <label for="email">Email <span class="optional">(optional)</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" />
+          </div>
+        </div>
+
+        <div class="field" id="field-message-wrap">
+          <label for="message"><span id="message-label">Describe the problem</span></label>
+          <textarea id="message" name="message" rows="3" required placeholder={DEFAULT_PLACEHOLDER}></textarea>
+        </div>
+
+        <div class="field" id="field-photo-wrap">
+          <label for="photo">Add a photo <span class="optional">(optional)</span></label>
+          <input type="file" id="photo" name="photo" accept="image/*" aria-describedby="photo-help" />
+          <p class="hint" id="photo-help">Helps Shane see what he is dealing with.</p>
+        </div>
+
+        <details class="more">
+          <summary>Add a street address <span class="optional">(optional)</span></summary>
+          <div class="field">
+            <label for="street">Street address</label>
+            <input type="text" id="street" name="street" autocomplete="address-line1" />
+          </div>
+        </details>
+
+        <div class="field">
+          <label for="heard_about">How did you hear about us? <span class="optional">(optional)</span></label>
+          <select id="heard_about" name="heard_about">
+            <option value="">Choose one</option>
+            {heardAbout.map((h) => <option value={h.id}>{h.label}</option>)}
+          </select>
+        </div>
+
+        {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-appearance="interaction-only"></div>}
+
+        <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">Send request</button>
+        <p class="form-privacy">What you enter is emailed to Shane so he can answer your request.{privacyPublished && <> <a href={`${base}privacy/`}>Privacy notice</a></>}</p>
+      </form>
+
+      <p class="alt-contact">Prefer email? <a href={publicEmailHref}>{publicEmail}</a></p>
     </div>
   </main>
 
@@ -192,18 +208,41 @@ const breadcrumb = {
       if (!form) return;
       const track = (event, params) => window.smTrack && window.smTrack(event, params);
       const $ = (id) => document.getElementById(id);
-      const serviceSel = $('service_type');
-      const addressInput = $('address');
       const towns = JSON.parse(form.dataset.towns || '{}');
+      const issueSatisfies = form.dataset.issueSatisfies === 'true';
+      const defaultPlaceholder = form.dataset.defaultPlaceholder || '';
       const params = new URLSearchParams(window.location.search);
+      const serviceRadios = [...form.querySelectorAll('input[name="service_type"]')];
+      const timingRadios = [...form.querySelectorAll('input[name="timing"]')];
+      const groups = [...form.querySelectorAll('[data-service-group]')];
+      const addressInput = $('address');
+      const message = $('message');
+      const baseTitle = document.title;
+      // JavaScript shows its own error summary, so the browser's pop-up bubbles are switched off. Without JavaScript
+      // they (and the server's own checks) are the fallback.
+      form.noValidate = true;
+
+      const selectedService = () => (serviceRadios.find((r) => r.checked) || {}).value || '';
+      const selectedLabel = () => { const r = serviceRadios.find((x) => x.checked); return r ? r.nextElementSibling.textContent : ''; };
+      const selectedTiming = () => (timingRadios.find((r) => r.checked) || {}).value || '';
+
+      // ---- A fresh id per page load, so a double tap or retried post is recognised on the server ----
+      const makeId = () => {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        const b = new Uint8Array(16); crypto.getRandomValues(b);
+        b[6] = (b[6] & 0x0f) | 0x40; b[8] = (b[8] & 0x3f) | 0x80;
+        const h = [...b].map((x) => x.toString(16).padStart(2, '0')).join('');
+        return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+      };
+      const requestId = form.querySelector('[data-request-id]');
+      requestId.value = makeId();
+      // Coming back to a finished request with the Back button must not reuse its id, or a new request would be swallowed.
+      window.addEventListener('pageshow', (e) => { if (e.persisted) { requestId.value = makeId(); syncAll(false); } });
 
       // ---- Carry service + town from the page the visitor came from (editable) ----
       let prefilled = false;
-      const wantedService = params.get('service');
-      if (wantedService && [...serviceSel.options].some((o) => o.value === wantedService)) {
-        serviceSel.value = wantedService;
-        prefilled = true;
-      }
+      const wanted = serviceRadios.find((r) => r.value === params.get('service'));
+      if (wanted) { wanted.checked = true; prefilled = true; }
       const wantedTown = params.get('town');
       // Free-text towns arrive through sessionStorage (town=other) so they never sit in a URL that analytics could record;
       // the plain GET form used without JavaScript still sends ?town_other=.
@@ -220,24 +259,85 @@ const breadcrumb = {
         prefilled = true;
       }
       if (prefilled) $('prefill-note').hidden = false;
+      // A service that came from another page is shown as one line with a Change button, so the form starts at the
+      // questions that matter. Without JavaScript the full list stays visible.
+      const tilesBox = $('service-tiles');
+      const chosenBox = $('service-chosen');
+      const changeBtn = $('service-change');
+      if (wanted) {
+        tilesBox.hidden = true;
+        chosenBox.hidden = false;
+        $('service-chosen-name').textContent = wanted.nextElementSibling.textContent;
+        changeBtn.addEventListener('click', () => {
+          tilesBox.hidden = false;
+          chosenBox.hidden = true;
+          changeBtn.setAttribute('aria-expanded', 'true');
+          const current = serviceRadios.find((r) => r.checked) || serviceRadios[0];
+          current.focus();
+        });
+      }
 
-      // ---- Emergency nudge: a form can wait, a flood can't ----
-      const emergencyNote = $('emergency-note');
-      const syncEmergency = () => { emergencyNote.hidden = serviceSel.value !== 'emergency-plumbing'; };
-      serviceSel.addEventListener('change', syncEmergency);
-      syncEmergency();
-
-      // ---- Text link carries the chosen service/town ----
+      // ---- Questions for the chosen service, the description rule, and the emergency nudge ----
+      const status = $('reveal-status');
+      const activeGroup = () => groups.find((g) => !g.hidden) || null;
+      const issueAnswered = () => {
+        const g = activeGroup();
+        return !!g && [...g.querySelectorAll('fieldset[data-issue] input:checked')].some((i) => i.value !== 'other' && i.value !== 'unknown');
+      };
+      const hasIssueQuestion = () => { const g = activeGroup(); return !!g && !!g.querySelector('fieldset[data-issue]'); };
+      const syncQuestions = (announce) => {
+        const svc = selectedService();
+        let shown = null;
+        groups.forEach((g) => {
+          const on = g.dataset.serviceGroup === svc;
+          g.hidden = !on;
+          g.querySelectorAll('input').forEach((i) => { i.disabled = !on; if (!on) i.checked = false; });
+          if (on) shown = g;
+        });
+        // Say that questions appeared; focus is never moved on its own.
+        status.textContent = announce && shown ? shown.dataset.announce : '';
+        message.placeholder = shown ? shown.dataset.placeholder : defaultPlaceholder;
+      };
+      const syncMessageRule = () => {
+        const optional = issueSatisfies && issueAnswered();
+        message.required = !optional;
+        $('message-label').textContent = optional ? 'Anything else Shane should know? (optional)' : hasIssueQuestion() ? 'Or describe the problem' : 'Describe the problem';
+      };
+      const syncEmergency = () => { $('emergency-note').hidden = !(selectedService() === 'emergency-plumbing' || selectedTiming() === 'now'); };
       const textLinks = document.querySelectorAll('[data-contact-text]');
       const syncTextLinks = () => {
-        const label = serviceSel.options[serviceSel.selectedIndex]?.textContent || '';
+        const svc = selectedService();
         const where = addressInput.value.trim();
-        const body = `Hi Shane — ${serviceSel.value && serviceSel.value !== 'other' ? `I need help with: ${label}` : 'I need a plumber'}${where ? ` (${where})` : ''}. `;
+        const body = `Hi Shane — ${svc && svc !== 'other' && svc !== 'not-sure' ? `I need help with: ${selectedLabel()}` : 'I need a plumber'}${where ? ` (${where})` : ''}. `;
         textLinks.forEach((a) => { a.href = `sms:+17818204592?body=${encodeURIComponent(body)}`; });
       };
-      serviceSel.addEventListener('change', syncTextLinks);
+      function syncAll(announce) { syncQuestions(announce); syncMessageRule(); syncEmergency(); syncTextLinks(); }
+      syncAll(false);
+
+      // ---- Town coverage, in words, as you leave the field (never blocks the request) ----
+      const townList = Object.entries(towns).map(([slug, name]) => [slug, name, name.toLowerCase()]);
+      const normalize = (s) => s.toLowerCase().replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+      const townFrom = (text) => {
+        const segments = text.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean);
+        for (let i = segments.length - 1; i >= 0; i--) {
+          const key = normalize(segments[i]).replace(/^(?:the\s+)?(?:city|town)\s+of\s+/, '').replace(/,?\s*(?:ma|mass|massachusetts)\b.*$/, '').replace(/,?\s*\d{5}(?:-\d{4})?$/, '').trim();
+          if (!key || /^(?:ma|mass|massachusetts|\d{5}(?:-\d{4})?)$/.test(key)) continue;
+          return townList.find(([slug, , lower]) => lower === key || slug === key) || null;
+        }
+        return null;
+      };
+      const townStatus = $('town-status');
+      const checkTown = () => {
+        const value = addressInput.value.trim();
+        if (!value) { townStatus.textContent = ''; return; }
+        const hit = townFrom(value);
+        townStatus.textContent = hit ? `Shane serves ${hit[1]}.` : "That town isn't on Shane's list yet. Send the request anyway and he will confirm.";
+        syncTextLinks();
+      };
+      addressInput.addEventListener('change', checkTown);
+      addressInput.addEventListener('blur', checkTown);
       addressInput.addEventListener('input', syncTextLinks);
-      syncTextLinks();
+      if (addressInput.value) checkTown();
 
       // ---- Lead attribution (first touch this visit + a separate later-campaign tag) ----
       let attr = {};
@@ -251,20 +351,29 @@ const breadcrumb = {
       };
       form.querySelectorAll('[data-attr]').forEach((input) => { input.value = values[input.name] || ''; });
 
-      track('request_form_open', { service_type: prefilled ? serviceSel.value : '' });
+      track('request_form_open', { service_type: prefilled ? selectedService() : '' });
       let started = false;
-      form.addEventListener('focusin', () => {
+      const markStarted = () => {
         if (started) return;
         started = true;
-        track('form_start', { form_id: 'service_request', service_type: serviceSel.value });
-      });
+        track('form_start', { form_id: 'service_request', service_type: selectedService() });
+      };
+      form.addEventListener('focusin', markStarted);
+      serviceRadios.forEach((r) => r.addEventListener('change', () => {
+        markStarted();
+        syncAll(true);
+        track('service_select', { service_type: r.value });
+      }));
+      timingRadios.forEach((r) => r.addEventListener('change', syncEmergency));
+      groups.forEach((g) => g.addEventListener('change', syncMessageRule));
 
-      // ---- Honest error handling: keep what they typed, say what happened, offer another route ----
+      // ---- Errors: a summary that takes focus, a message at each field, and every answer kept ----
       const statusBox = $('form-status');
       const statusText = $('form-status-text');
+      const statusList = $('form-status-list');
       const statusActions = $('form-status-actions');
       const messages = {
-        validation: 'Something in the form needs another look: check the required fields, remove extra links, and make sure any photo is a JPG, PNG, HEIC or PDF under 10 MB. Or just call or text Shane.',
+        validation: 'Something in the form needs another look: check the highlighted answers, remove extra links, and make sure any photo is a JPG, PNG, WebP or HEIC image under 10 MB. Or just call or text Shane.',
         photo: 'That photo is too large to send here (over 10 MB). Remove it and send the request, then text the photo to Shane.',
         delivery: 'Your request did not go through, and Shane has not received it. Try again in a minute, or call, text or email Shane directly.',
         network: 'We could not reach the server, so your request has not been sent. Check your connection and try again, or call, text or email Shane directly.',
@@ -272,19 +381,76 @@ const breadcrumb = {
         verification: 'We could not confirm the request came from a person. Reload the page and try again, or call or text Shane.',
         blocked: 'This request was blocked for safety. Reload this page and try again, or call or text Shane.',
       };
+      const clearFieldErrors = () => {
+        form.querySelectorAll('.field-error').forEach((e) => e.remove());
+        form.querySelectorAll('[aria-invalid]').forEach((el) => {
+          el.removeAttribute('aria-invalid');
+          const ids = (el.getAttribute('aria-describedby') || '').split(' ').filter((x) => x && !x.endsWith('-error'));
+          if (ids.length) el.setAttribute('aria-describedby', ids.join(' ')); else el.removeAttribute('aria-describedby');
+        });
+        statusList.replaceChildren();
+        statusList.hidden = true;
+        document.title = baseTitle;
+      };
+      const showStatus = () => {
+        statusBox.hidden = false;
+        document.title = `Error: ${baseTitle}`;
+        statusBox.focus();
+        statusBox.scrollIntoView({ block: 'center' });
+      };
+
+      const EMAIL = /^[^\s@<>,;:"()[\]\\]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+      const validate = () => {
+        const problems = [];
+        const add = (id, text) => problems.push({ id, text });
+        if (!$('address').value.trim()) add('address', 'Enter your town');
+        if (!$('name').value.trim()) add('name', 'Enter your name');
+        const digits = $('phone').value.replace(/\D/g, '').length;
+        if (!$('phone').value.trim()) add('phone', 'Enter a phone number Shane can call or text');
+        else if (digits < 7) add('phone', 'Enter a phone number with at least 7 digits');
+        const email = $('email').value.trim();
+        if (email && !EMAIL.test(email)) add('email', 'Enter an email address like name@example.com, or leave it empty');
+        if (message.required && !message.value.trim()) add('message', hasIssueQuestion() ? 'Choose what is going on above, or describe the problem' : 'Describe the problem');
+        return problems;
+      };
+      const showProblems = (problems) => {
+        clearFieldErrors();
+        statusText.textContent = 'There is a problem';
+        statusActions.hidden = true;
+        problems.forEach((p) => {
+          const input = $(p.id);
+          const err = document.createElement('p');
+          err.className = 'field-error';
+          err.id = `${p.id}-error`;
+          err.textContent = p.text;
+          input.insertAdjacentElement('afterend', err);
+          input.setAttribute('aria-invalid', 'true');
+          input.setAttribute('aria-describedby', [input.getAttribute('aria-describedby'), err.id].filter(Boolean).join(' '));
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#${p.id}`;
+          a.textContent = p.text;
+          a.addEventListener('click', (e) => { e.preventDefault(); input.focus(); input.scrollIntoView({ block: 'center' }); });
+          li.append(a);
+          statusList.append(li);
+        });
+        statusList.hidden = false;
+        showStatus();
+        track('form_validation_error', { form_id: 'service_request', error_fields: problems.map((p) => p.id).join(','), error_count: String(problems.length), service_type: selectedService() });
+      };
+
       // retained = the fetch path, where the page (and the visitor's answers) stay put. After a plain
       // form post the page reloads empty, so we must not claim their answers are still there.
       const showError = (code, retained) => {
         const key = messages[code] ? code : 'delivery';
+        clearFieldErrors();
         statusText.textContent = messages[key] + (retained ? ' Your answers are still in the form.' : '');
         statusActions.hidden = key === 'validation';
-        const label = serviceSel.options[serviceSel.selectedIndex]?.textContent || 'Service request';
-        const lines = [$('message').value.trim(), '', `Name: ${$('name').value.trim()}`, `Phone: ${$('phone').value.trim()}`, `Town/address: ${addressInput.value.trim()}`].join('\n');
+        const label = selectedLabel() || 'Service request';
+        const lines = [message.value.trim(), '', `Name: ${$('name').value.trim()}`, `Phone: ${$('phone').value.trim()}`, `Town/address: ${addressInput.value.trim()}`].join('\n');
         $('mailto-fallback').href = `mailto:shane@smeredithplumbing.com?subject=${encodeURIComponent('Service request - ' + label)}&body=${encodeURIComponent(lines)}`;
-        statusBox.hidden = false;
-        statusBox.focus();
-        statusBox.scrollIntoView({ block: 'center' });
-        track('form_error', { form_id: 'service_request', error_type: key, service_type: serviceSel.value });
+        showStatus();
+        track('form_error', { form_id: 'service_request', error_type: key, service_type: selectedService() });
         // A Turnstile token can be used once; get a fresh one for the retry.
         try { if (window.turnstile && window.turnstile.reset) window.turnstile.reset(); } catch (_) {}
       };
@@ -299,13 +465,18 @@ const breadcrumb = {
         if (!window.fetch || !window.FormData) return;
         event.preventDefault();
         if (sending) return;
+        const problems = validate();
+        if (problems.length) { showProblems(problems); return; }
+        clearFieldErrors();
+        statusBox.hidden = true;
         sending = true;
         const idle = button.textContent;
         button.disabled = true;
         button.textContent = 'Sending…';
-        statusBox.hidden = true;
+        form.setAttribute('aria-busy', 'true');
         // An attempt, not a lead: leads are counted only from the confirmed thank-you page.
-        track('form_submit_attempt', { form_id: 'service_request', service_type: serviceSel.value });
+        track('form_submit_attempt', { form_id: 'service_request', service_type: selectedService(), timing: selectedTiming() });
+        const finish = () => { sending = false; button.disabled = false; button.textContent = idle; form.removeAttribute('aria-busy'); };
         try {
           const data = new FormData(form);
           // Phone photos are often 3-8 MB. Shrink big ones in the browser (longest side 1800 px, JPEG) so the
@@ -326,9 +497,7 @@ const breadcrumb = {
           const sendingPhoto = data.get('photo');
           if (sendingPhoto instanceof File && sendingPhoto.size > 10 * 1024 * 1024) {
             showError('photo', true);
-            sending = false;
-            button.disabled = false;
-            button.textContent = idle;
+            finish();
             return;
           }
           const response = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
@@ -342,346 +511,82 @@ const breadcrumb = {
         } catch (_) {
           showError('network', true);
         }
-        sending = false;
-        button.disabled = false;
-        button.textContent = idle;
+        finish();
       });
     });
   </script>
 
   <style>
-    .topbar {
-      background: rgba(250, 247, 242, 0.86);
-      backdrop-filter: saturate(160%) blur(14px);
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .topbar-row {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 0.8rem 1.75rem;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      color: var(--black);
-    }
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s ease;
-      flex-shrink: 0;
-    }
-    .brand:hover .brand-icon {
-      transform: rotate(-4deg) scale(1.06);
-    }
-    .brand-wordmark {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-    .brand-wordmark strong {
-      font-weight: 800;
-      font-size: 1rem;
-      letter-spacing: -0.02em;
-      color: var(--black);
-    }
-    .brand-wordmark em {
-      font-style: normal;
-      font-family: 'Fraunces', Georgia, serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      color: var(--ink-muted);
-      letter-spacing: 0.04em;
-      margin-top: 1px;
-    }
-    .topbar-call {
-      padding: 0.55rem 1rem;
-      background: var(--black);
-      color: #fff;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.92rem;
-      margin-left: auto;
-      white-space: nowrap;
-    }
-    .topbar-call:hover {
-      background: var(--red);
-      color: #fff;
-      opacity: 1;
-    }
+    .request { padding-bottom: 1rem; }
+    .request-wrap { max-width: 44rem; }
+    .request .page-head { padding-bottom: .75rem; }
+    .quick-contact { margin-top: 1rem; }
+    .quick-contact .btn { flex: 1 1 10rem; }
 
-    .contact-main {
-      padding: 4rem 0 6rem;
-      background: var(--paper);
-    }
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .contact-info {
-      max-width: 500px;
-    }
-    .trust-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--red-dark);
-      background: var(--highlight);
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      margin-bottom: 1.25rem;
-    }
-    .contact-info h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-    }
-    .lede {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: var(--ink-soft);
-      margin-bottom: 2.5rem;
-    }
-
-    .owner-card {
-      background: var(--paper-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1.75rem;
-    }
-    .owner-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .owner-image {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ffffff;
-      box-shadow: 0 4px 10px rgba(17, 17, 17, 0.08);
-    }
-    .owner-meta {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-    .owner-meta strong {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--black);
-    }
-    .owner-meta span {
-      font-size: 0.82rem;
-      color: var(--ink-soft);
-    }
-    .owner-quote {
-      font-size: 0.95rem;
-      line-height: 1.55;
-      color: var(--ink);
-      font-style: italic;
-      margin: 0 0 1.25rem 0;
-    }
-    .owner-rating {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--black);
-    }
-    .owner-rating .stars {
-      color: var(--gold);
-      letter-spacing: 1px;
-    }
-
-    .form-card {
-      background: #ffffff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.02), 0 16px 40px rgba(17, 17, 17, 0.04);
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 1.25rem;
-    }
-    .form-status {
-      margin-bottom: 1rem;
-      padding: 0.9rem 1rem;
-      border-radius: 8px;
-      border: 1px solid rgba(183, 28, 28, 0.18);
-      background: #fff1f1;
-      color: #7f1d1d;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      font-weight: 600;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1.25rem;
-      min-width: 0;
-    }
-    .form-group label {
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--ink-soft);
-    }
-    .form-group label .required {
-      color: var(--red);
-    }
-    .form-group label .optional {
-      font-weight: 500;
-      color: var(--ink-muted);
-      text-transform: none;
-      letter-spacing: normal;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="tel"],
-    .form-group input[type="email"],
-    .form-group select,
-    .form-group textarea {
-      font-family: inherit;
-      font-size: 1rem;
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      padding: 0.85rem 1rem;
-      border: 2px solid var(--line-2);
-      border-radius: 6px;
-      background: #ffffff;
-      color: var(--black);
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      outline: none;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
-    }
-    .form-group select {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%234b5563' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-      background-repeat: no-repeat;
-      background-position: right 0.85rem center;
-      background-size: 1.1rem;
-      padding-right: 2.5rem;
-    }
-    .form-group input[type="file"] {
-      min-height: 44px;
-      padding: 0.5rem 0;
-      font-size: 0.9rem;
-    }
-    .file-help {
-      font-size: 0.82rem;
-      line-height: 1.4;
-      color: var(--ink-muted);
-    }
-    .submit-btn {
-      width: 100%;
-      justify-content: center;
-      padding: 1.1rem;
-      font-size: 1.05rem;
-      margin-top: 0.5rem;
-    }
-
-    .direct-call-alt {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line-2);
-      text-align: center;
-    }
-    .direct-call-alt p {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--ink-soft);
-      margin-bottom: 0.85rem;
-    }
-    .direct-email-alt {
-      margin: 1rem 0 0;
-      font-size: 0.92rem;
-      color: var(--ink-muted);
-      font-weight: 500;
-    }
-    .direct-email-alt a {
-      color: var(--black);
-      font-weight: 700;
-      text-decoration: underline;
-      text-underline-offset: 0.18em;
-    }
-    .direct-email-alt a:hover {
-      color: var(--red);
-      opacity: 1;
-    }
-    .call-btn {
-      width: 100%;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    @media (max-width: 900px) {
-      .contact-main {
-        padding: 2rem 0 4rem;
-      }
-      .contact-layout {
-        display: flex;
-        flex-direction: column;
-        gap: 2.5rem;
-      }
-      .contact-info {
-        max-width: 100%;
-      }
-      .lede {
-        margin-bottom: 1.5rem;
-      }
-      .form-card {
-        padding: 1.5rem;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .form-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0;
-      }
-    }
-
+    .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-    .quick-contact { background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 1.5rem; }
-    .quick-contact p { margin: 0 0 .75rem; font-size: .95rem; color: var(--ink-soft); }
-    .quick-contact p strong { color: var(--black); }
-    .quick-contact-actions { display: flex; gap: .6rem; flex-wrap: wrap; }
-    .quick-contact-actions .btn { flex: 1 1 10rem; justify-content: center; padding: .85rem 1rem; }
-    .form-status p { margin: 0; }
+    .optional { font-weight: 400; color: var(--color-text-muted); }
+
+    .form-status { margin: 0 0 1.25rem; padding: 1rem 1.1rem; background: var(--color-tint); border: 2px solid var(--color-action-hover); border-radius: var(--radius-sm); color: var(--color-text); }
+    .form-status:focus { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+    .status-title { margin: 0; font-weight: 700; }
+    .status-list { margin: .6rem 0 0; padding-left: 1.2rem; }
+    :global(.status-list a) { color: var(--color-action-hover); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; display: inline-block; padding: 3px 0; }
     .status-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .85rem; }
-    .status-actions .btn { flex: 1 1 8rem; justify-content: center; padding: .75rem .9rem; font-size: .9rem; }
-    .form-status:focus { outline: 3px solid var(--red); outline-offset: 2px; }
-    .prefill-note { margin: 0 0 1.25rem; padding: .6rem .85rem; border-left: 3px solid var(--gold); background: var(--paper-2); font-size: .88rem; color: var(--ink-soft); border-radius: 4px; }
-    .emergency-note { margin: .35rem 0 0; padding: .75rem .9rem; background: var(--highlight); border: 1px solid rgba(183, 28, 28, .25); border-radius: 8px; font-size: .92rem; line-height: 1.5; color: #7f1d1d; }
-    .emergency-note a { color: #7f1d1d; font-weight: 800; text-decoration: underline; text-underline-offset: .18em; }
+    .status-actions .btn { flex: 1 1 8rem; }
+    .prefill-note { margin: -.15rem 0 .6rem; }
+
+    form { display: block; }
+    .group { margin: 0 0 1.2rem; padding: 0; border: 0; min-width: 0; }
+    .group legend { padding: 0; margin: 0 0 .55rem; font-weight: 700; font-size: 1.05rem; }
+    .field { display: flex; flex-direction: column; gap: .35rem; margin: 0 0 1.25rem; min-width: 0; }
+    .field label { font-weight: 700; }
+    .field-row { display: grid; gap: 0; }
+    @media (min-width: 600px) { .field-row { grid-template-columns: 1fr 1fr; gap: 1.25rem; } }
+
+    .field input[type='text'], .field input[type='tel'], .field input[type='email'], .field select, .field textarea {
+      font: inherit; font-size: 1rem; width: 100%; min-height: 50px; padding: .65rem .85rem;
+      color: var(--color-text); background: var(--color-surface);
+      border: 2px solid var(--color-control); border-radius: var(--radius-md);
+    }
+    .field textarea { min-height: 6.5rem; resize: vertical; }
+    .field select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' width='24' height='24' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23313131' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right .75rem center; background-size: 1.1rem; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--color-text); }
+    .field input[type='file'] { min-height: 48px; padding: .4rem 0; font: inherit; font-size: .95rem; }
+    .field [aria-invalid='true'] { border-color: var(--color-action-hover); border-width: 3px; }
+    :global(.field-error) { margin: 0; color: var(--color-action-hover); font-weight: 700; font-size: .95rem; }
+    .hint { margin: 0; color: var(--color-text-muted); font-size: .9rem; }
+    .town-status { min-height: 1.3em; }
+
+    .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+    @media (max-width: 359px) { .tiles { grid-template-columns: minmax(0, 1fr); } }
+    .tile, .chip { display: flex; align-items: center; gap: .6rem; padding: .55rem .8rem; background: var(--color-surface); border: 2px solid var(--color-control); border-radius: var(--radius-md); cursor: pointer; font-weight: 600; line-height: 1.2; }
+    .tile { min-height: 54px; }
+    .tile-urgent { grid-column: 1 / -1; border-left: 6px solid var(--color-action); }
+    .tile input, .chip input { flex: none; width: 1.5rem; height: 1.5rem; margin: 0; accent-color: var(--color-action); }
+    .tile:has(input:checked), .chip:has(input:checked) { border-color: var(--color-text); background: var(--color-tint); box-shadow: inset 0 0 0 1px var(--color-text); }
+    .tile:has(input:focus-visible), .chip:has(input:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+    .chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+    @media (max-width: 359px) { .chips { grid-template-columns: minmax(0, 1fr); } }
+    .chip { min-height: 46px; font-weight: 500; font-size: .95rem; }
+    @media (min-width: 600px) { .chips { display: flex; flex-wrap: wrap; } }
+    .q-group { margin: 0; }
+    .q { margin-bottom: 1.2rem; }
+
+    .chosen { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 54px; padding: .35rem .5rem .35rem .9rem; background: var(--color-tint); border: 2px solid var(--color-text); border-radius: var(--radius-md); }
+    .chosen-text { margin: 0; font-size: 1.05rem; }
+    .chosen-change { min-height: 44px; padding: 0 .75rem; background: none; border: 0; font: inherit; font-weight: 700; color: var(--color-text); text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+    .emergency-note { margin: -.4rem 0 1.4rem; }
+    .more { margin: 0 0 1.25rem; }
+    .more summary { display: flex; align-items: center; min-height: 48px; cursor: pointer; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
+    .more[open] summary { margin-bottom: .5rem; }
+    .more .field { margin-bottom: 0; }
+
+    .submit-btn { width: 100%; min-height: 56px; font-size: 1.4rem; margin-top: .25rem; }
     .submit-btn[disabled] { opacity: .7; cursor: progress; }
-    .form-privacy { margin: .9rem 0 0; font-size: .82rem; color: var(--ink-muted); text-align: center; }
-    .form-privacy a { color: var(--black); text-decoration: underline; text-underline-offset: .18em; font-weight: 600; }
-    @media (max-width: 420px) { .form-group select { font-size: .95rem; padding-right: 2.2rem; } }
-    </style>
+    .form-privacy { margin: .8rem 0 0; font-size: .88rem; color: var(--color-text-muted); }
+    .form-privacy a { text-decoration: underline; text-underline-offset: .18em; font-weight: 600; }
+    .alt-contact { margin: 1.5rem 0 0; color: var(--color-text-muted); }
+    .alt-contact a { font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+  </style>
 </Base>

@@ -1,0 +1,269 @@
+{
+  "_comment": "Single source of truth for the optional, service-specific questions on the request form and for the server's validation of them. Every question is a single radio group and always offers a Don't know / Not sure choice. Option ids are stable: they travel in the form post and appear in the notification email as their labels. The question wording is a proposal for Shane to approve; changing a label here changes it everywhere. An 'issue' question describes the problem; when one is answered with a real choice (not 'other' and not a don't-know / not-sure answer), the written description becomes optional (issueSatisfiesDescription). Set that flag to false to make the description required again.",
+  "issueSatisfiesDescription": true,
+  "timing": [
+    {
+      "id": "now",
+      "label": "Right now"
+    },
+    {
+      "id": "soon",
+      "label": "In a few days"
+    },
+    {
+      "id": "planning",
+      "label": "Planning ahead"
+    }
+  ],
+  "services": {
+    "emergency-plumbing": {
+      "announce": "Questions about an emergency are shown below.",
+      "placeholder": "e.g. the pipe is spraying, or the heat went out overnight",
+      "questions": [
+        {
+          "id": "em_issue",
+          "label": "What is happening?",
+          "issue": true,
+          "options": [
+            {
+              "id": "no-heat",
+              "label": "No heat"
+            },
+            {
+              "id": "no-hot-water",
+              "label": "No hot water"
+            },
+            {
+              "id": "burst-or-frozen-pipe",
+              "label": "Burst or frozen pipe"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            }
+          ]
+        }
+      ]
+    },
+    "water-heater-replacement": {
+      "announce": "Questions about a water heater are shown below.",
+      "placeholder": "e.g. the tank is leaking at the bottom, or I want a quote to replace an old heater",
+      "questions": [
+        {
+          "id": "wh_fuel",
+          "label": "What does it run on?",
+          "options": [
+            {
+              "id": "gas",
+              "label": "Gas"
+            },
+            {
+              "id": "electric",
+              "label": "Electric"
+            },
+            {
+              "id": "oil",
+              "label": "Oil"
+            },
+            {
+              "id": "unknown",
+              "label": "Don't know"
+            }
+          ]
+        },
+        {
+          "id": "wh_issue",
+          "label": "What is going on?",
+          "issue": true,
+          "options": [
+            {
+              "id": "no-hot-water",
+              "label": "No hot water"
+            },
+            {
+              "id": "leaking",
+              "label": "Leaking"
+            },
+            {
+              "id": "not-hot-enough-or-noisy",
+              "label": "Not hot enough, or noisy"
+            },
+            {
+              "id": "replace-before-it-fails",
+              "label": "Replacing it before it fails"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            }
+          ]
+        }
+      ]
+    },
+    "boiler-service": {
+      "announce": "Questions about a boiler are shown below.",
+      "placeholder": "e.g. the boiler keeps shutting off, or I want a quote to replace it",
+      "questions": [
+        {
+          "id": "bl_issue",
+          "label": "What do you need?",
+          "issue": true,
+          "options": [
+            {
+              "id": "no-heat",
+              "label": "No heat"
+            },
+            {
+              "id": "leaking",
+              "label": "Leaking"
+            },
+            {
+              "id": "noise-or-pressure",
+              "label": "Noise or pressure problem"
+            },
+            {
+              "id": "yearly-service",
+              "label": "Yearly service"
+            },
+            {
+              "id": "replacement-quote",
+              "label": "Replacement quote"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            }
+          ]
+        }
+      ]
+    },
+    "kitchen-bath-remodels": {
+      "announce": "Questions about a remodel are shown below.",
+      "placeholder": "e.g. a bathroom gut renovation, new vanity and shower valve",
+      "questions": [
+        {
+          "id": "rm_room",
+          "label": "Which room?",
+          "options": [
+            {
+              "id": "kitchen",
+              "label": "Kitchen"
+            },
+            {
+              "id": "bathroom",
+              "label": "Bathroom"
+            },
+            {
+              "id": "both",
+              "label": "Both"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            }
+          ],
+          "issue": true
+        }
+      ]
+    },
+    "new-construction-plumbing": {
+      "announce": "Questions about a new construction project are shown below.",
+      "placeholder": "e.g. a two-story addition, framing starts next month",
+      "questions": [
+        {
+          "id": "nc_type",
+          "label": "What kind of project?",
+          "options": [
+            {
+              "id": "new-house",
+              "label": "New house"
+            },
+            {
+              "id": "addition",
+              "label": "Addition"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            },
+            {
+              "id": "unknown",
+              "label": "Not sure"
+            }
+          ],
+          "issue": true
+        }
+      ]
+    },
+    "gas-installation": {
+      "announce": "A question about gas work is shown below.",
+      "placeholder": "e.g. a gas line for a new stove",
+      "questions": [
+        {
+          "id": "gas_use",
+          "label": "What is it for?",
+          "options": [
+            {
+              "id": "stove-or-oven",
+              "label": "Stove or oven"
+            },
+            {
+              "id": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "id": "heater-or-boiler",
+              "label": "Water heater or boiler"
+            },
+            {
+              "id": "grill-or-outdoor",
+              "label": "Grill or outdoor use"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            },
+            {
+              "id": "unknown",
+              "label": "Don't know"
+            }
+          ]
+        }
+      ]
+    },
+    "general-plumbing": {
+      "announce": "A question about the problem is shown below.",
+      "placeholder": "e.g. the kitchen faucet drips, or a drain keeps backing up",
+      "questions": [
+        {
+          "id": "gp_issue",
+          "label": "What is the problem?",
+          "issue": true,
+          "options": [
+            {
+              "id": "leak-or-drip",
+              "label": "Leak or drip"
+            },
+            {
+              "id": "clog-or-slow-drain",
+              "label": "Clog or slow drain"
+            },
+            {
+              "id": "toilet-sink-or-faucet",
+              "label": "Toilet, sink or faucet"
+            },
+            {
+              "id": "low-water-pressure",
+              "label": "Low water pressure"
+            },
+            {
+              "id": "other",
+              "label": "Something else"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "defaultPlaceholder": "e.g. what is happening, where it is, and anything Shane should know before he calls"
+}

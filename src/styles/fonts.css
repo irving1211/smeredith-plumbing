@@ -8,3 +8,12 @@
   font-weight: 100 900;
   src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
 }
+
+/* Display face: one weight, Latin subset (22 KB). It echoes the heavy condensed wordmark in the logo. */
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2') format('woff2');
+}

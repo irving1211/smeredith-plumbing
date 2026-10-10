@@ -1,0 +1,98 @@
+---
+import { jsonLd } from '../lib/jsonld.js';
+import Base from '../layouts/Base.astro';
+import jobsRaw from '../jobs.json';
+import services from '../services.json';
+import serviceOptions from '../service-options.json';
+
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+const request = (service: string) => `${base}contact/?service=${service}`;
+
+// Jobs grouped by the service they show, in the order Shane's work is listed on the home page.
+const groupOrder = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels'];
+const groups = groupOrder
+  .map((id) => ({
+    id,
+    option: serviceOptions.find((o) => o.id === id)!,
+    service: services.find((s) => s.slug === id),
+    jobs: jobsRaw.filter((j) => j.service === id).map((j) => ({ ...j, photos: j.photos.map((p) => ({ ...p, src: `${base}${p.src.replace(/^\//, '')}` })) })),
+  }))
+  .filter((g) => g.jobs.length);
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
+    { '@type': 'ListItem', position: 2, name: 'Our work', item: `${origin}${base}work/` },
+  ],
+};
+---
+
+<Base
+  title="Recent Plumbing & Heating Jobs | S. Meredith, Saugus MA"
+  description="Photos of recent water heater, boiler and kitchen and bath remodel plumbing jobs by Shane Meredith across Saugus, the North Shore and Boston."
+  pageType="work"
+  current="work"
+>
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
+  <main id="main">
+    <div class="container page-head">
+      <p class="breadcrumb"><a href={base}>Home</a> / Our work</p>
+      <h1>Recent jobs</h1>
+      <p class="lede">Photos from jobs Shane has finished. Scroll sideways on a job to see more photos of it.</p>
+    </div>
+
+    {groups.map((g) => (
+      <section class="section" aria-labelledby={`${g.id}-h`}>
+        <div class="container">
+          <h2 class="section-title" id={`${g.id}-h`}>{g.option.short === 'Kitchen / bath remodel' ? 'Kitchen and bath remodels' : `${g.option.short}s`}</h2>
+          <div class="jobs">
+            {g.jobs.map((job) => (
+              <figure class="job-card">
+                <div class="photo-strip" role="group" tabindex="0" aria-label={`${job.title}: ${job.photos.length} ${job.photos.length === 1 ? 'photo' : 'photos'}`}>
+                  {job.photos.map((photo, i) => (
+                    <img src={photo.src} alt={`${job.title}, photo ${i + 1} of ${job.photos.length}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                  ))}
+                </div>
+                <figcaption>
+                  <strong>{job.title}</strong>
+                  <span>{job.desc}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div class="actions group-actions">
+            <a class="btn btn-primary" href={request(g.id)}>Request {g.option.short.toLowerCase()} service</a>
+            {g.service && <a class="btn btn-secondary" href={`${base}services/${g.id}/`}>What it covers</a>}
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <section class="band on-dark" aria-labelledby="work-contact-h">
+      <div class="container">
+        <h2 id="work-contact-h">Have a job like these?</h2>
+        <p>Call Shane, or send the details and a photo with the request form.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost-dark" href={`${base}contact/`}>Request service</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .jobs { display: grid; gap: 1.75rem; margin: 0 0 1.5rem; }
+  @media (min-width: 900px) { .jobs { grid-template-columns: 1fr 1fr; gap: 2.25rem 2.5rem; } }
+  .job-card { margin: 0; min-width: 0; }
+  .photo-strip { display: flex; gap: .5rem; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: var(--radius-sm); }
+  .photo-strip img { flex: 0 0 auto; height: min(26rem, 70vw); width: auto; max-width: none; scroll-snap-align: start; border-radius: var(--radius-sm); }
+  .job-card figcaption { display: grid; gap: .15rem; padding-top: .6rem; }
+  .job-card figcaption span { color: var(--color-text-muted); font-size: .95rem; max-width: 36rem; }
+  .group-actions { margin-top: .5rem; }
+</style>

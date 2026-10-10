@@ -81,9 +81,9 @@ test('every service id on the form is accepted; unknown ids are rejected, not ec
   assert.equal(bad.response.headers.get('location'), 'https://smeredithplumbing.com/contact/?status=validation');
 });
 
-test('an empty service defaults to general plumbing and legacy option text from cached pages still maps', async () => {
+test('a request with no service is recorded as not sure, and legacy option text from cached pages still maps', async () => {
   const empty = await submit(form());
-  assert.equal(new URL(empty.response.headers.get('location')).searchParams.get('svc'), 'general-plumbing');
+  assert.equal(new URL(empty.response.headers.get('location')).searchParams.get('svc'), 'not-sure');
   const legacy = await submit(form({ service_type: 'Water heater' }));
   assert.equal(new URL(legacy.response.headers.get('location')).searchParams.get('svc'), 'water-heater-replacement');
 });
@@ -193,8 +193,10 @@ test('the confirmation URL contains only enumerated ids and a random lead id —
     form({ name: 'Zelda Private', phone: '617-555-0199', email: 'zelda@example.com', address: '9 Secret Ln, Lynn', message: 'Private message text', service_type: 'water-heater-replacement', heard_about: 'referral' }),
   );
   const location = response.headers.get('location');
+  // The lead id is random hex by design and can contain digit runs like "617"; check everything except it.
+  const withoutLeadId = location.replace(/lead=[0-9a-f-]{36}/, 'lead=ID');
   for (const secret of ['Zelda', 'Private', '617', '0199', 'zelda@', 'Secret', 'Lynn', 'message']) {
-    assert.ok(!location.includes(secret), `confirmation URL leaks ${secret}`);
+    assert.ok(!withoutLeadId.includes(secret), `confirmation URL leaks ${secret}`);
   }
   const url = new URL(location);
   assert.deepEqual([...url.searchParams.keys()].sort(), ['ha', 'lead', 'src', 'svc']);

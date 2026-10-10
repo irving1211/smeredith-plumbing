@@ -46,7 +46,7 @@ describe('on-demand Google Map', () => {
     const page = await context.newPage();
     const google = [];
     page.on('request', (r) => { if (r.url().includes('googleapis.com')) google.push(r.url()); });
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.waitForTimeout(400);
     assert.equal(await page.locator('[data-gmap-open]').isVisible(), true);
     assert.deepEqual(google, [], 'no Google request before the visitor asks for the map');
@@ -57,7 +57,7 @@ describe('on-demand Google Map', () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
     await page.route(MAPS, (route) => route.abort('failed'));
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.locator('[data-gmap-open]').click();
     await page.waitForFunction(() => /couldn't load/.test(document.querySelector('[data-gmap-status]').textContent));
     assert.equal(await page.locator('[data-gmap]').isHidden(), true);
@@ -73,7 +73,7 @@ describe('on-demand Google Map', () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.route(MAPS, (route) => route.fulfill({ contentType: 'text/javascript', body: 'window.gm_authFailure && window.gm_authFailure();' }));
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.locator('[data-gmap-open]').click();
     await page.waitForFunction(() => /couldn't load/.test(document.querySelector('[data-gmap-status]').textContent));
     assert.equal(await page.locator('[data-gmap]').isHidden(), true);
@@ -85,7 +85,7 @@ describe('on-demand Google Map', () => {
     const page = await context.newPage();
     const requested = [];
     await page.route(MAPS, (route) => { requested.push(route.request().url()); route.fulfill({ contentType: 'text/javascript', body: MAPS_STUB }); });
-    await page.goto(`${origin}/#area`);
+    await page.goto(`${origin}/service-area/`);
     await page.locator('[data-gmap-open]').click();
     await page.waitForFunction(() => window.__stub && window.__stub.features.length > 0);
     const stub = await page.evaluate(() => window.__stub);
@@ -127,7 +127,7 @@ describe('live Google reviews', () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
     await page.route(API, (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(sample) }));
-    await page.goto(`${origin}/#reviews`);
+    await page.goto(`${origin}/about/#reviews`);
     await page.locator('[data-live-reviews]:not([hidden])').waitFor();
     const cards = page.locator('.live-card');
     assert.equal(await cards.count(), 2);
@@ -156,7 +156,7 @@ describe('live Google reviews', () => {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await page.route(API, handler);
-      await page.goto(`${origin}/#reviews`);
+      await page.goto(`${origin}/about/#reviews`);
       await page.waitForFunction(() => window.dataLayer.some((e) => e.event === 'reviews_live'), null, { timeout: 8000 });
       assert.equal(await page.locator('[data-live-reviews]').isHidden(), true);
       assert.equal(await page.locator('.live-card').count(), 0);
@@ -172,12 +172,12 @@ describe('live Google reviews', () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.route(API, (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(sample) }));
-    await page.goto(`${origin}/#reviews`);
+    await page.goto(`${origin}/about/#reviews`);
     await page.locator('[data-live-reviews]:not([hidden])').waitFor();
     const text = await page.locator('#reviews').textContent();
     assert.match(text, /Latest reviews on Google/);
     assert.match(text, /Loaded from Google and shown as posted, newest first/);
-    assert.match(text, /Hand-picked excerpts/);
+    assert.match(text, /hand-picked excerpts/i);
     await context.close();
   });
 
@@ -186,7 +186,7 @@ describe('live Google reviews', () => {
     const page = await context.newPage();
     let calls = 0;
     await page.route(API, (route) => { calls++; route.fulfill({ contentType: 'application/json', body: JSON.stringify(sample) }); });
-    await page.goto(`${origin}/`);
+    await page.goto(`${origin}/about/`);
     await page.waitForTimeout(500);
     assert.equal(calls, 0, 'not fetched during initial load');
     await page.locator('#reviews').scrollIntoViewIfNeeded();
@@ -213,7 +213,7 @@ describe('privacy notice follows the features that are built in', () => {
     assert.ok(!text.includes('Cloudflare Turnstile'));
   });
 
-  test('once published it is indexable, in the sitemap, and linked from the home page footer and the form', async () => {
+  test('once published it is indexable, in the sitemap, and linked from the footer and the form', async () => {
     const html = await (await fetch(`${origin}/privacy/`)).text();
     assert.doesNotMatch(html, /name="robots" content="noindex/);
     assert.match(html, /<link rel="canonical" href="https:\/\/smeredithplumbing\.com\/privacy\/"/);
