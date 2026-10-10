@@ -8,11 +8,26 @@
     "meta_desc": "24/7 emergency plumbing and heating in Saugus, the North Shore and Boston: no heat, no hot water, burst pipes. Owner-operated. Call 781-820-4592.",
     "intro": "Plumbing and heating emergencies don't wait for business hours. Burst pipes, no heat in January, no hot water Saturday morning, gas leaks, and failed sump pumps — Shane Meredith comes out personally, with parts on the truck, ready to make the call to fix and the call to wait until Monday.",
     "scenarios": [
-      { "h": "No heat in January", "b": "Boiler down, pilot out, circulator failed, no-fire. Same-day Saturday is the rule, not the exception. Most repairs done on the first visit." },
-      { "h": "No hot water", "b": "Tank failure, pilot out, thermocouple, control board. We diagnose first, swap the part if it's fixable, replace the unit same-day if it's not." },
-      { "h": "Burst or frozen pipe", "b": "We shut it down, thaw what's salvageable, repair or replace what isn't. Insurance-ready photos and invoicing every time." },
-      { "h": "Sump-pump or ejector-pump failure", "b": "Failed sump pumps and ejector pumps can flood a basement fast. We isolate the failed equipment, repair or replace it, and restore safe operation." },
-      { "h": "Gas smell or suspected leak", "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Licensed gas fitter, code-compliant repair, pressure-tested before sign-off." }
+      {
+        "h": "No heat in January",
+        "b": "Boiler down, pilot out, circulator failed, no-fire. Same-day Saturday is the rule, not the exception. Most repairs done on the first visit."
+      },
+      {
+        "h": "No hot water",
+        "b": "Tank failure, pilot out, thermocouple, control board. We diagnose first, swap the part if it's fixable, replace the unit same-day if it's not."
+      },
+      {
+        "h": "Burst or frozen pipe",
+        "b": "We shut it down, thaw what's salvageable, repair or replace what isn't. Insurance-ready photos and invoicing every time."
+      },
+      {
+        "h": "Sump-pump or ejector-pump failure",
+        "b": "Failed sump pumps and ejector pumps can flood a basement fast. We isolate the failed equipment, repair or replace it, and restore safe operation."
+      },
+      {
+        "h": "Gas smell or suspected leak",
+        "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Licensed gas fitter, code-compliant repair, pressure-tested before sign-off."
+      }
     ],
     "guarantee": "Licensed Massachusetts plumber and gas fitter, fully insured. Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
   },
@@ -25,13 +40,55 @@
     "meta_desc": "Water heater repair and same-day replacement in Saugus and the North Shore: tank, tankless, power-vent, gas, electric. Free written quotes. Call 781-820-4592.",
     "intro": "When a water heater fails it's almost never convenient. Shane stocks the truck for the common units (40 and 50 gallon gas + electric, plus power-vent and tankless rough-ins), so most replacements get done same-day — pulled out, set in, lines connected, hauled away.",
     "scenarios": [
-      { "h": "50-gallon tank, gas or electric", "b": "Standard residential replacement. Most homes in Saugus, Lynn, and Revere run a 40 or 50-gallon atmospheric or power-vent tank. We carry both and can usually swap same-day." },
-      { "h": "Power-vent installation", "b": "Necessary when there's no natural draft chimney or when an existing vent doesn't meet code. Power-vent units run quiet, vent through PVC, and last 8–12 years on average." },
-      { "h": "Tankless conversion", "b": "Endless hot water, smaller footprint, longer service life. Right answer for some homes — not all. We'll walk through whether your gas line, venting, and water hardness make tankless the better economic call." },
-      { "h": "Leaking tank, no hot water, pilot won't light", "b": "Diagnose first. If it's a thermocouple, control board, or element — repair. If the tank is rusted through, replacement is the only honest answer." },
-      { "h": "Removal and disposal of the old unit", "b": "Pulled, drained, hauled away. No leftover hardware in your basement." }
+      {
+        "h": "50-gallon tank, gas or electric",
+        "b": "Standard residential replacement. Most homes in Saugus, Lynn, and Revere run a 40 or 50-gallon atmospheric or power-vent tank. We carry both and can usually swap same-day."
+      },
+      {
+        "h": "Power-vent installation",
+        "b": "Necessary when there's no natural draft chimney or when an existing vent doesn't meet code. Power-vent units run quiet, vent through PVC, and last 8–12 years on average."
+      },
+      {
+        "h": "Tankless conversion",
+        "b": "Endless hot water, smaller footprint, longer service life. Right answer for some homes — not all. We'll walk through whether your gas line, venting, and water hardness make tankless the better economic call."
+      },
+      {
+        "h": "Leaking tank, no hot water, pilot won't light",
+        "b": "Diagnose first. If it's a thermocouple, control board, or element — repair. If the tank is rusted through, replacement is the only honest answer."
+      },
+      {
+        "h": "Removal and disposal of the old unit",
+        "b": "Pulled, drained, hauled away. No leftover hardware in your basement."
+      }
     ],
-    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the units we install — we go over the warranty and the workmanship in writing before the job."
+    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the units we install — we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about water heaters",
+    "qa": [
+      {
+        "q": "Should I repair or replace my water heater?",
+        "a": "A tank that is leaking from the tank itself, or rusted through, can't be patched, so that is a replacement. Problems like a pilot that won't stay lit, a failed thermocouple, a bad control board or a burned-out element are often repairable, which is why the first step is a diagnosis. Age matters too: an older tank is more likely to fail again soon, and the data label on the unit usually shows the manufacture date or a serial number that encodes it. Send a photo of the unit and its data label with your request so the answer starts from the right equipment."
+      },
+      {
+        "q": "What affects the cost of a water heater replacement?",
+        "list": [
+          "The type and size you choose: a standard tank, a power-vent unit, or a tankless conversion.",
+          "Fuel: gas or electric, and whether you are keeping it or switching.",
+          "Venting: a power-vent or tankless unit may need different venting than the old one.",
+          "Where it sits: basement, closet or attic, and how easy it is to get the old unit out and the new one in.",
+          "Removal and disposal of the old unit, and any permit the job calls for."
+        ],
+        "a": "No price is listed here because it depends on those points. Shane gives a free written quote. The quickest way to get one is to text photos."
+      },
+      {
+        "q": "How long does a water heater replacement take?",
+        "a": "Shane stocks the truck for the common 40 and 50 gallon gas and electric units, so most replacements are done the same day. Anything that changes the setup, such as moving the heater, switching fuel or adding venting, takes longer."
+      },
+      {
+        "q": "How often should a water heater be serviced?",
+        "a": "Follow the manufacturer's instructions for your model. Many call for periodic flushing to clear sediment from the tank. Popping or rumbling noises, rust-colored hot water, or moisture around the base of the tank are signs to have it looked at. If you are weighing a {{boiler-service|boiler with an indirect hot water tank}}, that is a different setup with its own service needs."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the water heater and its data label, whether it runs on gas or electric, where it is in the house, and what it is doing (leaking, no hot water, pilot out)."
   },
   {
     "slug": "boiler-service",
@@ -42,13 +99,61 @@
     "meta_desc": "Boiler service, repair and replacement from Saugus to Boston. Multi-zone systems, combi units and indirect tanks. Licensed and insured. Call 781-820-4592.",
     "intro": "Heat is not optional in January. Shane services and replaces high-efficiency boilers — cast iron and mod-con, multi-zone systems with indirect tanks, Combi units that handle heat and hot water on one box. When a boiler dies in a cold snap, heat comes back same-day whenever possible.",
     "scenarios": [
-      { "h": "Annual cleaning and service", "b": "Combustion analysis, electrode check, low-water cutoff test, fault code clearing. A clean boiler runs longer and uses less fuel. We tell you straight what's wear-and-tear vs. what's about to fail." },
-      { "h": "No-heat emergency", "b": "Pilot out, ignitor failed, circulator stuck, zone valve, aquastat, low water. Most fixes are same-visit." },
-      { "h": "Full replacement", "b": "Cast iron pull-and-swap, mod-con upgrade, Combi conversion. We size based on a Manual-J load, not the nameplate of the unit that died." },
-      { "h": "Indirect-fired hot water tank", "b": "Paired with the boiler for unlimited hot water at high efficiency. Better than a standalone tank for most multi-bath homes." },
-      { "h": "Multi-zone systems", "b": "New zone added for an addition or finished basement. Zone valve, thermostat, piping, controls — done right the first time." }
+      {
+        "h": "Annual cleaning and service",
+        "b": "Combustion analysis, electrode check, low-water cutoff test, fault code clearing. A clean boiler runs longer and uses less fuel. We tell you straight what's wear-and-tear vs. what's about to fail."
+      },
+      {
+        "h": "No-heat emergency",
+        "b": "Pilot out, ignitor failed, circulator stuck, zone valve, aquastat, low water. Most fixes are same-visit."
+      },
+      {
+        "h": "Full replacement",
+        "b": "Cast iron pull-and-swap, mod-con upgrade, Combi conversion. We size based on a Manual-J load, not the nameplate of the unit that died."
+      },
+      {
+        "h": "Indirect-fired hot water tank",
+        "b": "Paired with the boiler for unlimited hot water at high efficiency. Better than a standalone tank for most multi-bath homes."
+      },
+      {
+        "h": "Multi-zone systems",
+        "b": "New zone added for an addition or finished basement. Zone valve, thermostat, piping, controls — done right the first time."
+      }
     ],
-    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job."
+    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about boilers",
+    "qa": [
+      {
+        "q": "Should I repair or replace my boiler?",
+        "a": "Repair makes sense when one part has failed on a boiler that is otherwise sound: an ignitor, circulator, zone valve, aquastat or low-water cutoff, for example. Replacement is worth discussing when a boiler keeps breaking down, leaks at the boiler body, or is old enough that parts are hard to find. Older boilers also tend to burn more fuel than modern high-efficiency models. Send a photo of the boiler and its data label and describe the symptom or fault code so the quote starts from the right equipment."
+      },
+      {
+        "q": "What is the difference between a cast iron, mod-con and combi boiler?",
+        "list": [
+          "Cast iron: the traditional heavy-section boiler, common in older homes.",
+          "Mod-con (modulating condensing): adjusts its output to the demand and recovers extra heat from its exhaust, which needs a condensate drain and plastic venting.",
+          "Combi: heats the house and makes domestic hot water from one unit, with no separate tank.",
+          "Indirect tank: a separate insulated hot water tank heated by the boiler, so the boiler supplies the hot water too."
+        ],
+        "a": "Which one is right depends on your house, your fuel and your hot water use, so say what you have and what you want when you send your request."
+      },
+      {
+        "q": "What affects the cost of a boiler replacement?",
+        "list": [
+          "The boiler type and size, and whether you are keeping the same fuel.",
+          "Venting and chimney changes, which depend on the type of boiler.",
+          "How many heating zones you have, and the thermostats, valves and controls that go with them.",
+          "Whether you want an indirect hot water tank with it.",
+          "Removal of the old boiler, and any permit the job calls for."
+        ],
+        "a": "Shane gives a free written quote, so there is no published price. If you have no heat right now, see the {{emergency-plumbing|emergency page}}."
+      },
+      {
+        "q": "How often should a boiler be serviced?",
+        "a": "Annual cleaning and service is the usual routine, and it is part of what Shane offers: a clean boiler runs longer and uses less fuel. Book it before the heating season rather than during a cold snap."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the boiler and its data label, your fuel (gas or oil), roughly how old it is if you know, the number of heating zones, and any fault code or symptom."
   },
   {
     "slug": "gas-installation",
@@ -59,11 +164,26 @@
     "meta_desc": "Gas line installation and repair in Saugus and the North Shore: range and dryer hookups, appliance and generator lines, pressure-tested. Call 781-820-4592.",
     "intro": "Gas work in Massachusetts is licensed work. Shane is a licensed gas fitter — every line installed, every connection made, every repair finished is code-compliant, pressure-tested, and signed off. From a stove hookup to a full generator line, gas work gets done right or it doesn't get done.",
     "scenarios": [
-      { "h": "Stove or range hookup", "b": "Gas range or dryer install, including shutoff valve, flex connector, and leak test. Done in under an hour for most installs." },
-      { "h": "New gas line for an appliance", "b": "Running new line from the meter to a stove, dryer, fireplace, or generator. Black iron or CSST, sized to load, pressure-tested before sign-off." },
-      { "h": "Generator gas line", "b": "Stationary backup generator install (gas-side). Coordinated with the electrician on the wire side." },
-      { "h": "Suspected leak or smell of gas", "b": "If you smell gas, leave the building and call the utility (National Grid 800-233-5325) first. Then call us for the repair side." },
-      { "h": "Conversion from oil or propane to natural gas", "b": "Coordinated with the boiler/water heater swap when you upgrade the heating system." }
+      {
+        "h": "Stove or range hookup",
+        "b": "Gas range or dryer install, including shutoff valve, flex connector, and leak test. Done in under an hour for most installs."
+      },
+      {
+        "h": "New gas line for an appliance",
+        "b": "Running new line from the meter to a stove, dryer, fireplace, or generator. Black iron or CSST, sized to load, pressure-tested before sign-off."
+      },
+      {
+        "h": "Generator gas line",
+        "b": "Stationary backup generator install (gas-side). Coordinated with the electrician on the wire side."
+      },
+      {
+        "h": "Suspected leak or smell of gas",
+        "b": "If you smell gas, leave the building and call the utility (National Grid 800-233-5325) first. Then call us for the repair side."
+      },
+      {
+        "h": "Conversion from oil or propane to natural gas",
+        "b": "Coordinated with the boiler/water heater swap when you upgrade the heating system."
+      }
     ],
     "guarantee": "Licensed Massachusetts gas fitter. All work is permitted and inspected per Massachusetts plumbing & gas code (248 CMR), and pressure-tested before sign-off."
   },
@@ -76,13 +196,51 @@
     "meta_desc": "Plumbing for kitchen and bathroom remodels across the North Shore and Boston. Permitted, inspected and coordinated with your contractor. Call 781-820-4592.",
     "intro": "When your contractor opens the walls, the plumbing decisions you make matter for the next 20 years. Shane handles the rough plumbing on kitchen and bath remodels — drains, supplies, vents, valves, fixtures. Coordinated cleanly with your GC, your electrician, and your tile setter.",
     "scenarios": [
-      { "h": "Full bathroom remodel", "b": "Tub-to-shower conversion, new vanity, toilet, shower trim, supply and waste re-route. Coordinated with the tile schedule." },
-      { "h": "Full kitchen remodel", "b": "Sink, dishwasher, disposal, ice-maker line, gas range hookup. Layout-stage consult to make sure the plumbing plan actually works with the cabinets." },
-      { "h": "Adding a bathroom or laundry", "b": "Half-bath, full bath, or laundry room added to an existing home. New stack ties, supply and drain re-routes, pressure check before close-up." },
-      { "h": "Fixture upgrades", "b": "Replacing a tub, vanity, toilet, or shower trim without a full remodel. Most done in a day." },
-      { "h": "Permits and inspections", "b": "All remodel plumbing is permitted and inspected. We handle the paperwork and the inspector visit." }
+      {
+        "h": "Full bathroom remodel",
+        "b": "Tub-to-shower conversion, new vanity, toilet, shower trim, supply and waste re-route. Coordinated with the tile schedule."
+      },
+      {
+        "h": "Full kitchen remodel",
+        "b": "Sink, dishwasher, disposal, ice-maker line, gas range hookup. Layout-stage consult to make sure the plumbing plan actually works with the cabinets."
+      },
+      {
+        "h": "Adding a bathroom or laundry",
+        "b": "Half-bath, full bath, or laundry room added to an existing home. New stack ties, supply and drain re-routes, pressure check before close-up."
+      },
+      {
+        "h": "Fixture upgrades",
+        "b": "Replacing a tub, vanity, toilet, or shower trim without a full remodel. Most done in a day."
+      },
+      {
+        "h": "Permits and inspections",
+        "b": "All remodel plumbing is permitted and inspected. We handle the paperwork and the inspector visit."
+      }
     ],
-    "guarantee": "Licensed and insured. All remodel plumbing is permitted and inspected. We go over fixture warranties and the workmanship in writing before the job."
+    "guarantee": "Licensed and insured. All remodel plumbing is permitted and inspected. We go over fixture warranties and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about remodel plumbing",
+    "qa": [
+      {
+        "q": "When does the plumber come into a kitchen or bath remodel?",
+        "a": "Twice. The first visit is the rough plumbing, before walls and floors are closed: supply lines, drains, vents and valves. The second is the finish work, after the cabinets, tile and fixtures are in. Layout and fixture decisions have to be made before the rough-in, because moving a drain later means opening finished walls."
+      },
+      {
+        "q": "What should I decide before the rough plumbing?",
+        "list": [
+          "Where each sink, tub, shower, toilet and appliance will go.",
+          "The fixtures themselves: their spec sheets give the rough-in dimensions the plumber works from.",
+          "The type of shower valve and trim you want.",
+          "Any extras: a dishwasher, disposal, ice-maker line, gas range or a second sink.",
+          "Whether you are adding a bathroom or laundry, which means new drain and vent connections."
+        ],
+        "a": "If the fixtures are not chosen yet, say so. Plumbing decisions made early save changes after the walls are closed."
+      },
+      {
+        "q": "How do I get an accurate quote for remodel plumbing?",
+        "a": "Send the plans or a sketch, the fixture list, photos of the existing plumbing, and your contractor's contact. Shane's free written quote is based on the scope. Remodel plumbing is permitted and inspected, and Shane coordinates with your contractor, electrician and tile setter. For an addition or new build, see {{new-construction-plumbing|new construction plumbing}}."
+      }
+    ],
+    "send_for_quote": "Send with your request: plans or a sketch, a fixture list, photos of the existing plumbing, your town, and your contractor's name and phone number if you have one."
   },
   {
     "slug": "new-construction-plumbing",
@@ -93,12 +251,49 @@
     "meta_desc": "New construction and addition plumbing from Saugus to Boston, from underground rough-in to final fixture set. Permitted and inspected. Call 781-820-4592.",
     "intro": "New builds, additions, and gut renovations need a plumber who can read the architectural set and execute from underground to finish. Shane handles new construction from the underground rough-in through final fixture set — permits pulled, inspections passed, ready for occupancy.",
     "scenarios": [
-      { "h": "Underground rough-in", "b": "Sanitary, storm, and water main from the foundation underground out. Tied into municipal services. Inspected before slab pour." },
-      { "h": "Above-grade rough-in", "b": "Drain, waste, vent, and supply throughout the building shell. Pressure-tested before insulation/drywall." },
-      { "h": "Fixture set and trim-out", "b": "All fixtures, valves, faucets, toilets, tubs, showers, water heater, boiler. Coordinated with cabinets, tile, and electrical." },
-      { "h": "Permits and inspections", "b": "Permit pulled with the town, rough and final inspections coordinated, certificate of occupancy ready." },
-      { "h": "Additions and dormers", "b": "Tying new plumbing into existing — including stack ties, vent extensions, and main upsize when warranted." }
+      {
+        "h": "Underground rough-in",
+        "b": "Sanitary, storm, and water main from the foundation underground out. Tied into municipal services. Inspected before slab pour."
+      },
+      {
+        "h": "Above-grade rough-in",
+        "b": "Drain, waste, vent, and supply throughout the building shell. Pressure-tested before insulation/drywall."
+      },
+      {
+        "h": "Fixture set and trim-out",
+        "b": "All fixtures, valves, faucets, toilets, tubs, showers, water heater, boiler. Coordinated with cabinets, tile, and electrical."
+      },
+      {
+        "h": "Permits and inspections",
+        "b": "Permit pulled with the town, rough and final inspections coordinated, certificate of occupancy ready."
+      },
+      {
+        "h": "Additions and dormers",
+        "b": "Tying new plumbing into existing — including stack ties, vent extensions, and main upsize when warranted."
+      }
     ],
-    "guarantee": "Licensed and insured. Permits pulled, rough and final inspections passed. We go over warranties and the workmanship in writing before the job."
+    "guarantee": "Licensed and insured. Permits pulled, rough and final inspections passed. We go over warranties and the workmanship in writing before the job.",
+    "qa_title": "Questions builders and homeowners ask about new construction plumbing",
+    "qa": [
+      {
+        "q": "What are the stages of plumbing on a new build or addition?",
+        "list": [
+          "Underground rough-in: sanitary, storm and water service, before the slab is poured.",
+          "Above-grade rough-in: drain, waste, vent and supply through the framing, before insulation and drywall.",
+          "Fixture set and trim-out: fixtures, valves and appliances connected once cabinets and tile are in.",
+          "Inspections at the stages the town requires, and sign-off before occupancy."
+        ],
+        "a": "Each stage follows the building schedule, so the plumber needs to know the dates early."
+      },
+      {
+        "q": "What do I need to send for a new construction quote?",
+        "a": "The plans (the plumbing or architectural set), the town, the target dates, the contractor's name and number, and whether the property is on municipal water and sewer. Shane gives a free written quote based on the scope. For work inside an existing house, see {{kitchen-bath-remodels|kitchen and bath remodel plumbing}}."
+      },
+      {
+        "q": "Does the plumber handle permits and inspections?",
+        "a": "Yes. Shane pulls the plumbing permit with the town and coordinates the rough and final inspections. If your general contractor already handles permits, tell Shane when you request the quote so nothing is done twice."
+      }
+    ],
+    "send_for_quote": "Send with your request: the plans, the town, your target dates, the general contractor's name and phone number, and whether the property has municipal water and sewer."
   }
 ]

@@ -172,14 +172,39 @@ test('the homepage never hides the hero behind a reveal animation', () => {
   assert.doesNotMatch(html, /querySelectorAll\('section, \.work-card/);
 });
 
-test('webfonts: one variable Inter file is preloaded and no static Inter weights are shipped', () => {
-  const html = page('/');
-  const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+\.woff2)"/g)].map((m) => m[1]);
-  assert.equal(preloads.length, 1);
-  assert.match(preloads[0], /inter-latin-wght-normal/);
+test('webfonts: only the one variable Inter file and the wordmark font are preloaded; no static Inter weights ship', () => {
+  for (const path of ['/', '/contact', '/services/boiler-service']) {
+    const html = page(path);
+    const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+\.woff2)"/g)].map((m) => m[1]);
+    assert.equal(preloads.length, 2, `${path} preloads`);
+    assert.match(preloads[0], /inter-latin-wght-normal/);
+    assert.match(preloads[1], /fraunces-latin-500-normal/);
+  }
   const fonts = readdirSync(join(dist, '_astro')).filter((f) => /^inter-latin-\d{3}-normal/.test(f));
   assert.deepEqual(fonts, [], 'static Inter weights should not be in the build');
 });
+
+test('priority service pages answer real customer questions without prices, promises or new claims', () => {
+  const qaSlugs = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels', 'new-construction-plumbing'];
+  for (const slug of qaSlugs) {
+    const html = page(`/services/${slug}`);
+    const section = html.match(/<section class="homeowner-qa"[\s\S]*?<\/section>/)?.[0];
+    assert.ok(section, `${slug} has the Q&A section`);
+    const text = section.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    assert.ok((section.match(/<h3/g) || []).length >= 3, `${slug} has at least three questions`);
+    assert.doesNotMatch(text, /\$\s?\d|\d\s?(dollars|USD)|\bwarrant(y|ies)\b.*\d+\s?(year|yr)/i, `${slug} must not state prices or warranty terms`);
+    assert.doesNotMatch(text, /guarantee|always|never fail|within the hour|lowest price|cheapest/i, `${slug} must not add promises`);
+    assert.match(section, new RegExp(`href="/contact/\\?service=${slug}"`), `${slug} Q&A CTA carries the service id`);
+    assert.doesNotMatch(section, /\{\{|\}\}/, `${slug} has unresolved link markers`);
+  }
+  // marked-up internal links point at real service pages
+  const boiler = page('/services/boiler-service');
+  assert.match(boiler, /href="\/services\/emergency-plumbing\/"[^>]*>emergency page</);
+  assert.match(page('/services/water-heater-replacement'), /href="\/services\/boiler-service\/"/);
+  // gas and emergency pages are deliberately untouched until their facts are confirmed
+  for (const slug of ['gas-installation', 'emergency-plumbing']) assert.doesNotMatch(page(`/services/${slug}`), /<section class="homeowner-qa"/);
+});
+
 test('the privacy notice is prepared but unpublished: noindex, not in the sitemap, linked from nowhere', () => {
   const html = page('/privacy');
   assert.match(html, /<meta name="robots" content="noindex/);

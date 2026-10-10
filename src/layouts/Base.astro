@@ -163,6 +163,14 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
       }
       * { box-sizing: border-box; }
       [hidden] { display: none !important; }
+      /* Touch targets: at least 44 px tall (the gallery arrows are sized in index.astro). */
+      .topbar-call { min-height: 44px; display: inline-flex; align-items: center; }
+      .menu-toggle { min-height: 44px; }
+      /* Stand-alone text links get a 44 px-tall hit area; breadcrumbs and links inside sentences get 24+ px (WCAG 2.5.8). */
+      .hero-alt a, .more-link a, .back-link a, .services-all a, .direct-email-alt a, .contact-list a, .footer-links a, .mobile-menu-meta a, .trust-email a, .nf-links a, .footer-credit a { display: inline-flex; align-items: center; min-height: 44px; }
+      .brand { min-height: 44px; }
+      .breadcrumb a { display: inline-block; padding: .35rem 0; }
+      .homeowner-qa p a, .qa-send a { padding-block: 3px; }
       html { scroll-behavior: smooth; }
       html, body {
         margin: 0;

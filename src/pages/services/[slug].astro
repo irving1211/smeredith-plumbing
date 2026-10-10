@@ -25,6 +25,15 @@ const relatedJobs = jobs.filter((j) => j.service === service.slug).slice(0, 3);
 const relatedServices = services.filter((s) => s.slug !== service.slug);
 const approvedTowns = TOWNS.map((t) => t.name);
 
+// Q&A answers may contain {{service-slug|link text}} markers that become internal links.
+type Part = string | { href: string; text: string };
+const linkify = (text: string): Part[] =>
+  text.split(/(\{\{[a-z-]+\|[^}]+\}\})/).map((part) => {
+    const m = part.match(/^\{\{([a-z-]+)\|([^}]+)\}\}$/);
+    return m ? { href: `${base}services/${m[1]}/`, text: m[2] } : part;
+  });
+const qa = (service as { qa?: Array<{ q: string; a: string; list?: string[] }> }).qa || [];
+
 const serviceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -94,6 +103,26 @@ const breadcrumb = {
       <div class="guarantee">
         <strong>Licensed &amp; code-compliant.</strong> {service.guarantee}
       </div>
+
+      {qa.length > 0 && (
+        <section class="homeowner-qa" id="homeowner-questions" aria-labelledby="homeowner-qa-h">
+          <h2 id="homeowner-qa-h">{(service as { qa_title?: string }).qa_title}</h2>
+          {qa.map((item) => (
+            <div class="qa-item">
+              <h3>{item.q}</h3>
+              {item.list && <ul>{item.list.map((li) => <li>{li}</li>)}</ul>}
+              <p>{linkify(item.a).map((p) => (typeof p === 'string' ? p : <a href={p.href}>{p.text}</a>))}</p>
+            </div>
+          ))}
+          {(service as { send_for_quote?: string }).send_for_quote && (
+            <p class="qa-send"><strong>For a faster quote.</strong> {(service as { send_for_quote?: string }).send_for_quote}</p>
+          )}
+          <div class="hero-cta qa-cta">
+            <a class="btn btn-primary" href={contactHref}>Request a free written quote</a>
+            <a class="btn btn-ghost" href={smsHref}>Text photos to Shane</a>
+          </div>
+        </section>
+      )}
 
       {relatedJobs.length > 0 && (
         <section class="related-work" id="related-work" aria-labelledby="related-work-h">
@@ -169,6 +198,19 @@ const breadcrumb = {
     .guarantee { background: var(--highlight); border-radius: 12px; padding: 1.4rem 1.7rem; margin-bottom: 3rem; line-height: 1.6; color: var(--ink); border: 1px solid rgba(184,138,58,.25); }
     .guarantee strong { display: inline-block; margin-right: .35rem; color: var(--black); }
 
+    .homeowner-qa { margin: 0 0 3rem; }
+    .homeowner-qa .qa-item { padding: 1.4rem 0; border-top: 1px solid var(--line); }
+    .homeowner-qa .qa-item:first-of-type { border-top: 0; }
+    .homeowner-qa h3 { font-size: 1.12rem; letter-spacing: -0.015em; margin-bottom: .6rem; }
+    .homeowner-qa p, .homeowner-qa li { color: var(--ink-soft); line-height: 1.65; }
+    .homeowner-qa p { margin: 0; }
+    .homeowner-qa ul { margin: 0 0 .8rem; padding-left: 1.2rem; display: grid; gap: .35rem; }
+    .homeowner-qa a { color: var(--black); font-weight: 600; text-decoration: underline; text-underline-offset: .18em; }
+    .homeowner-qa a.btn { text-decoration: none; }
+    .homeowner-qa a.btn-primary { color: #fff; }
+    .qa-send { margin-top: 1.4rem !important; padding: 1rem 1.2rem; background: var(--paper-2); border-left: 3px solid var(--gold); border-radius: 6px; }
+    .qa-send strong { color: var(--black); }
+    .qa-cta { margin-top: 1.4rem; }
     .page-cta { background: var(--paper-2); border-radius: 16px; padding: 3rem 2rem; text-align: center; margin: 4rem 0 2rem; }
     .page-cta h2 { margin-bottom: 1rem; }
     .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }

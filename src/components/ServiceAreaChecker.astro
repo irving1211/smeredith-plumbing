@@ -258,7 +258,8 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
   .gmap { width: 100%; height: 420px; border-radius: 14px; border: 1px solid var(--line); }
   .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--ink-soft); }
   .area-towns { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
-  .area-towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .5rem 1rem; font-weight: 600; font-size: .92rem; }
+  .area-towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; font-weight: 600; font-size: .92rem; }
+  .area-towns li a, .area-towns li.town-plain { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; }
   .area-towns li a { color: var(--ink); }
   .area-towns li a:hover { color: var(--red); opacity: 1; }
   .area-towns li.town-plain { color: var(--ink-soft); }
