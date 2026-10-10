@@ -271,3 +271,37 @@ test('conversion tracking: event hooks present, no third-party tags unless confi
   }
   assert.match(page('/contact/thanks/'), /data-page-type="lead-confirmation"/);
 });
+
+// URL inventory taken from the build before the October 2026 redesign (17 pages). None may disappear without a redirect.
+const URLS_BEFORE_REDESIGN = [
+  '/', '/services/', '/services/emergency-plumbing/', '/services/water-heater-replacement/', '/services/boiler-service/',
+  '/services/gas-installation/', '/services/kitchen-bath-remodels/', '/services/new-construction-plumbing/',
+  '/areas/saugus/', '/areas/lynn/', '/areas/revere/', '/areas/malden/', '/areas/peabody/',
+  '/contact/', '/contact/thanks/', '/privacy/', '/404.html',
+];
+
+test('every page URL that existed before the redesign still exists (nothing was removed or moved)', () => {
+  for (const path of URLS_BEFORE_REDESIGN) assert.ok(existsSync(fileFor(path)), `${path} is missing from the build`);
+});
+
+test('internal links: every href on every page points at a page, file or in-page id that exists', () => {
+  const broken = [];
+  // path of each built page ("/about/", "/404.html") -> the set of element ids on it
+  const urlOf = (file) => '/' + relative(dist, file).split(sep).join('/').replace(/index\.html$/, '');
+  const pages = new Map(allHtmlFiles().map((f) => [urlOf(f), { html: readFileSync(f, 'utf8') }]));
+  for (const p of pages.values()) p.ids = new Set([...p.html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+  for (const [from, { html }] of pages) {
+    for (const m of html.matchAll(/<a\b[^>]*\bhref="([^"]*)"/g)) {
+      const href = m[1].replace(/&amp;/g, '&');
+      if (/^(?:https?:|mailto:|tel:|sms:|data:|javascript:)/.test(href)) continue;
+      const [pathPart, hash] = href.split('#');
+      if (pathPart && !pathPart.startsWith('/')) { broken.push(`${from} -> ${href} (relative link)`); continue; }
+      const target = pathPart ? pathPart.split('?')[0] : from;
+      const isFile = /\.[a-z0-9]+$/i.test(target);
+      const destPage = pages.get(target);
+      if (!destPage && !(isFile && existsSync(join(dist, target.replace(/^\//, ''))))) { broken.push(`${from} -> ${href}`); continue; }
+      if (hash && destPage && !destPage.ids.has(hash)) broken.push(`${from} -> ${href} (no element with id "${hash}")`);
+    }
+  }
+  assert.deepEqual([...new Set(broken)], []);
+});

@@ -291,6 +291,48 @@ describe('errors, back/edit and recovery', () => {
     await context.close();
   });
 
+  test('a page restored from the back button gets a working Send button again (it was stuck on "Sending…")', async () => {
+    const { context } = await phoneContext(browser);
+    const page = await newForm(context);
+    await mockContact(page, () => new Promise(() => {})); // never answers: the page stays mid-send
+    await fillForm(page);
+    await page.click('#submit-btn');
+    await page.waitForFunction(() => document.getElementById('submit-btn').disabled);
+    assert.equal(await page.locator('#submit-btn').textContent(), 'Sending…');
+    await page.evaluate(() => window.dispatchEvent(Object.assign(new Event('pageshow'), { persisted: true })));
+    assert.equal(await page.locator('#submit-btn').isEnabled(), true);
+    assert.equal(await page.locator('#submit-btn').textContent(), 'Send request');
+    assert.equal(await page.locator('form').getAttribute('aria-busy'), null);
+    await context.close();
+  });
+
+  test('a ?status= value that is not one of our messages shows nothing (it used to print JavaScript internals)', async () => {
+    const { context } = await phoneContext(browser);
+    for (const status of ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'nonsense']) {
+      const page = await newForm(context, `/contact/?status=${status}`);
+      assert.equal(await page.locator('#form-status').isHidden(), true, status);
+      assert.doesNotMatch(await page.locator('main').innerText(), /native code|\[object/, status);
+      await page.close();
+    }
+    const page = await newForm(context, '/contact/?status=delivery');
+    assert.equal(await page.locator('#form-status').isVisible(), true, 'a real status still shows');
+    await context.close();
+  });
+
+  test('a photo over the 6 MB the server accepts is refused with an honest message before sending (client and server agree)', async () => {
+    const { context } = await phoneContext(browser);
+    const page = await newForm(context);
+    const seen = await mockContact(page);
+    await fillForm(page);
+    await page.setInputFiles('#photo', { name: 'huge.heic', mimeType: 'image/heic', buffer: Buffer.alloc(7 * 1024 * 1024, 1) });
+    await page.click('#submit-btn');
+    await page.locator('#form-status').waitFor({ state: 'visible' });
+    assert.match(await page.locator('#form-status-text').textContent(), /too large to send here \(over 6 MB\).*Your answers are still in the form/);
+    assert.equal(seen.length, 0);
+    assert.equal(await page.locator('#submit-btn').isEnabled(), true);
+    await context.close();
+  });
+
   test('back/edit: the Change button reopens the full list with the current choice focused, and nothing typed is lost', async () => {
     const { context } = await phoneContext(browser);
     const page = await newForm(context, '/contact/?service=boiler-service&town=lynn');

@@ -173,15 +173,16 @@ test('the homepage has no reveal animation: every section is readable as soon as
   assert.doesNotMatch(html, /opacity:\s*0\b/);
 });
 
-test('webfonts: only the variable Inter file and the one Barlow Condensed weight are preloaded; no static Inter weights or retired serif ship', () => {
+test('webfonts: only the heading font is preloaded (preloading Inter measured slower to first paint); no static Inter weights or retired serif ship', () => {
   for (const path of ['/', '/contact', '/services/boiler-service']) {
     const html = page(path);
-    const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+\.woff2)"/g)].map((m) => m[1]);
-    assert.equal(preloads.length, 2, `${path} preloads`);
-    assert.match(preloads[0], /inter-latin-wght-normal/);
-    assert.match(preloads[1], /barlow-condensed-latin-700-normal/);
+    const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+.woff2)"/g)].map((m) => m[1]);
+    assert.equal(preloads.length, 1, `${path} preloads`);
+    assert.match(preloads[0], /barlow-condensed-latin-700-normal/);
+    // the body font is still shipped, just not preloaded
+    assert.match(html, /inter-latin-wght-normal[^"']*.woff2/, `${path} still references the variable Inter file`);
   }
-  const fonts = readdirSync(join(dist, '_astro')).filter((f) => /^inter-latin-\d{3}-normal/.test(f));
+  const fonts = readdirSync(join(dist, '_astro')).filter((f) => /^inter-latin-d{3}-normal/.test(f));
   assert.deepEqual(fonts, [], 'static Inter weights should not be in the build');
   assert.deepEqual(readdirSync(join(dist, '_astro')).filter((f) => /fraunces/i.test(f)), [], 'the retired serif is not shipped');
 });

@@ -147,6 +147,43 @@ test('the same request id twice sends one email and gives both callers the same 
   assert.equal(second.body.leadId, first.body.leadId, 'the confirmation carries the original lead id, so it is counted once');
 });
 
+test('the same id with DIFFERENT details is never swallowed: it is sent as an update that keeps the lead id (independent review finding 1)', async () => {
+  installFakeCache();
+  const first = await submit(form({ request_id: REQUEST_ID, name: 'Pat Example', phone: '617-555-0142' }));
+  // e.g. the reply was lost, the visitor corrected a digit and sent again; or someone reused another visitor's id
+  const fixed = await submit(form({ request_id: REQUEST_ID, name: 'Pat Example', phone: '617-555-0143' }));
+  assert.equal(fixed.sent.length, 1, 'the corrected request reaches Shane');
+  assert.equal(fixed.body.leadId, first.body.leadId, 'same lead id, so it is still counted once');
+  assert.match(fixed.sent[0].subject, /Updated service request/);
+  assert.match(fixed.sent[0].text, /This is an update: The same form was sent again with different details/);
+  assert.match(fixed.sent[0].text, /617-555-0143/);
+  // sending that corrected version again is a plain repeat
+  const again = await submit(form({ request_id: REQUEST_ID, name: 'Pat Example', phone: '617-555-0143' }));
+  assert.equal(again.sent.length, 0);
+  assert.equal(again.body.leadId, first.body.leadId);
+});
+
+test('someone else reusing a remembered request id cannot suppress or read anything: their own request is delivered', async () => {
+  installFakeCache();
+  const victim = await submit(form({ request_id: REQUEST_ID, name: 'Victim', service_type: 'boiler-service' }));
+  const other = await submit(form({ request_id: REQUEST_ID.toUpperCase(), name: 'Other Person', service_type: 'gas-installation', message: 'Different request' }));
+  assert.equal(other.sent.length, 1, 'delivered, not silently dropped');
+  assert.match(other.sent[0].text, /Name: Other Person/);
+  assert.equal(victim.sent.length, 1);
+});
+
+test('adding a photo to an otherwise identical resend counts as a change, so the photo is not lost', async () => {
+  installFakeCache();
+  const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, ...new Array(64).fill(0)]);
+  const first = await submit(form({ request_id: REQUEST_ID }));
+  const fd = form({ request_id: REQUEST_ID });
+  fd.set('photo', new File([png], 'leak.png', { type: 'image/png' }));
+  const withPhoto = await submit(fd);
+  assert.equal(first.sent.length, 1);
+  assert.equal(withPhoto.sent.length, 1);
+  assert.ok(withPhoto.sent[0].attachments?.length || withPhoto.sent[0].attachment || JSON.stringify(withPhoto.sent[0]).includes('photo-'), 'the photo travels');
+});
+
 test('a failed delivery is not remembered, so the retry with the same id is sent', async () => {
   installFakeCache();
   const failed = await submit(form({ request_id: REQUEST_ID }), { fetchImpl: async () => new Response('no', { status: 500 }) });
@@ -169,4 +206,45 @@ test('an invalid post is never remembered: fixing it and resending the same id w
   assert.equal(bad.response.status, 400);
   const good = await submit(form({ request_id: REQUEST_ID }));
   assert.equal(good.sent.length, 1);
+});
+
+// ---------- hidden characters, links and the service-area hint (independent review findings 3, 4, 5) ----------
+
+test('the service-area hint looks at the town only: a street named after another town does not change it', async () => {
+  const medford = await submit(form({ address: 'Medford', street: '12 Lynn St' }));
+  assert.match(medford.sent[0].text, /Service area check: Not on the confirmed list/);
+  const boston = await submit(form({ address: 'Danvers', street: '5 Boston St' }));
+  assert.match(boston.sent[0].text, /Service area check: Not on the confirmed list/);
+  const real = await submit(form({ address: 'Lynn', street: '5 Boston St' }));
+  assert.match(real.sent[0].text, /Service area check: Lynn - on Shane's confirmed list/);
+});
+
+test('hidden control and direction-override characters never reach the subject, name or email lines', async () => {
+  const name = 'Pat\u0085Example\u202Edcba\u2066x\u2069';
+  const { sent } = await submit(form({ name }));
+  assert.doesNotMatch(sent[0].subject, /[\u0085\u202A-\u202E\u2066-\u2069]/);
+  assert.match(sent[0].text, /Name: Pat Example dcba x/);
+  assert.doesNotMatch(sent[0].text, /[\u0085\u2028\u2029\u202A-\u202E\u2066-\u2069]/);
+});
+
+test('every kind of line break inside the message stays inside its indented block, so it cannot forge email lines', async () => {
+  const message = 'first line\rLead ID: FAKE-1\u0085Phone: FAKE-2\u2028Email: fake@example.com\r\nlast line';
+  const { sent } = await submit(form({ message }));
+  const lines = sent[0].text.split('\n');
+  for (const forged of ['Lead ID: FAKE-1', 'Phone: FAKE-2', 'Email: fake@example.com']) {
+    assert.equal(lines.some((l) => l === forged || l.startsWith(`${forged.split(':')[0]}: FAKE`)), false, `${forged} must not start a line`);
+    assert.ok(lines.some((l) => l === `  ${forged}`), `${forged} is inside the indented message`);
+  }
+  assert.ok(lines.includes('  last line'));
+  assert.match(sent[0].text, /Lead ID: [0-9a-f-]{36}/, 'the real lead id is still there');
+});
+
+test('links in any free-text field count toward the limit, so a chosen-problem request cannot carry spam links', async () => {
+  const fd = form({ service_type: 'boiler-service', q_bl_issue: 'no-heat', name: 'http://a.example http://b.example http://c.example' }, { withMessage: false });
+  const bad = await submit(fd);
+  assert.equal(bad.response.status, 400);
+  const fd2 = form({ service_type: 'boiler-service', q_bl_issue: 'no-heat', street: 'www.a.example www.b.example www.c.example' }, { withMessage: false });
+  assert.equal((await submit(fd2)).response.status, 400);
+  const fine = form({ service_type: 'boiler-service', q_bl_issue: 'no-heat', message: 'Photos at https://example.com/a and https://example.com/b' });
+  assert.equal((await submit(fine)).response.status, 200, 'two links in the message are still allowed');
 });

@@ -44,6 +44,8 @@ type LeadPayload = Attribution & {
   issueAnswered: boolean;
   /** Random id the page generates once per load; lets a double tap or a retried post be recognised. */
   requestId: string;
+  /** True when the same form was sent again with different details after an earlier email already went out. */
+  isUpdate: boolean;
 };
 
 type UploadedPhoto = {
@@ -155,13 +157,14 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
         email: oneLine(getString(formData, "email", 160)),
         address: oneLine(getString(formData, "address", 200)),
         serviceId,
-        message: getString(formData, "message", 4000),
+        message: cleanMessage(getString(formData, "message", 4000)),
         heardAboutId: resolveHeardAbout(getString(formData, "heard_about", 80)),
         street: oneLine(getString(formData, "street", 200)),
         timing: isTiming(timing) ? timing : "",
         answers: answers.map((a: { question: string; answer: string }) => ({ question: a.question, answer: a.answer })),
         issueAnswered,
         requestId: REQUEST_ID_REGEX.test(requestId) ? requestId : "",
+        isUpdate: false,
         utmSource: cleanToken(formData.get("utm_source"), 100),
         utmMedium: cleanToken(formData.get("utm_medium"), 100),
         utmCampaign: cleanToken(formData.get("utm_campaign"), 100),
@@ -175,10 +178,14 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
 
   if (!payload || isInvalidPayload(payload)) return fail("validation", 400);
 
-  // A double tap, a retried post or a back-and-resubmit carries the same request id: answer with the confirmation
-  // we already gave, without a second email. Best effort (edge cache, per data centre).
-  const earlier = payload.requestId ? await recallRequest(payload.requestId) : "";
-  if (earlier) return respondConfirmed(earlier, payload);
+  // A double tap, a retried post or a back-and-resubmit carries the same request id AND the same content: answer with
+  // the confirmation we already gave, without a second email. The same id with DIFFERENT content (the visitor fixed a
+  // detail after a lost reply, or someone reused an id) is never swallowed: it is sent, as an update that keeps the
+  // original lead id so it is still counted once. Best effort (edge cache, per data centre).
+  const printed = payload.requestId ? await fingerprint(payload, formData.get("photo")) : "";
+  const earlier = payload.requestId ? await recallRequest(payload.requestId) : null;
+  if (earlier && earlier.fingerprint === printed) return respondConfirmed(earlier.leadId, payload);
+  if (earlier) payload.isUpdate = true;
 
   const attachment = await readAttachment(formData.get("photo"));
   if (attachment instanceof Error) return fail("validation", 400);
@@ -195,10 +202,10 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     if (!verified) return fail("verification", 403);
   }
 
-  const leadId = crypto.randomUUID();
+  const leadId = earlier ? earlier.leadId : crypto.randomUUID();
   const source = classifySource(payload);
   const serviceLabel = SERVICE_LABELS.get(payload.serviceId) || payload.serviceId;
-  const subject = `[Website form] New service request - ${stripControl(serviceLabel)} - ${stripControl(payload.name)}`;
+  const subject = `[Website form] ${payload.isUpdate ? "Updated" : "New"} service request - ${stripControl(serviceLabel)} - ${stripControl(payload.name)}`;
   const replyTo = payload.email || DEFAULT_TO_EMAIL;
 
   try {
@@ -220,7 +227,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     return fail("delivery", 502);
   }
 
-  if (payload.requestId) await rememberRequest(payload.requestId, leadId);
+  if (payload.requestId) await rememberRequest(payload.requestId, leadId, printed);
   return respondConfirmed(leadId, payload);
 
   function respondConfirmed(confirmedLeadId: string, lead: LeadPayload): Response {
@@ -237,25 +244,35 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
 // Remembers which lead id a request id already produced (best-effort, edge cache). Fails open: a cache outage
 // can at worst let a duplicate through, never block a real customer.
 const requestKey = (requestId: string) => new Request(`https://request-ids.invalid/${requestId}`);
-async function recallRequest(requestId: string): Promise<string> {
+const REMEMBERED_REGEX = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\|([0-9a-f]{32})$/;
+async function recallRequest(requestId: string): Promise<{ leadId: string; fingerprint: string } | null> {
   const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-  if (!cache) return "";
+  if (!cache) return null;
   try {
     const hit = await cache.match(requestKey(requestId));
-    const leadId = hit ? (await hit.text()).trim() : "";
-    return REQUEST_ID_REGEX.test(leadId) ? leadId : "";
+    const match = REMEMBERED_REGEX.exec(hit ? (await hit.text()).trim() : "");
+    return match ? { leadId: match[1], fingerprint: match[2] } : null;
   } catch {
-    return "";
+    return null;
   }
 }
-async function rememberRequest(requestId: string, leadId: string): Promise<void> {
+async function rememberRequest(requestId: string, leadId: string, printed: string): Promise<void> {
   const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
   if (!cache) return;
   try {
-    await cache.put(requestKey(requestId), new Response(leadId, { headers: { "Cache-Control": `max-age=${REQUEST_MEMORY_SECONDS}` } }));
+    await cache.put(requestKey(requestId), new Response(`${leadId}|${printed}`, { headers: { "Cache-Control": `max-age=${REQUEST_MEMORY_SECONDS}` } }));
   } catch {
     /* best effort */
   }
+}
+// A short fingerprint of what was sent (including the size of any photo), so a repeat is told apart from an edit.
+async function fingerprint(p: LeadPayload, photo: FormDataEntryValue | null): Promise<string> {
+  const photoSize = typeof photo === "object" && photo && "size" in photo ? (photo as File).size : 0;
+  const bytes = new TextEncoder().encode(
+    JSON.stringify([p.serviceId, p.name, p.phone, p.email, p.address, p.street, p.message, p.timing, p.heardAboutId, p.answers.map((a) => [a.question, a.answer]), photoSize]),
+  );
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  return Array.from(digest, (b) => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
 }
 
 function getString(formData: FormData, key: string, maxLength = 0): string {
@@ -265,12 +282,24 @@ function getString(formData: FormData, key: string, maxLength = 0): string {
   return maxLength ? trimmed.slice(0, maxLength) : trimmed;
 }
 
+// Control characters (including the C1 range), line/paragraph separators and text-direction overrides: none of them
+// belong in a name, a subject line or an email body, and some mail clients turn them into line breaks or reorder text.
+const HIDDEN_CHARS = /[\u0000-\u001F\u007F-\u009F\u2028\u2029\u202A-\u202E\u2066-\u2069]+/g;
+
 function oneLine(value: string): string {
-  return value.replace(/[\u0000-\u001F\u007F]+/g, " ").replace(/\s+/g, " ").trim();
+  return value.replace(HIDDEN_CHARS, " ").replace(/\s+/g, " ").trim();
 }
 
 function stripControl(value: string): string {
-  return value.replace(/[\u0000-\u001F\u007F]+/g, " ").trim();
+  return value.replace(HIDDEN_CHARS, " ").trim();
+}
+
+// The free-text message keeps its line breaks (every kind is normalised to \n) and its tabs, nothing else hidden.
+function cleanMessage(value: string): string {
+  return value
+    .replace(/\r\n|\r|\u0085|\u2028|\u2029/g, "\n")
+    .replace(/[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069]/g, "")
+    .trim();
 }
 
 function resolveServiceId(raw: string): string | null {
@@ -305,8 +334,10 @@ function isInvalidPayload(payload: LeadPayload): boolean {
     return true;
   }
 
-  // Link-stuffed messages are spam; a real service request rarely contains more than a link or two.
-  if ((payload.message.match(/https?:\/\/|www\./gi) || []).length > MAX_LINKS_IN_MESSAGE) {
+  // Link-stuffed requests are spam; a real service request rarely contains more than a link or two. Every free-text
+  // field counts, because a request that is only a chosen problem has no message to hold the links.
+  const freeText = [payload.message, payload.name, payload.address, payload.street].join(" ");
+  if ((freeText.match(/https?:\/\/|www\./gi) || []).length > MAX_LINKS_IN_MESSAGE) {
     return true;
   }
 
@@ -525,6 +556,7 @@ function serviceAreaNote(address: string): string {
 function leadRows(payload: LeadPayload, leadId: string, sourceLabel: string, serviceLabel: string): Array<[string, string]> {
   const rows: Array<[string, string]> = [
     ["Lead ID", leadId],
+    ...(payload.isUpdate ? [["This is an update", "The same form was sent again with different details. It has the same Lead ID as the earlier email; use this version."] as [string, string]] : []),
     ["Received", receivedAt()],
     ["Service requested", `${serviceLabel} (${payload.serviceId})`],
     ["How soon", payload.timing ? timingLabel(payload.timing) : "Not answered"],
@@ -533,7 +565,7 @@ function leadRows(payload: LeadPayload, leadId: string, sourceLabel: string, ser
     ["Phone", payload.phone],
     ["Email", payload.email || "Not provided"],
     ["Town / address", [payload.street, payload.address].filter(Boolean).join(", ")],
-    ["Service area check", serviceAreaNote([payload.street, payload.address].filter(Boolean).join(", "))],
+    ["Service area check", serviceAreaNote(payload.address)],
     ["Message", payload.message || "Not written (the customer answered the questions above)"],
     ["Customer said they heard about us", payload.heardAboutId ? HEARD_ABOUT.get(payload.heardAboutId) || "Not answered" : "Not answered"],
     ["Captured source", sourceLabel],

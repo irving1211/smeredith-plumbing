@@ -116,15 +116,15 @@ const breadcrumb = {
     .intro { font-size: 1.15rem; line-height: 1.7; color: var(--ink); margin-bottom: 3rem; padding: 1.6rem 1.8rem; background: var(--paper-2); border-left: 3px solid var(--red); border-radius: 8px; }
     .page-body h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 2.5rem 0 1.5rem; letter-spacing: -0.02em; }
     .scenario-list { display: flex; flex-direction: column; gap: 1.4rem; margin-bottom: 3rem; }
-    .scenario { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem 1.7rem; transition: border-color .25s ease, transform .2s ease; }
-    .scenario:hover { border-color: var(--line-2); transform: translateX(2px); }
+    .scenario { background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.5rem 1.7rem; transition: border-color .25s ease; }
+    .scenario:hover { border-color: var(--line-2); }
     .scenario h3 { font-size: 1.1rem; margin-bottom: .55rem; letter-spacing: -0.015em; }
     .scenario p { color: var(--ink-soft); margin: 0; line-height: 1.6; }
 
     .common-calls { list-style: none; padding: 0; margin: 0 0 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .65rem; }
     .common-calls li { background: var(--paper-2); border: 1px solid var(--line); border-radius: 8px; padding: .85rem 1.1rem; color: var(--ink); font-weight: 500; font-size: .95rem; }
 
-    .page-cta { background: var(--paper-2); border-radius: 16px; padding: 3rem 2rem; text-align: center; margin: 4rem 0 2rem; }
+    .page-cta { background: var(--paper-2); border-radius: var(--radius-md); padding: 3rem 2rem; text-align: center; margin: 4rem 0 2rem; }
     .page-cta h2 { margin-bottom: 1rem; }
     .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }
     .page-cta .hero-cta { justify-content: center; }
@@ -133,11 +133,11 @@ const breadcrumb = {
     .hero-alt { margin: 1rem 0 0; font-weight: 600; }
     .hero-alt a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
     .link-pills { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-    .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
+    .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
     .link-pills a:hover { border-color: var(--red); color: var(--red); opacity: 1; }
     .where p, .related-services p { color: var(--ink-soft); line-height: 1.65; }
     .job-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
-    .job-thumb { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .job-thumb { margin: 0; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
     .job-thumb img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
     .job-thumb figcaption { padding: .7rem .9rem; font-weight: 600; font-size: .92rem; }
     .more-link { margin-top: 1rem; }

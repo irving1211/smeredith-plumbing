@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import serviceOptions from '../service-options.json';
 import heardAbout from '../heard-about.json';
 import { TOWNS } from '../lib/service-area.js';
-import { DEFAULT_PLACEHOLDER, ISSUE_SATISFIES_DESCRIPTION, TIMING, announceFor, fieldName, placeholderFor, questionsFor } from '../lib/request-questions.js';
+import { DEFAULT_PLACEHOLDER, ISSUE_SATISFIES_DESCRIPTION, NON_ANSWERS, TIMING, announceFor, fieldName, placeholderFor, questionsFor } from '../lib/request-questions.js';
 import questionData from '../request-questions.json';
 
 const base = import.meta.env.BASE_URL;
@@ -71,6 +71,7 @@ const breadcrumb = {
         data-towns={JSON.stringify(townNames)}
         data-issue-satisfies={String(ISSUE_SATISFIES_DESCRIPTION)}
         data-default-placeholder={DEFAULT_PLACEHOLDER}
+        data-non-answers={JSON.stringify([...NON_ANSWERS])}
       >
         <div class="hp" aria-hidden="true">
           <label>Leave this field empty <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
@@ -210,6 +211,7 @@ const breadcrumb = {
       const $ = (id) => document.getElementById(id);
       const towns = JSON.parse(form.dataset.towns || '{}');
       const issueSatisfies = form.dataset.issueSatisfies === 'true';
+      const nonAnswers = JSON.parse(form.dataset.nonAnswers || '[]');
       const defaultPlaceholder = form.dataset.defaultPlaceholder || '';
       const params = new URLSearchParams(window.location.search);
       const serviceRadios = [...form.querySelectorAll('input[name="service_type"]')];
@@ -218,9 +220,6 @@ const breadcrumb = {
       const addressInput = $('address');
       const message = $('message');
       const baseTitle = document.title;
-      // JavaScript shows its own error summary, so the browser's pop-up bubbles are switched off. Without JavaScript
-      // they (and the server's own checks) are the fallback.
-      form.noValidate = true;
 
       const selectedService = () => (serviceRadios.find((r) => r.checked) || {}).value || '';
       const selectedLabel = () => { const r = serviceRadios.find((x) => x.checked); return r ? r.nextElementSibling.textContent : ''; };
@@ -236,8 +235,13 @@ const breadcrumb = {
       };
       const requestId = form.querySelector('[data-request-id]');
       requestId.value = makeId();
+      const button = $('submit-btn');
+      const idleLabel = button.textContent;
+      let sending = false;
+      const resetSending = () => { sending = false; button.disabled = false; button.textContent = idleLabel; form.removeAttribute('aria-busy'); };
       // Coming back to a finished request with the Back button must not reuse its id, or a new request would be swallowed.
-      window.addEventListener('pageshow', (e) => { if (e.persisted) { requestId.value = makeId(); syncAll(false); } });
+      // A page restored from the back/forward cache still thinks it is mid-send: give it a fresh id and a usable button.
+      window.addEventListener('pageshow', (e) => { if (e.persisted) { requestId.value = makeId(); resetSending(); syncAll(false); } });
 
       // ---- Carry service + town from the page the visitor came from (editable) ----
       let prefilled = false;
@@ -282,7 +286,7 @@ const breadcrumb = {
       const activeGroup = () => groups.find((g) => !g.hidden) || null;
       const issueAnswered = () => {
         const g = activeGroup();
-        return !!g && [...g.querySelectorAll('fieldset[data-issue] input:checked')].some((i) => i.value !== 'other' && i.value !== 'unknown');
+        return !!g && [...g.querySelectorAll('fieldset[data-issue] input:checked')].some((i) => !nonAnswers.includes(i.value));
       };
       const hasIssueQuestion = () => { const g = activeGroup(); return !!g && !!g.querySelector('fieldset[data-issue]'); };
       const syncQuestions = (announce) => {
@@ -373,8 +377,8 @@ const breadcrumb = {
       const statusList = $('form-status-list');
       const statusActions = $('form-status-actions');
       const messages = {
-        validation: 'Something in the form needs another look: check the highlighted answers, remove extra links, and make sure any photo is a JPG, PNG, WebP or HEIC image under 10 MB. Or just call or text Shane.',
-        photo: 'That photo is too large to send here (over 10 MB). Remove it and send the request, then text the photo to Shane.',
+        validation: 'Something in the form needs another look: check the highlighted answers, remove extra links, and make sure any photo is a JPG, PNG, WebP or HEIC image under 6 MB. Or just call or text Shane.',
+        photo: 'That photo is too large to send here (over 6 MB). Remove it and send the request, then text the photo to Shane.',
         delivery: 'Your request did not go through, and Shane has not received it. Try again in a minute, or call, text or email Shane directly.',
         network: 'We could not reach the server, so your request has not been sent. Check your connection and try again, or call, text or email Shane directly.',
         rate: 'Too many requests came from this connection in a short time. Please wait a few minutes, or call or text Shane.',
@@ -442,7 +446,7 @@ const breadcrumb = {
       // retained = the fetch path, where the page (and the visitor's answers) stay put. After a plain
       // form post the page reloads empty, so we must not claim their answers are still there.
       const showError = (code, retained) => {
-        const key = messages[code] ? code : 'delivery';
+        const key = Object.prototype.hasOwnProperty.call(messages, code) ? code : 'delivery';
         clearFieldErrors();
         statusText.textContent = messages[key] + (retained ? ' Your answers are still in the form.' : '');
         statusActions.hidden = key === 'validation';
@@ -456,11 +460,12 @@ const breadcrumb = {
       };
 
       const initial = params.get('status');
-      if (initial && messages[initial]) showError(initial);
+      if (initial && Object.prototype.hasOwnProperty.call(messages, initial)) showError(initial);
 
       // ---- Submit: fetch when available (keeps the form on failure), native post otherwise ----
-      const button = $('submit-btn');
-      let sending = false;
+      // From here on the script owns validation, so the browser's own pop-up bubbles are switched off. If anything above
+      // had failed, this line is never reached and the native checks (and the server's) stay as the fallback.
+      form.noValidate = true;
       form.addEventListener('submit', async (event) => {
         if (!window.fetch || !window.FormData) return;
         event.preventDefault();
@@ -470,13 +475,12 @@ const breadcrumb = {
         clearFieldErrors();
         statusBox.hidden = true;
         sending = true;
-        const idle = button.textContent;
         button.disabled = true;
         button.textContent = 'Sending…';
         form.setAttribute('aria-busy', 'true');
         // An attempt, not a lead: leads are counted only from the confirmed thank-you page.
         track('form_submit_attempt', { form_id: 'service_request', service_type: selectedService(), timing: selectedTiming() });
-        const finish = () => { sending = false; button.disabled = false; button.textContent = idle; form.removeAttribute('aria-busy'); };
+        const finish = resetSending;
         try {
           const data = new FormData(form);
           // Phone photos are often 3-8 MB. Shrink big ones in the browser (longest side 1800 px, JPEG) so the
@@ -495,7 +499,7 @@ const breadcrumb = {
             } catch (_) { /* keep the original */ }
           }
           const sendingPhoto = data.get('photo');
-          if (sendingPhoto instanceof File && sendingPhoto.size > 10 * 1024 * 1024) {
+          if (sendingPhoto instanceof File && sendingPhoto.size > 6 * 1024 * 1024) {
             showError('photo', true);
             finish();
             return;

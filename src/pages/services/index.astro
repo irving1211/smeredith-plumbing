@@ -113,8 +113,8 @@ const serviceList = {
 
     .page-body { padding: 2rem 0 7rem; background: var(--paper); }
     .hub-grid { list-style: none; margin: 0 0 3rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
-    .hub-card { display: flex; flex-direction: column; gap: .6rem; height: 100%; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem 1.7rem; color: var(--ink); transition: border-color .25s ease, transform .2s ease; }
-    .hub-card:hover { border-color: var(--red); transform: translateY(-2px); opacity: 1; }
+    .hub-card { display: flex; flex-direction: column; gap: .6rem; height: 100%; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.6rem 1.7rem; color: var(--ink); transition: border-color .25s ease; }
+    .hub-card:hover { border-color: var(--red); opacity: 1; }
     .hub-card h2 { font-size: 1.25rem; letter-spacing: -0.02em; }
     .hub-card p { margin: 0; color: var(--ink-soft); line-height: 1.55; }
     .hub-link { margin-top: auto; color: var(--red); font-weight: 700; font-size: .92rem; }
@@ -124,9 +124,9 @@ const serviceList = {
     .hub-note p { color: var(--ink-soft); line-height: 1.65; }
     .hub-note a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
     .town-links { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-    .town-links a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1rem; text-decoration: none; font-weight: 600; font-size: .92rem; }
+    .town-links a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: .55rem 1rem; text-decoration: none; font-weight: 600; font-size: .92rem; }
 
-    .page-cta { background: var(--paper-2); border-radius: 16px; padding: 3rem 2rem; text-align: center; margin: 3rem 0 0; }
+    .page-cta { background: var(--paper-2); border-radius: var(--radius-md); padding: 3rem 2rem; text-align: center; margin: 3rem 0 0; }
     .page-cta h2 { margin-bottom: 1rem; }
     .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }
     .page-cta .hero-cta { justify-content: center; }
