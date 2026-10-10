@@ -1226,13 +1226,19 @@ const whyShane = [
 
     /* Skip layout and paint of off-screen sections until they approach the viewport (first-paint cost on phones).
        --cis is a measured placeholder height; 'auto' replaces it with the real height after first render. */
-    .trust-band { --cis: 550px; } .why { --cis: 1700px; } .emergency { --cis: 470px; } .services { --cis: 2450px; }
-    .work { --cis: 4750px; } .about { --cis: 1450px; } .van { --cis: 1050px; } .reviews { --cis: 4200px; }
-    .social { --cis: 610px; } .faq { --cis: 1200px; } .area { --cis: 950px; } .contact { --cis: 1150px; } .site-footer { --cis: 510px; }
+    /* Measured on the final build (phone 390 px, tablet 820 px, desktop 1280 px). */
+    .trust-band { --cis: 550px; } .why { --cis: 1720px; } .emergency { --cis: 470px; } .services { --cis: 2480px; }
+    .work { --cis: 4760px; } .about { --cis: 1440px; } .van { --cis: 1050px; } .reviews { --cis: 4230px; }
+    .social { --cis: 610px; } .faq { --cis: 1195px; } .area { --cis: 1860px; } .contact { --cis: 1200px; } .site-footer { --cis: 595px; }
+    @media (min-width: 600px) and (max-width: 900px) {
+      .trust-band { --cis: 440px; } .why { --cis: 1150px; } .emergency { --cis: 450px; } .services { --cis: 1510px; }
+      .work { --cis: 2750px; } .about { --cis: 1150px; } .van { --cis: 1210px; } .reviews { --cis: 2160px; }
+      .social { --cis: 585px; } .faq { --cis: 1015px; } .area { --cis: 1540px; } .contact { --cis: 1170px; } .site-footer { --cis: 400px; }
+    }
     @media (min-width: 901px) {
-      .trust-band { --cis: 200px; } .why { --cis: 1050px; } .emergency { --cis: 340px; } .services { --cis: 1430px; }
-      .work { --cis: 2350px; } .about { --cis: 830px; } .van { --cis: 820px; } .reviews { --cis: 1950px; }
-      .social { --cis: 450px; } .faq { --cis: 1200px; } .area { --cis: 745px; } .contact { --cis: 920px; } .site-footer { --cis: 310px; }
+      .trust-band { --cis: 200px; } .why { --cis: 1050px; } .emergency { --cis: 340px; } .services { --cis: 1450px; }
+      .work { --cis: 2350px; } .about { --cis: 830px; } .van { --cis: 820px; } .reviews { --cis: 1960px; }
+      .social { --cis: 450px; } .faq { --cis: 1215px; } .area { --cis: 1610px; } .contact { --cis: 955px; } .site-footer { --cis: 330px; }
     }
     .trust-band, .why, .emergency, .services, .work, .about, .van, .reviews, .social, .faq, .area, .contact, .site-footer {
       content-visibility: auto; contain-intrinsic-size: auto var(--cis);

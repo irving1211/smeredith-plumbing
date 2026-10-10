@@ -433,6 +433,7 @@ describe('accessibility (axe, WCAG 2 A/AA + best practice)', () => {
       await page.goto(`${origin}${path}`);
       // render and reveal every section (off-screen ones are intentionally skipped/transparent until scrolled to)
       await page.evaluate(() => { document.documentElement.classList.add('cv-off'); document.querySelectorAll('.reveal').forEach((e) => e.classList.add('is-visible')); });
+      await page.waitForTimeout(1200); // let the 0.7 s reveal transition finish; text sampled mid-fade reads as low contrast
       await page.addScriptTag({ path: axePath });
       const results = await page.evaluate(() => axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }));
       // Faint decorative service numerals (aria-hidden watermark digits) are exempt as pure decoration.
@@ -442,4 +443,41 @@ describe('accessibility (axe, WCAG 2 A/AA + best practice)', () => {
       await context.close();
     });
   }
+});
+
+describe('scrolling stability (content-visibility placeholders)', () => {
+  for (const [label, width, height] of [['phone', 390, 844], ['tablet', 820, 1100], ['desktop', 1280, 900]]) {
+    test(`scrolling the whole homepage on a ${label} causes no meaningful layout shift`, async () => {
+      const { context } = await phoneContext(browser, { viewport: { width, height }, isMobile: width < 600, hasTouch: width < 600 });
+      const page = await context.newPage();
+      await page.addInitScript(() => {
+        window.__cls = 0;
+        new PerformanceObserver((list) => list.getEntries().forEach((e) => { if (!e.hadRecentInput) window.__cls += e.value; })).observe({ type: 'layout-shift', buffered: true });
+      });
+      await page.goto(`${origin}/`);
+      await page.waitForTimeout(600);
+      let last = -1;
+      for (let i = 0; i < 80; i++) {
+        const y = await page.evaluate((step) => { window.scrollBy({ top: step, behavior: 'instant' }); return window.scrollY; }, Math.round(height * 0.7));
+        await page.waitForTimeout(120);
+        if (y === last) break;
+        last = y;
+      }
+      await page.waitForTimeout(700);
+      const cls = await page.evaluate(() => window.__cls);
+      assert.ok(cls < 0.1, `cumulative layout shift while scrolling was ${cls.toFixed(3)} (limit 0.1)`);
+      await context.close();
+    });
+  }
+
+  test('in-page navigation lands on the right section even though sections below the fold are lazily laid out', async () => {
+    const { context } = await phoneContext(browser);
+    const page = await context.newPage();
+    await page.goto(`${origin}/`);
+    await page.locator('.mobile-menu-link[href="#faq"]').evaluate((el) => el.click());
+    await page.waitForTimeout(1800);
+    const top = await page.evaluate(() => Math.round(document.getElementById('faq').getBoundingClientRect().top));
+    assert.ok(top >= 0 && top <= 140, `FAQ heading should sit just below the header after navigating (top = ${top}px)`);
+    await context.close();
+  });
 });
