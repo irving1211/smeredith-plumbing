@@ -22,6 +22,8 @@ export const GET: APIRoute = ({ site }) => {
       changefreq: 'monthly',
     })),
     { loc: `${origin}${base}/contact/`, priority: '0.7', changefreq: 'monthly' },
+    // The privacy notice joins the sitemap only once Shane has approved it (PUBLIC_PRIVACY_PUBLISHED=1).
+    ...(import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1' ? [{ loc: `${origin}${base}/privacy/`, priority: '0.3', changefreq: 'yearly' }] : []),
   ];
 
   const xml =

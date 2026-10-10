@@ -1,0 +1,10 @@
+/* Inter Variable, Latin subset only (the site is English-only). One ~48 KB file covers weights 100-900;
+   it replaces six static weights and the other six unused character subsets. Glyphs outside Latin
+   (arrows, stars, check marks) fall back to the system font exactly as before. */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
+}

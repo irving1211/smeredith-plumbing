@@ -1,0 +1,96 @@
+---
+// Privacy notice. It describes ONLY what this build of the site actually does: paragraphs for Google
+// Analytics, the interactive map, live Google reviews and Turnstile appear only in builds that include
+// those features. Status: prepared, awaiting Shane's approval. Until PUBLIC_PRIVACY_PUBLISHED=1 is set at
+// build time the page is noindex, left out of the sitemap, and not linked from anywhere.
+import Base from '../layouts/Base.astro';
+import SubpageHeader from '../components/SubpageHeader.astro';
+
+const base = import.meta.env.BASE_URL;
+const published = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
+const analytics = Boolean(import.meta.env.PUBLIC_GA4_ID || import.meta.env.PUBLIC_GTM_ID);
+const maps = Boolean(import.meta.env.PUBLIC_GOOGLE_MAPS_KEY);
+const liveReviews = import.meta.env.PUBLIC_REVIEWS_LIVE === '1';
+const turnstile = Boolean(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY);
+const email = 'shane@smeredithplumbing.com';
+const phone = '781-820-4592';
+---
+
+<Base
+  title="Privacy | S. Meredith Plumbing & Heating"
+  description="What the S. Meredith Plumbing & Heating website collects when you send a service request or browse, where it goes, and your choices. Plain language."
+  noindex={!published}
+  pageType="privacy"
+>
+  <SubpageHeader />
+  <main class="privacy">
+    <div class="container">
+      <h1>Privacy</h1>
+      <p class="updated">Last updated October 10, 2026. This page covers this website, not phone calls or texts.</p>
+
+      <h2>When you send a service request</h2>
+      <p>The request form asks for your name, phone number, town or address, and a description of the problem. Your email address, a photo, and how you heard about us are optional. When you press send, the details are emailed to Shane so he can answer your request. A photo is only attached to that email; it is not published or stored on the website.</p>
+      <p>If you would rather not use the form, you can call or text <a href={`tel:+17818204592`}>{phone}</a> or email <a href={`mailto:${email}`}>{email}</a>.</p>
+
+      <h2>How we learn which listing you used</h2>
+      <p>When you arrive, the site notes which page you landed on, the website you came from (the site name and page only, never your search words), and any campaign tag in the link, such as the tag on Shane's Google Business Profile link. This is kept in your browser's session storage and is cleared when you close the tab. It is added to your request only if you send one, so Shane knows which listing worked. Your answer to "How did you hear about us?" is stored with the request.</p>
+
+      <h2>Cookies, storage and visit counts</h2>
+      <ul>
+        <li>This website sets no cookies of its own.</li>
+        <li>After you send a request, your browser remembers a random confirmation code on your device so that reloading the thank-you page is not counted twice. The code contains no personal information.</li>
+        <li>Page visits are counted with Cloudflare Web Analytics, which does not use cookies or follow you from site to site. Cloudflare also hosts this website and protects it from abuse, which involves handling IP addresses.</li>
+        <li>To slow down abuse, the form's server briefly remembers how many requests came from an IP address in a short window. It is not kept as a record of visitors.</li>
+      </ul>
+
+      {analytics && (
+        <>
+          <h2>Google Analytics</h2>
+          <p>This site uses Google Analytics to count visits and actions such as phone taps and completed requests. Google Analytics uses cookies. You can opt out with the Google Analytics opt-out browser add-on or your browser's cookie settings. Names, phone numbers, email addresses, addresses and message text are never sent to analytics.</p>
+        </>
+      )}
+
+      {maps && (
+        <>
+          <h2>Interactive map</h2>
+          <p>The service-area map is a simple picture drawn by this site. If you press "Show interactive map", your browser loads Google Maps, and Google receives your IP address and the usual browser details under Google's own privacy policy. Nothing from Google Maps loads unless you press that button.</p>
+        </>
+      )}
+
+      {liveReviews && (
+        <>
+          <h2>Google reviews</h2>
+          <p>Reviews shown on the home page are retrieved from Shane's Google Business Profile by this website's server and shown as posted, with the reviewer's name as it appears on Google. Your browser does not contact Google to display them.</p>
+        </>
+      )}
+
+      {turnstile && (
+        <>
+          <h2>Spam check</h2>
+          <p>The request form uses Cloudflare Turnstile to tell people from automated programs. It runs in your browser and may share limited browser details with Cloudflare.</p>
+        </>
+      )}
+
+      <h2>Who receives information</h2>
+      <p>Shane receives your request. Our email delivery services (Cloudflare, with a backup provider) carry it to his inbox. We do not publish requests or photos.</p>
+
+      <h2>Your choices</h2>
+      <p>You can contact Shane at <a href={`mailto:${email}`}>{email}</a> or <a href={`tel:+17818204592`}>{phone}</a> to ask what he holds about a request or to have it removed. You can also clear your browser's site data at any time.</p>
+
+      <p class="back"><a href={base}>← Back to home</a></p>
+    </div>
+  </main>
+
+  <style>
+    .privacy { padding: 4rem 0 6rem; background: var(--paper); }
+    .privacy .container { max-width: 760px; }
+    .privacy h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: .6rem; }
+    .updated { color: var(--ink-muted); margin: 0 0 2rem; }
+    .privacy h2 { font-size: 1.3rem; margin: 2.2rem 0 .7rem; letter-spacing: -0.02em; }
+    .privacy p, .privacy li { color: var(--ink-soft); line-height: 1.7; }
+    .privacy ul { padding-left: 1.2rem; display: grid; gap: .5rem; }
+    .privacy a { color: var(--black); text-decoration: underline; text-underline-offset: .18em; font-weight: 600; }
+    .back { margin-top: 2.5rem; }
+    @media (max-width: 900px) { .privacy { padding: 2.5rem 0 4rem; } }
+  </style>
+</Base>

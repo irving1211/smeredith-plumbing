@@ -9,6 +9,8 @@ export default defineConfig({
   site: isGithubPages ? 'https://irving1211.github.io' : 'https://smeredithplumbing.com',
   base: isGithubPages ? '/smeredith-plumbing/' : '/',
   trailingSlash: 'always',
+  // Inline each page's CSS: one fewer round trip before first paint (pages are small and CSS is per-page).
+  build: { inlineStylesheets: 'always' },
   server: {
     host: '0.0.0.0',
     port: 4322,

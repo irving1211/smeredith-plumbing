@@ -11,8 +11,8 @@ const publicEmailHref = `mailto:${publicEmail}`;
 <Base title="Request Received | S. Meredith Plumbing & Heating" description="Thank you for your service request. Shane will be in touch with you shortly." noindex pageType="lead-confirmation">
   <header class="topbar">
     <div class="container topbar-row">
-      <a class="brand" href={base} aria-label="Back to home">
-        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
+      <a class="brand" href={base}>
+        <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="40" height="40" />
         <span class="brand-wordmark">
           <strong>S. Meredith</strong>
           <em>Plumbing &amp; Heating</em>
@@ -29,7 +29,7 @@ const publicEmailHref = `mailto:${publicEmail}`;
         
         <h1>We've got it.</h1>
         <p class="thanks-message">
-          Shane has received your service request directly on his phone. He will review the details and call you back shortly.
+          Your service request has been sent to Shane. He will review the details and call you back shortly. For anything urgent, call or text him.
         </p>
 
         <div class="thanks-actions">
@@ -50,15 +50,31 @@ const publicEmailHref = `mailto:${publicEmail}`;
   </main>
 
   <script is:inline>
-    // Count a lead only when this visit came from a real form submission (flag set on submit),
-    // so refreshes or direct visits to this URL don't inflate conversions.
+    // A lead is counted ONLY when the server confirmed delivery: it redirects here with a one-time
+    // random lead id. Visits without that id (direct, refresh, bookmark, bots) count nothing.
+    // The id is stripped from the address bar at once and remembered on this device (random ids only), so a
+    // reload, back/forward, duplicated or re-opened tab can't count the same lead twice. Only enumerated values are sent
+    // to analytics: no name, phone, email, address, message text, or the lead id itself.
     document.addEventListener('DOMContentLoaded', () => {
       try {
-        const pending = sessionStorage.getItem('sm_lead_pending');
-        if (!pending) return;
-        sessionStorage.removeItem('sm_lead_pending');
-        const lead = JSON.parse(pending);
-        if (window.smTrack) window.smTrack('generate_lead', { form_id: 'service_request', service_type: lead.service_type || '', heard_about: lead.heard_about || '' });
+        const q = new URLSearchParams(location.search);
+        const lead = q.get('lead');
+        if (!lead) return;
+        history.replaceState(null, '', location.pathname);
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(lead)) return;
+        const counted = JSON.parse(localStorage.getItem('sm_leads_counted') || '[]');
+        if (counted.includes(lead)) return;
+        counted.push(lead);
+        localStorage.setItem('sm_leads_counted', JSON.stringify(counted.slice(-20)));
+        const id = (v) => (/^[a-z0-9_-]{1,60}$/.test(v || '') ? v : '');
+        if (window.smTrack) {
+          window.smTrack('generate_lead', {
+            form_id: 'service_request',
+            service_type: id(q.get('svc')),
+            lead_source: id(q.get('src')),
+            heard_about: id(q.get('ha')),
+          });
+        }
       } catch (_) {}
     });
   </script>

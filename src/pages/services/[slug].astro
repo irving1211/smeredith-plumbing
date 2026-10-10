@@ -4,6 +4,8 @@ import SubpageHeader from '../../components/SubpageHeader.astro';
 import services from '../../services.json';
 import areas from '../../areas.json';
 import jobs from '../../jobs.json';
+import ServiceAreaChecker from '../../components/ServiceAreaChecker.astro';
+import { TOWNS } from '../../lib/service-area.js';
 
 export function getStaticPaths() {
   return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
@@ -14,12 +16,14 @@ const base = import.meta.env.BASE_URL;
 const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
-const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — I'd like help with: ${service.title}. `)}`;
+// The service travels into the request form by its stable id (the form lets the visitor change it).
+const contactHref = `${base}contact/?service=${service.slug}`;
 const pageUrl = `${origin}${base}services/${service.slug}/`;
 const hubUrl = `${origin}${base}services/`;
 const relatedJobs = jobs.filter((j) => j.service === service.slug).slice(0, 3);
 const relatedServices = services.filter((s) => s.slug !== service.slug);
-const approvedTowns = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Haverhill'];
+const approvedTowns = TOWNS.map((t) => t.name);
 
 const serviceJsonLd = {
   '@context': 'https://schema.org',
@@ -48,7 +52,7 @@ const breadcrumb = {
 };
 ---
 
-<Base title={service.seo_title} description={service.meta_desc} pageType="service" pageMeta={{ service: service.slug }}>
+<Base title={service.seo_title} description={service.meta_desc} pageType="service" pageMeta={{ service_type: service.slug }}>
   <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
 
@@ -68,8 +72,8 @@ const breadcrumb = {
       <div class="hero-cta">
         <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
         <a class="btn btn-ghost" href={smsHref}>Text photos to Shane</a>
+        <a class="btn btn-ghost" href={contactHref}>Request service online</a>
       </div>
-      <p class="hero-alt"><a href={`${base}contact/`}>Or request service online →</a></p>
     </div>
   </section>
 
@@ -108,7 +112,8 @@ const breadcrumb = {
 
       <section class="where" id="service-towns" aria-labelledby="service-towns-h">
         <h2 id="service-towns-h">Where Shane does this work</h2>
-        <p>Based in Saugus and serving {approvedTowns.slice(1, -1).join(', ')} and {approvedTowns.at(-1)}.</p>
+        <p>Based in Saugus and serving {approvedTowns.slice(1, -1).join(', ')} and {approvedTowns.at(-1)}. Check your town and the request form opens with this service already selected.</p>
+        <ServiceAreaChecker service={service.slug} showMap={false} uid="svc-area" />
         <ul class="link-pills">
           {areas.map((a) => <li><a href={`${base}areas/${a.slug}/`}>Plumber in {a.town}</a></li>)}
         </ul>
@@ -120,7 +125,7 @@ const breadcrumb = {
         <div class="hero-cta">
           <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
           <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
-          <a class="btn btn-ghost big" href={`${base}contact/`}>Request service</a>
+          <a class="btn btn-ghost big" href={contactHref}>Request service</a>
         </div>
       </div>
 

@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import jobsRaw from '../jobs.json';
 import services from '../services.json';
-import areas from '../areas.json';
+import ServiceAreaChecker from '../components/ServiceAreaChecker.astro';
+import LiveReviews from '../components/LiveReviews.astro';
+import { TOWNS } from '../lib/service-area.js';
 
 const base = import.meta.env.BASE_URL;
 const jobs = jobsRaw.map((j) => ({
@@ -28,6 +30,9 @@ const vanImageSmallSrc = `${base}images/van/van-side-800.webp`;
 const vanImageSrcSet = `${vanImageSmallSrc} 800w, ${vanImageSrc} 1100w`;
 const vanImageSizes = '(max-width: 900px) 92vw, (max-width: 1240px) 48vw, 560px';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+// Live Google reviews are built in only after Google approves Business Profile API access (see docs).
+const reviewsLive = import.meta.env.PUBLIC_REVIEWS_LIVE === '1';
+const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
 // Owner-confirmed Google Business Profile share link (2026-05-28).
 const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
 
@@ -58,7 +63,7 @@ const faqs = [
   { q: 'Do you offer free estimates?', a: 'Yes. Every job starts with a free, written estimate. No surprise pricing, no upsell scripts, and no third-party dispatcher.' },
   { q: 'Are you licensed and insured?', a: 'Yes. Fully licensed in Massachusetts and fully insured. MA license #9630040-PL-M is listed on every written estimate and invoice.' },
   { q: 'How fast do you respond?', a: 'Calls are answered live during business hours and returned within one hour after-hours. For true emergencies like no heat in January, a burst pipe, or no hot water, we come out nights and weekends too.' },
-  { q: 'What areas do you serve?', a: 'Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston, including Lynn, Revere, Malden, Melrose, Wakefield, Peabody, Stoneham, Everett, Somerville, Boston, Lexington, Tewksbury, Haverhill, and beyond. Outside the list? Call. If we’re close, we’ll help.' },
+  { q: 'What areas do you serve?', a: `Based in Saugus, MA. Working homes and jobsites across the Northshore and into Boston, including ${TOWNS.slice(1).map((t) => t.name).join(', ')}, and beyond. Outside the list? Call. If we’re close, we’ll help.` },
   { q: 'Do you stand behind your work?', a: 'Yes. Shane is licensed and insured, and work is done to code and inspected where required. Manufacturer warranties apply to the equipment installed, and workmanship is gone over with you in writing for each job. No boilerplate.' },
   { q: 'Do you handle new construction and additions?', a: 'Yes. From rough-in to finish, Shane handles plumbing for new builds, additions, and gut renovations. Inspected, signed off, and ready to occupy.' },
   { q: 'Do you work weekends and holidays?', a: '24/7 for true emergencies. Same-day Saturday for boiler and water heater failures whenever possible. You call, Shane answers.' },
@@ -81,12 +86,12 @@ const whyShane = [
   <Fragment slot="head">
     <!-- Google Search Console ownership (irvingcarrion.17). Keep: removing it un-verifies the property. -->
     <meta name="google-site-verification" content="T1fr6tjXPBeZCzYliQAi5NbFYg6pVZYkxTW6no-cVG4" />
-    <link rel="preload" as="image" href={heroImageSrc} type="image/webp" imagesrcset={heroImageSrcSet} imagesizes={heroImageSizes} fetchpriority="high" />
+    <link rel="preload" as="image" href={heroImageSrc} type="image/webp" imagesrcset={heroImageSrcSet} imagesizes={heroImageSizes} media="(min-width: 901px)" fetchpriority="high" />
   </Fragment>
   <header class="topbar" data-topbar>
     <div class="container topbar-row">
-      <a class="brand" href="#top" aria-label="S. Meredith Plumbing & Heating — back to top">
-        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="44" height="44" />
+      <a class="brand" href="#top">
+        <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="44" height="44" />
         <span class="brand-wordmark">
           <strong>S. Meredith</strong>
           <em>Plumbing &amp; Heating</em>
@@ -161,7 +166,7 @@ const whyShane = [
       <div class="hero-grid">
         <div class="hero-content">
           <div class="hero-brand-line">
-            <img class="hero-mini-logo" src={`${base}images/logo-icon.png`} alt="" width="48" height="48" />
+            <img class="hero-mini-logo" src={`${base}images/logo-icon-128.webp`} alt="" width="48" height="48" />
             <span class="hero-brand-text">
               <strong>S. MEREDITH</strong>
               <span>PLUMBING & HEATING</span>
@@ -213,7 +218,7 @@ const whyShane = [
         <div class="hero-visual">
           <div class="hero-card">
             <div class="hero-image-wrap">
-              <img class="hero-owner-img" src={heroImageSrc} srcset={heroImageSrcSet} sizes={heroImageSizes} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" width="960" height="1280" loading="eager" fetchpriority="high" decoding="sync" />
+              <img class="hero-owner-img" src={heroImageSrc} srcset={heroImageSrcSet} sizes={heroImageSizes} alt="Shane Meredith, owner-operator of S. Meredith Plumbing & Heating" width="960" height="1280" loading="eager" />
               <div class="hero-image-overlay">
                 <span class="badge-status">ON CALL 24/7</span>
               </div>
@@ -458,9 +463,10 @@ const whyShane = [
       <div class="section-head">
         <span class="kicker">From neighbors</span>
         <h2>What <span class="display-serif">customers</span> say.</h2>
-        <p class="reviews-badge"><span class="g-stars">★★★★★</span> Excerpts from Shane’s 5-star Google reviews</p>
+        <p class="reviews-badge"><span class="g-stars">★★★★★</span> Hand-picked excerpts from Shane’s 5-star Google reviews</p>
       </div>
-      <div class="review-grid">
+      {reviewsLive && <LiveReviews allReviewsUrl={googleReviewsUrl} />}
+      <div class="review-grid" data-curated>
         {reviews.map((r) => (
           <article class="review-card">
             <div class="review-top">
@@ -540,23 +546,9 @@ const whyShane = [
       <div class="section-head">
         <span class="kicker">Service Area</span>
         <h2>Plumbing &amp; heating in <span class="display-serif">your town</span>.</h2>
-        <p class="section-sub">Based in Saugus. Serving homes and commercial jobsites across Saugus, the North Shore, and Boston. Click a town for local context:</p>
+        <p class="section-sub">Based in Saugus. Serving homes and commercial jobsites across Saugus, the North Shore, and Boston. Pick your town to check coverage and start a request with it already filled in.</p>
       </div>
-      <ul class="towns">
-        {areas.map((a) => (
-          <li><a href={`${base}areas/${a.slug}/`}>{a.town}</a></li>
-        ))}
-        <li class="town-plain">Melrose</li>
-        <li class="town-plain">Wakefield</li>
-        <li class="town-plain">Stoneham</li>
-        <li class="town-plain">Everett</li>
-        <li class="town-plain">Somerville</li>
-        <li class="town-plain">Boston</li>
-        <li class="town-plain">Lexington</li>
-        <li class="town-plain">Tewksbury</li>
-        <li class="town-plain">Haverhill</li>
-      </ul>
-      <p class="towns-note">Outside this list? Call anyway. If we’re close, we’ll help.</p>
+      <ServiceAreaChecker />
     </div>
   </section>
 
@@ -601,6 +593,7 @@ const whyShane = [
         <a href={facebookUrl} rel="noopener" target="_blank">Facebook</a>
         <span class="dot">·</span>
         <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a>
+        {privacyPublished && <><span class="dot">·</span><a href={`${base}privacy/`}>Privacy</a></>}
       </div>
       <div class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating · Built for the Northshore</div>
       <div class="footer-credit">
@@ -616,117 +609,45 @@ const whyShane = [
   </a>
 
   <script is:inline>
-    // Sticky topbar shrink on scroll
-    (() => {
-      const topbar = document.querySelector('[data-topbar]');
-      if (!topbar) return;
-      const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 30);
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
-
-    // Floating call button: reveal only once the hero has scrolled out of view
-    (() => {
-      const sticky = document.querySelector('.sticky-call');
-      const hero = document.getElementById('top');
-      if (!sticky || !hero) return;
-      if (!('IntersectionObserver' in window)) { sticky.classList.add('is-visible'); return; }
-      const io = new IntersectionObserver(
-        ([entry]) => sticky.classList.toggle('is-visible', !entry.isIntersecting),
-        { threshold: 0 }
-      );
-      io.observe(hero);
-    })();
-
+    // Only what must work instantly (the menu button and in-page links) is wired up straight away.
+    // Everything else waits until after the first paint, so phone CPUs paint the hero first.
     (() => {
       const topbar = document.querySelector('[data-topbar]');
       const toggle = document.querySelector('[data-menu-toggle]');
       const menu = document.querySelector('[data-mobile-menu]');
       const scrim = document.querySelector('[data-menu-scrim]');
       const mobileLinks = document.querySelectorAll('[data-mobile-link]');
-      if (!topbar || !toggle || !menu || !scrim) return;
-
-      const closeMenu = () => {
-        topbar.classList.remove('menu-open');
-        document.body.classList.remove('menu-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.setAttribute('aria-label', 'Open navigation menu');
-        menu.setAttribute('aria-hidden', 'true');
-      };
-
-      const openMenu = () => {
-        topbar.classList.add('menu-open');
-        document.body.classList.add('menu-open');
-        toggle.setAttribute('aria-expanded', 'true');
-        toggle.setAttribute('aria-label', 'Close navigation menu');
-        menu.setAttribute('aria-hidden', 'false');
-      };
-
-      toggle.addEventListener('click', () => {
-        if (topbar.classList.contains('menu-open')) closeMenu();
-        else openMenu();
-      });
-
-      scrim.addEventListener('click', closeMenu);
-      mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeMenu();
-      });
-
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 900) closeMenu();
-      });
-    })();
-
-    // Restrained scroll-reveal — opacity + small Y lift, 1x only
-    (() => {
-      if (!('IntersectionObserver' in window)) return;
-      const targets = document.querySelectorAll('section, .work-card, .service-card, .review-card, .faq-item, .trust-grid li, .why-card');
-      targets.forEach((el) => el.classList.add('reveal'));
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      if (topbar && toggle && menu && scrim) {
+        const closeMenu = () => {
+          topbar.classList.remove('menu-open');
+          document.body.classList.remove('menu-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', 'Open navigation menu');
+          menu.setAttribute('aria-hidden', 'true');
+        };
+        const openMenu = () => {
+          topbar.classList.add('menu-open');
+          document.body.classList.add('menu-open');
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.setAttribute('aria-label', 'Close navigation menu');
+          menu.setAttribute('aria-hidden', 'false');
+        };
+        toggle.addEventListener('click', () => {
+          if (topbar.classList.contains('menu-open')) closeMenu();
+          else openMenu();
         });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-      targets.forEach((el) => io.observe(el));
-    })();
-
-    // Hero stats — stagger reveal
-    (() => {
-      const items = document.querySelectorAll('.hero-stats li');
-      items.forEach((el, i) => el.style.setProperty('--stagger', `${i * 80}ms`));
-    })();
-
-    // FAQ — close siblings on open
-    (() => {
-      const items = document.querySelectorAll('.faq-item');
-      items.forEach((item) => {
-        item.addEventListener('toggle', () => {
-          if (item.open) items.forEach((other) => { if (other !== item) other.open = false; });
+        scrim.addEventListener('click', closeMenu);
+        mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMenu();
         });
-      });
-    })();
-
-    // Active nav scroll-spy — highlights the section currently in view
-    (() => {
-      if (!('IntersectionObserver' in window)) return;
-      const links = Array.from(document.querySelectorAll('[data-navlink]'));
-      const sections = links.map((l) => document.getElementById(l.dataset.navlink)).filter(Boolean);
-      if (!sections.length) return;
-      const setActive = (id) => {
-        links.forEach((l) => l.classList.toggle('active', l.dataset.navlink === id));
-      };
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 900) closeMenu();
         });
-      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-      sections.forEach((s) => io.observe(s));
-    })();
+      }
 
-    // Smooth-scroll offset for in-page anchor links (account for sticky topbar)
-    (() => {
+      // Smooth-scroll offset for in-page anchor links (account for sticky topbar). Sections below the
+      // fold are laid out lazily (content-visibility), so render them all once before measuring.
       const offset = 80;
       document.querySelectorAll('a[href^="#"]').forEach((a) => {
         a.addEventListener('click', (e) => {
@@ -735,12 +656,65 @@ const whyShane = [
           const target = document.getElementById(id);
           if (!target) return;
           e.preventDefault();
+          document.documentElement.classList.add('cv-off');
           const top = target.getBoundingClientRect().top + window.scrollY - offset;
           window.scrollTo({ top, behavior: 'smooth' });
-          history.pushState(null, '', `#${id}`);
+          history.pushState(null, '', '#' + id);
         });
       });
     })();
+
+    // After first paint: scroll state, floating call button, FAQ, scroll-spy and the scroll-reveal.
+    requestAnimationFrame(() => setTimeout(() => {
+      const topbar = document.querySelector('[data-topbar]');
+      if (topbar) {
+        const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 30);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      // Floating call button: reveal only once the hero has scrolled out of view
+      const sticky = document.querySelector('.sticky-call');
+      const hero = document.getElementById('top');
+      if (sticky && hero) {
+        if (!('IntersectionObserver' in window)) sticky.classList.add('is-visible');
+        else new IntersectionObserver(([entry]) => sticky.classList.toggle('is-visible', !entry.isIntersecting), { threshold: 0 }).observe(hero);
+      }
+
+      // FAQ — close siblings on open
+      const faqs = document.querySelectorAll('.faq-item');
+      faqs.forEach((item) => {
+        item.addEventListener('toggle', () => {
+          if (item.open) faqs.forEach((other) => { if (other !== item) other.open = false; });
+        });
+      });
+
+      if (!('IntersectionObserver' in window)) return;
+
+      // Active nav scroll-spy — highlights the section currently in view
+      const links = Array.from(document.querySelectorAll('[data-navlink]'));
+      const sections = links.map((l) => document.getElementById(l.dataset.navlink)).filter(Boolean);
+      if (sections.length) {
+        const setActive = (id) => links.forEach((l) => l.classList.toggle('active', l.dataset.navlink === id));
+        const spy = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }), { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+        sections.forEach((s) => spy.observe(s));
+      }
+
+      // Restrained scroll-reveal for content that is NOT already on screen. Anything visible when this
+      // runs (the hero, the first sections) is left alone, so nothing ever flashes out and back in.
+      const reveal = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); reveal.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      const seen = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          seen.unobserve(e.target);
+          if (!e.isIntersecting) { e.target.classList.add('reveal'); reveal.observe(e.target); }
+        });
+      });
+      document.querySelectorAll('main > section:not(.hero), .work-card, .service-card, .review-card, .faq-item, .trust-grid li, .why-card').forEach((el) => seen.observe(el));
+    }, 0));
   </script>
 
   <style>
@@ -976,9 +950,11 @@ const whyShane = [
     .star-rating { letter-spacing: 0.05em; font-size: .95rem; }
 
     .hero-stats { list-style: none; padding: 0; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; width: 100%; border-top: 2px solid var(--line-2); border-bottom: 2px solid var(--line-2); padding: 2.4rem 0; position: relative; z-index: 2; }
-    .hero-stats li { display: flex; flex-direction: column; align-items: center; gap: .35rem; opacity: 0; transform: translateY(8px); transition: opacity .6s ease var(--stagger, 0ms), transform .6s ease var(--stagger, 0ms); }
-    .hero-stats.is-visible li, .reveal.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
-    section.is-visible .hero-stats li { opacity: 1; transform: translateY(0); }
+    .hero-stats li { display: flex; flex-direction: column; align-items: center; gap: .35rem; animation: stat-in .6s ease var(--stagger, 0ms) both; }
+    .hero-stats li:nth-child(2) { --stagger: 80ms; }
+    .hero-stats li:nth-child(3) { --stagger: 160ms; }
+    @keyframes stat-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .hero-stats li { animation: none; } }
     .hero-stats strong { font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); line-height: 1; }
     .hero-stats span { font-size: .9rem; color: var(--ink-soft); letter-spacing: -0.005em; font-weight: 600; text-transform: uppercase; }
 
@@ -1073,7 +1049,7 @@ const whyShane = [
       font-size: 1.8rem;
       font-weight: 900;
       color: var(--paper-3); /* very subtle light grey-warm */
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter Variable', 'Inter', sans-serif;
       line-height: 1;
       transition: color .3s ease, opacity .3s ease;
     }
@@ -1214,17 +1190,6 @@ const whyShane = [
     .faq-body p { margin: 0; color: var(--ink-soft); font-size: .98rem; line-height: 1.65; }
 
     .area { padding: 7rem 0; background: var(--paper); }
-    .towns { list-style: none; padding: 0; margin: 0 auto 1.8rem; max-width: 900px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .55rem; text-align: center; }
-    .towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; font-weight: 500; color: var(--ink); font-size: .92rem; transition: border-color .2s ease, transform .2s ease, background .2s ease; }
-    .towns li:hover { border-color: var(--red); transform: translateY(-2px); background: var(--paper-2); }
-    .towns li a { display: flex; align-items: center; justify-content: center; text-align: center; padding: .65rem .5rem; color: var(--ink); width: 100%; position: relative; }
-    .towns li a::after { position: absolute; right: .8rem; margin-left: 0; transform: translateX(-4px); transition: opacity .2s ease, transform .2s ease; }
-    .towns li:hover a::after { transform: translateX(0); margin-left: 0; }
-    .towns li a::after { content: ' →'; opacity: 0; margin-left: .2rem; transition: opacity .2s ease, margin-left .2s ease; color: var(--red); }
-    .towns li:hover a::after { opacity: 1; margin-left: .35rem; }
-    .towns li.town-plain { padding: .65rem .5rem; cursor: default; }
-    .towns li.town-plain:hover { transform: none; border-color: var(--line); background: #fff; }
-    .towns-note { text-align: center; color: var(--ink-muted); font-size: .95rem; }
 
     .contact { padding: 7rem 0; background: var(--black); color: #fff; position: relative; overflow: hidden; }
     .contact::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top, rgba(194,73,44,.10), transparent 60%); pointer-events: none; }
@@ -1253,14 +1218,30 @@ const whyShane = [
     .footer-links a { color: rgba(255,255,255,.75); }
     .footer-links a:hover { color: #fff; opacity: 1; }
     .footer-links .dot { color: rgba(255,255,255,.25); }
-    .footer-fineprint { grid-column: 1 / -1; text-align: center; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.08); margin-top: .5rem; font-size: .82rem; color: rgba(255,255,255,.4); }
+    .footer-fineprint { grid-column: 1 / -1; text-align: center; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.08); margin-top: .5rem; font-size: .82rem; color: rgba(255,255,255,.62); }
     .footer-credit { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: .5rem .75rem; flex-wrap: wrap; text-align: center; font-size: .82rem; color: rgba(255,255,255,.5); }
     .footer-credit strong { color: rgba(255,255,255,.82); font-weight: 600; }
     .footer-credit a { color: rgba(255,255,255,.78); text-decoration: underline; text-underline-offset: .18em; }
     .footer-credit a:hover { color: #fff; opacity: 1; }
 
+    /* Skip layout and paint of off-screen sections until they approach the viewport (first-paint cost on phones).
+       --cis is a measured placeholder height; 'auto' replaces it with the real height after first render. */
+    .trust-band { --cis: 550px; } .why { --cis: 1700px; } .emergency { --cis: 470px; } .services { --cis: 2450px; }
+    .work { --cis: 4750px; } .about { --cis: 1450px; } .van { --cis: 1050px; } .reviews { --cis: 4200px; }
+    .social { --cis: 610px; } .faq { --cis: 1200px; } .area { --cis: 950px; } .contact { --cis: 1150px; } .site-footer { --cis: 510px; }
+    @media (min-width: 901px) {
+      .trust-band { --cis: 200px; } .why { --cis: 1050px; } .emergency { --cis: 340px; } .services { --cis: 1430px; }
+      .work { --cis: 2350px; } .about { --cis: 830px; } .van { --cis: 820px; } .reviews { --cis: 1950px; }
+      .social { --cis: 450px; } .faq { --cis: 1200px; } .area { --cis: 745px; } .contact { --cis: 920px; } .site-footer { --cis: 310px; }
+    }
+    .trust-band, .why, .emergency, .services, .work, .about, .van, .reviews, .social, .faq, .area, .contact, .site-footer {
+      content-visibility: auto; contain-intrinsic-size: auto var(--cis);
+    }
+    html.cv-off .trust-band, html.cv-off .why, html.cv-off .emergency, html.cv-off .services, html.cv-off .work, html.cv-off .about,
+    html.cv-off .van, html.cv-off .reviews, html.cv-off .social, html.cv-off .faq, html.cv-off .area, html.cv-off .contact, html.cv-off .site-footer { content-visibility: visible; }
+
     /* Restrained scroll-reveal */
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(0.22, 0.61, 0.36, 1), transform .7s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: opacity, transform; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(0.22, 0.61, 0.36, 1), transform .7s cubic-bezier(0.22, 0.61, 0.36, 1); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 

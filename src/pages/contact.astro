@@ -1,12 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
+import serviceOptions from '../service-options.json';
+import heardAbout from '../heard-about.json';
+import { TOWNS } from '../lib/service-area.js';
 
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const publicEmail = 'shane@smeredithplumbing.com';
 const publicEmailHref = `mailto:${publicEmail}`;
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
 const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+const townNames = Object.fromEntries(TOWNS.map((t) => [t.slug, t.name]));
+// Optional bot protection. Renders only when a Turnstile site key is present at build time AND the
+// Pages secret TURNSTILE_SECRET_KEY is set (see docs). Off by default: no third-party script loads.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
+const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
 
 const breadcrumb = {
   '@context': 'https://schema.org',
@@ -20,10 +29,11 @@ const breadcrumb = {
 
 <Base title="Request Plumbing Service in Saugus, MA | S. Meredith" description="Request plumbing or heating service from Shane Meredith in Saugus, MA. Send the details and a photo, or call 781-820-4592 for 24/7 emergency service." pageType="contact">
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
+  <Fragment slot="head">{turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}</Fragment>
   <header class="topbar">
     <div class="container topbar-row">
-      <a class="brand" href={base} aria-label="Back to home">
-        <img class="brand-icon" src={`${base}images/logo-icon.png`} alt="" width="40" height="40" />
+      <a class="brand" href={base}>
+        <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="40" height="40" />
         <span class="brand-wordmark">
           <strong>S. Meredith</strong>
           <em>Plumbing &amp; Heating</em>
@@ -36,12 +46,12 @@ const breadcrumb = {
   <main class="contact-main">
     <div class="container">
       <div class="contact-layout">
-        
+
         <!-- Trust & Information Column -->
         <div class="contact-info">
           <span class="trust-badge">Licensed & Insured · MA #9630040-PL-M</span>
           <h1>Need service? <span class="display-serif">Shane will call</span> you back fast.</h1>
-          
+
           <p class="lede">
             No automated switchboards or third-party call centers. When you request service below, the details go directly to Shane so he can review them and call you back shortly.
           </p>
@@ -66,21 +76,42 @@ const breadcrumb = {
 
         <!-- Form Column -->
         <div class="form-card">
-          <div class="form-status" id="form-status" hidden aria-live="polite"></div>
+          <div class="quick-contact">
+            <p><strong>Rather talk or text?</strong> Shane answers his phone.</p>
+            <div class="quick-contact-actions">
+              <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
+              <a class="btn btn-secondary" href={smsHref} data-contact-text>Text photos</a>
+            </div>
+          </div>
+
+          <div class="form-status" id="form-status" role="alert" tabindex="-1" hidden>
+            <p id="form-status-text"></p>
+            <div class="status-actions" id="form-status-actions" hidden>
+              <a class="btn btn-dark" href={`tel:${phoneTel}`}>Call {phone}</a>
+              <a class="btn btn-secondary" href={smsHref} data-contact-text>Text Shane</a>
+              <a class="btn btn-secondary" id="mailto-fallback" href={publicEmailHref}>Email instead</a>
+            </div>
+          </div>
+          <p class="prefill-note" id="prefill-note" hidden>We filled in the service and town from the page you came from. Change anything that's wrong.</p>
+
           <form
+            id="service-request-form"
             action={`${base}api/contact`}
             method="POST"
             enctype="multipart/form-data"
-            data-base={base}
+            data-towns={JSON.stringify(townNames)}
           >
-            <input type="text" name="_honey" style="display:none" />
-            <input type="hidden" name="success_url" id="success-url-input" value="" />
-            <input type="hidden" name="error_url" id="error-url-input" value="" />
+            <div class="hp" aria-hidden="true">
+              <label>Leave this field empty <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
+            </div>
             <input type="hidden" name="utm_source" value="" data-attr />
             <input type="hidden" name="utm_medium" value="" data-attr />
             <input type="hidden" name="utm_campaign" value="" data-attr />
             <input type="hidden" name="landing_page" value="" data-attr />
             <input type="hidden" name="referrer" value="" data-attr />
+            <input type="hidden" name="latest_utm_source" value="" data-attr />
+            <input type="hidden" name="latest_utm_medium" value="" data-attr />
+            <input type="hidden" name="latest_utm_campaign" value="" data-attr />
 
             <div class="form-group">
               <label for="name">Your Name <span class="required">*</span></label>
@@ -100,19 +131,20 @@ const breadcrumb = {
 
             <div class="form-group">
               <label for="address">Town or Address <span class="required">*</span></label>
-              <input type="text" id="address" name="address" required placeholder="Where do you need service?" />
+              <input type="text" id="address" name="address" required placeholder="Where do you need service?" autocomplete="address-level2" list="town-list" />
+              <datalist id="town-list">
+                {TOWNS.map((t) => <option value={t.name}></option>)}
+              </datalist>
             </div>
 
             <div class="form-group">
               <label for="service_type">What do you need?</label>
               <select id="service_type" name="service_type">
-                <option value="Emergency">Emergency — no heat / burst pipe / no hot water</option>
-                <option value="Water heater">Water heater replacement / repair</option>
-                <option value="Boiler / heating">Boiler / heating system</option>
-                <option value="General plumbing" selected>General plumbing service</option>
-                <option value="Remodel / new construction">Remodel / new construction</option>
-                <option value="Something else">Something else</option>
+                {serviceOptions.map((o) => <option value={o.id} selected={Boolean((o as { default?: boolean }).default)}>{o.label}</option>)}
               </select>
+              <p class="emergency-note" id="emergency-note" hidden>
+                <strong>No heat, a burst pipe or no hot water?</strong> Call Shane now at <a href={`tel:${phoneTel}`}>{phone}</a>. A form can wait; a flooded basement can't.
+              </p>
             </div>
 
             <div class="form-group">
@@ -122,28 +154,24 @@ const breadcrumb = {
 
             <div class="form-group">
               <label for="photo">Add a photo <span class="optional">(Optional — helps Shane triage)</span></label>
-              <input type="file" id="photo" name="photo" accept="image/*" />
-              <span class="file-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster.</span>
+              <input type="file" id="photo" name="photo" accept="image/*" aria-describedby="photo-help" />
+              <span class="file-help" id="photo-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster. Up to 10 MB.</span>
             </div>
 
             <div class="form-group">
               <label for="heard_about">How did you hear about us? <span class="optional">(Optional)</span></label>
               <select id="heard_about" name="heard_about">
                 <option value="">Choose one</option>
-                <option>Google Search</option>
-                <option>Google Maps</option>
-                <option>Referral</option>
-                <option>Facebook</option>
-                <option>Instagram</option>
-                <option>Contractor or property manager</option>
-                <option>Previous customer</option>
-                <option>Other</option>
+                {heardAbout.map((h) => <option value={h.id}>{h.label}</option>)}
               </select>
             </div>
 
-            <button type="submit" class="btn btn-primary submit-btn">
+            {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-appearance="interaction-only"></div>}
+
+            <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
               Send Request to Shane
             </button>
+            <p class="form-privacy">What you enter is emailed to Shane so he can answer your request.{privacyPublished && <> <a href={`${base}privacy/`}>Privacy notice</a></>}</p>
           </form>
 
           <div class="direct-call-alt">
@@ -159,55 +187,131 @@ const breadcrumb = {
 
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.querySelector('form');
-      const successInput = document.getElementById('success-url-input');
-      const errorInput = document.getElementById('error-url-input');
-      if (form && successInput && errorInput) {
-        const base = form.getAttribute('data-base') || '/';
-        successInput.value = window.location.origin + base + 'contact/thanks/';
-        errorInput.value = window.location.origin + base + 'contact/';
+      const form = document.getElementById('service-request-form');
+      if (!form) return;
+      const track = (event, params) => window.smTrack && window.smTrack(event, params);
+      const $ = (id) => document.getElementById(id);
+      const serviceSel = $('service_type');
+      const addressInput = $('address');
+      const towns = JSON.parse(form.dataset.towns || '{}');
+      const params = new URLSearchParams(window.location.search);
+
+      // ---- Carry service + town from the page the visitor came from (editable) ----
+      let prefilled = false;
+      const wantedService = params.get('service');
+      if (wantedService && [...serviceSel.options].some((o) => o.value === wantedService)) {
+        serviceSel.value = wantedService;
+        prefilled = true;
       }
-
-      // Lead attribution (first touch this session) travels with the request to Shane's inbox.
-      if (form) {
-        let attr = {};
-        try { attr = JSON.parse(sessionStorage.getItem('sm_attr') || '{}'); } catch (_) {}
-        form.querySelectorAll('[data-attr]').forEach((input) => { input.value = attr[input.name] || ''; });
-
-        const track = (event, params) => window.smTrack && window.smTrack(event, params);
-        track('request_form_open');
-        let started = false;
-        form.addEventListener('focusin', () => {
-          if (started) return;
-          started = true;
-          track('form_start', { form_id: 'service_request' });
-        });
-        form.addEventListener('submit', () => {
-          const service = form.querySelector('[name="service_type"]');
-          const heard = form.querySelector('[name="heard_about"]');
-          try {
-            sessionStorage.setItem('sm_lead_pending', JSON.stringify({
-              service_type: service ? service.value : '',
-              heard_about: heard ? heard.value : '',
-            }));
-          } catch (_) {}
-          track('form_submit', { form_id: 'service_request' });
-        });
+      const wantedTown = params.get('town');
+      const otherTown = (params.get('town_other') || '').replace(/[\u0000-\u001F]/g, '').trim().slice(0, 60);
+      if (wantedTown && Object.prototype.hasOwnProperty.call(towns, wantedTown) && !addressInput.value) {
+        addressInput.value = towns[wantedTown];
+        prefilled = true;
+      } else if (otherTown && !addressInput.value) {
+        addressInput.value = otherTown;
+        prefilled = true;
       }
+      if (prefilled) $('prefill-note').hidden = false;
 
-      const statusBox = document.getElementById('form-status');
-      if (!statusBox) return;
+      // ---- Emergency nudge: a form can wait, a flood can't ----
+      const emergencyNote = $('emergency-note');
+      const syncEmergency = () => { emergencyNote.hidden = serviceSel.value !== 'emergency-plumbing'; };
+      serviceSel.addEventListener('change', syncEmergency);
+      syncEmergency();
 
-      const status = new URLSearchParams(window.location.search).get('status');
+      // ---- Text link carries the chosen service/town ----
+      const textLinks = document.querySelectorAll('[data-contact-text]');
+      const syncTextLinks = () => {
+        const label = serviceSel.options[serviceSel.selectedIndex]?.textContent || '';
+        const where = addressInput.value.trim();
+        const body = `Hi Shane — ${serviceSel.value && serviceSel.value !== 'other' ? `I need help with: ${label}` : 'I need a plumber'}${where ? ` (${where})` : ''}. `;
+        textLinks.forEach((a) => { a.href = `sms:+17818204592?body=${encodeURIComponent(body)}`; });
+      };
+      serviceSel.addEventListener('change', syncTextLinks);
+      addressInput.addEventListener('input', syncTextLinks);
+      syncTextLinks();
+
+      // ---- Lead attribution (first touch this visit + a separate later-campaign tag) ----
+      let attr = {};
+      try { attr = JSON.parse(sessionStorage.getItem('sm_attr') || '{}'); } catch (_) {}
+      const first = attr.first || {};
+      const latest = attr.latest || {};
+      const values = {
+        utm_source: first.utm_source, utm_medium: first.utm_medium, utm_campaign: first.utm_campaign,
+        landing_page: first.landing_page, referrer: first.referrer,
+        latest_utm_source: latest.utm_source, latest_utm_medium: latest.utm_medium, latest_utm_campaign: latest.utm_campaign,
+      };
+      form.querySelectorAll('[data-attr]').forEach((input) => { input.value = values[input.name] || ''; });
+
+      track('request_form_open', { service_type: prefilled ? serviceSel.value : '' });
+      let started = false;
+      form.addEventListener('focusin', () => {
+        if (started) return;
+        started = true;
+        track('form_start', { form_id: 'service_request', service_type: serviceSel.value });
+      });
+
+      // ---- Honest error handling: keep what they typed, say what happened, offer another route ----
+      const statusBox = $('form-status');
+      const statusText = $('form-status-text');
+      const statusActions = $('form-status-actions');
       const messages = {
-        validation: 'Please check the form fields and try again. If the photo upload keeps failing, text Shane the photo directly.',
-        delivery: 'The request could not be delivered right now. Call or text Shane directly and try the form again in a few minutes.',
+        validation: 'Something in the form needs another look: check the required fields, remove extra links, and make sure any photo is a JPG, PNG, HEIC or PDF under 10 MB. Or just call or text Shane.',
+        delivery: 'Your request did not go through, and Shane has not received it. Try again in a minute, or call, text or email Shane directly.',
+        network: 'We could not reach the server, so your request has not been sent. Check your connection and try again, or call, text or email Shane directly.',
+        rate: 'Too many requests came from this connection in a short time. Please wait a few minutes, or call or text Shane.',
+        verification: 'We could not confirm the request came from a person. Reload the page and try again, or call or text Shane.',
+        blocked: 'This request was blocked for safety. Reload this page and try again, or call or text Shane.',
+      };
+      // retained = the fetch path, where the page (and the visitor's answers) stay put. After a plain
+      // form post the page reloads empty, so we must not claim their answers are still there.
+      const showError = (code, retained) => {
+        const key = messages[code] ? code : 'delivery';
+        statusText.textContent = messages[key] + (retained ? ' Your answers are still in the form.' : '');
+        statusActions.hidden = key === 'validation';
+        const label = serviceSel.options[serviceSel.selectedIndex]?.textContent || 'Service request';
+        const lines = [$('message').value.trim(), '', `Name: ${$('name').value.trim()}`, `Phone: ${$('phone').value.trim()}`, `Town/address: ${addressInput.value.trim()}`].join('\n');
+        $('mailto-fallback').href = `mailto:shane@smeredithplumbing.com?subject=${encodeURIComponent('Service request - ' + label)}&body=${encodeURIComponent(lines)}`;
+        statusBox.hidden = false;
+        statusBox.focus();
+        statusBox.scrollIntoView({ block: 'center' });
+        track('form_error', { form_id: 'service_request', error_type: key, service_type: serviceSel.value });
       };
 
-      if (status && messages[status]) {
-        statusBox.textContent = messages[status];
-        statusBox.hidden = false;
-      }
+      const initial = params.get('status');
+      if (initial && messages[initial]) showError(initial);
+
+      // ---- Submit: fetch when available (keeps the form on failure), native post otherwise ----
+      const button = $('submit-btn');
+      let sending = false;
+      form.addEventListener('submit', async (event) => {
+        if (!window.fetch || !window.FormData) return;
+        event.preventDefault();
+        if (sending) return;
+        sending = true;
+        const idle = button.textContent;
+        button.disabled = true;
+        button.textContent = 'Sending…';
+        statusBox.hidden = true;
+        // An attempt, not a lead: leads are counted only from the confirmed thank-you page.
+        track('form_submit_attempt', { form_id: 'service_request', service_type: serviceSel.value });
+        try {
+          const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+          let body = null;
+          try { body = await response.json(); } catch (_) {}
+          if (response.ok && body && body.ok && body.redirect && new URL(body.redirect, location.href).origin === location.origin) {
+            window.location.assign(body.redirect);
+            return;
+          }
+          showError(body && body.error ? body.error : 'delivery', true);
+        } catch (_) {
+          showError('network', true);
+        }
+        sending = false;
+        button.disabled = false;
+        button.textContent = idle;
+      });
     });
   </script>
 
@@ -526,5 +630,23 @@ const breadcrumb = {
         gap: 0;
       }
     }
-  </style>
+
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .quick-contact { background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 1.5rem; }
+    .quick-contact p { margin: 0 0 .75rem; font-size: .95rem; color: var(--ink-soft); }
+    .quick-contact p strong { color: var(--black); }
+    .quick-contact-actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .quick-contact-actions .btn { flex: 1 1 10rem; justify-content: center; padding: .85rem 1rem; }
+    .form-status p { margin: 0; }
+    .status-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .85rem; }
+    .status-actions .btn { flex: 1 1 8rem; justify-content: center; padding: .75rem .9rem; font-size: .9rem; }
+    .form-status:focus { outline: 3px solid var(--red); outline-offset: 2px; }
+    .prefill-note { margin: 0 0 1.25rem; padding: .6rem .85rem; border-left: 3px solid var(--gold); background: var(--paper-2); font-size: .88rem; color: var(--ink-soft); border-radius: 4px; }
+    .emergency-note { margin: .35rem 0 0; padding: .75rem .9rem; background: var(--highlight); border: 1px solid rgba(183, 28, 28, .25); border-radius: 8px; font-size: .92rem; line-height: 1.5; color: #7f1d1d; }
+    .emergency-note a { color: #7f1d1d; font-weight: 800; text-decoration: underline; text-underline-offset: .18em; }
+    .submit-btn[disabled] { opacity: .7; cursor: progress; }
+    .form-privacy { margin: .9rem 0 0; font-size: .82rem; color: var(--ink-muted); text-align: center; }
+    .form-privacy a { color: var(--black); text-decoration: underline; text-underline-offset: .18em; font-weight: 600; }
+    @media (max-width: 420px) { .form-group select { font-size: .95rem; padding-right: 2.2rem; } }
+    </style>
 </Base>

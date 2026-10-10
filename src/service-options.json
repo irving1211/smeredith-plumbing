@@ -1,0 +1,10 @@
+[
+  { "id": "emergency-plumbing", "label": "Emergency: no heat, burst pipe", "short": "Emergency", "urgent": true },
+  { "id": "water-heater-replacement", "label": "Water heater repair or replacement", "short": "Water heater" },
+  { "id": "boiler-service", "label": "Boiler service, repair or replacement", "short": "Boiler" },
+  { "id": "kitchen-bath-remodels", "label": "Kitchen or bath remodel plumbing", "short": "Kitchen / bath remodel" },
+  { "id": "new-construction-plumbing", "label": "New construction or addition", "short": "New construction" },
+  { "id": "gas-installation", "label": "Gas line installation or repair", "short": "Gas line" },
+  { "id": "general-plumbing", "label": "General plumbing repair", "short": "General plumbing", "default": true },
+  { "id": "other", "label": "Something else", "short": "Other" }
+]

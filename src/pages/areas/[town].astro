@@ -15,6 +15,7 @@ const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — calling from ${area.town}. `)}`;
 const otherTowns = areas.filter((a) => a.slug !== area.slug);
+const contactHref = `${base}contact/?town=${area.slug}`;
 
 // Breadcrumb schema only references real pages; the visible "Service area" link is a homepage section.
 const breadcrumb = {
@@ -47,7 +48,7 @@ const breadcrumb = {
         <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
         <a class="btn btn-ghost" href={smsHref}>Text Shane from {area.town}</a>
       </div>
-      <p class="hero-alt"><a href={`${base}contact/`}>Or request service online →</a></p>
+      <p class="hero-alt"><a href={contactHref}>Or request service online →</a></p>
     </div>
   </section>
 
@@ -84,7 +85,7 @@ const breadcrumb = {
         <div class="hero-cta">
           <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
           <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
-          <a class="btn btn-ghost big" href={`${base}contact/`}>Request service</a>
+          <a class="btn btn-ghost big" href={contactHref}>Request service</a>
         </div>
       </div>
 

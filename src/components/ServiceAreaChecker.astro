@@ -1,0 +1,266 @@
+---
+// Town-level coverage checker + outline map.
+//  - Coverage comes ONLY from src/service-area.json (owner-confirmed towns). An unlisted town is
+//    told to contact Shane, never turned away.
+//  - Without JavaScript the form is a plain GET to /contact/ with the town and service carried over.
+//  - The outlines are real municipal boundaries (src/service-area-geo.json, built by
+//    scripts/build-service-area-geo.mjs) and are drawn as town coverage, not a service radius.
+//  - An interactive Google Map loads only on request, and only if PUBLIC_GOOGLE_MAPS_KEY was set when
+//    the site was built. Shane's home address is never used or shown.
+import { TOWNS, HOME_TOWN, CONFIRMED_ON } from '../lib/service-area.js';
+import areas from '../areas.json';
+import geo from '../service-area-geo.json';
+
+interface Props {
+  /** A service id from service-options.json, carried into the request form. */
+  service?: string;
+  /** Show the outline map and town links (full variant). */
+  showMap?: boolean;
+  /** Unique id prefix when the component appears twice on a page. */
+  uid?: string;
+}
+const { service = '', showMap = true, uid = 'area' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const mapsKey = import.meta.env.PUBLIC_GOOGLE_MAPS_KEY || '';
+const pageSlugs = new Set(areas.map((a) => a.slug));
+const [vx, vy, vw, vh] = geo.viewBox;
+const townNames = TOWNS.map((t) => t.name).join(', ');
+---
+
+<div class="area-checker" data-area-checker data-base={base} data-service={service} data-maps-key={mapsKey}>
+  <form class="area-form" action={`${base}contact/`} method="get" data-area-form>
+    <div class="area-field">
+      <label for={`${uid}-town`}>Check your town</label>
+      <select id={`${uid}-town`} name="town" data-area-select>
+        <option value="">Choose your town…</option>
+        {TOWNS.map((t) => <option value={t.slug}>{t.name}</option>)}
+      </select>
+    </div>
+    <div class="area-field">
+      <label for={`${uid}-other`}>Not on the list? Type your town</label>
+      <input id={`${uid}-other`} name="town_other" type="text" maxlength="60" autocomplete="address-level2" data-area-other />
+    </div>
+    {service && <input type="hidden" name="service" value={service} />}
+    <button type="submit" class="btn btn-primary">Check my town</button>
+  </form>
+
+  <div class="area-result" data-area-result role="status" aria-live="polite" hidden>
+    <p class="area-message" data-area-message></p>
+    <p class="area-note" data-area-note hidden></p>
+    <div class="area-actions">
+      <a class="btn btn-primary" data-area-cta href={`${base}contact/`}>Request service</a>
+      <a class="btn btn-ghost" data-area-call href="tel:+17818204592">Call 781-820-4592</a>
+    </div>
+  </div>
+
+  {showMap && (
+    <figure class="area-map">
+      <svg class="area-svg" viewBox={`${vx} ${vy} ${vw} ${vh}`} role="img" aria-labelledby={`${uid}-map-title ${uid}-map-desc`} focusable="false">
+        <title id={`${uid}-map-title`}>Map of the towns Shane serves</title>
+        <desc id={`${uid}-map-desc`}>Town outlines for {townNames}. Coloured towns are on Shane's confirmed list. Uncoloured neighbouring towns are not on the list yet, so contact Shane to confirm availability. Use the town selector above for the same information as text.</desc>
+        <path class="ctx" d={geo.context} />
+        {TOWNS.map((t) => <path class="town" data-town={t.slug} data-cx={geo.towns[t.slug].cx} data-cy={geo.towns[t.slug].cy} d={geo.towns[t.slug].d} />)}
+        <text class="lbl" data-label x={geo.towns[HOME_TOWN].cx} y={geo.towns[HOME_TOWN].cy} text-anchor="middle">Saugus</text>
+      </svg>
+      <figcaption>
+        <span class="key key-served" aria-hidden="true"></span> Towns on Shane's confirmed list
+        <span class="key key-other" aria-hidden="true"></span> Nearby, not on the list: contact Shane to confirm.
+        <span class="credit">Town outlines: U.S. Census Bureau legal boundaries (they include some harbor water). Coverage is by town; large towns may need a call to confirm your street.</span>
+      </figcaption>
+      {mapsKey && (
+        <div class="gmap-wrap">
+          <button type="button" class="btn btn-secondary" data-gmap-open>Show interactive map</button>
+          <p class="gmap-status" data-gmap-status role="status" aria-live="polite"></p>
+          <div class="gmap" data-gmap hidden></div>
+        </div>
+      )}
+    </figure>
+  )}
+
+  {showMap && (
+    <ul class="area-towns">
+      {TOWNS.map((t) => (
+        <li class={pageSlugs.has(t.slug) ? '' : 'town-plain'}>
+          {pageSlugs.has(t.slug) ? <a href={`${base}areas/${t.slug}/`}>{t.name}</a> : t.name}
+        </li>
+      ))}
+    </ul>
+  )}
+  {showMap && <p class="area-confirmed">Service area confirmed by Shane {CONFIRMED_ON}. Outside this list? Call anyway: if it's close, he'll tell you.</p>}
+</div>
+
+<script>
+  import { checkTown } from '../lib/service-area.js';
+
+  type Track = (event: string, params?: Record<string, string>) => void;
+  const track: Track = (event, params) => (window as unknown as { smTrack?: Track }).smTrack?.(event, params);
+
+  document.querySelectorAll<HTMLElement>('[data-area-checker]').forEach((root) => {
+    const base = root.dataset.base || '/';
+    const service = root.dataset.service || '';
+    const select = root.querySelector<HTMLSelectElement>('[data-area-select]')!;
+    const other = root.querySelector<HTMLInputElement>('[data-area-other]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-area-form]')!;
+    const box = root.querySelector<HTMLElement>('[data-area-result]')!;
+    const message = root.querySelector<HTMLElement>('[data-area-message]')!;
+    const note = root.querySelector<HTMLElement>('[data-area-note]')!;
+    const cta = root.querySelector<HTMLAnchorElement>('[data-area-cta]')!;
+    const paths = Array.from(root.querySelectorAll<SVGPathElement>('path.town'));
+    const label = root.querySelector<SVGTextElement>('[data-label]');
+    let selectedSlug = '';
+    let refreshMap: (() => void) | null = null;
+
+    const highlight = (slug: string) => {
+      selectedSlug = slug;
+      paths.forEach((p) => p.classList.toggle('is-selected', p.dataset.town === slug));
+      if (label) {
+        const target = paths.find((p) => p.dataset.town === slug);
+        if (target) {
+          label.textContent = select.selectedOptions[0]?.textContent || '';
+          label.setAttribute('x', target.dataset.cx || '0');
+          label.setAttribute('y', target.dataset.cy || '0');
+          label.classList.add('is-selected');
+        } else {
+          label.classList.remove('is-selected');
+        }
+      }
+      refreshMap?.();
+    };
+
+    const run = (value: string) => {
+      const result = checkTown(value, service, { base });
+      box.hidden = false;
+      message.textContent = result.message;
+      note.textContent = result.note || '';
+      note.hidden = !result.note;
+      cta.href = result.cta.href;
+      cta.textContent = result.cta.label;
+      highlight(result.status === 'confirmed' && result.town ? result.town.slug : '');
+      // Only the enumerated town slug (or "other") is reported; typed text never leaves the page.
+      track('service_area_check', { town: result.town ? result.town.slug : 'other', result: result.status, service_type: service });
+    };
+
+    select.addEventListener('change', () => {
+      if (select.value) {
+        other.value = '';
+        run(select.value);
+      }
+    });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = select.value || other.value.trim();
+      if (!value) {
+        select.focus();
+        return;
+      }
+      run(value);
+    });
+    paths.forEach((p) => {
+      p.addEventListener('click', () => {
+        select.value = p.dataset.town || '';
+        other.value = '';
+        run(select.value);
+      });
+    });
+
+    // ---- Interactive Google Map: on request only, never required ----
+    const openBtn = root.querySelector<HTMLButtonElement>('[data-gmap-open]');
+    const mapEl = root.querySelector<HTMLElement>('[data-gmap]');
+    const status = root.querySelector<HTMLElement>('[data-gmap-status]');
+    const key = root.dataset.mapsKey || '';
+    if (openBtn && mapEl && status && key) {
+      const fail = () => {
+        mapEl.hidden = true;
+        openBtn.disabled = false;
+        status.textContent = "The interactive map couldn't load. The town checker above works without it.";
+        track('service_area_map_error');
+      };
+      const loadGoogle = () =>
+        new Promise<void>((resolve, reject) => {
+          const w = window as unknown as Record<string, unknown> & { google?: { maps?: unknown } };
+          if (w.google && w.google.maps) return resolve();
+          const timer = window.setTimeout(() => reject(new Error('timeout')), 10000);
+          w.__smMapsReady = () => { window.clearTimeout(timer); resolve(); };
+          w.gm_authFailure = () => { window.clearTimeout(timer); reject(new Error('auth')); fail(); };
+          const s = document.createElement('script');
+          s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=__smMapsReady&loading=async&v=weekly`;
+          s.async = true;
+          s.onerror = () => { window.clearTimeout(timer); reject(new Error('load')); };
+          document.head.appendChild(s);
+        });
+
+      openBtn.addEventListener('click', async () => {
+        openBtn.disabled = true;
+        status.textContent = 'Loading map…';
+        track('service_area_map_open');
+        try {
+          await loadGoogle();
+          const g = (window as unknown as { google: any }).google;
+          const { Map } = await g.maps.importLibrary('maps');
+          const response = await fetch(`${base}data/service-area.geojson`);
+          if (!response.ok) throw new Error('geojson');
+          const geojson = await response.json();
+          mapEl.hidden = false;
+          const map = new Map(mapEl, { center: { lat: 42.47, lng: -71.03 }, zoom: 10, gestureHandling: 'cooperative', mapTypeControl: false, streetViewControl: false, clickableIcons: false });
+          map.data.addGeoJson(geojson);
+          const style = (feature: any) => ({
+            fillColor: '#d32f2f',
+            fillOpacity: feature.getProperty('slug') === selectedSlug ? 0.5 : 0.16,
+            strokeColor: '#b71c1c',
+            strokeWeight: 1.2,
+          });
+          map.data.setStyle(style);
+          map.data.addListener('click', (e: any) => {
+            select.value = e.feature.getProperty('slug');
+            other.value = '';
+            run(select.value);
+          });
+          refreshMap = () => map.data.setStyle(style);
+          status.textContent = 'Click a coloured town to check it.';
+        } catch {
+          fail();
+        }
+      });
+    }
+
+    root.setAttribute('data-ready', 'true');
+  });
+</script>
+
+<style>
+  .area-checker { display: grid; gap: 1.5rem; }
+  .area-form { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: end; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; }
+  @media (min-width: 700px) { .area-form { grid-template-columns: 1fr 1fr auto; } }
+  .area-field { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+  .area-field label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .area-field select, .area-field input { font: inherit; font-size: 1rem; width: 100%; height: 3.4rem; padding: .85rem 1rem; border: 2px solid var(--line-2); border-radius: 6px; background: #fff; color: var(--black); }
+  .area-field select:focus, .area-field input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(211, 47, 47, .12); }
+  .area-result { background: var(--paper-2); border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 10px; padding: 1.2rem 1.3rem; }
+  .area-message { margin: 0 0 .35rem; font-weight: 700; font-size: 1.08rem; color: var(--black); }
+  .area-note { margin: 0 0 .6rem; color: var(--ink-soft); font-size: .92rem; }
+  .area-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; }
+  .area-actions .btn { padding: .85rem 1.2rem; }
+  .area-form .btn { height: 3.4rem; justify-content: center; padding-block: 0; }
+  .area-map { margin: 0; display: grid; gap: .8rem; justify-items: center; }
+  .area-svg { width: 100%; max-width: 440px; height: auto; max-height: 600px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; }
+  .area-svg .ctx { fill: var(--paper-3); stroke: #fff; stroke-width: .8; }
+  .area-svg .town { fill: #f6c9c6; stroke: var(--red-dark); stroke-width: 1; stroke-linejoin: round; cursor: pointer; transition: fill .15s ease; }
+  .area-svg .town:hover { fill: #ee9a95; }
+  .area-svg .town.is-selected { fill: var(--red); }
+  .area-svg .lbl { font: 800 17px 'Inter Variable', 'Inter', system-ui, sans-serif; fill: var(--black); paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
+  .area-svg .lbl.is-selected { font-size: 20px; }
+  .area-map figcaption { font-size: .88rem; color: var(--ink-soft); line-height: 1.6; max-width: 56ch; text-align: center; }
+  .area-map .key { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin: 0 .3rem 0 .6rem; border: 1px solid var(--red-dark); }
+  .area-map .key-served { background: #f6c9c6; }
+  .area-map .key-other { background: var(--paper-3); border-color: var(--line-2); }
+  .area-map .credit { display: block; margin-top: .35rem; font-size: .8rem; color: var(--ink-muted); }
+  .gmap-wrap { width: 100%; max-width: 640px; display: grid; gap: .6rem; justify-items: center; }
+  .gmap { width: 100%; height: 420px; border-radius: 14px; border: 1px solid var(--line); }
+  .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--ink-soft); }
+  .area-towns { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+  .area-towns li { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .5rem 1rem; font-weight: 600; font-size: .92rem; }
+  .area-towns li a { color: var(--ink); }
+  .area-towns li a:hover { color: var(--red); opacity: 1; }
+  .area-towns li.town-plain { color: var(--ink-soft); }
+  .area-confirmed { margin: 0; text-align: center; color: var(--ink-muted); font-size: .88rem; }
+</style>

@@ -1,0 +1,21 @@
+{
+  "_comment": "Single source of truth for the confirmed service-area town list. Owner boundary map approved 2026-05-28 (gbp-reconciliation-sheet.md). Edit ONLY here: the checker, map, schema, service pages, FAQ and form all read this file. A town missing from this list is never 'rejected' — visitors are told to contact Shane to confirm availability.",
+  "confirmedOn": "2026-05-28",
+  "home": "saugus",
+  "towns": [
+    { "slug": "saugus", "name": "Saugus" },
+    { "slug": "lynn", "name": "Lynn" },
+    { "slug": "revere", "name": "Revere" },
+    { "slug": "malden", "name": "Malden" },
+    { "slug": "melrose", "name": "Melrose" },
+    { "slug": "wakefield", "name": "Wakefield" },
+    { "slug": "peabody", "name": "Peabody" },
+    { "slug": "stoneham", "name": "Stoneham" },
+    { "slug": "everett", "name": "Everett" },
+    { "slug": "somerville", "name": "Somerville" },
+    { "slug": "boston", "name": "Boston", "note": "Large city: confirm your neighborhood." },
+    { "slug": "lexington", "name": "Lexington" },
+    { "slug": "tewksbury", "name": "Tewksbury" },
+    { "slug": "haverhill", "name": "Haverhill" }
+  ]
+}

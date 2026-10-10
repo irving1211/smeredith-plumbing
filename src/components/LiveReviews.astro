@@ -1,0 +1,108 @@
+---
+// Live Google reviews (Business Profile API via /api/reviews). Rendered only when the site is built with
+// PUBLIC_REVIEWS_LIVE=1, i.e. after Google has approved API access and the Pages secrets are set.
+// It stays hidden unless the endpoint returns real reviews, so a failure leaves the page exactly as it
+// was: the hand-picked testimonials below remain, clearly labelled as hand-picked.
+interface Props {
+  /** Public link to all of Shane's reviews on Google. */
+  allReviewsUrl: string;
+}
+const { allReviewsUrl } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<div class="live-reviews" data-live-reviews data-endpoint={`${base}api/reviews`} hidden>
+  <h3 class="live-h">Latest reviews on Google</h3>
+  <p class="live-meta" data-live-meta></p>
+  <div class="live-grid" data-live-grid></div>
+  <p class="live-credit">
+    Loaded from Google and shown as posted, newest first.
+    <a href={allReviewsUrl} target="_blank" rel="noopener">Read all reviews on Google →</a>
+  </p>
+</div>
+
+<script>
+  type Track = (event: string, params?: Record<string, string>) => void;
+  const track: Track = (event, params) => (window as unknown as { smTrack?: Track }).smTrack?.(event, params);
+
+  const root = document.querySelector<HTMLElement>('[data-live-reviews]');
+  if (root) {
+    const grid = root.querySelector<HTMLElement>('[data-live-grid]')!;
+    const meta = root.querySelector<HTMLElement>('[data-live-meta]')!;
+    let started = false;
+
+    const render = (data: any) => {
+      for (const r of data.reviews) {
+        const card = document.createElement('article');
+        card.className = 'live-card';
+        const stars = document.createElement('div');
+        stars.className = 'live-stars';
+        stars.setAttribute('role', 'img');
+        stars.setAttribute('aria-label', `${r.stars} out of 5 stars`);
+        stars.textContent = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+        const quote = document.createElement('blockquote');
+        quote.textContent = r.text; // plain text only: never interpreted as HTML
+        const cite = document.createElement('cite');
+        const when = r.date ? new Date(`${r.date}T12:00:00`).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '';
+        cite.textContent = `— ${r.name}${when ? ` · ${when}` : ''} · Google review`;
+        card.append(stars, quote, cite);
+        grid.append(card);
+      }
+      if (typeof data.averageRating === 'number' && typeof data.totalReviewCount === 'number') {
+        meta.textContent = `${data.averageRating.toFixed(1)} out of 5 from ${data.totalReviewCount} reviews on Google`;
+      } else {
+        meta.hidden = true;
+      }
+      root.hidden = false;
+      const curated = document.querySelector('[data-curated]');
+      if (curated && !document.querySelector('.curated-h')) {
+        const h = document.createElement('h3');
+        h.className = 'curated-h';
+        h.textContent = 'More from Shane’s customers (hand-picked excerpts)';
+        curated.before(h);
+      }
+    };
+
+    const load = async () => {
+      if (started) return;
+      started = true;
+      try {
+        const response = await fetch(root.dataset.endpoint || '/api/reviews', { headers: { Accept: 'application/json' } });
+        const data = response.ok ? await response.json() : null;
+        if (data && data.status === 'ok' && Array.isArray(data.reviews) && data.reviews.length) {
+          render(data);
+          track('reviews_live', { result: 'ok' });
+        } else {
+          track('reviews_live', { result: 'unavailable', reason: String((data && data.reason) || 'bad_response').slice(0, 30) });
+        }
+      } catch {
+        track('reviews_live', { result: 'unavailable', reason: 'network' });
+      }
+    };
+
+    // Not needed for first paint: fetch when the reviews section is about to be seen.
+    const section = document.getElementById('reviews');
+    if (section && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { io.disconnect(); load(); }
+      }, { rootMargin: '600px 0px' });
+      io.observe(section);
+    } else {
+      load();
+    }
+  }
+</script>
+
+<style is:global>
+  .live-reviews { margin: 0 0 2.5rem; }
+  .live-reviews .live-h, .curated-h { font-size: 1.15rem; letter-spacing: -0.015em; margin: 0 0 .4rem; }
+  .curated-h { margin: 2.5rem 0 1rem; }
+  .live-meta { margin: 0 0 1.1rem; color: var(--ink-soft); font-weight: 600; font-size: .95rem; }
+  .live-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.1rem; }
+  .live-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem 1.5rem 1.3rem; display: flex; flex-direction: column; gap: .8rem; }
+  .live-stars { color: var(--gold); letter-spacing: 2px; font-size: 1.05rem; }
+  .live-card blockquote { margin: 0; line-height: 1.6; color: var(--ink); }
+  .live-card cite { font-style: normal; font-size: .88rem; font-weight: 700; color: var(--ink-soft); margin-top: auto; }
+  .live-credit { margin: 1.1rem 0 0; font-size: .86rem; color: var(--ink-muted); }
+  .live-credit a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+</style>

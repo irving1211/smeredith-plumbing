@@ -20,7 +20,7 @@ const INDEXABLE = [
   ...areas.map((a) => `/areas/${a.slug}/`),
   '/contact/',
 ];
-const NOINDEX = ['/contact/thanks/', '/404.html'];
+const NOINDEX = ['/contact/thanks/', '/404.html', '/privacy/'];
 
 function fileFor(path) {
   if (path.endsWith('.html')) return join(dist, path);

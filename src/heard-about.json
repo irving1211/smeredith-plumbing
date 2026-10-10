@@ -1,0 +1,10 @@
+[
+  { "id": "google-search", "label": "Google Search" },
+  { "id": "google-maps", "label": "Google Maps" },
+  { "id": "referral", "label": "Referral" },
+  { "id": "facebook", "label": "Facebook" },
+  { "id": "instagram", "label": "Instagram" },
+  { "id": "contractor-or-property-manager", "label": "Contractor or property manager" },
+  { "id": "previous-customer", "label": "Previous customer" },
+  { "id": "other", "label": "Other" }
+]

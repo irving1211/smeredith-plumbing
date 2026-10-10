@@ -1,17 +1,12 @@
 ---
-import "@fontsource/inter/latin-400.css";
-import "@fontsource/inter/latin-500.css";
-import "@fontsource/inter/latin-600.css";
-import "@fontsource/inter/latin-700.css";
-import "@fontsource/inter/latin-800.css";
-import "@fontsource/inter/latin-900.css";
+// One variable Inter (400-900 in a single ~48 KB file) replaces six static weights, and only the
+// Fraunces weight the wordmark actually uses is loaded.
+import "../styles/fonts.css";
 import "@fontsource/fraunces/latin-500.css";
-import "@fontsource/fraunces/latin-700.css";
-import "@fontsource/fraunces/latin-900.css";
 
-import inter400Url from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-import inter900Url from '@fontsource/inter/files/inter-latin-900-normal.woff2?url';
+import interVariableUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import services from '../services.json';
+import { TOWNS } from '../lib/service-area.js';
 
 export interface Props {
   title?: string;
@@ -39,8 +34,9 @@ const site = 'https://smeredithplumbing.com';
 const phone = '781-820-4592';
 const publicEmail = 'shane@smeredithplumbing.com';
 const business = 'S. Meredith Plumbing & Heating';
-// Approved website service-area set (owner boundary map, 2026-05-28). Must match the GBP service areas.
-const areaServed = ['Saugus', 'Lynn', 'Revere', 'Malden', 'Melrose', 'Wakefield', 'Peabody', 'Stoneham', 'Everett', 'Somerville', 'Boston', 'Lexington', 'Tewksbury', 'Haverhill'];
+// Approved website service-area set (owner boundary map, 2026-05-28), read from the single canonical
+// list in src/service-area.json. It must match the GBP service areas.
+const areaServed = TOWNS.map((t) => t.name);
 
 // Service-area business: locality only, never a street address. No aggregateRating/review markup
 // (self-serving LocalBusiness reviews are not eligible for review snippets) and no regular
@@ -120,9 +116,8 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <meta property="og:site_name" content={business} />
     <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
     <meta name="theme-color" content="#1a120a" />
-    <!-- Body + headline weights: preloaded so the font swap doesn't reflow the hero (CLS). -->
-    <link rel="preload" href={inter400Url} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={inter900Url} as="font" type="font/woff2" crossorigin />
+    <!-- The one body + headline font file, preloaded so the swap doesn't reflow the hero (CLS). -->
+    <link rel="preload" href={interVariableUrl} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
@@ -163,13 +158,14 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
         --gold: #c2902c;
       }
       * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
       html { scroll-behavior: smooth; }
       html, body {
         margin: 0;
         padding: 0;
         background: var(--paper);
         color: var(--ink);
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
         font-size: 17px;
         line-height: 1.55;
         -webkit-font-smoothing: antialiased;
@@ -177,7 +173,7 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
         letter-spacing: -0.011em;
       }
       h1, h2, h3, h4 {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter Variable', 'Inter', sans-serif;
         font-weight: 900;
         letter-spacing: -0.03em;
         color: var(--black);
@@ -186,7 +182,7 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
       }
       h1 { letter-spacing: -0.04em; line-height: 1.02; }
       .display-serif {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
         font-weight: 900;
         font-style: normal;
         letter-spacing: -0.025em;
@@ -258,24 +254,34 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
         };
         w.smTrack = track;
 
-        // First touch of the session, unless a later landing carries UTM tags (e.g. the GBP website link).
+        // Attribution is kept in sessionStorage only (cleared when the tab closes; never sent to analytics).
+        //   first  : the first page of the visit. Written once and never overwritten.
+        //   latest : a DIFFERENT campaign tag seen later in the same visit, kept separately.
         try {
           const q = new URLSearchParams(location.search);
-          if (!sessionStorage.getItem('sm_attr') || q.get('utm_source')) {
-            const ref = document.referrer && !document.referrer.startsWith(location.origin) ? document.referrer : '';
-            sessionStorage.setItem('sm_attr', JSON.stringify({
-              utm_source: q.get('utm_source') || '',
-              utm_medium: q.get('utm_medium') || '',
-              utm_campaign: q.get('utm_campaign') || '',
-              landing_page: location.pathname,
-              referrer: ref,
-            }));
+          const clip = (v, n) => String(v || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, n);
+          const tag = { utm_source: clip(q.get('utm_source'), 100), utm_medium: clip(q.get('utm_medium'), 100), utm_campaign: clip(q.get('utm_campaign'), 100) };
+          const tagged = tag.utm_source || tag.utm_medium || tag.utm_campaign;
+          const stored = JSON.parse(sessionStorage.getItem('sm_attr') || '{}');
+          if (!stored.first) {
+            let ref = '';
+            try {
+              const r = new URL(document.referrer);
+              if (r.origin !== location.origin) ref = r.origin + r.pathname;
+            } catch (_) {}
+            stored.first = Object.assign({ landing_page: location.pathname, referrer: ref.slice(0, 300) }, tag);
+            sessionStorage.setItem('sm_attr', JSON.stringify(stored));
+          } else if (tagged && JSON.stringify([stored.first.utm_source, stored.first.utm_medium, stored.first.utm_campaign]) !== JSON.stringify([tag.utm_source, tag.utm_medium, tag.utm_campaign])) {
+            stored.latest = tag;
+            sessionStorage.setItem('sm_attr', JSON.stringify(stored));
           }
         } catch (_) {}
 
         if (pageType === 'service') track('service_page_view');
         if (pageType === 'town') track('town_page_view');
 
+        // Only enumerated ids ever go into event parameters (never names, phones, emails, addresses or free text).
+        const ID = /^[a-z0-9-]{1,60}$/;
         document.addEventListener('click', (e) => {
           const link = e.target.closest && e.target.closest('a[href]');
           if (!link) return;
@@ -285,7 +291,14 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
           const params = { link_location: where };
           if (href.startsWith('tel:')) track('phone_click', params);
           else if (href.startsWith('sms:')) track('sms_click', params);
-          else if (/\/contact\/?$/.test(href)) track('request_form_click', params);
+          else if (/\/contact\/?(?:[?#]|$)/.test(href)) {
+            try {
+              const q = new URL(href, location.href).searchParams;
+              if (ID.test(q.get('service') || '')) params.service_type = q.get('service');
+              if (ID.test(q.get('town') || '')) params.town = q.get('town');
+            } catch (_) {}
+            track('request_form_click', params);
+          }
         });
       })();
     </script>

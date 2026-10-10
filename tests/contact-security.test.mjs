@@ -44,7 +44,9 @@ test('ignores off-site success/error redirect targets (no open redirect)', async
 test('keeps same-origin redirect targets', async () => {
   const response = await post(validForm({ success_url: 'https://smeredithplumbing.com/contact/thanks/' }));
   assert.equal(response.status, 303);
-  assert.equal(response.headers.get('location'), 'https://smeredithplumbing.com/contact/thanks/');
+  const location = new URL(response.headers.get('location'));
+  assert.equal(location.origin + location.pathname, 'https://smeredithplumbing.com/contact/thanks/');
+  assert.ok(location.searchParams.get('lead'), 'a real submission carries its one-time lead id');
 });
 
 test('includes lead source and attribution in the notification email', async () => {
@@ -60,9 +62,8 @@ test('includes lead source and attribution in the notification email', async () 
     }),
     (body) => (payload = body),
   );
-  assert.match(payload.text, /How they heard about us: Google Maps/);
-  assert.match(payload.text, /UTM source: google/);
-  assert.match(payload.text, /Landing page: \/services\/boiler-service\//);
+  assert.match(payload.text, /Customer said they heard about us: Google Maps/);
+  assert.match(payload.text, /First-touch tag \(source \/ medium \/ campaign\): google \/ organic$/m);
+  assert.match(payload.text, /Landing page \(first visit\): \/services\/boiler-service\//);
   assert.match(payload.html, /Google Maps/);
-  assert.doesNotMatch(payload.text, /UTM campaign/);
 });
