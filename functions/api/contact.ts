@@ -38,7 +38,7 @@ type LeadPayload = Attribution & {
 
 type UploadedPhoto = {
   ext: string;
-  content: string;
+  bytes: ArrayBuffer;
   contentType: string;
 };
 
@@ -62,9 +62,11 @@ type FailureCode = "validation" | "delivery" | "rate" | "verification" | "blocke
 
 const DEFAULT_TO_EMAIL = "shane@smeredithplumbing.com";
 const DEFAULT_FROM_EMAIL = "shane@smeredithplumbing.com";
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
+// The page shrinks phone photos in the browser first, so real uploads are far smaller; this bounds the CPU/memory a single request can use.
+const MAX_FILE_BYTES = 6 * 1024 * 1024;
 const MAX_REQUEST_BYTES = 12 * 1024 * 1024;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// One plain address: no angle brackets, commas, quotes or control characters (they could add recipients or headers).
+const EMAIL_REGEX = /^[^\s@<>,;:"()[\]\\]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
 const RATE_LIMIT = 5;
 const RATE_WINDOW_SECONDS = 10 * 60;
 const MAX_LINKS_IN_MESSAGE = 2;
@@ -73,17 +75,18 @@ const SERVICE_LABELS = new Map<string, string>(options.map((o) => [o.id, o.label
 const DEFAULT_SERVICE_ID = options.find((o) => (o as { default?: boolean }).default)?.id || "general-plumbing";
 
 // Pages cached before the stable-ID rollout still post the old option text.
-const LEGACY_SERVICE_VALUES: Record<string, string> = {
-  Emergency: "emergency-plumbing",
-  "Water heater": "water-heater-replacement",
-  "Boiler / heating": "boiler-service",
-  "General plumbing": "general-plumbing",
-  "Remodel / new construction": "kitchen-bath-remodels",
-  "Something else": "other",
-};
+const LEGACY_SERVICE_VALUES = new Map<string, string>([
+  ["Emergency", "emergency-plumbing"],
+  ["Water heater", "water-heater-replacement"],
+  ["Boiler / heating", "boiler-service"],
+  ["General plumbing", "general-plumbing"],
+  ["Remodel / new construction", "kitchen-bath-remodels"],
+  ["Something else", "other"],
+]);
 
-const HEARD_ABOUT: Record<string, string> = Object.fromEntries(heardAbout.map((h) => [h.id, h.label]));
-const LEGACY_HEARD_ABOUT = new Map(Object.entries(HEARD_ABOUT).map(([id, label]) => [label, id]));
+// Maps, not plain objects: visitor-supplied keys like "constructor" or "__proto__" must never resolve to inherited members.
+const HEARD_ABOUT = new Map<string, string>(heardAbout.map((h) => [h.id, h.label]));
+const LEGACY_HEARD_ABOUT = new Map<string, string>(heardAbout.map((h) => [h.label, h.id]));
 
 export const onRequestPost = async ({ request, env }: { request: Request; env: Env }) => {
   const wantsJson = (request.headers.get("accept") || "").includes("application/json");
@@ -107,6 +110,9 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   const declaredLength = Number(request.headers.get("content-length") || 0);
   if (declaredLength > MAX_REQUEST_BYTES) return fail("validation", 413);
 
+  // Throttle before reading or parsing the body, so a flood costs as little as possible.
+  if (await isRateLimited(request)) return fail("rate", 429);
+
   let formData: FormData;
   try {
     formData = await request.formData();
@@ -124,24 +130,14 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     return wantsJson ? json({ ok: true, redirect: successUrl.toString() }, 200) : redirect(successUrl);
   }
 
-  if (await isRateLimited(request)) return fail("rate", 429);
-
-  if (env.TURNSTILE_SECRET_KEY) {
-    const verified = await verifyTurnstile(
-      env.TURNSTILE_SECRET_KEY,
-      getString(formData, "cf-turnstile-response", 2048),
-      request.headers.get("cf-connecting-ip") || "",
-    );
-    if (!verified) return fail("verification", 403);
-  }
-
   const serviceId = resolveServiceId(getString(formData, "service_type", 120));
   const payload: LeadPayload | null = serviceId
     ? {
-        name: getString(formData, "name", 120),
-        phone: getString(formData, "phone", 50),
-        email: getString(formData, "email", 160),
-        address: getString(formData, "address", 200),
+        // Single-line fields: line breaks are removed so a value can never forge extra lines in the email.
+        name: oneLine(getString(formData, "name", 120)),
+        phone: oneLine(getString(formData, "phone", 50)),
+        email: oneLine(getString(formData, "email", 160)),
+        address: oneLine(getString(formData, "address", 200)),
         serviceId,
         message: getString(formData, "message", 4000),
         heardAboutId: resolveHeardAbout(getString(formData, "heard_about", 80)),
@@ -161,10 +157,22 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   const attachment = await readAttachment(formData.get("photo"));
   if (attachment instanceof Error) return fail("validation", 400);
 
+  // The challenge token is single-use, so it is only spent once the form itself is valid: a visitor who
+  // fixes a typo and resends is never told "verification failed".
+  if (env.TURNSTILE_SECRET_KEY) {
+    const verified = await verifyTurnstile(
+      env.TURNSTILE_SECRET_KEY,
+      getString(formData, "cf-turnstile-response", 2048),
+      request.headers.get("cf-connecting-ip") || "",
+      requestUrl.hostname,
+    );
+    if (!verified) return fail("verification", 403);
+  }
+
   const leadId = crypto.randomUUID();
   const source = classifySource(payload);
   const serviceLabel = SERVICE_LABELS.get(payload.serviceId) || payload.serviceId;
-  const subject = `New service request - ${stripControl(serviceLabel)} - ${stripControl(payload.name)}`;
+  const subject = `[Website form] New service request - ${stripControl(serviceLabel)} - ${stripControl(payload.name)}`;
   const replyTo = payload.email || DEFAULT_TO_EMAIL;
 
   try {
@@ -177,7 +185,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
       text: buildTextEmail(payload, leadId, source.label, serviceLabel),
       // Never reuse the visitor's file name (it can carry a person's name or path): random id + sniffed extension.
       attachment: attachment
-        ? { filename: `photo-${leadId.slice(0, 8)}.${attachment.ext}`, content: attachment.content, contentType: attachment.contentType }
+        ? { filename: `photo-${leadId.slice(0, 8)}.${attachment.ext}`, content: arrayBufferToBase64(attachment.bytes), contentType: attachment.contentType }
         : null,
     });
   } catch (error) {
@@ -203,6 +211,10 @@ function getString(formData: FormData, key: string, maxLength = 0): string {
   return maxLength ? trimmed.slice(0, maxLength) : trimmed;
 }
 
+function oneLine(value: string): string {
+  return value.replace(/[\u0000-\u001F\u007F]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
 function stripControl(value: string): string {
   return value.replace(/[\u0000-\u001F\u007F]+/g, " ").trim();
 }
@@ -210,12 +222,12 @@ function stripControl(value: string): string {
 function resolveServiceId(raw: string): string | null {
   if (!raw) return DEFAULT_SERVICE_ID;
   if (SERVICE_LABELS.has(raw)) return raw;
-  return LEGACY_SERVICE_VALUES[raw] || null;
+  return LEGACY_SERVICE_VALUES.get(raw) || null;
 }
 
 function resolveHeardAbout(raw: string): string {
   if (!raw) return "";
-  if (raw in HEARD_ABOUT) return raw;
+  if (HEARD_ABOUT.has(raw)) return raw;
   return LEGACY_HEARD_ABOUT.get(raw) || "";
 }
 
@@ -255,7 +267,7 @@ async function isRateLimited(request: Request): Promise<boolean> {
 
   try {
     const bucket = Math.floor(Date.now() / (RATE_WINDOW_SECONDS * 1000));
-    const key = new Request(`https://rate-limit.internal/contact/${encodeURIComponent(ip)}/${bucket}`);
+    const key = new Request(`https://rate-limit.internal/contact/${encodeURIComponent(rateKeyFor(ip))}/${bucket}`);
     const hit = await cache.match(key);
     const count = hit ? Number(await hit.text()) || 0 : 0;
     if (count >= RATE_LIMIT) return true;
@@ -269,7 +281,18 @@ async function isRateLimited(request: Request): Promise<boolean> {
   return false;
 }
 
-async function verifyTurnstile(secret: string, token: string, ip: string): Promise<boolean> {
+// IPv4 addresses are keyed as-is; IPv6 addresses by their /64 prefix (one household/device can rotate through the whole /64).
+function rateKeyFor(ip: string): string {
+  if (!ip.includes(":")) return ip;
+  const [head, tail = ""] = ip.toLowerCase().split("::");
+  const headGroups = head ? head.split(":") : [];
+  const tailGroups = ip.includes("::") && tail ? tail.split(":") : [];
+  const missing = Math.max(0, 8 - headGroups.length - tailGroups.length);
+  const groups = [...headGroups, ...Array(ip.includes("::") ? missing : 0).fill("0"), ...tailGroups];
+  return groups.slice(0, 4).map((g) => g.padStart(4, "0")).join(":");
+}
+
+async function verifyTurnstile(secret: string, token: string, ip: string, hostname: string): Promise<boolean> {
   if (!token) return false;
   try {
     const body = new FormData();
@@ -278,7 +301,9 @@ async function verifyTurnstile(secret: string, token: string, ip: string): Promi
     if (ip) body.set("remoteip", ip);
     const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body });
     if (!response.ok) return false;
-    const data = (await response.json()) as { success?: boolean };
+    const data = (await response.json()) as { success?: boolean; hostname?: string };
+    // A token minted for another site must not pass here.
+    if (data.hostname && data.hostname !== hostname) return false;
     return data.success === true;
   } catch {
     return false;
@@ -292,7 +317,6 @@ function sniffFileType(bytes: Uint8Array): { ext: string; type: string } | null 
   if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return { ext: "jpg", type: "image/jpeg" };
   if (bytes[0] === 0x89 && ascii(1, 4) === "PNG" && bytes[4] === 0x0d && bytes[5] === 0x0a) return { ext: "png", type: "image/png" };
   if (ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP") return { ext: "webp", type: "image/webp" };
-  if (ascii(0, 5) === "%PDF-") return { ext: "pdf", type: "application/pdf" };
   if (ascii(4, 8) === "ftyp" && ["heic", "heix", "hevc", "hevx", "heim", "heis", "mif1", "msf1"].includes(ascii(8, 12))) {
     return { ext: "heic", type: "image/heic" };
   }
@@ -314,7 +338,7 @@ async function readAttachment(value: FormDataEntryValue | null): Promise<Uploade
     return new Error("unsupported-file-type");
   }
 
-  return { ext: kind.ext, content: arrayBufferToBase64(buffer), contentType: kind.type };
+  return { ext: kind.ext, bytes: buffer, contentType: kind.type };
 }
 
 async function sendMessage(env: Env, message: OutgoingMessage): Promise<void> {
@@ -453,7 +477,7 @@ function leadRows(payload: LeadPayload, leadId: string, sourceLabel: string, ser
     ["Town / address", payload.address],
     ["Service area check", serviceAreaNote(payload.address)],
     ["Message", payload.message],
-    ["Customer said they heard about us", payload.heardAboutId ? HEARD_ABOUT[payload.heardAboutId] : "Not answered"],
+    ["Customer said they heard about us", payload.heardAboutId ? HEARD_ABOUT.get(payload.heardAboutId) || "Not answered" : "Not answered"],
     ["Captured source", sourceLabel],
   ];
 
@@ -494,7 +518,7 @@ function buildHtmlEmail(payload: LeadPayload, leadId: string, sourceLabel: strin
 function buildTextEmail(payload: LeadPayload, leadId: string, sourceLabel: string, serviceLabel: string): string {
   const lines = ["New website service request", "Record it in the lead tracker with the Lead ID below.", ""];
   for (const [label, value] of leadRows(payload, leadId, sourceLabel, serviceLabel)) {
-    if (label === "Message") lines.push("", "Message:", value, "");
+    if (label === "Message") lines.push("", "Message:", ...value.split(/\r?\n/).map((line) => `  ${line}`), "");
     else if (label.startsWith("Customer said")) lines.push("Lead source:", `${label}: ${value}`);
     else lines.push(`${label}: ${value}`);
   }
@@ -531,24 +555,27 @@ function withStatus(url: URL, status: string): URL {
 }
 
 function redirect(url: URL): Response {
-  return new Response(null, { status: 303, headers: { Location: url.toString(), "Cache-Control": "no-store" } });
+  return new Response(null, { status: 303, headers: { Location: url.toString(), "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 }
 
 function json(body: Record<string, unknown>, status: number): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" },
   });
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
+  // Native encoder where the runtime has it (much less CPU than the loop below; Workers' free plan allows ~10 ms).
+  const native = (bytes as unknown as { toBase64?: () => string }).toBase64;
+  if (typeof native === "function") return native.call(bytes);
   const chunkSize = 0x8000;
   let binary = "";
 
   for (let index = 0; index < bytes.length; index += chunkSize) {
     const chunk = bytes.subarray(index, index + chunkSize);
-    binary += String.fromCharCode(...chunk);
+    binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
   }
 
   return btoa(binary);

@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '../../lib/jsonld.js';
 import Base from '../../layouts/Base.astro';
 import SubpageHeader from '../../components/SubpageHeader.astro';
 import services from '../../services.json';
@@ -62,8 +63,8 @@ const breadcrumb = {
 ---
 
 <Base title={service.seo_title} description={service.meta_desc} pageType="service" pageMeta={{ service_type: service.slug }}>
-  <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} slot="head" />
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(serviceJsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
 
   <SubpageHeader />
 

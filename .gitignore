@@ -27,3 +27,18 @@ pnpm-debug.log*
 
 # e2e build output
 dist-e2e/
+
+# More environment files (the example template's real name is cloudflare-mail.env)
+.env.local
+.env.*.local
+.env.development
+.env.staging
+cloudflare-mail.env
+
+# Local tooling and one-off build output (never source)
+.wrangler/
+.claude/
+dist-pages/
+preview-root/
+case-study-assets/
+*.zip

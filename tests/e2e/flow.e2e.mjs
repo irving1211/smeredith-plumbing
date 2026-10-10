@@ -154,12 +154,14 @@ describe('service-area checker', () => {
     const text = await result.innerText();
     assert.match(text, /Contact Shane to confirm availability in Andover/);
     assert.doesNotMatch(text, /not served|don't serve|sorry|unable|outside our/i);
-    assert.equal(await result.locator('[data-area-cta]').getAttribute('href'), '/contact/?town_other=Andover');
+    assert.equal(await result.locator('[data-area-cta]').getAttribute('href'), '/contact/?town=other', 'the typed town is not in the link');
     assert.equal(await page.locator('#area path.town.is-selected').count(), 0, 'nothing is highlighted as served');
     assert.match(await result.locator('[data-area-call]').getAttribute('href'), /^tel:/);
     await result.locator('[data-area-cta]').click();
-    await page.waitForURL(/town_other=Andover/);
+    await page.waitForURL(/\/contact\/\?town=other$/);
+    assert.ok(!page.url().includes('Andover'), 'the typed town never appears in a URL');
     assert.equal(await page.inputValue('#address'), 'Andover');
+    assert.equal(await page.evaluate(() => sessionStorage.getItem('sm_town_other')), null, 'handed over once, then cleared');
     const checks = named(events, 'service_area_check');
     assert.deepEqual(checks.map((c) => [c.town, c.result]), [['other', 'unlisted']]);
     assert.ok(!JSON.stringify(events).includes('Andover'), 'typed town never reaches analytics');
@@ -478,6 +480,52 @@ describe('scrolling stability (content-visibility placeholders)', () => {
     await page.waitForTimeout(1800);
     const top = await page.evaluate(() => Math.round(document.getElementById('faq').getBoundingClientRect().top));
     assert.ok(top >= 0 && top <= 140, `FAQ heading should sit just below the header after navigating (top = ${top}px)`);
+    await context.close();
+  });
+});
+
+describe('photo upload', () => {
+  test('a large phone photo is resized in the browser before it is sent; a small one is sent untouched', async () => {
+    const { default: sharp } = await import('sharp');
+    const big = await sharp({ create: { width: 1600, height: 1200, channels: 3, noise: { type: 'gaussian', mean: 128, sigma: 40 } } }).png().toBuffer();
+    const small = await sharp({ create: { width: 300, height: 200, channels: 3, background: '#d32f2f' } }).png().toBuffer();
+    assert.ok(big.length > 1500000, `test image should start large (${big.length} bytes)`);
+
+    const { context } = await phoneContext(browser);
+    const page = await context.newPage();
+    const posts = [];
+    await page.route('**/api/contact', async (route) => {
+      const buf = route.request().postDataBuffer();
+      posts.push({ size: buf.length, head: buf.toString('latin1') .slice(0, 4000) });
+      await route.fulfill(okJson());
+    });
+    for (const [name, buffer] of [['big', big], ['small', small]]) {
+      await page.goto(`${origin}/contact/`);
+      await fillForm(page);
+      await page.setInputFiles('#photo', { name: `${name}.png`, mimeType: 'image/png', buffer });
+      await page.click('#submit-btn');
+      await page.waitForURL(/contact\/thanks/);
+    }
+    assert.match(posts[0].head, /filename="photo\.jpg"/, 'big photo is re-encoded as a JPEG');
+    assert.match(posts[0].head, /Content-Type: image\/jpeg/);
+    assert.ok(posts[0].size < big.length * 0.6, `uploaded ${posts[0].size} bytes from a ${big.length}-byte photo`);
+    assert.match(posts[1].head, /filename="small\.png"/, 'small photo is left alone');
+    assert.ok(posts[1].size < small.length + 4000);
+    await context.close();
+  });
+
+  test('a photo that cannot be decoded is still sent as-is (the server decides)', async () => {
+    const { context } = await phoneContext(browser);
+    const page = await context.newPage();
+    const posts = [];
+    await page.route('**/api/contact', async (route) => { posts.push(route.request().postDataBuffer().toString('latin1').slice(0, 3000)); await route.fulfill(okJson()); });
+    await page.goto(`${origin}/contact/`);
+    await fillForm(page);
+    const junk = Buffer.alloc(1700000, 7); // large, labelled PNG, but not an image
+    await page.setInputFiles('#photo', { name: 'broken.png', mimeType: 'image/png', buffer: junk });
+    await page.click('#submit-btn');
+    await page.waitForURL(/contact\/thanks/);
+    assert.match(posts[0], /filename="broken\.png"/);
     await context.close();
   });
 });

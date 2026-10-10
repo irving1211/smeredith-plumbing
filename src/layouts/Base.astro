@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '../lib/jsonld.js';
 // One variable Inter (400-900 in a single ~48 KB file) replaces six static weights, and only the
 // Fraunces weight the wordmark actually uses is loaded.
 import "../styles/fonts.css";
@@ -124,11 +125,15 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <link rel="preload" href={frauncesUrl} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
-    <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
-    {faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
+    <script type="application/ld+json" set:html={jsonLd(localBusinessJsonLd)} />
+    {faqJsonLd && <script type="application/ld+json" set:html={jsonLd(faqJsonLd)} />}
     <slot name="head" />
     {gtmId && (
       <script is:inline define:vars={{ gtmId }}>
+        // A GTM "Data Layer Variable" named page_url_clean is the page URL without one-time ids or typed towns: use it
+        // instead of the built-in Page URL in GA4 tags (see the activation notes).
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ page_url_clean: (function () { try { var u = new URL(location.href); ['lead', 'svc', 'src', 'ha', 'town_other', 'status'].forEach(function (k) { u.searchParams.delete(k); }); return u.toString(); } catch (e) { return location.href; } })() });
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);
       </script>
     )}
@@ -139,7 +144,16 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
           window.dataLayer = window.dataLayer || [];
           window.gtag = function(){ window.dataLayer.push(arguments); };
           window.gtag('js', new Date());
-          window.gtag('config', ga4Id);
+          // Report the page URL without one-time confirmation ids or visitor-typed towns (UTM tags are kept for attribution).
+          window.gtag('config', ga4Id, {
+            page_location: (function () {
+              try {
+                var u = new URL(location.href);
+                ['lead', 'svc', 'src', 'ha', 'town_other', 'status'].forEach(function (k) { u.searchParams.delete(k); });
+                return u.toString();
+              } catch (e) { return location.href; }
+            })(),
+          });
         </script>
       </>
     )}

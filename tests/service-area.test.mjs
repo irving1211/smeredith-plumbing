@@ -39,7 +39,8 @@ test('an unlisted town says "contact Shane to confirm", never a rejection', () =
   assert.match(r.message, /contact shane to confirm availability/i);
   assert.doesNotMatch(r.message, /\b(not served|do not serve|don't serve|outside our|sorry|unable)\b/i);
   assert.ok(r.callHref.startsWith('tel:'));
-  assert.equal(r.cta.href, '/contact/?town_other=andover', 'free-text town is carried separately from confirmed slugs');
+  assert.equal(r.cta.href, '/contact/?town=other', 'a typed town is never placed in the URL');
+  assert.equal(r.cta.typed, 'andover', 'the typed text is handed over separately (sessionStorage), not in the link');
   assert.match(r.cta.label, /contact shane/i);
 });
 
@@ -47,7 +48,9 @@ test('free-text towns are encoded and length-limited when carried into the form'
   const r = checkTown('Nowhere & <b>Bad</b> Town', 'boiler-service');
   assert.equal(r.status, 'unlisted');
   assert.ok(!r.cta.href.includes('<'), 'angle brackets must be percent-encoded');
-  assert.ok(r.cta.href.startsWith('/contact/?service=boiler-service&town_other='));
+  assert.equal(r.cta.href, '/contact/?service=boiler-service&town=other');
+  assert.ok(!/Nowhere|Bad|%3C|<b>/.test(r.cta.href), 'nothing the visitor typed is in the link');
+  assert.ok(!r.cta.typed.includes('\n') && r.cta.typed.length <= 60);
   assert.ok(checkTown('x'.repeat(300)).cta.href.length < 140);
 });
 

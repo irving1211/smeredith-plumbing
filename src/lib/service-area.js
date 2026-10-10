@@ -111,6 +111,8 @@ export function checkTown(input, serviceId, opts = {}) {
     note: '',
     message: `Contact Shane to confirm availability in ${typed}. If it's close to the towns on the map, he'll tell you straight.`,
     callHref,
-    cta: { href: contactHref(base, { service, town_other: typed }), label: 'Contact Shane to confirm availability' },
+    // The typed text is NOT put in the URL (analytics tools record page URLs): the checker passes it to the
+    // request page through sessionStorage. The no-JavaScript GET form is the only path that uses ?town_other=.
+    cta: { href: contactHref(base, { service, town: 'other' }), label: 'Contact Shane to confirm availability', typed },
   };
 }

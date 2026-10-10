@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '../lib/jsonld.js';
 import Base from '../layouts/Base.astro';
 import serviceOptions from '../service-options.json';
 import heardAbout from '../heard-about.json';
@@ -28,7 +29,7 @@ const breadcrumb = {
 ---
 
 <Base title="Request Plumbing Service in Saugus, MA | S. Meredith" description="Request plumbing or heating service from Shane Meredith in Saugus, MA. Send the details and a photo, or call 781-820-4592 for 24/7 emergency service." pageType="contact">
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
   <Fragment slot="head">{turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}</Fragment>
   <header class="topbar">
     <div class="container topbar-row">
@@ -155,7 +156,7 @@ const breadcrumb = {
             <div class="form-group">
               <label for="photo">Add a photo <span class="optional">(Optional — helps Shane triage)</span></label>
               <input type="file" id="photo" name="photo" accept="image/*" aria-describedby="photo-help" />
-              <span class="file-help" id="photo-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster. Up to 10 MB.</span>
+              <span class="file-help" id="photo-help">Take a photo of the leaking pipe, boiler, or water heater tag to help Shane diagnose it faster. Large photos are resized automatically.</span>
             </div>
 
             <div class="form-group">
@@ -204,7 +205,13 @@ const breadcrumb = {
         prefilled = true;
       }
       const wantedTown = params.get('town');
-      const otherTown = (params.get('town_other') || '').replace(/[\u0000-\u001F]/g, '').trim().slice(0, 60);
+      // Free-text towns arrive through sessionStorage (town=other) so they never sit in a URL that analytics could record;
+      // the plain GET form used without JavaScript still sends ?town_other=.
+      let carried = '';
+      if (wantedTown === 'other') {
+        try { carried = sessionStorage.getItem('sm_town_other') || ''; sessionStorage.removeItem('sm_town_other'); } catch (_) {}
+      }
+      const otherTown = (carried || params.get('town_other') || '').replace(/[\u0000-\u001F]/g, '').trim().slice(0, 60);
       if (wantedTown && Object.prototype.hasOwnProperty.call(towns, wantedTown) && !addressInput.value) {
         addressInput.value = towns[wantedTown];
         prefilled = true;
@@ -258,6 +265,7 @@ const breadcrumb = {
       const statusActions = $('form-status-actions');
       const messages = {
         validation: 'Something in the form needs another look: check the required fields, remove extra links, and make sure any photo is a JPG, PNG, HEIC or PDF under 10 MB. Or just call or text Shane.',
+        photo: 'That photo is too large to send here (over 10 MB). Remove it and send the request, then text the photo to Shane.',
         delivery: 'Your request did not go through, and Shane has not received it. Try again in a minute, or call, text or email Shane directly.',
         network: 'We could not reach the server, so your request has not been sent. Check your connection and try again, or call, text or email Shane directly.',
         rate: 'Too many requests came from this connection in a short time. Please wait a few minutes, or call or text Shane.',
@@ -277,6 +285,8 @@ const breadcrumb = {
         statusBox.focus();
         statusBox.scrollIntoView({ block: 'center' });
         track('form_error', { form_id: 'service_request', error_type: key, service_type: serviceSel.value });
+        // A Turnstile token can be used once; get a fresh one for the retry.
+        try { if (window.turnstile && window.turnstile.reset) window.turnstile.reset(); } catch (_) {}
       };
 
       const initial = params.get('status');
@@ -297,7 +307,31 @@ const breadcrumb = {
         // An attempt, not a lead: leads are counted only from the confirmed thank-you page.
         track('form_submit_attempt', { form_id: 'service_request', service_type: serviceSel.value });
         try {
-          const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+          const data = new FormData(form);
+          // Phone photos are often 3-8 MB. Shrink big ones in the browser (longest side 1800 px, JPEG) so the
+          // upload is fast and the server never has to handle a huge file. Anything we can't decode is sent as-is.
+          const photo = data.get('photo');
+          if (photo instanceof File && photo.size > 1500000 && /^image\/(jpeg|png|webp)$/.test(photo.type) && window.createImageBitmap) {
+            try {
+              const bitmap = await createImageBitmap(photo);
+              const scale = Math.min(1, 1800 / Math.max(bitmap.width, bitmap.height));
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.round(bitmap.width * scale);
+              canvas.height = Math.round(bitmap.height * scale);
+              canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+              const small = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.82));
+              if (small && small.size < photo.size) data.set('photo', small, 'photo.jpg');
+            } catch (_) { /* keep the original */ }
+          }
+          const sendingPhoto = data.get('photo');
+          if (sendingPhoto instanceof File && sendingPhoto.size > 10 * 1024 * 1024) {
+            showError('photo', true);
+            sending = false;
+            button.disabled = false;
+            button.textContent = idle;
+            return;
+          }
+          const response = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
           let body = null;
           try { body = await response.json(); } catch (_) {}
           if (response.ok && body && body.ok && body.redirect && new URL(body.redirect, location.href).origin === location.origin) {

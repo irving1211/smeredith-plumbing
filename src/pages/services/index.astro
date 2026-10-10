@@ -1,4 +1,5 @@
 ---
+import { jsonLd } from '../../lib/jsonld.js';
 import Base from '../../layouts/Base.astro';
 import SubpageHeader from '../../components/SubpageHeader.astro';
 import services from '../../services.json';
@@ -38,8 +39,8 @@ const serviceList = {
   description="Plumbing and heating services from Saugus, MA: emergency repair, water heaters, boilers, gas lines, remodel and new construction plumbing. Call 781-820-4592."
   pageType="services-hub"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="head" />
-  <script type="application/ld+json" set:html={JSON.stringify(serviceList)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(serviceList)} slot="head" />
 
   <SubpageHeader />
 

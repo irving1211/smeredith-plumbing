@@ -135,10 +135,18 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
       note.hidden = !result.note;
       cta.href = result.cta.href;
       cta.textContent = result.cta.label;
+      cta.dataset.typedTown = result.cta.typed || '';
       highlight(result.status === 'confirmed' && result.town ? result.town.slug : '');
       // Only the enumerated town slug (or "other") is reported; typed text never leaves the page.
       track('service_area_check', { town: result.town ? result.town.slug : 'other', result: result.status, service_type: service });
     };
+
+    cta.addEventListener('click', () => {
+      try {
+        if (cta.dataset.typedTown) sessionStorage.setItem('sm_town_other', cta.dataset.typedTown);
+        else sessionStorage.removeItem('sm_town_other');
+      } catch (_) { /* storage unavailable: the visitor can type the town on the next page */ }
+    });
 
     select.addEventListener('change', () => {
       if (select.value) {

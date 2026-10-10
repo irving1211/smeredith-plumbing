@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { after, before, describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { launch, named, phoneContext, serve } from './helpers.mjs';
+import { fillForm, launch, LEAD_ID, named, phoneContext, serve } from './helpers.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const outDir = join(root, 'dist-e2e');
@@ -15,7 +15,7 @@ let browser, server, origin;
 before(async () => {
   execFileSync(process.execPath, [join(root, 'node_modules/astro/bin/astro.mjs'), 'build', '--outDir', outDir], {
     cwd: root,
-    env: { ...process.env, PUBLIC_GOOGLE_MAPS_KEY: 'TEST-KEY-NOT-REAL', PUBLIC_REVIEWS_LIVE: '1', PUBLIC_PRIVACY_PUBLISHED: '1' },
+    env: { ...process.env, PUBLIC_GOOGLE_MAPS_KEY: 'TEST-KEY-NOT-REAL', PUBLIC_REVIEWS_LIVE: '1', PUBLIC_PRIVACY_PUBLISHED: '1', PUBLIC_GA4_ID: 'G-TEST000000' },
     stdio: 'ignore',
   });
   ({ server, origin } = await serve(outDir));
@@ -205,11 +205,11 @@ test('no JSON-LD review markup is ever emitted, live reviews or not', async () =
 describe('privacy notice follows the features that are built in', () => {
   const textOf = (html) => html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/\s+/g, ' ');
 
-  test('Maps and live-review paragraphs appear exactly when those features are built in; Analytics and Turnstile do not', async () => {
+  test('Analytics, Maps and live-review paragraphs appear exactly when those features are built in; Turnstile does not', async () => {
     const text = textOf(await (await fetch(`${origin}/privacy/`)).text());
     assert.ok(text.includes('Show interactive map'));
     assert.ok(text.includes('retrieved from Shane'));
-    assert.ok(!text.includes('Google Analytics'));
+    assert.ok(text.includes('Google Analytics uses cookies'), 'GA is built in here, so the notice must say so');
     assert.ok(!text.includes('Cloudflare Turnstile'));
   });
 
@@ -220,5 +220,70 @@ describe('privacy notice follows the features that are built in', () => {
     assert.match(await (await fetch(`${origin}/sitemap.xml`)).text(), /<loc>https:\/\/smeredithplumbing\.com\/privacy\/<\/loc>/);
     assert.match(await (await fetch(`${origin}/`)).text(), /<a href="\/privacy\/"[^>]*>Privacy<\/a>/);
     assert.match(await (await fetch(`${origin}/contact/`)).text(), /<a href="\/privacy\/"[^>]*>Privacy notice<\/a>/);
+  });
+});
+
+describe('GA4 (built with a test property id; Google\'s script is stubbed)', () => {
+  const stubGoogle = (page) => page.route('**/googletagmanager.com/**', (route) => route.fulfill({ contentType: 'text/javascript', body: '' }));
+  const gtag = (events, kind, name) => events.filter((e) => e['0'] === kind && (name === undefined || e['1'] === name));
+
+  test('the property is configured once, and the page URL sent to GA4 drops one-time ids and typed towns but keeps UTM tags', async () => {
+    const { context, events } = await phoneContext(browser);
+    const page = await context.newPage();
+    await stubGoogle(page);
+    await page.goto(`${origin}/contact/thanks/?lead=${LEAD_ID}&svc=boiler-service&src=gbp_tagged&ha=google-maps&town_other=Andover&utm_source=google-business-profile&utm_medium=organic&utm_campaign=gbp-website`);
+    await page.waitForTimeout(300);
+    const config = gtag(events, 'config');
+    assert.equal(config.length, 1);
+    assert.equal(config[0]['1'], 'G-TEST000000');
+    const sent = new URL(config[0]['2'].page_location);
+    for (const key of ['lead', 'svc', 'src', 'ha', 'town_other', 'status']) assert.equal(sent.searchParams.has(key), false, `${key} must not reach GA4`);
+    assert.equal(sent.searchParams.get('utm_source'), 'google-business-profile');
+    assert.equal(sent.searchParams.get('utm_medium'), 'organic');
+    assert.equal(sent.searchParams.get('utm_campaign'), 'gbp-website');
+    assert.ok(!JSON.stringify(config).includes('Andover'));
+    await context.close();
+  });
+
+  test('a confirmed submission reaches GA4 once as generate_lead with service and source, and with no personal data', async () => {
+    const { context, events } = await phoneContext(browser);
+    const page = await context.newPage();
+    await stubGoogle(page);
+    await page.route('**/api/contact', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, leadId: LEAD_ID, redirect: `${origin}/contact/thanks/?lead=${LEAD_ID}&svc=water-heater-replacement&src=gbp_tagged&ha=google-maps` }) }),
+    );
+    await page.goto(`${origin}/contact/?service=water-heater-replacement`);
+    await page.selectOption('#heard_about', 'google-maps');
+    await fillForm(page, { name: 'Zelda Private', phone: '617-555-0199', message: 'Private message text', address: '9 Secret Ln, Lynn' });
+    await page.click('#submit-btn');
+    await page.waitForURL(/contact\/thanks/);
+    await page.waitForTimeout(400);
+
+    const leads = gtag(events, 'event', 'generate_lead');
+    assert.equal(leads.length, 1, 'exactly one generate_lead reaches GA4');
+    assert.deepEqual(
+      { service_type: leads[0]['2'].service_type, lead_source: leads[0]['2'].lead_source, heard_about: leads[0]['2'].heard_about, form_id: leads[0]['2'].form_id },
+      { service_type: 'water-heater-replacement', lead_source: 'gbp_tagged', heard_about: 'google-maps', form_id: 'service_request' },
+    );
+    assert.equal(gtag(events, 'event', 'form_submit_attempt').length, 1, 'the attempt is a separate event from the lead');
+    const wire = JSON.stringify(events);
+    for (const secret of ['Zelda', '617-555-0199', 'Private message', 'Secret Ln', LEAD_ID]) assert.ok(!wire.includes(secret), `GA4 payload leaked ${secret}`);
+    await context.close();
+  });
+
+  test('phone, text and service-form taps carry only the page type and ids (service and town)', async () => {
+    const { context, events } = await phoneContext(browser);
+    const page = await context.newPage();
+    await stubGoogle(page);
+    await page.goto(`${origin}/services/boiler-service/`);
+    await page.locator('.page-hero .hero-cta').getByRole('link', { name: /Call 781/ }).evaluate((el) => { el.addEventListener('click', (e) => e.preventDefault()); el.click(); });
+    await page.locator('.page-hero .hero-cta').getByRole('link', { name: /Request service online/ }).evaluate((el) => { el.addEventListener('click', (e) => e.preventDefault()); el.click(); });
+    await page.waitForTimeout(200);
+    const phone = gtag(events, 'event', 'phone_click')[0]['2'];
+    assert.equal(phone.page_type, 'service');
+    assert.equal(phone.service_type, 'boiler-service');
+    const form = gtag(events, 'event', 'request_form_click')[0]['2'];
+    assert.equal(form.service_type, 'boiler-service');
+    await context.close();
   });
 });

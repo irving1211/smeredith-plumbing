@@ -117,7 +117,7 @@ test('secrets never appear in the response, on success or failure', async () => 
   }
 });
 
-test('every upstream failure degrades to "unavailable" with a coarse reason and HTTP 200', async () => {
+test('every upstream failure degrades to a generic "unavailable" (HTTP 200); the precise cause is only in the operator log', async () => {
   const cases = [
     [{ tokenStatus: 400 }, 'auth'],
     [{ reviewsStatus: 401 }, 'auth'],
@@ -125,16 +125,53 @@ test('every upstream failure degrades to "unavailable" with a coarse reason and 
     [{ reviewsStatus: 429 }, 'quota'],
     [{ reviewsStatus: 500 }, 'upstream'],
   ];
+  const original = console.error;
   for (const [opts, reason] of cases) {
     __resetForTests();
+    const logged = [];
+    console.error = (...a) => logged.push(a.join(' '));
     globalThis.fetch = googleStub(opts);
-    const { res, body } = await get();
-    assert.equal(res.status, 200, reason);
-    assert.deepEqual(body, { status: 'unavailable', reason });
+    try {
+      const { res, body } = await get();
+      assert.equal(res.status, 200, reason);
+      assert.deepEqual(body, { status: 'unavailable', reason: 'upstream' }, 'visitors never see whether it was auth, quota or permissions');
+    } finally {
+      console.error = original;
+    }
+    assert.ok(logged.some((l) => l.includes(reason)), `operator log names the cause (${reason})`);
   }
   __resetForTests();
   globalThis.fetch = async () => { throw new TypeError('network down'); };
-  assert.deepEqual((await get()).body, { status: 'unavailable', reason: 'upstream' });
+  console.error = () => {};
+  try { assert.deepEqual((await get()).body, { status: 'unavailable', reason: 'upstream' }); } finally { console.error = original; }
+});
+
+test('after a failed refresh Google is not called again on every page view (5-minute backoff)', async () => {
+  installCache();
+  const calls = [];
+  globalThis.fetch = googleStub({ reviewsStatus: 500, calls });
+  const original = console.error; console.error = () => {};
+  try {
+    await get();
+    const afterFirst = calls.filter((c) => c.url.includes('mybusiness')).length;
+    assert.equal(afterFirst, 1);
+    for (let i = 0; i < 5; i++) await get();
+    assert.equal(calls.filter((c) => c.url.includes('mybusiness')).length, 1, 'five more page views made no further upstream calls');
+  } finally { console.error = original; }
+});
+
+test('simultaneous visitors share a single upstream refresh', async () => {
+  const calls = [];
+  let release;
+  const gate = new Promise((r) => { release = r; });
+  const inner = googleStub({ calls });
+  globalThis.fetch = async (url, init) => { if (String(url).includes('mybusiness')) await gate; return inner(url, init); };
+  const pending = Promise.all([get(), get(), get(), get()]);
+  await new Promise((r) => setTimeout(r, 20));
+  release();
+  const results = await pending;
+  assert.equal(calls.filter((c) => c.url.includes('mybusiness')).length, 1);
+  assert.ok(results.every((r) => r.body.status === 'ok'));
 });
 
 test('a fresh cache avoids calling Google again; a failure after expiry serves stale for up to 24 hours', async () => {

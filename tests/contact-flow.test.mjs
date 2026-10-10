@@ -304,7 +304,6 @@ test('uploads are accepted by what the bytes are, and renamed so no personal fil
     [PNG, 'Pat Example kitchen.PNG', 'image/png', 'png'],
     [JPEG, 'IMG_0001.jpeg', 'image/jpeg', 'jpg'],
     [HEIC, 'IMG_0002.HEIC', '', 'heic'],
-    [PDF, 'quote.pdf', 'application/pdf', 'pdf'],
   ]) {
     const { sent } = await submit(form({ photo: file(bytes, name, type) }));
     assert.equal(sent.length, 1, name);
@@ -343,4 +342,132 @@ test('visitor text is HTML-escaped in the email and cannot inject headers into t
   assert.doesNotMatch(sent[0].body.subject, /[\r\n]/);
   assert.match(sent[0].body.html, /&lt;script&gt;alert\(1\)&lt;\/script&gt; &amp; more/);
   assert.doesNotMatch(sent[0].body.html, /<script>alert/);
+});
+
+test('attachment bytes survive encoding exactly (native and fallback paths)', async () => {
+  const bytes = new Uint8Array(70000);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = (i * 31 + 7) % 256;
+  bytes.set(PNG.slice(0, 16), 0);
+  const run = async () => {
+    const { sent } = await submit(form({ photo: new File([bytes], 'x.png', { type: 'image/png' }) }));
+    assert.equal(sent.length, 1);
+    const decoded = Uint8Array.from(Buffer.from(sent[0].body.attachments[0].content, 'base64'));
+    assert.equal(decoded.length, bytes.length);
+    assert.deepEqual(decoded, bytes);
+  };
+  const original = Object.getOwnPropertyDescriptor(Uint8Array.prototype, 'toBase64');
+  const setNative = (impl) => Object.defineProperty(Uint8Array.prototype, 'toBase64', { value: impl, configurable: true, writable: true });
+  try {
+    setNative(undefined);
+    await run(); // loop fallback (runtimes without a native encoder)
+    let nativeCalls = 0;
+    setNative(function () { nativeCalls++; return Buffer.from(this).toString('base64'); });
+    await run(); // native encoder branch
+    assert.equal(nativeCalls, 1, 'the native encoder is used when the runtime provides one');
+  } finally {
+    if (original) Object.defineProperty(Uint8Array.prototype, 'toBase64', original);
+    else delete Uint8Array.prototype.toBase64;
+  }
+});
+
+// ---------- hardening from the independent security review ----------
+
+test('PDFs are not accepted: only images can reach the inbox (a PDF can carry active content)', async () => {
+  const { response, sent } = await submit(form({ photo: file(PDF, 'quote.pdf', 'application/pdf') }), { json: true });
+  assert.equal(response.status, 400);
+  assert.equal(sent.length, 0);
+});
+
+test('uploads are capped at 6 MB; a 6 MB image still goes through', async () => {
+  const six = new Uint8Array(6 * 1024 * 1024); six.set(PNG, 0);
+  const ok = await submit(form({ photo: new File([six], 'a.png', { type: 'image/png' }) }));
+  assert.equal(ok.sent.length, 1);
+  const over = new Uint8Array(6 * 1024 * 1024 + 1); over.set(PNG, 0);
+  const bad = await submit(form({ photo: new File([over], 'a.png', { type: 'image/png' }) }), { json: true });
+  assert.equal(bad.response.status, 400);
+  assert.equal(bad.sent.length, 0);
+});
+
+test('names that match object prototype members are just unknown values, never a crash', async () => {
+  for (const bad of ['constructor', '__proto__', 'toString', 'hasOwnProperty', 'valueOf']) {
+    const svc = await submit(form({ service_type: bad }), { json: true });
+    assert.equal(svc.response.status, 400, `service_type=${bad}`);
+    assert.deepEqual(await svc.response.json(), { ok: false, error: 'validation' });
+    assert.equal(svc.sent.length, 0);
+    const heard = await submit(form({ heard_about: bad }), { json: true });
+    assert.equal(heard.response.status, 200, `heard_about=${bad} is an optional field and is simply dropped`);
+    assert.doesNotMatch(heard.sent[0].body.text, /function|\[object/i);
+    assert.match(heard.sent[0].body.text, /Customer said they heard about us: Not answered/);
+  }
+});
+
+test('the rate limit is checked before the body is parsed, and it keys IPv6 visitors by their /64', async () => {
+  installFakeCache();
+  let parsed = 0;
+  const original = Request.prototype.formData;
+  Request.prototype.formData = function () { parsed++; return original.call(this); };
+  try {
+    const v6 = (suffix) => ({ 'cf-connecting-ip': `2001:db8:abcd:12:${suffix}` });
+    for (let i = 1; i <= 5; i++) await submit(form(), { headers: v6(`aaaa::${i}`) });
+    const before = parsed;
+    const sixth = await submit(form(), { headers: v6('bbbb:cccc:dddd:9999'), json: true });
+    assert.equal(sixth.response.status, 429, 'a different address in the same /64 shares the budget');
+    assert.equal(parsed, before, 'a throttled request is rejected without parsing its body');
+    assert.equal(sixth.sent.length, 0);
+    const other = await submit(form(), { headers: { 'cf-connecting-ip': '2001:db8:abcd:13::1' }, json: true });
+    assert.equal(other.response.status, 200, 'a neighbouring /64 is unaffected');
+  } finally {
+    Request.prototype.formData = original;
+  }
+});
+
+test('Turnstile: a form the visitor still has to fix does not spend their single-use token; a foreign-site token is refused', async () => {
+  const env = { ...ENV, TURNSTILE_SECRET_KEY: 'secret' };
+  let verifies = 0;
+  const impl = (hostname) => async (url, init) => {
+    if (String(url).includes('siteverify')) { verifies++; return new Response(JSON.stringify({ success: true, hostname }), { status: 200 }); }
+    return new Response(null, { status: 200 });
+  };
+  const invalid = await submit(form({ name: '', 'cf-turnstile-response': 'tok' }), { env, json: true, fetchImpl: impl('smeredithplumbing.com') });
+  assert.equal(invalid.response.status, 400);
+  assert.equal((await invalid.response.json()).error, 'validation', 'told to fix the form, not "verification failed"');
+  assert.equal(verifies, 0, 'the token was not consumed');
+  const ok = await submit(form({ 'cf-turnstile-response': 'tok' }), { env, json: true, fetchImpl: impl('smeredithplumbing.com') });
+  assert.equal(ok.response.status, 200);
+  assert.equal(verifies, 1);
+  const foreign = await submit(form({ 'cf-turnstile-response': 'tok' }), { env, json: true, fetchImpl: impl('evil.example') });
+  assert.equal(foreign.response.status, 403);
+});
+
+test('email addresses with extra recipients, angle brackets or control characters are refused', async () => {
+  for (const email of ['<a@b.co>', 'a@b.co,d@e.co', 'a@b.co;d@e.co', 'a b@c.co', 'a@b', '"x"@b.co', 'a@b.co\u0000x']) {
+    const { response, sent } = await submit(form({ email }), { json: true });
+    assert.equal(response.status, 400, JSON.stringify(email));
+    assert.equal(sent.length, 0);
+  }
+  for (const email of ['pat@example.com', "o'brien@mail.example.co.uk", 'first.last+tag@example.org']) {
+    const { sent } = await submit(form({ email }));
+    assert.equal(sent.length, 1, email);
+  }
+});
+
+test('line breaks in single-line fields cannot forge lines in the email, and the message is set apart', async () => {
+  const { sent } = await submit(form({ name: 'Pat\nLead ID: forged', address: 'Lynn\r\nCaptured source: Google Business Profile', message: 'hello\nLead ID: 00000000-0000-0000-0000-000000000000\nService requested: free' }));
+  const text = sent[0].body.text;
+  assert.equal((text.match(/^Lead ID:/gm) || []).length, 1, 'only the real Lead ID line exists at the start of a line');
+  assert.equal((text.match(/^Captured source:/gm) || []).length, 1);
+  assert.equal((text.match(/^Service requested:/gm) || []).length, 1);
+  assert.match(text, /^  Lead ID: 0{8}-/m, 'a forged label inside the message is indented under "Message:"');
+  assert.match(text, /^Name: Pat Lead ID: forged$/m);
+  assert.match(sent[0].body.subject, /^\[Website form\] New service request - /);
+});
+
+test('function responses carry nosniff and are never cacheable', async () => {
+  const ok = await submit(form(), { json: true });
+  const bad = await submit(form({ name: '' }), { json: true });
+  const redirect = await submit(form());
+  for (const { response } of [ok, bad, redirect]) {
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+  }
 });

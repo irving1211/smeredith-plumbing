@@ -35,6 +35,8 @@ const FRESH_MS = 6 * 60 * 60 * 1000;
 const STALE_MS = 24 * 60 * 60 * 1000;
 const SHOW = 6;
 const CACHE_KEY = "https://reviews.internal/gbp/v1";
+const FAILURE_KEY = "https://reviews.internal/gbp/v1/failure";
+const FAILURE_BACKOFF_MS = 5 * 60 * 1000;
 const STARS: Record<string, number> = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
 
 class UpstreamError extends Error {
@@ -46,6 +48,8 @@ class UpstreamError extends Error {
 }
 
 let tokenCache: { value: string; expiresAt: number } | null = null;
+// Concurrent visitors in the same isolate share one upstream refresh instead of each calling Google.
+let inflight: Promise<ReviewsPayload> | null = null;
 
 export const onRequestGet = async ({ env }: { env: Env }): Promise<Response> => {
   if (!isConfigured(env)) return respond({ status: "unavailable", reason: "not_configured" }, 60);
@@ -53,15 +57,25 @@ export const onRequestGet = async ({ env }: { env: Env }): Promise<Response> => 
   const cached = await readCache();
   if (cached && cached.ageMs < FRESH_MS) return respond(cached.body, 300);
 
+  // If a refresh failed in the last few minutes, don't ask Google again on every page view.
+  const recentlyFailed = await hasRecentFailure();
+  if (recentlyFailed) {
+    if (cached && cached.ageMs < STALE_MS) return respond(cached.body, 60);
+    return respond({ status: "unavailable", reason: "upstream" }, 60);
+  }
+
   try {
-    const fresh = await fetchReviews(env);
+    inflight = inflight || fetchReviews(env).finally(() => { inflight = null; });
+    const fresh = await inflight;
     await writeCache(fresh);
     return respond(fresh, 300);
   } catch (error) {
+    // The precise cause (auth, quota, forbidden...) goes to the operator's log only; visitors just see "unavailable".
     const reason = error instanceof UpstreamError ? error.reason : "upstream";
     console.error("Reviews refresh failed:", reason);
+    await markFailure();
     if (cached && cached.ageMs < STALE_MS) return respond(cached.body, 60);
-    return respond({ status: "unavailable", reason }, 60);
+    return respond({ status: "unavailable", reason: "upstream" }, 60);
   }
 };
 
@@ -168,6 +182,26 @@ async function readCache(): Promise<{ body: ReviewsPayload; ageMs: number } | nu
   }
 }
 
+async function hasRecentFailure(): Promise<boolean> {
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  if (!cache) return false;
+  try {
+    return Boolean(await cache.match(new Request(FAILURE_KEY)));
+  } catch {
+    return false;
+  }
+}
+
+async function markFailure(): Promise<void> {
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  if (!cache) return;
+  try {
+    await cache.put(new Request(FAILURE_KEY), new Response("1", { headers: { "Cache-Control": `max-age=${FAILURE_BACKOFF_MS / 1000}` } }));
+  } catch {
+    // best effort
+  }
+}
+
 async function writeCache(body: ReviewsPayload): Promise<void> {
   const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
   if (!cache) return;
@@ -191,4 +225,5 @@ function respond(body: ReviewsPayload | Unavailable, maxAge: number): Response {
 /** Test hook: forget the in-memory access token. */
 export function __resetForTests(): void {
   tokenCache = null;
+  inflight = null;
 }
