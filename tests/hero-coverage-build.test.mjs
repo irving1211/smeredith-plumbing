@@ -76,3 +76,21 @@ test('hero logo files are resized copies of the supplied logo (same proportions)
     }
   }
 });
+
+test('no page repeats unsourced promises (insurance, same-day, free quotes, stocked truck, visit frequency) outside verbatim customer quotes', async () => {
+  const { readdirSync, statSync } = await import('node:fs');
+  const files = [];
+  const walk = (d) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) walk(p); else if (f.endsWith('.html')) files.push(p); } };
+  walk(dist);
+  const claims = [/fully insured/i, /licensed (&|&amp;|and) insured/i, /same[- ]day/i, /free (written )?(quotes?|estimates?)/i, /1-hour/i, /no dispatch fee/i, /parts on the (truck|van)/i, /stocked van|stocks the truck/i, /\bweekly\b/i, /in dozens of/i];
+  for (const file of files) {
+    const text = readFileSync(file, 'utf8')
+      .replace(/<script[\s\S]*?<\/script>/g, ' ')
+      .replace(/<style[\s\S]*?<\/style>/g, ' ')
+      // Customers' own words, quoted as written, with the caption that names the reviewer and their visit.
+      .replace(/<figure class="quote review-card"[\s\S]*?<\/figure>/g, ' ')
+      .replace(/<blockquote[\s\S]*?<\/blockquote>/g, ' ')
+      .replace(/<[^>]+>/g, ' ');
+    for (const claim of claims) assert.doesNotMatch(text, claim, `${file.slice(dist.length)} still says ${claim}`);
+  }
+});

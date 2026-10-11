@@ -1,7 +1,54 @@
 {
   "_comment": "Review-only data for /review/ (built only when PUBLIC_REVIEW_ROUTES=1). Measurements are filled from qa/heroes-2026-10-10/ results; nothing here is shown on production pages.",
-  "measured": null,
-  "recommendation": null,
+  "measured": {
+    "conditions": "Phone checks at 390 x 844 and 1280 x 800 in Chrome after animations settle (qa/heroes-2026-10-10/first-screen.json). Speed: Lighthouse 12.8.2 mobile (simulated 4G-class network, 4x slower CPU), all pages served from the same local server, 3 interleaved rounds, median shown; a second full pass agreed. Differences under about 150 ms in largest paint flip between passes and are noise; options 2 and 4 were one step (about 150 ms) slower in both passes because they draw the logo larger. Unthrottled, every option painted in 0.15-0.23 s. Accessibility: axe-core WCAG 2.2 AA on each full page, with motion and with reduced motion.",
+    "rows": {
+      "1": {
+        "Branding fidelity": "High: logo whole and prominent on desktop; red/charcoal pipe matches the logo's wrenches",
+        "Clarity": "Clear: the line literally connects a ringing phone to Shane. Small logo on phones (113 px)",
+        "Phone, first screen": "Call ends 650 px, Request 708 px down a 844 px screen; logo drawn 113x111 px (desktop 161x158)",
+        "Accessibility": "axe: 0 serious/critical (moving and still); drawing hidden from screen readers; static with reduced motion; no layout shift",
+        "Mobile speed (median of 3)": "score 99, first paint 1.13 s, largest paint 2.10 s (runs 2103-2108 ms), layout shift 0, 369 KB in 9 requests (live home: 350 KB, 8)"
+      },
+      "2": {
+        "Branding fidelity": "Highest logo presence (largest logo, on white like the van decal); the only dark hero, so it reads as a brand moment",
+        "Clarity": "Clear on phones; the desk phone is a familiar picture. White text on charcoal",
+        "Phone, first screen": "Call ends 648 px, Request 706 px down a 844 px screen; logo drawn 173x171 px (desktop 212x209)",
+        "Accessibility": "axe: 0 serious/critical; white-on-charcoal text 13:1; static with reduced motion; no layout shift",
+        "Mobile speed (median of 3)": "score 98, first paint 1.13 s, largest paint 2.25 s (runs 2103-2254 ms), layout shift 0, 378 KB in 9 requests (live home: 350 KB, 8)"
+      },
+      "3": {
+        "Branding fidelity": "Medium-high: distinctive trade drawing; logo is the destination but small on phones (99 px)",
+        "Clarity": "Most explicit about problems Shane fixes (leak, no hot water, no heat) without new claims",
+        "Phone, first screen": "Call ends 665 px, Request 723 px down a 844 px screen; logo drawn 99x98 px (desktop 165x163)",
+        "Accessibility": "axe: 0 serious/critical; labels in the drawing are decorative (hidden), the same words exist as links below; no layout shift",
+        "Mobile speed (median of 3)": "score 99, first paint 1.13 s, largest paint 2.10 s (runs 2103-2178 ms), layout shift 0, 371 KB in 9 requests (live home: 350 KB, 8)"
+      },
+      "4": {
+        "Branding fidelity": "Highest recognition: reads like Shane's own van (his wording, his decal, his license line). Furnaces left off pending S5",
+        "Clarity": "Headline and actions come first, exactly where they are on the live page; the van panel sits below them",
+        "Phone, first screen": "Call ends 427 px, Request 485 px down a 844 px screen; logo drawn 134x132 px (desktop 206x203)",
+        "Accessibility": "axe: 0 serious/critical; panel hidden from screen readers (the service list is repeated as real links below); no layout shift",
+        "Mobile speed (median of 3)": "score 98, first paint 1.14 s, largest paint 2.25 s (runs 2253-2254 ms), layout shift 0, 379 KB in 9 requests (live home: 350 KB, 8)"
+      },
+      "5": {
+        "Branding fidelity": "Friendly but introduces a new character: proposed brand extension needing Shane's approval; not his likeness",
+        "Clarity": "Instantly reads as \"a person answers\"",
+        "Phone, first screen": "Call ends 648 px, Request 706 px down a 844 px screen; logo drawn 175x172 px (desktop 217x214)",
+        "Accessibility": "axe: 0 serious/critical; figure hidden from screen readers; no layout shift",
+        "Mobile speed (median of 3)": "score 98, first paint 1.13 s, largest paint 2.25 s (runs 2253-2254 ms), layout shift 0, 379 KB in 9 requests (live home: 350 KB, 8)"
+      }
+    }
+  },
+  "recommendation": {
+    "id": "4",
+    "why": [
+      "It is the most recognisably Shane's: his own van wording, decal and license line, so a customer who has seen the van in a driveway recognises the site, and nothing in it is new artwork that needs separate approval.",
+      "It keeps the headline, Call and Request exactly where they are on the live page (Call ends at 427 px, Request at 485 px on a phone), the best action visibility of the five; the other options push them down 220-240 px (still on the first screen).",
+      "Cost: it is one simulation step (about 150 ms) slower to largest paint than options 1 and 3 and adds 29 KB, and it pushes the service list further down the phone page. If speed or a shorter page matters more, option 1 is the runner-up: the lightest option that still tells the \"answers the phone\" story.",
+      "Option 5 should not be chosen without Shane approving a new character for his brand."
+    ]
+  },
   "options": [
     {
       "id": "1",

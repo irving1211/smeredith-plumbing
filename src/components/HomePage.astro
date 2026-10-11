@@ -41,7 +41,9 @@ const job = jobsRaw.find((j) => j.slug === 'single-water-heater-open-basement')!
 const jobPhoto = job.photos[0];
 
 // Shane does not like the current portrait, so the home page no longer uses it; the van stands in for "Meet Shane".
-const vanSrc = `${base}images/van/van-side-800.webp`;
+// 128 x 96 slot: small copies of the van photo (van-thumb-*.webp, made with sharp from van-side.jpg, GPS-free).
+const vanSrc = `${base}images/van/van-thumb-128.webp`;
+const vanSrcSet = `${base}images/van/van-thumb-128.webp 128w, ${base}images/van/van-thumb-256.webp 256w`;
 
 const faqs = [
   { q: 'Who answers the phone?', a: 'Shane Meredith, the owner. S. Meredith Plumbing & Heating is owner-operated, so you reach Shane directly. Call or text 781-820-4592, or send a request and he will follow up.' },
@@ -106,7 +108,7 @@ const faqs = [
 
     <section class="section" id="about" aria-labelledby="meet-h">
       <div class="container meet">
-        <img class="meet-photo" src={vanSrc} alt="Shane's van, lettered with his services and number" width="128" height="96" loading="lazy" decoding="async" />
+        <img class="meet-photo" src={vanSrc} srcset={vanSrcSet} sizes="128px" alt="Shane's van, lettered with his services and number" width="128" height="96" loading="lazy" decoding="async" />
         <div>
           <h2 class="section-title" id="meet-h">Meet Shane</h2>
           <p>Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>

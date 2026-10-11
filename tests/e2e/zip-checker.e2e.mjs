@@ -167,6 +167,19 @@ describe('ZIP checker', () => {
     await context.close();
   });
 
+  test('if the lookup code itself cannot load, the visitor still gets the call option and a retry', async () => {
+    const { context, events } = await phoneContext(browser);
+    const page = await context.newPage();
+    await page.route('**/_astro/zip-coverage*.js', (route) => route.abort());
+    await page.goto(`${origin}/`);
+    const result = await check(page, '01906');
+    assert.match(await result.locator('[data-area-message]').textContent(), /lookup didn't load/);
+    assert.match(await result.locator('[data-area-cta]').getAttribute('href'), /^tel:/);
+    assert.equal(await result.locator('[data-zip-retry]').isVisible(), true);
+    assert.deepEqual(named(events, 'service_area_check').map((c) => c.result), ['lookup_error']);
+    await context.close();
+  });
+
   test('keyboard only: tab to the ZIP box, type, press Enter, tab to the answer', async () => {
     const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const page = await context.newPage();

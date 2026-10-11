@@ -2,7 +2,7 @@
 schema_version: 1
 client: S. Meredith Plumbing & Heating
 project: smeredith-plumbing
-version: 1.0.1
+version: 1.1.0
 status: client-review
 approved_by: null
 approved_at: null
@@ -106,15 +106,17 @@ Only what the site needs, each with a job: the ruled service list (navigation + 
 
 ## Photography and illustration
 
-Real photos only: Shane's portrait (home hero on desktop, Meet Shane strip on phones, About), the van (About), and job photos (one on the home page, all on Work, grouped by service). Job photos keep their caption text and show customer homes without identifying details. GPS metadata is stripped and a test keeps it that way. No generated or stock imagery.
+Real photos only. **The current portrait is no longer on the home page (2026-10-10): Shane does not like it.** The home hero is copy only (or one of the review hero options) and the "Meet Shane" strip shows the van; the portrait remains on About until Shane supplies a replacement or says to remove it (owner question). Other real photos: the van (About), and job photos (one on the home page, all on Work, grouped by service). Job photos keep their caption text and show customer homes without identifying details. GPS metadata is stripped and a test keeps it that way. No generated or stock imagery. Hero options use code-drawn SVG only (handset, pipe runs, fittings, fixtures, valve, wrench and, in option 5, a simple original plumber figure); none is a photo, a stock asset or a likeness of Shane.
 
 ## Icons
 
-None. Arrows and chevrons are avoided; the red underline and the `+`/`−` of the answers list are drawn with text and CSS. If an icon is ever needed it must be a single SVG set.
+None in the interface. (The hero options' drawings are illustrations, not an icon set.) Arrows and chevrons are avoided; the red underline and the `+`/`−` of the answers list are drawn with text and CSS. If an icon is ever needed it must be a single SVG set.
 
 ## Motion
 
-Tier **none**. No scroll reveals, no fades, no parallax, no auto-advancing anything. Colour changes on hover and focus only; `prefers-reduced-motion` is honoured by the generated token file.
+Live pages: tier **none**. No scroll reveals, no fades, no parallax, no auto-advancing anything. Colour changes on hover and focus only; `prefers-reduced-motion` is honoured by the generated token file.
+
+Candidate (hero options only, review pages, `tokens.json` → `motion.candidate`): **brief-once**. CSS only, no library and no script; decorative drawings only; plays once on load and ends within 1.4 s; never loops, never flashes, no sound; the heading, text, buttons and the logo image never move or fade; the resting state is the design, shown at once with `prefers-reduced-motion: reduce` or when animations do not run. Tested in `tests/e2e/heroes.review.mjs` (animation count and end times, zero animations with reduced motion, layout shift < 0.01, heading and Call button never move).
 
 ## Accessibility
 
@@ -135,6 +137,26 @@ Only real, confirmed proof: the license number as Shane gave it, two verbatim re
 ## Prohibited patterns
 
 Everything in `design-method.md` §5, plus for this client: pulsing "live" dots and emergency pills, centered heroes, check-mark trust bullets, stat strips, numbered card grids, rotating carousels, scroll-reveal animation, sticky or floating call bars, uppercase tracked eyebrow labels, a red accent word inside a headline, tinted rounded icon squares, gradient or glass effects, any claim not in the approved-claims table, any "licensed and insured" wording, AI/automation wording on customer-facing pages, and any third-party widget that blocks the first screen or the form.
+
+## Hero options (review, 2026-10-10)
+
+Brief: `_context/claude-hero-coverage-prompt-2026-10-10.md`. Five working openings for Irving to choose from; **none is approved and none is live**. They are built only into the review build (`npm run build:review`: `/review/` and `/review/hero-1/` to `/hero-5/`), noindex and out of the sitemap. The live home keeps a copy-only hero (`src/components/heroes/HeroBaseline.astro`).
+
+Shared by every option (`src/components/HeroCopy.astro`, `LogoPicture.astro`): the h1 "The plumber who answers the phone.", the existing lede (services, Saugus/North Shore/Boston, 24/7), Call 781-820-4592 and Request service; Shane's logo exactly as supplied (`logo-full.png`, 720 x 710), only resized (`scripts/make-logo-sizes.mjs`), never cropped, recoloured or redrawn. Evidence studied: the logo (charcoal and red, a house between two crossed pipe wrenches, wordmark band, phone number in the red base) and the van side (bold italic bullet list, logo decal, "License #9630040" by the door).
+
+| # | Composition and hierarchy | Visual story | Evidence used |
+|---|---|---|---|
+| 1 | Phone: drawing band above the copy. Desktop: copy left, drawing right | A ringing receiver, a red line through a pipe and two bends, arriving at the logo | Logo (pipe wrenches, red/charcoal), the brand line |
+| 2 | Full-width charcoal band; logo on a white plate (like the decal on the white van) beside a desk phone; copy in white | The receiver lifts off its cradle: the call is answered | Logo, van decal on white |
+| 3 | Grid-paper band; riser-diagram drawing first (desktop: left), copy after | Leak, no hot water and no heat pipe into one line, through a valve, to the logo | Services Shane offers (heaters, boilers, general), the logo |
+| 4 | Copy first, then a white "van side" panel: bullet list, logo decal, license line, pipe and wrench along the bottom | Reads like Shane's van | Van lettering transcription (Furnaces left off pending S5) |
+| 5 | Drawing and logo side by side above the copy (desktop: left of the copy) | A simple, original plumber lifts a phone to his ear | The brand line; **proposed brand extension, needs Shane's approval; not his likeness** |
+
+Comparison, screenshots and measurements: `qa/heroes-2026-10-10/` and the vault report `_context/hero-coverage-implementation-2026-10-10.md`.
+
+## Coverage checker (2026-10-10)
+
+ZIP first: one text field (`inputmode=numeric`, `autocomplete=postal-code`, never `type=number`, so 01906 keeps its zero), a Check button, then a result box with the answer, an approximate pin on the town-outline map (a dashed circle around the ZIP's Census internal point, captioned "approximate centre ... not your address") and the next action. Confirmed towns: "Yes — request service" (red) carrying the service and the town. Everything else: "Call Shane to confirm" (red) with a request as the secondary action; never a refusal. The town picker sits behind "No ZIP handy? Pick your town"; without JavaScript a plain town picker and the phone number replace the ZIP box. Towns with pages stay in an expandable list of plain links for search engines. Logic: `src/lib/zip-coverage.js`; data: `public/data/zip-coverage.json` (Census, see ASSETS).
 
 ## Decision log
 
@@ -165,3 +187,5 @@ Everything in `design-method.md` §5, plus for this client: pulsing "live" dots 
 - 2026-10-10 — status → client-review.
 - 2026-10-10 — v1.0.1: Preload only the heading font (measured); inner pages normalised to token radius and no hover motion; LCP elements verified; independent-review fixes recorded in the implementation notes.
 - 2026-10-10 — status → client-review.
+- 2026-10-10 — **v1.1.0: hero options and ZIP-first coverage.** Portrait removed from the home page (owner dislikes it). Five review-only hero options built (above); the live home hero is copy only until Irving chooses. Motion candidate tier brief-once recorded for the chosen hero only. Lettering font role added (system Arial, option 4 only). Coverage checker changed from a town list to ZIP first with an approximate pin; the 14 confirmed towns are unchanged and are still the only "Yes"; a proposed expansion is kept separately in `src/service-area-proposed.json` and never answers Yes.
+- 2026-10-10 — v1.1.0: Hero options (review only), ZIP-first coverage checker, portrait removed from home, lettering font role, motion candidate.

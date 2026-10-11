@@ -21,9 +21,9 @@
     "h1": "Plumber in Lynn, MA — North Shore boiler & water heater specialist",
     "tagline": "Lynn's older housing stock, modern plumbing answers.",
     "meta_desc": "Plumber serving Lynn, MA: boilers, water heaters, gas lines and emergency repairs. Owner-operated and licensed, based next door in Saugus. Call 781-820-4592.",
-    "intro": "Lynn has the densest stock of pre-war and triple-decker housing on the North Shore. That means cast iron drains, lead-to-galvanized water mains, and old boilers running well past their service life. We work Lynn weekly — most emergency calls on the North Shore come from this side of the line.",
+    "intro": "Lynn has the densest stock of pre-war and triple-decker housing on the North Shore. That means cast iron drains, lead-to-galvanized water mains, and old boilers running well past their service life. Shane works in Lynn from his base next door in Saugus.",
     "local_hooks": [
-      { "h": "Pre-war triple-deckers", "b": "Multi-family buildings throughout Lynn share waste stacks and old plumbing that hasn't been touched in decades. We've done full re-pipes and sectional repairs in dozens of these buildings." },
+      { "h": "Pre-war triple-deckers", "b": "Multi-family buildings throughout Lynn share waste stacks and old plumbing that hasn't been touched in decades. Re-pipes and sectional repairs are common work in buildings like these." },
       { "h": "Older boiler stock", "b": "1970s and 1980s cast iron boilers are still common in Lynn. Some are worth saving, many are not — we tell you straight." },
       { "h": "Hard water means short water heater life", "b": "Lynn's water hardness shortens tank life. Tankless conversions and water-treatment options make sense for some homes — we'll quote both." }
     ],
@@ -36,7 +36,7 @@
     "h1": "Plumber in Revere, MA — coastal salt-air water heater specialist",
     "tagline": "Revere homes face the ocean. Your plumbing should be ready.",
     "meta_desc": "Plumber serving Revere, MA: water heaters, boilers, gas lines and emergency repairs for coastal homes. Owner-operated, based in Saugus. Call 781-820-4592.",
-    "intro": "Revere is a coastal town — and coastal towns chew through water heaters and outdoor plumbing faster than inland markets. Salt air corrodes power-vent terminations, copper supply lines, and tank exteriors. We service Revere weekly and stock the parts that the coast eats through.",
+    "intro": "Revere is a coastal town — and coastal towns chew through water heaters and outdoor plumbing faster than inland markets. Salt air corrodes power-vent terminations, copper supply lines, and tank exteriors. Shane serves Revere from Saugus, next door.",
     "local_hooks": [
       { "h": "Salt-air corrosion on outdoor terminations", "b": "Power-vent terminations, condensate drains, and exterior gas piping corrode 2–3x faster on the coast. We use marine-grade fasteners and inspect the exterior side annually." },
       { "h": "Older Beachmont and Point of Pines housing", "b": "Pre-war coastal cottages, many converted to year-round homes, often have plumbing that doesn't match their current use. We re-pipe and update without ripping the place apart." },
@@ -68,7 +68,7 @@
     "meta_desc": "Plumber serving Peabody, MA: boilers, water heaters, generator gas lines, remodels and emergencies. Owner-operated, based in Saugus. Call 781-820-4592.",
     "intro": "Peabody mixes residential neighborhoods — West, South, Peabody Centre — with the kind of homes that reward a craftsman over a national chain. We work Peabody regularly, on jobs ranging from emergency boiler swaps to full bathroom remodels.",
     "local_hooks": [
-      { "h": "West Peabody single-family homes", "b": "Larger lots, often with attached or detached generators tied to a gas line we installed. We handle the gas-side of generator installs." },
+      { "h": "West Peabody single-family homes", "b": "Larger lots, often with attached or detached generators that need a gas line. Shane handles the gas side of generator installs." },
       { "h": "Mid-century homes in South Peabody", "b": "Many built in the 1950s and 60s — original plumbing, original boilers, often in need of upgrade before the next winter." },
       { "h": "Peabody Centre two-families", "b": "Older multi-family stock with shared stacks. We handle stack ties and pressure tests cleanly." }
     ],

@@ -1,0 +1,44 @@
+{
+ "target": "http://127.0.0.1:61599/review/hero-3/",
+ "url": "http://127.0.0.1:61599/review/hero-3/",
+ "audited_at": "2026-10-11T00:36:25.838Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "SHIP",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "P3": 1
+ },
+ "findings": [
+  {
+   "id": "F001",
+   "kind": "objective",
+   "severity": "P2",
+   "check": "lcp-lazy",
+   "evidence": "LCP element <IMG> http://127.0.0.1:61599/images/jobs/single-water-heater-open-basement/shot-1-900.webp is loading=\"lazy\"",
+   "breakpoint": 1280,
+   "business_impact": "Lazy-loading the hero image delays the largest paint (Core Web Vitals).",
+   "recommendation": "Remove loading=\"lazy\" from the hero/LCP image; consider fetchpriority=\"high\".",
+   "verification": "Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone.",
+   "occurrences": 1
+  },
+  {
+   "id": "F002",
+   "kind": "objective",
+   "severity": "P3",
+   "check": "canonical",
+   "evidence": "no canonical link",
+   "breakpoint": null,
+   "business_impact": "Duplicate URLs can split ranking signals.",
+   "recommendation": "Add <link rel=\"canonical\">.",
+   "verification": "Re-run: node scripts/audit.js <target> — the canonical finding must be gone.",
+   "occurrences": 1
+  }
+ ]
+}

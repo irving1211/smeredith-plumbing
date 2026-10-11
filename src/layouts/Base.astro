@@ -211,7 +211,7 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
       .on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--color-ink-on-dark); }
       /* Touch targets: at least 44 px tall. Stand-alone text links get a 44 px hit area; links inside sentences get 24+ px (WCAG 2.5.8). */
       .hero-alt a, .more-link a, .back-link a, .services-all a, .direct-email-alt a, .contact-list a, .trust-email a, .nf-links a { display: inline-flex; align-items: center; min-height: 44px; }
-      .breadcrumb a { display: inline-flex; align-items: center; min-height: 44px; }
+      .breadcrumb a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
       .homeowner-qa p a, .qa-send a { padding-block: 3px; }
       h1, h2 {
         font-family: var(--font-display);

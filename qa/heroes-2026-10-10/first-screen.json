@@ -1,0 +1,110 @@
+{
+  "home": {
+    "phone": {
+      "hero_height": 454,
+      "h1_top": 86,
+      "call_bottom": 427,
+      "request_bottom": 485,
+      "logo_px": "none",
+      "first_service_row_visible": true
+    },
+    "desktop": {
+      "hero_height": 363,
+      "h1_top": 116,
+      "call_bottom": 373,
+      "request_bottom": 373,
+      "logo_px": "none",
+      "first_service_row_visible": true
+    }
+  },
+  "hero-1": {
+    "phone": {
+      "hero_height": 677,
+      "h1_top": 310,
+      "call_bottom": 650,
+      "request_bottom": 708,
+      "logo_px": "113x111",
+      "first_service_row_visible": false
+    },
+    "desktop": {
+      "hero_height": 444,
+      "h1_top": 116,
+      "call_bottom": 454,
+      "request_bottom": 454,
+      "logo_px": "161x158",
+      "first_service_row_visible": true
+    }
+  },
+  "hero-2": {
+    "phone": {
+      "hero_height": 675,
+      "h1_top": 307,
+      "call_bottom": 648,
+      "request_bottom": 706,
+      "logo_px": "173x171",
+      "first_service_row_visible": false
+    },
+    "desktop": {
+      "hero_height": 444,
+      "h1_top": 116,
+      "call_bottom": 454,
+      "request_bottom": 454,
+      "logo_px": "212x209",
+      "first_service_row_visible": true
+    }
+  },
+  "hero-3": {
+    "phone": {
+      "hero_height": 697,
+      "h1_top": 325,
+      "call_bottom": 665,
+      "request_bottom": 723,
+      "logo_px": "99x98",
+      "first_service_row_visible": false
+    },
+    "desktop": {
+      "hero_height": 533,
+      "h1_top": 120,
+      "call_bottom": 538,
+      "request_bottom": 538,
+      "logo_px": "165x163",
+      "first_service_row_visible": true
+    }
+  },
+  "hero-4": {
+    "phone": {
+      "hero_height": 732,
+      "h1_top": 86,
+      "call_bottom": 427,
+      "request_bottom": 485,
+      "logo_px": "134x132",
+      "first_service_row_visible": false
+    },
+    "desktop": {
+      "hero_height": 524,
+      "h1_top": 116,
+      "call_bottom": 534,
+      "request_bottom": 534,
+      "logo_px": "206x203",
+      "first_service_row_visible": true
+    }
+  },
+  "hero-5": {
+    "phone": {
+      "hero_height": 675,
+      "h1_top": 307,
+      "call_bottom": 648,
+      "request_bottom": 706,
+      "logo_px": "175x172",
+      "first_service_row_visible": false
+    },
+    "desktop": {
+      "hero_height": 444,
+      "h1_top": 116,
+      "call_bottom": 454,
+      "request_bottom": 454,
+      "logo_px": "217x214",
+      "first_service_row_visible": true
+    }
+  }
+}

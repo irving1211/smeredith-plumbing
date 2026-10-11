@@ -6,15 +6,15 @@
     "h1": "Emergency plumber, North Shore & Boston — 24/7",
     "tagline": "No heat. No hot water. Burst pipe. Call — Shane comes out.",
     "meta_desc": "24/7 emergency plumbing and heating in Saugus, the North Shore and Boston: no heat, no hot water, burst pipes. Owner-operated. Call 781-820-4592.",
-    "intro": "Plumbing and heating emergencies don't wait for business hours. Burst pipes, no heat in January, no hot water Saturday morning, gas leaks, and failed sump pumps — Shane Meredith comes out personally, with parts on the truck, ready to make the call to fix and the call to wait until Monday.",
+    "intro": "Plumbing and heating emergencies don't wait for business hours. Burst pipes, no heat in January, no hot water Saturday morning, gas leaks, and failed sump pumps — Shane Meredith comes out personally, ready to make the call to fix and the call to wait until Monday.",
     "scenarios": [
       {
         "h": "No heat in January",
-        "b": "Boiler down, pilot out, circulator failed, no-fire. Same-day Saturday is the rule, not the exception. Most repairs done on the first visit."
+        "b": "Boiler down, pilot out, circulator failed, no-fire. Call any time: emergency service is 24/7."
       },
       {
         "h": "No hot water",
-        "b": "Tank failure, pilot out, thermocouple, control board. We diagnose first, swap the part if it's fixable, replace the unit same-day if it's not."
+        "b": "Tank failure, pilot out, thermocouple, control board. We diagnose first, swap the part if it's fixable, and quote a replacement if it's not."
       },
       {
         "h": "Burst or frozen pipe",
@@ -29,20 +29,20 @@
         "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Licensed gas fitter, code-compliant repair, pressure-tested before sign-off."
       }
     ],
-    "guarantee": "Licensed Massachusetts plumber and gas fitter, fully insured. Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
+    "guarantee": "Licensed Massachusetts plumber and gas fitter (license 9630040-PL-M). Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
   },
   {
     "slug": "water-heater-replacement",
     "title": "Water Heater Replacement & Repair",
     "seo_title": "Water Heater Replacement in Saugus, MA | S. Meredith",
     "h1": "Water heater replacement in Saugus & the North Shore",
-    "tagline": "Tank, tankless, gas, electric, power-vent. Same-day swaps when yours quits.",
-    "meta_desc": "Water heater repair and same-day replacement in Saugus and the North Shore: tank, tankless, power-vent, gas, electric. Free written quotes. Call 781-820-4592.",
-    "intro": "When a water heater fails it's almost never convenient. Shane stocks the truck for the common units (40 and 50 gallon gas + electric, plus power-vent and tankless rough-ins), so most replacements get done same-day — pulled out, set in, lines connected, hauled away.",
+    "tagline": "Tank, tankless, gas, electric, power-vent. Repair or replacement when yours quits.",
+    "meta_desc": "Water heater repair and replacement in Saugus and the North Shore: tank, tankless, power-vent, gas and electric. Owner-operated. Call 781-820-4592.",
+    "intro": "When a water heater fails it's almost never convenient. Shane replaces the common 40 and 50 gallon gas and electric tanks, power-vent units and tankless rough-ins: the old unit out, the new one set in and the lines connected.",
     "scenarios": [
       {
         "h": "50-gallon tank, gas or electric",
-        "b": "Standard residential replacement. Most homes in Saugus, Lynn, and Revere run a 40 or 50-gallon atmospheric or power-vent tank. We carry both and can usually swap same-day."
+        "b": "Standard residential replacement. Most homes in Saugus, Lynn, and Revere run a 40 or 50-gallon atmospheric or power-vent tank. Shane installs both."
       },
       {
         "h": "Power-vent installation",
@@ -61,7 +61,7 @@
         "b": "Pulled, drained, hauled away. No leftover hardware in your basement."
       }
     ],
-    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the units we install — we go over the warranty and the workmanship in writing before the job.",
+    "guarantee": "Licensed installs (MA license 9630040-PL-M). Manufacturer warranties apply to the units we install — we go over the warranty and the workmanship in writing before the job.",
     "qa_title": "Questions homeowners ask about water heaters",
     "qa": [
       {
@@ -77,11 +77,11 @@
           "Where it sits: basement, closet or attic, and how easy it is to get the old unit out and the new one in.",
           "Removal and disposal of the old unit, and any permit the job calls for."
         ],
-        "a": "No price is listed here because it depends on those points. Shane gives a free written quote. The quickest way to get one is to text photos."
+        "a": "No price is listed here because it depends on those points. Ask Shane for a quote. The quickest way is to text photos."
       },
       {
         "q": "How long does a water heater replacement take?",
-        "a": "Shane stocks the truck for the common 40 and 50 gallon gas and electric units, so most replacements are done the same day. Anything that changes the setup, such as moving the heater, switching fuel or adding venting, takes longer."
+        "a": "A straight swap of a common 40 or 50 gallon gas or electric tank is the quickest job; ask Shane how soon he can do yours. Anything that changes the setup, such as moving the heater, switching fuel or adding venting, takes longer."
       },
       {
         "q": "How often should a water heater be serviced?",
@@ -95,9 +95,9 @@
     "title": "High-Efficiency Boiler Service & Replacement",
     "seo_title": "Boiler Repair & Replacement in Saugus, MA | S. Meredith",
     "h1": "Boiler repair & replacement, Saugus to Boston",
-    "tagline": "Service, repair, full replacements. Heat back on the same day — even Saturdays.",
-    "meta_desc": "Boiler service, repair and replacement from Saugus to Boston. Multi-zone systems, combi units and indirect tanks. Licensed and insured. Call 781-820-4592.",
-    "intro": "Heat is not optional in January. Shane services and replaces high-efficiency boilers — cast iron and mod-con, multi-zone systems with indirect tanks, Combi units that handle heat and hot water on one box. When a boiler dies in a cold snap, heat comes back same-day whenever possible.",
+    "tagline": "Service, repair and full replacements, with 24/7 emergency service when the heat goes out.",
+    "meta_desc": "Boiler service, repair and replacement from Saugus to Boston. Multi-zone systems, combi units and indirect tanks. Licensed, owner-operated. Call 781-820-4592.",
+    "intro": "Heat is not optional in January. Shane services and replaces high-efficiency boilers — cast iron and mod-con, multi-zone systems with indirect tanks, Combi units that handle heat and hot water on one box. When a boiler dies in a cold snap, call: emergency service is 24/7.",
     "scenarios": [
       {
         "h": "Annual cleaning and service",
@@ -120,7 +120,7 @@
         "b": "New zone added for an addition or finished basement. Zone valve, thermostat, piping, controls — done right the first time."
       }
     ],
-    "guarantee": "Licensed and insured installs. Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job.",
+    "guarantee": "Licensed installs (MA license 9630040-PL-M). Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job.",
     "qa_title": "Questions homeowners ask about boilers",
     "qa": [
       {
@@ -146,7 +146,7 @@
           "Whether you want an indirect hot water tank with it.",
           "Removal of the old boiler, and any permit the job calls for."
         ],
-        "a": "Shane gives a free written quote, so there is no published price. If you have no heat right now, see the {{emergency-plumbing|emergency page}}."
+        "a": "Prices depend on the job, so none is published; ask Shane for a quote. If you have no heat right now, see the {{emergency-plumbing|emergency page}}."
       },
       {
         "q": "How often should a boiler be serviced?",
@@ -217,7 +217,7 @@
         "b": "All remodel plumbing is permitted and inspected. We handle the paperwork and the inspector visit."
       }
     ],
-    "guarantee": "Licensed and insured. All remodel plumbing is permitted and inspected. We go over fixture warranties and the workmanship in writing before the job.",
+    "guarantee": "Licensed (MA license 9630040-PL-M). All remodel plumbing is permitted and inspected. We go over fixture warranties and the workmanship in writing before the job.",
     "qa_title": "Questions homeowners ask about remodel plumbing",
     "qa": [
       {
@@ -237,7 +237,7 @@
       },
       {
         "q": "How do I get an accurate quote for remodel plumbing?",
-        "a": "Send the plans or a sketch, the fixture list, photos of the existing plumbing, and your contractor's contact. Shane's free written quote is based on the scope. Remodel plumbing is permitted and inspected, and Shane coordinates with your contractor, electrician and tile setter. For an addition or new build, see {{new-construction-plumbing|new construction plumbing}}."
+        "a": "Send the plans or a sketch, the fixture list, photos of the existing plumbing, and your contractor's contact. Shane's quote is based on the scope. Remodel plumbing is permitted and inspected, and Shane coordinates with your contractor, electrician and tile setter. For an addition or new build, see {{new-construction-plumbing|new construction plumbing}}."
       }
     ],
     "send_for_quote": "Send with your request: plans or a sketch, a fixture list, photos of the existing plumbing, your town, and your contractor's name and phone number if you have one."
@@ -272,7 +272,7 @@
         "b": "Tying new plumbing into existing — including stack ties, vent extensions, and main upsize when warranted."
       }
     ],
-    "guarantee": "Licensed and insured. Permits pulled, rough and final inspections passed. We go over warranties and the workmanship in writing before the job.",
+    "guarantee": "Licensed (MA license 9630040-PL-M). Permits pulled, rough and final inspections passed. We go over warranties and the workmanship in writing before the job.",
     "qa_title": "Questions builders and homeowners ask about new construction plumbing",
     "qa": [
       {
@@ -287,7 +287,7 @@
       },
       {
         "q": "What do I need to send for a new construction quote?",
-        "a": "The plans (the plumbing or architectural set), the town, the target dates, the contractor's name and number, and whether the property is on municipal water and sewer. Shane gives a free written quote based on the scope. For work inside an existing house, see {{kitchen-bath-remodels|kitchen and bath remodel plumbing}}."
+        "a": "The plans (the plumbing or architectural set), the town, the target dates, the contractor's name and number, and whether the property is on municipal water and sewer. Shane quotes based on the scope. For work inside an existing house, see {{kitchen-bath-remodels|kitchen and bath remodel plumbing}}."
       },
       {
         "q": "Does the plumber handle permits and inspections?",

@@ -5,11 +5,13 @@ import area from '../../service-area.json';
 // The outline map as a static, cacheable image for the ZIP checker's approximate pin. The checker loads it only after
 // a ZIP has been checked, so it never delays the first screen. Red = owner-confirmed towns (src/service-area.json);
 // grey = neighbouring towns that are not confirmed. Text labels use system fonts (an SVG image cannot load web fonts).
+const esc = (v: string | number) => String(v).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
 export const GET: APIRoute = () => {
   const [x, y, w, h] = geo.viewBox;
   const towns = geo.towns as Record<string, { d: string; cx: number; cy: number }>;
   const labels = area.towns
-    .map((t) => `<text x="${towns[t.slug].cx}" y="${towns[t.slug].cy}">${t.name}</text>`)
+    .map((t) => `<text x="${esc(towns[t.slug].cx)}" y="${esc(towns[t.slug].cy)}">${esc(t.name)}</text>`)
     .join('');
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}">` +

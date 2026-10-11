@@ -1,0 +1,44 @@
+{
+ "target": "http://127.0.0.1:52673/review/",
+ "url": "http://127.0.0.1:52673/review/",
+ "audited_at": "2026-10-11T00:37:16.885Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "SHIP",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "P3": 1
+ },
+ "findings": [
+  {
+   "id": "F001",
+   "kind": "objective",
+   "severity": "P2",
+   "check": "focus-visible",
+   "evidence": "no visible focus indicator on: iframe",
+   "breakpoint": 1280,
+   "business_impact": "Keyboard users cannot see where they are (WCAG 2.4.7).",
+   "recommendation": "Add a visible :focus-visible style (outline ≥2 px).",
+   "verification": "Re-run: node scripts/audit.js <target> — the focus-visible finding must be gone.",
+   "occurrences": 1
+  },
+  {
+   "id": "F002",
+   "kind": "objective",
+   "severity": "P3",
+   "check": "canonical",
+   "evidence": "no canonical link",
+   "breakpoint": null,
+   "business_impact": "Duplicate URLs can split ranking signals.",
+   "recommendation": "Add <link rel=\"canonical\">.",
+   "verification": "Re-run: node scripts/audit.js <target> — the canonical finding must be gone.",
+   "occurrences": 1
+  }
+ ]
+}

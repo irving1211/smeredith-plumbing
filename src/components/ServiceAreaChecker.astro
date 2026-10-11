@@ -130,7 +130,8 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
 
 <script>
   import { checkTown } from '../lib/service-area.js';
-  import { checkZip, pinPosition } from '../lib/zip-coverage.js';
+  // The ZIP logic (and the coverage lists it reads) loads only when someone uses the ZIP box, not with the page.
+  const zipLib = () => import('../lib/zip-coverage.js');
 
   type Track = (event: string, params?: Record<string, string>) => void;
   const track: Track = (event, params) => (window as unknown as { smTrack?: Track }).smTrack?.(event, params);
@@ -253,6 +254,21 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
       retry.hidden = true;
       zipInput.removeAttribute('aria-invalid');
       let data: unknown = null;
+      // Clear the previous answer at once so an old result is never read as the answer to the new ZIP.
+      show('Checking…', '', null, null);
+      showPin('', null);
+      let lib: Awaited<ReturnType<typeof zipLib>>;
+      try {
+        lib = await zipLib();
+      } catch {
+        // The lookup code itself could not load (offline, flaky network): same honest answer as a failed data load.
+        show("The ZIP lookup didn't load. Try again, pick your town instead, or call Shane.", '', { kind: 'call', href: 'tel:+17818204592', label: 'Call 781-820-4592' }, null);
+        retry.hidden = false;
+        showPin('', null);
+        track('service_area_check', { method: 'zip', result: 'lookup_error', service_type: service });
+        return;
+      }
+      const { checkZip, pinPosition } = lib;
       // Validation does not need the data: answer bad input at once.
       const quick = checkZip(value, {}, service, { base });
       if (quick.state === 'invalid') {
@@ -283,7 +299,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
     });
     retry.addEventListener('click', () => runZip());
     // Start the small data download as soon as the visitor shows intent, so the answer is instant.
-    zipInput.addEventListener('focus', () => { loadZipData(`${base}data/zip-coverage.json`).catch(() => {}); }, { once: true });
+    zipInput.addEventListener('focus', () => { zipLib().catch(() => {}); loadZipData(`${base}data/zip-coverage.json`).catch(() => {}); }, { once: true });
 
     // ---- Town picker (no ZIP handy) ----
     const runTown = (value: string) => {
@@ -446,7 +462,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
   .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--color-text-muted); }
   .area-towns { list-style: none; margin: .5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
   .area-towns li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-weight: 600; font-size: .95rem; }
-  .area-towns li a, .area-towns li.town-plain { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; }
+  .area-towns li a, .area-towns li.town-plain { display: flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 1rem; }
   .area-towns li a { text-decoration: underline; text-underline-offset: .2em; }
   .area-towns li.town-plain { color: var(--color-text-muted); }
   .area-confirmed { margin: .75rem 0 0; color: var(--color-text-muted); font-size: .9rem; }
