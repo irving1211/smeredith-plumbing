@@ -118,11 +118,15 @@ describe('service and town carry-through', () => {
   });
 });
 
+// The town picker now sits behind "No ZIP handy? Pick your town" (the ZIP checker is first; see zip-checker.e2e.mjs).
+const openTownPicker = (page, scope = '#area') => page.locator(`${scope} .area-manual summary`).first().click();
+
 describe('service-area checker', () => {
   test('a confirmed town gets a clear request CTA that carries the town (and the service on service pages)', async () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/service-area/`);
+    await openTownPicker(page);
     await page.selectOption('#area-town', 'lynn');
     const result = page.locator('#area [data-area-result]');
     assert.equal(await result.isVisible(), true);
@@ -131,12 +135,15 @@ describe('service-area checker', () => {
     assert.equal(await cta.getAttribute('href'), '/contact/?town=lynn');
     assert.match(await cta.textContent(), /Request service in Lynn/);
     assert.equal(await page.locator('#area path.town.is-selected').getAttribute('data-town'), 'lynn');
-    assert.equal(await result.getAttribute('role'), 'status', 'result is announced to screen readers');
+    const live = page.locator('#area [data-area-live]');
+    assert.equal(await live.getAttribute('role'), 'status', 'a live region present from page load announces the result');
+    await page.waitForFunction(() => /Shane serves Lynn/.test(document.querySelector('#area [data-area-live]').textContent));
     await cta.click();
     await page.waitForURL(/\/contact\/\?town=lynn$/);
     assert.equal(await page.inputValue('#address'), 'Lynn');
 
     await page.goto(`${origin}/services/boiler-service/`);
+    await page.locator('#svc-area-town').evaluate((el) => el.closest('details').open = true);
     await page.selectOption('#svc-area-town', 'malden');
     assert.equal(await page.locator('[data-area-cta]').getAttribute('href'), '/contact/?service=boiler-service&town=malden');
 
@@ -149,6 +156,7 @@ describe('service-area checker', () => {
     const { context, events } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/service-area/`);
+    await openTownPicker(page);
     await page.fill('#area-other', 'Andover');
     await page.press('#area-other', 'Enter');
     const result = page.locator('#area [data-area-result]');
@@ -173,6 +181,7 @@ describe('service-area checker', () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/service-area/`);
+    await openTownPicker(page);
     await page.focus('#area-town');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
@@ -195,6 +204,7 @@ describe('service-area checker', () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/service-area/`);
+    await openTownPicker(page);
     await page.selectOption('#area-town', 'boston');
     assert.match(await page.locator('#area [data-area-note]').textContent(), /confirm your neighborhood/i);
     await context.close();
@@ -204,8 +214,9 @@ describe('service-area checker', () => {
     const { context } = await phoneContext(browser, { javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto(`${origin}/`);
-    await page.selectOption('#area-town', 'peabody');
-    await page.locator('#area').getByRole('button', { name: 'Check my town' }).click();
+    assert.equal(await page.locator('#area [data-zip-form]').isVisible(), false, 'the ZIP box needs JavaScript, so it is hidden');
+    await page.selectOption('#area-town-nojs', 'peabody');
+    await page.locator('#area .nojs-town').getByRole('button', { name: 'Request service' }).click();
     await page.waitForURL(/\/contact\/\?town=peabody/);
     assert.match(page.url(), /town=peabody/);
     await context.close();

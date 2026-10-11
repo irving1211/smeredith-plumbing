@@ -1,12 +1,13 @@
 ---
-// Town-level coverage checker + outline map.
-//  - Coverage comes ONLY from src/service-area.json (owner-confirmed towns). An unlisted town is
-//    told to contact Shane, never turned away.
-//  - Without JavaScript the form is a plain GET to /contact/ with the town and service carried over.
-//  - The outlines are real municipal boundaries (src/service-area-geo.json, built by
-//    scripts/build-service-area-geo.mjs) and are drawn as town coverage, not a service radius.
-//  - An interactive Google Map loads only on request, and only if PUBLIC_GOOGLE_MAPS_KEY was set when
-//    the site was built. Shane's home address is never used or shown.
+// Coverage checker: ZIP first, with an approximate pin and the next action.
+//  - Coverage comes ONLY from src/service-area.json (owner-confirmed towns). A valid ZIP is not automatically covered,
+//    and an unconfirmed town is never refused: the answer is "Call Shane to confirm". Logic: src/lib/zip-coverage.js.
+//  - ZIP geography (Census ZCTA -> town overlaps, public domain) is fetched from /data/zip-coverage.json only when a
+//    ZIP is checked; the map image is lazy and inside a hidden box, so it loads only when there is a pin to show.
+//  - The pin is the ZIP's approximate centre, labelled as such; no geolocation, no street-level position.
+//  - The typed ZIP never reaches a link, analytics or storage. Analytics gets only an enumerated result state.
+//  - Without JavaScript: a town picker (plain GET to /contact/ with the town and service) and the phone number.
+//  - The town links stay in the HTML (an expandable list) so search engines can always reach the town pages.
 import { TOWNS, HOME_TOWN, CONFIRMED_ON } from '../lib/service-area.js';
 import areas from '../areas.json';
 import geo from '../service-area-geo.json';
@@ -14,7 +15,7 @@ import geo from '../service-area-geo.json';
 interface Props {
   /** A service id from service-options.json, carried into the request form. */
   service?: string;
-  /** Show the outline map and town links (full variant). */
+  /** Show the large clickable outline map (Service area page). */
   showMap?: boolean;
   /** Unique id prefix when the component appears twice on a page. */
   uid?: string;
@@ -25,39 +26,76 @@ const mapsKey = import.meta.env.PUBLIC_GOOGLE_MAPS_KEY || '';
 const pageSlugs = new Set(areas.map((a) => a.slug));
 const [vx, vy, vw, vh] = geo.viewBox;
 const townNames = TOWNS.map((t) => t.name).join(', ');
+const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
 ---
 
-<div class="area-checker" data-area-checker data-base={base} data-service={service} data-maps-key={mapsKey}>
-  <form class="area-form" action={`${base}contact/`} method="get" data-area-form>
-    <div class="area-field">
-      <label for={`${uid}-town`}>Check your town</label>
-      <select id={`${uid}-town`} name="town" data-area-select>
-        <option value="">Choose your town…</option>
-        {TOWNS.map((t) => <option value={t.slug}>{t.name}</option>)}
-      </select>
+<div class="area-checker" data-area-checker data-base={base} data-service={service} data-maps-key={mapsKey} data-proj={proj}>
+  <form class="zip-form js-only" data-zip-form novalidate>
+    <label for={`${uid}-zip`}>Your ZIP code</label>
+    <div class="zip-row">
+      <input id={`${uid}-zip`} name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="10" spellcheck="false" aria-describedby={`${uid}-zip-hint`} data-zip-input />
+      <button type="submit" class="btn btn-primary">Check</button>
     </div>
-    <div class="area-field">
-      <label for={`${uid}-other`}>Not on the list? Type your town</label>
-      <input id={`${uid}-other`} name="town_other" type="text" maxlength="60" autocomplete="address-level2" data-area-other />
-    </div>
-    {service && <input type="hidden" name="service" value={service} />}
-    <button type="submit" class="btn btn-primary">Check my town</button>
+    <p class="hint" id={`${uid}-zip-hint`}>Only used to check the area on this page. It isn't saved or sent anywhere.</p>
   </form>
 
-  <div class="area-result" data-area-result role="status" aria-live="polite" hidden>
+  <noscript>
+    <form class="area-form nojs-town" action={`${base}contact/`} method="get">
+      <div class="area-field">
+        <label for={`${uid}-town-nojs`}>Pick your town</label>
+        <select id={`${uid}-town-nojs`} name="town">
+          <option value="">Choose your town…</option>
+          {TOWNS.map((t) => <option value={t.slug}>{t.name}</option>)}
+        </select>
+      </div>
+      {service && <input type="hidden" name="service" value={service} />}
+      <button type="submit" class="btn btn-primary">Request service</button>
+    </form>
+    <p class="nojs-call">Town not listed? <a href="tel:+17818204592">Call 781-820-4592</a> and Shane will tell you.</p>
+  </noscript>
+
+  <p class="visually-hidden" role="status" aria-live="polite" data-area-live></p>
+  <div class="area-result" data-area-result hidden>
     <p class="area-message" data-area-message></p>
     <p class="area-note" data-area-note hidden></p>
+    <div class="pinmap" data-pinmap hidden>
+      <div class="pinmap-frame">
+        <img data-pinmap-img src={`${base}data/area-map.svg`} alt="" width={vw} height={vh} loading="lazy" decoding="async" />
+        <span class="pin" data-pin aria-hidden="true"><span class="pin-ring"></span><span class="pin-dot"></span></span>
+      </div>
+      <p class="pinmap-cap" data-pin-caption></p>
+    </div>
     <div class="area-actions">
       <a class="btn btn-primary" data-area-cta href={`${base}contact/`}>Request service</a>
       <a class="btn btn-ghost" data-area-call href="tel:+17818204592">Call 781-820-4592</a>
+      <button type="button" class="btn btn-secondary" data-zip-retry hidden>Try again</button>
     </div>
   </div>
+
+  <details class="area-manual js-only">
+    <summary>No ZIP handy? Pick your town</summary>
+    <form class="area-form" action={`${base}contact/`} method="get" data-area-form>
+      <div class="area-field">
+        <label for={`${uid}-town`}>Your town</label>
+        <select id={`${uid}-town`} name="town" data-area-select>
+          <option value="">Choose your town…</option>
+          {TOWNS.map((t) => <option value={t.slug}>{t.name}</option>)}
+        </select>
+      </div>
+      <div class="area-field">
+        <label for={`${uid}-other`}>Not on the list? Type your town</label>
+        <input id={`${uid}-other`} name="town_other" type="text" maxlength="60" autocomplete="address-level2" data-area-other />
+      </div>
+      {service && <input type="hidden" name="service" value={service} />}
+      <button type="submit" class="btn btn-secondary">Check my town</button>
+    </form>
+  </details>
 
   {showMap && (
     <figure class="area-map">
       <svg class="area-svg" viewBox={`${vx} ${vy} ${vw} ${vh}`} role="img" aria-labelledby={`${uid}-map-title ${uid}-map-desc`} focusable="false">
         <title id={`${uid}-map-title`}>Map of the towns Shane serves</title>
-        <desc id={`${uid}-map-desc`}>Town outlines for {townNames}. Coloured towns are on Shane's confirmed list. Uncoloured neighbouring towns are not on the list yet, so contact Shane to confirm availability. Use the town selector above for the same information as text.</desc>
+        <desc id={`${uid}-map-desc`}>Town outlines for {townNames}. Coloured towns are on Shane's confirmed list. Uncoloured neighbouring towns are not on the list yet, so contact Shane to confirm availability. Use the ZIP or town checker above for the same information as text.</desc>
         <path class="ctx" d={geo.context} />
         {TOWNS.map((t) => <path class="town" data-town={t.slug} data-cx={geo.towns[t.slug].cx} data-cy={geo.towns[t.slug].cy} d={geo.towns[t.slug].d} />)}
         <text class="lbl" data-label x={geo.towns[HOME_TOWN].cx} y={geo.towns[HOME_TOWN].cy} text-anchor="middle">Saugus</text>
@@ -77,7 +115,8 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
     </figure>
   )}
 
-  {showMap && (
+  <details class="area-townlist" open={showMap ? true : undefined}>
+    <summary>Towns Shane serves ({TOWNS.length})</summary>
     <ul class="area-towns">
       {TOWNS.map((t) => (
         <li class={pageSlugs.has(t.slug) ? '' : 'town-plain'}>
@@ -85,38 +124,73 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
         </li>
       ))}
     </ul>
-  )}
-  {showMap && <p class="area-confirmed">Service area confirmed by Shane {CONFIRMED_ON}. Outside this list? Call anyway: if it's close, he'll tell you.</p>}
+    <p class="area-confirmed">Confirmed by Shane {CONFIRMED_ON}. Towns with a page are linked. Somewhere else nearby? Call: if it's close, he'll tell you.</p>
+  </details>
 </div>
 
 <script>
   import { checkTown } from '../lib/service-area.js';
+  import { checkZip, pinPosition } from '../lib/zip-coverage.js';
 
   type Track = (event: string, params?: Record<string, string>) => void;
   const track: Track = (event, params) => (window as unknown as { smTrack?: Track }).smTrack?.(event, params);
 
+  // One shared fetch for every checker on the page. A failed load is forgotten so "Try again" really retries.
+  let zipData: Promise<unknown> | null = null;
+  const loadZipData = (url: string) => {
+    if (!zipData) {
+      zipData = (async () => {
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), 8000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          if (!res.ok) throw new Error(String(res.status));
+          return await res.json();
+        } finally {
+          window.clearTimeout(timer);
+        }
+      })().catch((error) => {
+        zipData = null;
+        throw error;
+      });
+    }
+    return zipData;
+  };
+
   document.querySelectorAll<HTMLElement>('[data-area-checker]').forEach((root) => {
     const base = root.dataset.base || '/';
     const service = root.dataset.service || '';
-    const select = root.querySelector<HTMLSelectElement>('[data-area-select]')!;
-    const other = root.querySelector<HTMLInputElement>('[data-area-other]')!;
-    const form = root.querySelector<HTMLFormElement>('[data-area-form]')!;
-    const box = root.querySelector<HTMLElement>('[data-area-result]')!;
-    const message = root.querySelector<HTMLElement>('[data-area-message]')!;
-    const note = root.querySelector<HTMLElement>('[data-area-note]')!;
-    const cta = root.querySelector<HTMLAnchorElement>('[data-area-cta]')!;
+    const projection = JSON.parse(root.dataset.proj || '{}');
+    const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel)!;
+    const zipForm = $<HTMLFormElement>('[data-zip-form]');
+    const zipInput = $<HTMLInputElement>('[data-zip-input]');
+    const select = $<HTMLSelectElement>('[data-area-select]');
+    const other = $<HTMLInputElement>('[data-area-other]');
+    const form = $<HTMLFormElement>('[data-area-form]');
+    const box = $<HTMLElement>('[data-area-result]');
+    const live = $<HTMLElement>('[data-area-live]');
+    const message = $<HTMLElement>('[data-area-message]');
+    const note = $<HTMLElement>('[data-area-note]');
+    const cta = $<HTMLAnchorElement>('[data-area-cta]');
+    const second = $<HTMLAnchorElement>('[data-area-call]');
+    const retry = $<HTMLButtonElement>('[data-zip-retry]');
+    const pinmap = $<HTMLElement>('[data-pinmap]');
+    const pinImg = $<HTMLImageElement>('[data-pinmap-img]');
+    const pin = $<HTMLElement>('[data-pin]');
+    const pinCaption = $<HTMLElement>('[data-pin-caption]');
     const paths = Array.from(root.querySelectorAll<SVGPathElement>('path.town'));
     const label = root.querySelector<SVGTextElement>('[data-label]');
     let selectedSlug = '';
     let refreshMap: (() => void) | null = null;
+    let pinAt: { x: number; y: number } | null = null;
 
-    const highlight = (slug: string) => {
+    const highlight = (slug: string, name = '') => {
       selectedSlug = slug;
       paths.forEach((p) => p.classList.toggle('is-selected', p.dataset.town === slug));
       if (label) {
         const target = paths.find((p) => p.dataset.town === slug);
         if (target) {
-          label.textContent = select.selectedOptions[0]?.textContent || '';
+          label.textContent = name;
           label.setAttribute('x', target.dataset.cx || '0');
           label.setAttribute('y', target.dataset.cy || '0');
           label.classList.add('is-selected');
@@ -127,31 +201,114 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
       refreshMap?.();
     };
 
-    const run = (value: string) => {
-      const result = checkTown(value, service, { base });
-      box.hidden = false;
-      message.textContent = result.message;
-      note.textContent = result.note || '';
-      note.hidden = !result.note;
-      cta.href = result.cta.href;
-      cta.textContent = result.cta.label;
-      cta.dataset.typedTown = result.cta.typed || '';
-      highlight(result.status === 'confirmed' && result.town ? result.town.slug : '');
-      // Only the enumerated town slug (or "other") is reported; typed text never leaves the page.
-      track('service_area_check', { town: result.town ? result.town.slug : 'other', result: result.status, service_type: service });
+    type Action = { kind: string; href: string; label: string; townName?: string } | null;
+    const setButton = (el: HTMLAnchorElement, action: Action, primary: boolean) => {
+      el.hidden = !action;
+      if (!action) return;
+      el.href = action.href;
+      el.textContent = action.label;
+      el.className = `btn ${primary ? 'btn-primary' : 'btn-ghost'}`;
+      el.dataset.typedTown = action.townName || '';
     };
 
-    cta.addEventListener('click', () => {
+    const show = (text: string, noteText: string, primary: Action, secondary: Action) => {
+      box.hidden = false;
+      message.textContent = text;
+      note.textContent = noteText;
+      note.hidden = !noteText;
+      setButton(cta, primary, true);
+      setButton(second, secondary, false);
+      // Repeat the same words in the polite live region (it exists from page load, so screen readers announce it).
+      live.textContent = '';
+      window.setTimeout(() => { live.textContent = noteText ? `${text} ${noteText}` : text; }, 50);
+    };
+
+    // Frame the map so the pin sits in view, zoomed in around the ZIP's approximate centre.
+    const placePin = () => {
+      if (!pinAt || pinmap.hidden) return;
+      const frame = pinImg.parentElement as HTMLElement;
+      const fw = frame.clientWidth, fh = frame.clientHeight;
+      const [, , vw, vh] = projection.viewBox;
+      const width = Math.max(fw * 1.8, 320);
+      const height = width * (vh / vw);
+      const px = (pinAt.x / vw) * width, py = (pinAt.y / vh) * height;
+      const left = Math.min(0, Math.max(fw - width, fw / 2 - px));
+      const top = Math.min(0, Math.max(fh - height, fh / 2 - py));
+      pinImg.style.width = `${width}px`;
+      pinImg.style.transform = `translate(${left}px, ${top}px)`;
+      pin.style.transform = `translate(${left + px}px, ${top + py}px)`;
+    };
+    window.addEventListener('resize', placePin, { passive: true });
+
+    const showPin = (zip: string, at: { x: number; y: number } | null) => {
+      pinAt = at;
+      pinmap.hidden = !at;
+      if (!at) return;
+      pinCaption.textContent = `The pin marks the approximate centre of ZIP ${zip}, not your address. Red towns are on Shane's confirmed list.`;
+      placePin();
+    };
+
+    const runZip = async () => {
+      const value = zipInput.value;
+      retry.hidden = true;
+      zipInput.removeAttribute('aria-invalid');
+      let data: unknown = null;
+      // Validation does not need the data: answer bad input at once.
+      const quick = checkZip(value, {}, service, { base });
+      if (quick.state === 'invalid') {
+        show(quick.message, '', null, null);
+        showPin('', null);
+        zipInput.setAttribute('aria-invalid', 'true');
+        zipInput.focus();
+        track('service_area_check', { method: 'zip', result: quick.state, service_type: service });
+        return;
+      }
+      show('Checking…', '', null, null);
       try {
-        if (cta.dataset.typedTown) sessionStorage.setItem('sm_town_other', cta.dataset.typedTown);
-        else sessionStorage.removeItem('sm_town_other');
-      } catch (_) { /* storage unavailable: the visitor can type the town on the next page */ }
+        data = await loadZipData(`${base}data/zip-coverage.json`);
+      } catch {
+        data = null;
+      }
+      const result = checkZip(value, data as never, service, { base });
+      show(result.message, result.note, result.primary, result.secondary);
+      retry.hidden = !result.retry;
+      showPin(result.zip, pinPosition(result.pin, projection));
+      highlight(result.state === 'covered' && result.towns[0] ? result.towns[0].slug : '', result.towns[0]?.name || '');
+      track('service_area_check', { method: 'zip', result: result.state, service_type: service });
+    };
+
+    zipForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      runZip();
     });
+    retry.addEventListener('click', () => runZip());
+    // Start the small data download as soon as the visitor shows intent, so the answer is instant.
+    zipInput.addEventListener('focus', () => { loadZipData(`${base}data/zip-coverage.json`).catch(() => {}); }, { once: true });
+
+    // ---- Town picker (no ZIP handy) ----
+    const runTown = (value: string) => {
+      const result = checkTown(value, service, { base });
+      show(result.message, result.note || '', { kind: 'request', href: result.cta.href, label: result.cta.label, townName: result.cta.typed || '' }, { kind: 'call', href: result.callHref, label: 'Call 781-820-4592' });
+      retry.hidden = true;
+      showPin('', null);
+      highlight(result.status === 'confirmed' && result.town ? result.town.slug : '', select.selectedOptions[0]?.textContent || '');
+      // Only the enumerated town slug (or "other") is reported; typed text never leaves the page.
+      track('service_area_check', { method: 'town', town: result.town ? result.town.slug : 'other', result: result.status, service_type: service });
+    };
+
+    [cta, second].forEach((link) =>
+      link.addEventListener('click', () => {
+        try {
+          if (link.dataset.typedTown) sessionStorage.setItem('sm_town_other', link.dataset.typedTown);
+          else sessionStorage.removeItem('sm_town_other');
+        } catch (_) { /* storage unavailable: the visitor can type the town on the next page */ }
+      }),
+    );
 
     select.addEventListener('change', () => {
       if (select.value) {
         other.value = '';
-        run(select.value);
+        runTown(select.value);
       }
     });
     form.addEventListener('submit', (event) => {
@@ -161,13 +318,13 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
         select.focus();
         return;
       }
-      run(value);
+      runTown(value);
     });
     paths.forEach((p) => {
       p.addEventListener('click', () => {
         select.value = p.dataset.town || '';
         other.value = '';
-        run(select.value);
+        runTown(select.value);
       });
     });
 
@@ -180,7 +337,7 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
       const fail = () => {
         mapEl.hidden = true;
         openBtn.disabled = false;
-        status.textContent = "The interactive map couldn't load. The town checker above works without it.";
+        status.textContent = "The interactive map couldn't load. The checker above works without it.";
         track('service_area_map_error');
       };
       const loadGoogle = () =>
@@ -221,7 +378,7 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
           map.data.addListener('click', (e: any) => {
             select.value = e.feature.getProperty('slug');
             other.value = '';
-            run(select.value);
+            runTown(select.value);
           });
           refreshMap = () => map.data.setStyle(style);
           status.textContent = 'Click a coloured town to check it.';
@@ -236,9 +393,21 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
 </script>
 
 <style>
-  .area-checker { display: grid; gap: 1.5rem; }
-  .area-form { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: end; max-width: 44rem; }
+  .area-checker { display: grid; gap: 1.25rem; }
+  .zip-form { display: grid; gap: .35rem; max-width: 30rem; }
+  .zip-form label { font-weight: 700; }
+  .zip-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; }
+  .zip-row input { font: inherit; font-size: 1.15rem; letter-spacing: .06em; width: 100%; min-height: 50px; padding: .6rem .85rem; border: 2px solid var(--color-control); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+  .zip-row input:focus { border-color: var(--color-text); }
+  .zip-row input[aria-invalid='true'] { border-color: var(--color-action-hover); }
+  .zip-row .btn { min-height: 50px; padding-inline: 1.4rem; }
+  .zip-form .hint { margin: 0; font-size: .88rem; color: var(--color-text-muted); }
+  .visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .area-form { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: end; max-width: 44rem; padding-top: .75rem; }
   @media (min-width: 700px) { .area-form { grid-template-columns: 1fr 1fr auto; max-width: none; } }
+  .nojs-town { padding-top: 0; }
+  .nojs-call { margin: .5rem 0 0; }
+  .nojs-call a { font-weight: 700; text-decoration: underline; }
   .area-field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
   .area-field label { font-weight: 700; }
   .area-field select, .area-field input { font: inherit; font-size: 1rem; width: 100%; min-height: 50px; padding: .65rem .85rem; border: 2px solid var(--color-control); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
@@ -249,6 +418,16 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
   .area-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; }
   .area-actions .btn { flex: 1 1 11rem; }
   .area-form .btn { min-height: 50px; }
+  .pinmap { margin: .6rem 0 0; }
+  .pinmap-frame { position: relative; height: 190px; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: #E4E1DA; }
+  @media (min-width: 700px) { .pinmap-frame { height: 230px; } }
+  .pinmap-frame img { position: absolute; left: 0; top: 0; max-width: none; height: auto; transform-origin: 0 0; }
+  .pin { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+  .pin-dot { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--color-text); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--color-text); }
+  /* A wide, faint circle says "somewhere around here" rather than "your house". */
+  .pin-ring { position: absolute; left: -34px; top: -34px; width: 68px; height: 68px; border-radius: 50%; border: 2px dashed var(--color-text); background: rgba(49, 49, 49, .08); }
+  .pinmap-cap { margin: .4rem 0 0; font-size: .85rem; color: var(--color-text-muted); }
+  .area-manual summary, .area-townlist summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; width: fit-content; }
   .area-map { margin: 0; display: grid; gap: .8rem; justify-items: center; }
   .area-svg { width: 100%; max-width: 440px; height: auto; max-height: 600px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
   .area-svg .ctx { fill: var(--color-border); stroke: var(--color-surface); stroke-width: .8; }
@@ -265,10 +444,10 @@ const townNames = TOWNS.map((t) => t.name).join(', ');
   .gmap-wrap { width: 100%; max-width: 640px; display: grid; gap: .6rem; justify-items: center; }
   .gmap { width: 100%; height: 420px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
   .gmap-status { margin: 0; min-height: 1.2em; font-size: .9rem; color: var(--color-text-muted); }
-  .area-towns { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+  .area-towns { list-style: none; margin: .5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
   .area-towns li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-weight: 600; font-size: .95rem; }
   .area-towns li a, .area-towns li.town-plain { display: flex; align-items: center; min-height: 44px; padding: 0 1rem; }
   .area-towns li a { text-decoration: underline; text-underline-offset: .2em; }
   .area-towns li.town-plain { color: var(--color-text-muted); }
-  .area-confirmed { margin: 0; text-align: center; color: var(--color-text-muted); font-size: .9rem; }
+  .area-confirmed { margin: .75rem 0 0; color: var(--color-text-muted); font-size: .9rem; }
 </style>

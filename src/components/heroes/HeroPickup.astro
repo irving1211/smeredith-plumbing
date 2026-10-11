@@ -1,0 +1,65 @@
+---
+// Option 2: the logo picks up. Rules every hero follows are in ./README.md (shared copy, unchanged logo,
+// one-shot CSS-only motion whose resting state is the static design, aria-hidden drawings).
+import HeroCopy from '../HeroCopy.astro';
+import LogoPicture from '../LogoPicture.astro';
+---
+
+  <section class="home-hero hv2 on-dark" id="top" aria-labelledby="hero-h" data-hero="2">
+    <div class="container hv2-grid">
+      <div class="hv2-plate">
+        <LogoPicture class="hero-logo" sizes="(min-width: 900px) 230px, 36vw" />
+        <svg class="hv2-phone" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <g class="hv2-rings" fill="none" stroke-linecap="round">
+            <path d="M44 44 a 40 40 0 0 1 22 -18" />
+            <path d="M30 34 a 58 58 0 0 1 30 -24" />
+            <path d="M156 44 a 40 40 0 0 0 -22 -18" />
+            <path d="M170 34 a 58 58 0 0 0 -30 -24" />
+          </g>
+          <path class="hv2-base" d="M34 168 L58 120 H142 L166 168 Q 168 176 160 176 H40 Q 32 176 34 168 Z" />
+          <rect class="hv2-fork" x="56" y="112" width="14" height="12" rx="3" />
+          <rect class="hv2-fork" x="130" y="112" width="14" height="12" rx="3" />
+          <circle class="hv2-key" cx="100" cy="150" r="9" />
+          <g class="hv2-handset">
+            <path transform="translate(40 74)" d="M0 28 C 0 12 12 2 30 0 L 90 0 C 108 2 120 12 120 28 L 120 34 Q 120 40 114 40 L 92 40 Q 86 40 86 34 L 86 24 Q 86 18 80 18 L 40 18 Q 34 18 34 24 L 34 34 Q 34 40 28 40 L 6 40 Q 0 40 0 34 Z" />
+          </g>
+        </svg>
+      </div>
+      <HeroCopy dark />
+    </div>
+  </section>
+
+<style>
+
+  .home-hero { padding: 1.25rem 0 2rem; }
+  @media (min-width: 900px) { .home-hero { padding: 3rem 0 3.25rem; } }
+
+  /* ---------- Option 2: the logo picks up (dark band) ---------- */
+  .hv2 { background: var(--color-dark); color: var(--color-ink-on-dark); }
+  .hv2-grid { display: grid; gap: 1.25rem; }
+  .hv2-plate { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: center; gap: .5rem; background: #FFFFFF; border-radius: var(--radius-sm); padding: .85rem 1rem; max-width: 26rem; }
+  .hv2-phone { width: 100%; height: auto; aspect-ratio: 1; }
+  .hv2-base, .hv2-handset { fill: var(--color-text); }
+  .hv2-fork { fill: var(--color-text-muted); }
+  .hv2-key { fill: var(--color-action); }
+  .hv2-rings { stroke: var(--color-action); stroke-width: 6; opacity: 0; }
+  .hv2-handset { transform-box: view-box; transform-origin: 100px 94px; transform: translate(-6px, -42px) rotate(-14deg); }
+  @media (min-width: 900px) {
+    .hv2-grid { grid-template-columns: minmax(0, 26rem) 1fr; gap: 3.5rem; align-items: center; }
+    .hv2-plate { padding: 1.4rem; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hv2-rings { animation: sm-blink .6s .05s ease-out 1 both; }
+    .hv2-handset { animation: sm-lift .55s .3s cubic-bezier(.3, 1.4, .5, 1) 1 backwards; }
+  }
+
+  /* ---------- shared one-shot keyframes (resting state = the CSS above) ---------- */
+  @keyframes sm-ring { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-9deg); } 40% { transform: rotate(8deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(4deg); } }
+  @keyframes sm-blink { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes sm-draw { from { stroke-dashoffset: 100; } }
+  @keyframes sm-uncover { from { transform: scaleX(1); } }
+  @keyframes sm-lift { from { transform: translate(0, 0) rotate(0); } }
+  @keyframes sm-turn { from { transform: rotate(-30deg); } }
+  @keyframes sm-slide { from { transform: translateX(-12%); } }
+  @keyframes sm-raise { from { transform: rotate(-60deg); } }
+</style>

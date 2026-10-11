@@ -1,0 +1,107 @@
+---
+// Review-only routes: /review/ (this side-by-side comparison) and /review/hero-1/ ... /review/hero-5/ (./[o1].astro ...
+// ./[o5].astro, the full home page with each hero option). Built ONLY when PUBLIC_REVIEW_ROUTES=1 is set for the build, so a normal production build has no
+// /review/ pages at all. Every review page is noindex, has no canonical, and is never in the sitemap.
+import Base from '../../layouts/Base.astro';
+import data from '../../review/hero-options.json';
+
+export function getStaticPaths() {
+  if (import.meta.env.PUBLIC_REVIEW_ROUTES !== '1') return [];
+  return [{ params: { compare: undefined } }];
+}
+
+const base = import.meta.env.BASE_URL;
+type Measured = { conditions: string; rows: Record<string, Record<string, string | number>> } | null;
+const measured = data.measured as Measured;
+const recommendation = data.recommendation as { id: string; why: string[] } | null;
+---
+
+<Base title="Hero options for review | S. Meredith" description="Review-only comparison of five home page hero options for S. Meredith Plumbing & Heating. Not a public page." noindex pageType="review">
+    <main id="main">
+      <div class="container page-head">
+        <h1>Hero options</h1>
+        <p class="lede">Five working home page openings for Irving and Shane to compare. Every option has the same words, the same Call and Request buttons and Shane's logo exactly as supplied; only the composition and the one-time movement change. None of these is the live design. Nothing here is indexed.</p>
+        <p class="note">Each preview below is the real page. Press <strong>Replay</strong> to see the movement again; with "reduce motion" switched on in your phone or computer settings every option shows its finished, still version straight away. <a href={base}>Current home page</a> (no portrait, copy only) for reference.</p>
+      </div>
+
+      {data.options.map((o) => (
+        <section class="section option" id={`option-${o.id}`} aria-labelledby={`o${o.id}-h`}>
+          <div class="container">
+            <h2 id={`o${o.id}-h`}>{o.id}. {o.name}</h2>
+            <p class="story">{o.story}</p>
+            <p class="motion"><strong>Movement:</strong> {o.motion}</p>
+            {o.caveat && <p class="notice caveat"><strong>Note:</strong> {o.caveat}</p>}
+            <div class="frames">
+              <figure class="frame frame-phone">
+                <div class="viewport phone"><iframe src={`${base}review/hero-${o.id}/`} title={`Option ${o.id} on a phone`} loading="lazy" width="390" height="844" data-frame></iframe></div>
+                <figcaption>Phone, 390 px</figcaption>
+              </figure>
+              <figure class="frame frame-desktop">
+                <div class="viewport desktop"><iframe src={`${base}review/hero-${o.id}/`} title={`Option ${o.id} on a desktop`} loading="lazy" width="1280" height="800" data-frame></iframe></div>
+                <figcaption>Desktop, 1280 px</figcaption>
+              </figure>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn btn-secondary" data-replay={o.id}>Replay</button>
+              <a class="btn btn-secondary" href={`${base}review/hero-${o.id}/`}>Open option {o.id}</a>
+            </div>
+            {measured && measured.rows[o.id] && (
+              <dl class="facts">
+                {Object.entries(measured.rows[o.id]).map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+              </dl>
+            )}
+          </div>
+        </section>
+      ))}
+
+      {measured && (
+        <section class="section" aria-labelledby="m-h">
+          <div class="container">
+            <h2 id="m-h">How they were measured</h2>
+            <p class="prose">{measured.conditions}</p>
+          </div>
+        </section>
+      )}
+
+      {recommendation && (
+        <section class="section" aria-labelledby="r-h">
+          <div class="container">
+            <h2 id="r-h">Recommendation (the choice is Irving's)</h2>
+            <p>Option {recommendation.id}.</p>
+            <ul class="prose">{recommendation.why.map((w) => <li>{w}</li>)}</ul>
+          </div>
+        </section>
+      )}
+    </main>
+  </Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-replay]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const section = button.closest('section');
+      section?.querySelectorAll<HTMLIFrameElement>('[data-frame]').forEach((frame) => {
+        frame.src = frame.src;
+      });
+    });
+  });
+</script>
+
+<style>
+  .note { max-width: 44rem; color: var(--color-text-muted); }
+  .story { max-width: 44rem; font-size: 1.05rem; margin: .5rem 0; }
+  .motion { max-width: 44rem; color: var(--color-text-muted); margin: 0 0 .75rem; }
+  .caveat { max-width: 44rem; margin: 0 0 1rem; }
+  .frames { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; margin: 1rem 0; }
+  .frame { margin: 0; }
+  .frame figcaption { font-size: .85rem; color: var(--color-text-muted); margin-top: .35rem; }
+  .viewport { position: relative; overflow: hidden; border: 1px solid var(--color-control); border-radius: 8px; background: #fff; }
+  .viewport iframe { border: 0; transform-origin: 0 0; position: absolute; left: 0; top: 0; }
+  .phone { width: 234px; height: 506px; }
+  .phone iframe { transform: scale(.6); }
+  .desktop { width: min(640px, 100%); aspect-ratio: 1280 / 800; }
+  .desktop iframe { transform: scale(.5); }
+  @media (max-width: 700px) { .frame-desktop { display: none; } }
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; margin: 1rem 0 0; font-size: .95rem; }
+  .facts dt { font-weight: 700; }
+  .facts dd { margin: 0; }
+</style>

@@ -1,0 +1,66 @@
+{
+  "_comment": "PROPOSED coverage expansion for Irving and Shane to review. Nothing here is confirmed: the checker never answers 'Yes' for these towns and they are not in the map shading, schema or Google profile. To confirm a town, move it to src/service-area.json (single source of truth) after Shane names it. Evidence and the full table: vault _context/coverage-proposal-2026-10-10.md.",
+  "preparedOn": "2026-10-10",
+  "evidence": {
+    "owner-map": "Shane's hand-drawn boundary on a phone map, received 2026-05-28 (vault _context/harvest/2026-05-28-service-area-map.jpg). Hand-drawn: edges are approximate.",
+    "irving-2026-10-10": "Irving: Shane serves all of the North Shore, the areas around Saugus/Melrose, and outer Boston areas toward the North Shore (regional guidance, not a boundary).",
+    "mapc-nstf": "MAPC North Shore Task Force subregion members (https://www.mapc.org/resource-library/nstf-subregion/), used only as a public definition of 'North Shore'."
+  },
+  "tiers": {
+    "likely": "Inside the owner's drawn boundary AND matches Irving's 2026-10-10 description. Strongest candidates; still needs Shane's yes.",
+    "inside-map": "Inside the owner's drawn boundary but outside Irving's 2026-10-10 description (west / Merrimack Valley / inner Boston suburbs). Needs Shane's yes.",
+    "edge": "The hand-drawn line runs through or right beside the town. Needs Shane's yes.",
+    "conflict": "Public North Shore definition (and Irving's 'all of the North Shore') includes it, but it lies outside the owner's May boundary. Needs Shane's answer."
+  },
+  "towns": [
+    { "slug": "lynnfield", "name": "Lynnfield", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "swampscott", "name": "Swampscott", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "nahant", "name": "Nahant", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "danvers", "name": "Danvers", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "middleton", "name": "Middleton", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "chelsea", "name": "Chelsea", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "winthrop", "name": "Winthrop", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "medford", "name": "Medford", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "reading", "name": "Reading", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "north-reading", "name": "North Reading", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "woburn", "name": "Woburn", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "winchester", "name": "Winchester", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10"] },
+    { "slug": "topsfield", "name": "Topsfield", "tier": "likely", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"] },
+
+    { "slug": "andover", "name": "Andover", "tier": "inside-map", "basis": ["owner-map"], "note": "Open owner question since 2026-09-29 (GBP reconciliation question 7)." },
+    { "slug": "north-andover", "name": "North Andover", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "boxford", "name": "Boxford", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "georgetown", "name": "Georgetown", "tier": "inside-map", "basis": ["owner-map"], "note": "Was on the May 2026 site list, later removed from the confirmed set." },
+    { "slug": "groveland", "name": "Groveland", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "methuen", "name": "Methuen", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "lawrence", "name": "Lawrence", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "wilmington", "name": "Wilmington", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "burlington", "name": "Burlington", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "billerica", "name": "Billerica", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "bedford", "name": "Bedford", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "arlington", "name": "Arlington", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "belmont", "name": "Belmont", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "cambridge", "name": "Cambridge", "tier": "inside-map", "basis": ["owner-map"] },
+    { "slug": "watertown", "name": "Watertown", "tier": "inside-map", "basis": ["owner-map"] },
+
+    { "slug": "salem", "name": "Salem", "tier": "edge", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"], "note": "The drawn eastern line runs through Salem." },
+    { "slug": "beverly", "name": "Beverly", "tier": "edge", "basis": ["owner-map", "irving-2026-10-10", "mapc-nstf"], "note": "The drawn line reaches Beverly airport (west Beverly)." },
+    { "slug": "newbury", "name": "Newbury", "tier": "edge", "basis": ["owner-map"], "note": "The drawn line passes Byfield (part of Newbury)." },
+    { "slug": "west-newbury", "name": "West Newbury", "tier": "edge", "basis": ["owner-map"] },
+    { "slug": "merrimac", "name": "Merrimac", "tier": "edge", "basis": ["owner-map"] },
+    { "slug": "waltham", "name": "Waltham", "tier": "edge", "basis": ["owner-map"], "note": "The drawn southern line runs through Waltham." },
+    { "slug": "lincoln", "name": "Lincoln", "tier": "edge", "basis": ["owner-map"] },
+    { "slug": "lowell", "name": "Lowell", "tier": "edge", "basis": ["owner-map"], "note": "The drawn western line runs along the Lowell / Chelmsford side." },
+    { "slug": "chelmsford", "name": "Chelmsford", "tier": "edge", "basis": ["owner-map"] },
+    { "slug": "dracut", "name": "Dracut", "tier": "edge", "basis": ["owner-map"] },
+
+    { "slug": "marblehead", "name": "Marblehead", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "wenham", "name": "Wenham", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "hamilton", "name": "Hamilton", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "manchester-by-the-sea", "name": "Manchester-by-the-Sea", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "essex", "name": "Essex", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "gloucester", "name": "Gloucester", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "rockport", "name": "Rockport", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] },
+    { "slug": "ipswich", "name": "Ipswich", "tier": "conflict", "basis": ["irving-2026-10-10", "mapc-nstf"] }
+  ]
+}

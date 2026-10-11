@@ -215,6 +215,7 @@ describe('the pages that took over the long homepage sections', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/`);
     assert.equal(await page.locator('#area svg').count(), 0);
+    await page.locator('#area .area-manual summary').click();
     await page.selectOption('#area-town', 'revere');
     await page.locator('#area [data-area-cta]').click();
     await page.waitForURL(/\/contact\/\?town=revere$/);

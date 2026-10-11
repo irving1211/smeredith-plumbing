@@ -1,0 +1,13 @@
+---
+// Review-only: the full home page with hero option 3. Built only when PUBLIC_REVIEW_ROUTES=1 (see ./[...compare].astro).
+import HomePage from '../../components/HomePage.astro';
+import HeroDiagram from '../../components/heroes/HeroDiagram.astro';
+
+export function getStaticPaths() {
+  return import.meta.env.PUBLIC_REVIEW_ROUTES === '1' ? [{ params: { o3: 'hero-3' } }] : [];
+}
+---
+
+<HomePage hero="3" review>
+  <HeroDiagram slot="hero" />
+</HomePage>

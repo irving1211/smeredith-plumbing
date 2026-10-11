@@ -1,0 +1,42 @@
+{
+  "_comment": "Review-only data for /review/ (built only when PUBLIC_REVIEW_ROUTES=1). Measurements are filled from qa/heroes-2026-10-10/ results; nothing here is shown on production pages.",
+  "measured": null,
+  "recommendation": null,
+  "options": [
+    {
+      "id": "1",
+      "name": "Phone, pipe, logo",
+      "story": "One short ring of a phone, a red line runs through a pipe bend, and the line arrives at Shane's unchanged logo as a panel slides off it. The call reaches the person on the logo.",
+      "motion": "Phone wobbles once (0.5 s), red line draws through the pipe (0.35-1.0 s), cover slides off the logo (0.95-1.35 s). Then still.",
+      "caveat": ""
+    },
+    {
+      "id": "2",
+      "name": "The logo picks up",
+      "story": "A dark charcoal band, with the logo on a white plate like the decal on the white van. Beside it a desk phone's receiver lifts off its cradle once and stays lifted: the call is answered.",
+      "motion": "Two ring marks flash once (0.6 s); the receiver lifts and settles (0.3-0.85 s). Then still.",
+      "caveat": ""
+    },
+    {
+      "id": "3",
+      "name": "Plumbing diagram",
+      "story": "Drawn on grid paper like a riser diagram: a leaking tap, a water heater and a radiator (leak, no hot water, no heat) pipe into one line, through a valve, to Shane's logo. Whatever the problem, it runs to one person.",
+      "motion": "Red flow lines draw from each fixture to the logo (0.1-1.3 s). Then still.",
+      "caveat": ""
+    },
+    {
+      "id": "4",
+      "name": "Van lettering",
+      "story": "Headline first, then a white panel that reads like the side of Shane's van: his italic bullet list, the logo decal and the license line, with a pipe and a wrench along the bottom like the van's rocker panel.",
+      "motion": "The pipe slides in (0.5 s) and the wrench turns once as if tightening (0.25-0.95 s). Then still.",
+      "caveat": "The van also says Furnaces; it is left off until Shane confirms he offers furnace work (owner question S5)."
+    },
+    {
+      "id": "5",
+      "name": "A plumber answers",
+      "story": "A simple, original drawing of a plumber in a charcoal work shirt and red cap lifts a phone to his ear beside the logo. Friendly and direct.",
+      "motion": "Two ring marks flash once (0.55 s); the arm lifts the phone to the ear (0.35-0.95 s). Then still.",
+      "caveat": "Proposed brand extension, not Shane's likeness. The character is new artwork and needs Shane's approval before any public use; it would also need a decision on whether it appears anywhere else (van, cards, Google profile)."
+    }
+  ]
+}

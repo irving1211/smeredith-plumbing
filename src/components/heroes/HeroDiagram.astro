@@ -1,0 +1,97 @@
+---
+// Option 3: plumbing diagram. Rules every hero follows are in ./README.md (shared copy, unchanged logo,
+// one-shot CSS-only motion whose resting state is the static design, aria-hidden drawings).
+import HeroCopy from '../HeroCopy.astro';
+import LogoPicture from '../LogoPicture.astro';
+---
+
+  <section class="home-hero hv3" id="top" aria-labelledby="hero-h" data-hero="3">
+    <div class="container hv3-grid">
+      <div class="hv3-art">
+        <svg class="hv3-svg" viewBox="0 0 560 340" aria-hidden="true" focusable="false">
+          <g class="hv3-pipes" fill="none">
+            <path d="M88 78 H 186 a 14 14 0 0 1 14 14 V 170 H 384" />
+            <path d="M88 170 H 384" />
+            <path d="M90 275 H 186 a 14 14 0 0 0 14 -14 V 170" />
+          </g>
+          <g class="hv3-flow" fill="none">
+            <path class="f1" pathLength="100" d="M88 78 H 186 a 14 14 0 0 1 14 14 V 170 H 384" />
+            <path class="f2" pathLength="100" d="M88 170 H 384" />
+            <path class="f3" pathLength="100" d="M90 275 H 186 a 14 14 0 0 0 14 -14 V 170 H 384" />
+          </g>
+          <circle class="hv3-node" cx="200" cy="170" r="9" />
+          <g class="hv3-valve">
+            <path d="M276 156 L304 184 V 156 L276 184 Z" />
+            <rect x="287" y="134" width="6" height="22" />
+            <rect x="276" y="128" width="28" height="8" rx="3" />
+          </g>
+          <g class="hv3-fix">
+            <rect x="34" y="72" width="54" height="10" rx="3" />
+            <rect x="54" y="44" width="12" height="30" rx="2" />
+            <path class="hv3-spout" d="M60 47 H 92 a 9 9 0 0 1 9 9 V 62" />
+            <rect x="48" y="34" width="24" height="7" rx="3" />
+            <path class="hv3-red" d="M101 70 c -4 6 -6 9 -6 12 a 6 6 0 0 0 12 0 c 0 -3 -2 -6 -6 -12 z" />
+            <rect class="hv3-tank" x="40" y="132" width="44" height="74" rx="9" />
+            <rect x="56" y="118" width="12" height="15" rx="2" />
+            <path class="hv3-red" d="M57 196 l5 -11 l5 11 z" />
+            <rect x="34" y="257" width="56" height="6" rx="2" />
+            <rect x="36" y="250" width="8" height="46" rx="3" />
+            <rect x="48" y="250" width="8" height="46" rx="3" />
+            <rect x="60" y="250" width="8" height="46" rx="3" />
+            <rect x="72" y="250" width="8" height="46" rx="3" />
+            <rect x="84" y="257" width="6" height="32" rx="2" />
+          </g>
+          <g class="hv3-labels">
+            <text x="62" y="108">Leak</text>
+            <text x="62" y="230">No hot water</text>
+            <text x="62" y="322">No heat</text>
+          </g>
+        </svg>
+        <div class="hv3-logo"><LogoPicture class="hero-logo" sizes="(min-width: 900px) 190px, 30vw" /></div>
+      </div>
+      <HeroCopy />
+    </div>
+  </section>
+
+<style>
+
+  .home-hero { padding: 1.25rem 0 2rem; }
+  @media (min-width: 900px) { .home-hero { padding: 3rem 0 3.25rem; } }
+
+  /* ---------- Option 3: plumbing diagram ---------- */
+  .hv3 { background-color: var(--color-bg); background-image: linear-gradient(rgba(49, 49, 49, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(49, 49, 49, .07) 1px, transparent 1px); background-size: 28px 28px; background-position: -1px -1px; }
+  .hv3 :global(.hero-copy) { background: var(--color-bg); padding: .25rem 0; }
+  .hv3-grid { display: grid; gap: 1rem; }
+  .hv3-art { position: relative; aspect-ratio: 560 / 340; width: 100%; max-width: 34rem; }
+  .hv3-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hv3-pipes { stroke: var(--color-text); stroke-width: 10; }
+  .hv3-flow { stroke: var(--color-action); stroke-width: 3.5; stroke-dasharray: 100; stroke-dashoffset: 0; }
+  .hv3-node { fill: var(--color-text); }
+  .hv3-valve { fill: var(--color-text); }
+  .hv3-valve path { fill: #FFFFFF; stroke: var(--color-text); stroke-width: 4; stroke-linejoin: round; }
+  .hv3-fix { fill: var(--color-text); }
+  .hv3-spout { fill: none; stroke: var(--color-text); stroke-width: 8; }
+  .hv3-tank { fill: #FFFFFF; stroke: var(--color-text); stroke-width: 5; }
+  .hv3-red { fill: var(--color-action); stroke: none; }
+  .hv3-labels { font-family: var(--font-display); font-weight: 700; font-size: 17px; text-transform: uppercase; letter-spacing: .02em; fill: var(--color-text); text-anchor: middle; }
+  .hv3-logo { position: absolute; left: 68.6%; top: 20%; width: 30%; padding: 4px; background: var(--color-bg); }
+  @media (min-width: 900px) {
+    .hv3-grid { grid-template-columns: minmax(0, 34rem) 1fr; gap: 3rem; align-items: center; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hv3-flow path { animation: sm-draw .9s cubic-bezier(.4, 0, .2, 1) 1 backwards; }
+    .hv3-flow .f1 { animation-delay: .1s; }
+    .hv3-flow .f2 { animation-delay: .25s; }
+    .hv3-flow .f3 { animation-delay: .4s; }
+  }
+
+  /* ---------- shared one-shot keyframes (resting state = the CSS above) ---------- */
+  @keyframes sm-ring { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-9deg); } 40% { transform: rotate(8deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(4deg); } }
+  @keyframes sm-blink { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes sm-draw { from { stroke-dashoffset: 100; } }
+  @keyframes sm-uncover { from { transform: scaleX(1); } }
+  @keyframes sm-lift { from { transform: translate(0, 0) rotate(0); } }
+  @keyframes sm-turn { from { transform: rotate(-30deg); } }
+  @keyframes sm-slide { from { transform: translateX(-12%); } }
+  @keyframes sm-raise { from { transform: rotate(-60deg); } }
+</style>

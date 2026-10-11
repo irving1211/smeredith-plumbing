@@ -1,0 +1,196 @@
+---
+// The home page, shared by / (baseline hero) and the review-only hero options under /review/. One implementation of the
+// sections, navigation, checker and footer; only the hero (passed in the "hero" slot) changes. The hero is a slot, not
+// a prop, so each page bundles only its own hero's CSS.
+import Base from '../layouts/Base.astro';
+import jobsRaw from '../jobs.json';
+import services from '../services.json';
+import serviceOptions from '../service-options.json';
+import reviewData from '../reviews.json';
+import ServiceAreaChecker from './ServiceAreaChecker.astro';
+import { TOWNS } from '../lib/service-area.js';
+
+interface Props {
+  /** Review label: which option this copy of the page shows (review pages only). */
+  hero?: string;
+  /** Review copy of the page: noindex, no canonical, no Search Console tag, labelled as a review option. */
+  review?: boolean;
+}
+const { hero = 'baseline', review = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const publicEmail = 'shane@smeredithplumbing.com';
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
+const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
+const request = (service = '') => `${base}contact/${service ? `?service=${service}` : ''}`;
+
+// Shane's own list from the van, in the order that matches the work he wants most. Each row opens the
+// request form with that service already chosen; "Details" opens the service page when there is one.
+const pageSlugs = new Set(services.map((s) => s.slug));
+const order = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels', 'new-construction-plumbing', 'gas-installation', 'general-plumbing', 'emergency-plumbing'];
+const rows = order.map((id) => {
+  const o = serviceOptions.find((x) => x.id === id)!;
+  return { id, name: o.short, note: o.label, details: pageSlugs.has(id) ? `${base}services/${id}/` : `${base}services/` };
+});
+
+// Two excerpts that cover the two things visitors ask first: a heater and an emergency.
+const picks = ['Carly C.', 'Daniel M.'].map((n) => reviewData.reviews.find((r) => r.name === n)!);
+
+const job = jobsRaw.find((j) => j.slug === 'single-water-heater-open-basement')!;
+const jobPhoto = job.photos[0];
+
+// Shane does not like the current portrait, so the home page no longer uses it; the van stands in for "Meet Shane".
+const vanSrc = `${base}images/van/van-side-800.webp`;
+
+const faqs = [
+  { q: 'Who answers the phone?', a: 'Shane Meredith, the owner. S. Meredith Plumbing & Heating is owner-operated, so you reach Shane directly. Call or text 781-820-4592, or send a request and he will follow up.' },
+  { q: 'What areas do you serve?', a: `Based in Saugus, MA. Shane serves ${TOWNS.map((t) => t.name).join(', ')}. If your town is not on that list, contact Shane to confirm availability.` },
+  { q: 'Is Shane licensed?', a: 'Shane holds Massachusetts master plumber license 9630040-PL-M.' },
+];
+---
+
+<Base
+  title="S. Meredith Plumbing & Heating | Saugus, MA Plumber"
+  description="The plumber who answers the phone. Owner-operated plumbing and heating in Saugus, the North Shore and Boston. 24/7 emergency service. Call 781-820-4592."
+  pageType="home"
+  faqs={review ? [] : faqs}
+  noindex={review}
+>
+  {!review && (
+    <Fragment slot="head">
+      <!-- Google Search Console ownership (irvingcarrion.17). Keep: removing it un-verifies the property. -->
+      <meta name="google-site-verification" content="T1fr6tjXPBeZCzYliQAi5NbFYg6pVZYkxTW6no-cVG4" />
+    </Fragment>
+  )}
+
+  <main id="main">
+    <slot name="hero" />
+
+    <section class="section" id="services" aria-labelledby="need-h">
+      <div class="container">
+        <h2 class="section-title" id="need-h">What do you need?</h2>
+        <p class="section-note">Tap a service and the request form opens with it already chosen. Details shows what each one covers.</p>
+        <ul class="vanlist">
+          {rows.map((r) => (
+            <li>
+              <a class="row-main" href={request(r.id)}>
+                <span class="row-name">{r.name}</span>
+                <span class="row-note">{r.note}</span>
+              </a>
+              <a class="row-more" href={r.details} aria-label={`Details: ${r.name}`}>Details</a>
+            </li>
+          ))}
+        </ul>
+        <p class="more-link">Not sure what you need? <a href={request('not-sure')}>Describe it in the form</a> and Shane will sort it out. <a href={`${base}services/`}>All services</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="reviews" aria-labelledby="rev-h">
+      <div class="container">
+        <h2 class="section-title" id="rev-h">What customers say</h2>
+        <p class="section-note">Excerpts from five-star Google reviews, quoted as written.</p>
+        <ul class="quotes cols" data-curated>
+          {picks.map((r) => (
+            <li>
+              <figure class="quote review-card">
+                <blockquote>{r.body}</blockquote>
+                <figcaption><span class="stars" aria-hidden="true">★★★★★</span>{r.name}, {r.tag.toLowerCase()}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+        <p class="more-link"><a href={`${base}about/#reviews`}>More reviews</a> · <a href={googleReviewsUrl} target="_blank" rel="noopener">Read them on Google</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="meet-h">
+      <div class="container meet">
+        <img class="meet-photo" src={vanSrc} alt="Shane's van, lettered with his services and number" width="128" height="96" loading="lazy" decoding="async" />
+        <div>
+          <h2 class="section-title" id="meet-h">Meet Shane</h2>
+          <p>Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>
+          <p class="more-link"><a href={`${base}about/`}>About Shane and the van</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="job-h">
+      <div class="container job">
+        <figure class="job-photo">
+          <img src={`${base}${jobPhoto.src.replace(/^\//, '')}`} alt="A finished single water heater installation in an open basement" width={jobPhoto.width} height={jobPhoto.height} loading="lazy" decoding="async" />
+        </figure>
+        <div class="job-copy">
+          <h2 class="section-title" id="job-h">A recent job</h2>
+          <p>{job.desc}</p>
+          <div class="actions">
+            <a class="btn btn-primary" href={request('water-heater-replacement')}>Request water heater service</a>
+            <a class="btn btn-secondary" href={`${base}work/`}>See more work</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="area" aria-labelledby="area-h">
+      <div class="container">
+        <h2 class="section-title" id="area-h">Does Shane cover your area?</h2>
+        <p class="section-note">Based in Saugus. Enter your ZIP code to see the area on a map and what to do next.</p>
+        <ServiceAreaChecker showMap={false} />
+        <p class="more-link"><a href={`${base}service-area/`}>Full service area and map</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <h2 class="section-title" id="faq-h">Quick answers</h2>
+        <div class="faq-list">
+          {faqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <div class="faq-body"><p>{f.a}</p></div>
+            </details>
+          ))}
+        </div>
+        <p class="more-link">More answers are on each <a href={`${base}services/`}>service page</a>.</p>
+      </div>
+    </section>
+
+    <section class="band on-dark" id="contact" aria-labelledby="contact-h">
+      <div class="container">
+        <h2 id="contact-h">Call, text or send the details</h2>
+        <p>Phone first for anything urgent. For planned work, the request form takes a minute and can include a photo.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost-dark" href={smsHref}>Text Shane</a>
+          <a class="btn btn-ghost-dark" href={request()}>Request service</a>
+        </div>
+        <ul class="contact-meta">
+          <li><span class="lbl">Email</span><a href={`mailto:${publicEmail}`}>{publicEmail}</a></li>
+          <li><span class="lbl">Hours</span>24/7 emergency service</li>
+          <li><span class="lbl">Area</span>Saugus, the North Shore &amp; Boston</li>
+        </ul>
+      </div>
+    </section>
+    {review && (
+      <p class="review-flag">Review option {hero} of 5, for Irving and Shane to compare. Not the live design and not indexed. <a href={`${base}review/`}>Compare all options</a></p>
+    )}
+  </main>
+</Base>
+
+<style>
+  .review-flag { margin: 0; padding: .6rem var(--gutter); background: var(--color-tint); font-size: .92rem; text-align: center; }
+  .review-flag a { font-weight: 700; text-decoration: underline; }
+
+  .meet { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+  .meet-photo { width: 128px; height: 96px; object-fit: cover; border-radius: var(--radius-sm); }
+  .meet p { margin: 0 0 .5rem; }
+  .meet .section-title { margin-bottom: .4rem; font-size: 1.9rem; }
+
+  .job { display: grid; gap: 1.25rem; align-items: center; }
+  .job-photo { margin: 0; }
+  .job-photo img { width: 100%; max-width: 22rem; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); }
+  .job-copy p { margin: 0 0 1rem; max-width: 32rem; }
+  @media (min-width: 768px) {
+    .job { grid-template-columns: 22rem 1fr; gap: 3rem; }
+  }
+</style>

@@ -62,6 +62,7 @@ describe('on-demand Google Map', () => {
     await page.waitForFunction(() => /couldn't load/.test(document.querySelector('[data-gmap-status]').textContent));
     assert.equal(await page.locator('[data-gmap]').isHidden(), true);
     assert.equal(await page.locator('[data-gmap-open]').isEnabled(), true, 'they can try again');
+    await page.locator('#area .area-manual summary').click();
     await page.selectOption('#area-town', 'revere');
     assert.match(await page.locator('#area [data-area-message]').textContent(), /Shane serves Revere/);
     assert.equal(named(events, 'service_area_map_error').length, 1);

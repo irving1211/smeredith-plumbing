@@ -1,0 +1,27 @@
+---
+// The words and actions every hero option shares. Only the composition around them changes between options.
+// Wording is the approved brand line and the existing lede (design/VOICE.md); do not vary it per option.
+interface Props {
+  /** Dark background variant: secondary button uses the on-dark style. */
+  dark?: boolean;
+}
+const { dark = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<div class:list={["hero-copy", { "is-dark": dark }]}>
+  <h1 id="hero-h">The plumber who answers the phone.</h1>
+  <p class="lede">Owner-operated by Shane Meredith. Plumbing, heating, gas &amp; additions across Saugus, the North Shore &amp; Boston. 24/7 emergency service.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="tel:+17818204592">Call 781-820-4592</a>
+    <a class={`btn ${dark ? 'btn-ghost-dark' : 'btn-secondary'}`} href={`${base}contact/`}>Request service</a>
+  </div>
+</div>
+
+<style>
+  .hero-copy h1 { margin: 0 0 .75rem; }
+  .hero-copy .lede { margin: 0 0 1.25rem; max-width: 34rem; color: var(--color-text-muted); font-size: 1.08rem; }
+  @media (min-width: 900px) { .hero-copy .lede { font-size: 1.2rem; } }
+  .is-dark h1 { color: var(--color-ink-on-dark); }
+  .is-dark .lede { color: rgba(255, 255, 255, .88); }
+</style>

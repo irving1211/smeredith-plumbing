@@ -140,6 +140,8 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <script type="application/ld+json" set:html={jsonLd(localBusinessJsonLd)} />
     {faqJsonLd && <script type="application/ld+json" set:html={jsonLd(faqJsonLd)} />}
     <slot name="head" />
+    <!-- Controls that need JavaScript (the ZIP checker) are hidden without it; a no-JS path sits next to each. -->
+    <noscript><style>.js-only { display: none !important; }</style></noscript>
     {gtmId && (
       <script is:inline define:vars={{ gtmId }}>
         // A GTM "Data Layer Variable" named page_url_clean is the page URL without one-time ids or typed towns: use it
@@ -327,7 +329,8 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
             try {
               const q = new URL(href, location.href).searchParams;
               if (ID.test(q.get('service') || '')) params.service_type = q.get('service');
-              if (ID.test(q.get('town') || '')) params.town = q.get('town');
+              // A town reached through the ZIP/town checker is location data: the checker reports its own enumerated result instead.
+              if (ID.test(q.get('town') || '') && !link.closest('[data-area-checker]')) params.town = q.get('town');
             } catch (_) {}
             track('request_form_click', params);
           }

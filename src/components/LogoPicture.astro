@@ -1,0 +1,33 @@
+---
+// Shane's logo exactly as supplied (720 x 710), served at the size the layout needs. Never cropped, recoloured or
+// stretched: width is set and height follows the file's own aspect ratio. Files: scripts/make-logo-sizes.mjs.
+interface Props {
+  /** CSS sizes attribute for the layout slot the logo fills. */
+  sizes: string;
+  class?: string;
+  /** The hero logo is near the top of the page: fetch it early. */
+  priority?: boolean;
+}
+const { sizes, class: className = '', priority = true } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const set = (ext: string) => [240, 360, 480, 720].map((w) => `${base}images/logo-hero-${w}.${ext} ${w}w`).join(', ');
+---
+
+<picture class={className}>
+  <source type="image/avif" srcset={set('avif')} sizes={sizes} />
+  <img
+    src={`${base}images/logo-hero-360.webp`}
+    srcset={set('webp')}
+    sizes={sizes}
+    width="720"
+    height="710"
+    alt="S. Meredith Plumbing & Heating logo"
+    decoding="async"
+    fetchpriority={priority ? 'high' : undefined}
+  />
+</picture>
+
+<style>
+  picture { display: block; }
+  img { display: block; width: 100%; height: auto; aspect-ratio: 720 / 710; }
+</style>

@@ -42,3 +42,9 @@ dist-pages/
 preview-root/
 case-study-assets/
 *.zip
+
+# Census downloads used by scripts/build-zip-coverage.mjs (16 MB; re-fetched on demand)
+.cache/
+
+# Build with the review-only hero pages (npm run build:review)
+dist-review/
