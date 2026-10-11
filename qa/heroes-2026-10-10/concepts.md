@@ -1,41 +1,38 @@
 # Hero concepts — S. Meredith Plumbing & Heating (existing client)
 
-Method: the evidence → concept → build → before/after → QA steps of `if-they-hired-me`, adapted to an existing, contracted client. No outreach, no "unofficial concept" framing, nothing prepared for publication. Brief: vault `_context/claude-hero-coverage-prompt-2026-10-10.md`.
+Method: the evidence → concept → build → before/after → QA steps of `if-they-hired-me`, adapted to an existing, contracted client. No outreach, no "unofficial concept" framing, nothing prepared for publication.
 
-## Evidence studied
+## Round 2 (2026-10-10, night) — after Irving's review
 
-| Evidence | Where | What it gives the hero |
-|---|---|---|
-| Logo (owner-supplied) | `public/images/logo-full.png` (720 × 710, transparent, re-exported from a JPEG) | Charcoal #313131 and red #D32B2C; a house between two crossed pipe wrenches; a condensed wordmark between two rules; the phone number in the red base. Used whole and unchanged in every option |
-| Van side (owner photo) | `public/images/van/van-side.jpg`, transcription `assets/refs/van-side-list.txt` | A bold italic bullet list (Remodels, Boilers, New Construction, Furnaces, General Plumbing, Water Heaters), the logo decal on white, "License #9630040" by the door |
-| Brand line | live site, `design/VOICE.md` | "The plumber who answers the phone." Customers describe Shane by what he does (responded, arrived, explained) |
-| Services Shane offers | `src/service-options.json` | Water heaters, boilers, gas, remodels, new construction, general, emergency |
-| Owner preference | Irving, 2026-10-10 | Shane dislikes the current portrait: not used as a hero visual |
+Irving on round 1: "very low quality and not at all what we've been doing with what if they hire me … unique heroes that push the limits … look at the catalog … if you have to keep Shane's image just make the hero more high quality and easier to convert."
 
-## Thesis
+**What the catalog showed** (`C:/Users/Irving/projects/if-they-hired-me`: Paci Plumbing, AlexProductions, Mendez Flowers): real work photos visible from the first frame; poster-scale headline type; one signature system per business that turns their own trade into the picture (Paci's water heater feeding a copper header to four real jobs, Alex's viewfinder with real EXIF); rich dark surfaces with one brand accent; motion that rewards and never gates (Paci lesson 1). Round 1 ignored all of that: small clip-art drawings, no photos, no proof.
 
-The one thing the business sells that a chain cannot is that **the person on the logo picks up**. Each option tells that in a different picture, with the same words and the same two actions, and none makes the customer wait.
+**Round 2 rule:** every option is built on Shane's own material (his job photos, his van, his reviews, his portrait, his logo), with one signature system each, a poster headline, and a conversion block that is bigger and fuller than before: Call (54 px), Request service, "Text photos to Shane", and a trust line of owner-confirmed facts only (MA master plumber license 9630040-PL-M, owner-operated, 24/7 emergency service).
 
-## The five, and why each is different
+| # | Option | Signature system | Evidence |
+|---|---|---|---|
+| 1 | Incoming call | A phone rings, Shane picks up, three customers' words arrive as texts. On phones the first thing is a call banner that is itself the call link | Brand line; verbatim excerpts from `src/reviews.json` (Daniel M., Carly C., Luke B.); logo |
+| 2 | Blue hour | Full-bleed van photo at dusk, headline on the dark sky, one pass of evening light | `van-side.jpg` (owner photo): lettering, decal, number |
+| 3 | Mechanical room | A finished job as a marked-up drawing: scan line, three callouts, title block with the logo | `jobs/boiler-manifold-room/shot-1.jpg` (job "Boiler Manifold Mechanical Room") |
+| 4 | Rough to finished | The same job's rough stage and finished kitchen in one frame; the divider sweeps once, then the visitor drags it (real range control) | `jobs/kitchen-bath-remodel/shot-3.jpg` + `shot-2.jpg` (same job per `src/jobs.json`) |
+| 5 | Owner poster | Shane's portrait as a red-and-charcoal print, logo badge, split-flap board flipping through his 14 confirmed towns to 24/7 | `shane.jpg` (supplied by Shane; he dislikes it, kept only because Irving allowed it), `src/service-area.json` |
 
-1. **Phone → pipe → logo.** Cause and effect drawn as plumbing: the call runs through a pipe to Shane. Hierarchy: drawing first on phones (it is short), copy first on desktop.
-2. **The logo picks up.** The logo itself answers. A dark band (the only dark hero) with the logo on a white plate, the way it sits on the white van.
-3. **Plumbing diagram.** Problem-first: three real problems (leak, no hot water, no heat) pipe into one line that ends at the logo. Grid paper and riser-diagram drawing say "trade" without stock photos.
-4. **Van lettering.** Identity-first: copy, then a panel that reads like the side of his van. The most literal brand recognition; Furnaces left off pending S5.
-5. **A plumber answers.** People-first, the friendliest, but it introduces a new character that is not Shane: a proposed brand extension that needs his approval.
+All photos are crops of Shane's originals (`scripts/make-hero-photos.mjs`): no retouching, no generated or stock imagery, GPS dropped. Callout labels name only what the photo visibly shows.
 
-## Directions rejected
-
+### Rejected in round 2
 | Direction | Why not |
 |---|---|
-| Shane's portrait (any crop) | He dislikes it (brief) |
-| A real job photo as the hero | Strong proof, but the brief asks for the five directions above; one job photo already sits lower on the page |
-| Animated or redrawn logo (wrenches swinging, house lighting up) | The logo must not be modified; animating it is a modification |
-| Continuous ringing, splash screen, logo reveal that hides content | Brief: plays once, never blocks; the logo underneath option 1's cover panel is painted at once |
-| Lottie/GSAP animation | ~30-60 KB of library for a one-second effect that CSS does natively |
-| Generated illustration or stock mascot | No paid generation without approval; stock mascots are the category rut |
-| Map pin or van photo as the hero | The pin belongs to the coverage checker; the van photo is a landscape that crops badly at 390 px |
+| Animated or redrawn logo | Logo must stay unchanged |
+| A live "call timer" or fake availability ("Shane is free now") | Would imply availability nobody has confirmed |
+| Review stars / rating count in the hero | Self-serving review markup is not eligible and counts go stale; reviews appear as attributed words instead |
+| Paid effect libraries (HorizonX components, Aceternity Pro) | Paid licence; not authorised. Everything is vanilla CSS plus a few lines of JS for the drag control |
+| Video background | Heavy on phones, and there is no owner video |
+
+## Round 1 (2026-10-10, evening) — rejected by Irving
+
+Five code-drawn compositions (phone → pipe → logo; logo picks up; plumbing diagram; van lettering panel; illustrated plumber). Rejected as low quality: no photos, small decorative drawings, nothing that matched the catalog's standard. Screens kept in `draft/` and `final/` for the record.
 
 ## Before and after
 
-`before/` = the preview build before this work (commit `0aaa619`): portrait in the desktop hero. `final/` = the same pages and the five options after, phone 390 × 844 and desktop 1280 × 800, first screen and full page, captured after animations settle; `final-reduced/` = reduced motion (identical resting state).
+`before/` = the preview build before this work (commit `0aaa619`). Round 2 screens: `v2-final/` (phone 390 × 844 and desktop 1280 × 800, first screen + full page, settled), `v2-final-reduced/` (reduced motion), `v2-widths/` (900–1920 px checks).

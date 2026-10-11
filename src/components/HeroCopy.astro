@@ -1,27 +1,46 @@
 ---
-// The words and actions every hero option shares. Only the composition around them changes between options.
-// Wording is the approved brand line and the existing lede (design/VOICE.md); do not vary it per option.
+// The words and actions every hero shares. Only the composition around them changes between options.
+// Wording: the approved brand line, the existing lede, and only owner-confirmed facts (design/VOICE.md).
+// Each hero sets the headline size with --hero-h1 and picks the light or dark treatment.
 interface Props {
-  /** Dark background variant: secondary button uses the on-dark style. */
+  /** Dark background: light text, on-dark secondary button. */
   dark?: boolean;
+  /** Extra class for the hero's own layout hooks. */
+  class?: string;
+  /** The live copy-only hero: no text link or trust line, normal buttons (keeps the service list on the first phone screen). */
+  compact?: boolean;
 }
-const { dark = false } = Astro.props;
+const { dark = false, class: className = '', compact = false } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const sms = `sms:+17818204592?body=${encodeURIComponent('Hi Shane — ')}`;
 ---
 
-<div class:list={["hero-copy", { "is-dark": dark }]}>
+<div class:list={['hero-copy', { 'is-dark': dark, 'is-compact': compact }, className]}>
   <h1 id="hero-h">The plumber who answers the phone.</h1>
   <p class="lede">Owner-operated by Shane Meredith. Plumbing, heating, gas &amp; additions across Saugus, the North Shore &amp; Boston. 24/7 emergency service.</p>
   <div class="actions">
-    <a class="btn btn-primary" href="tel:+17818204592">Call 781-820-4592</a>
-    <a class={`btn ${dark ? 'btn-ghost-dark' : 'btn-secondary'}`} href={`${base}contact/`}>Request service</a>
+    <a class:list={["btn btn-primary", { "btn-hero": !compact }]} href="tel:+17818204592">Call 781-820-4592</a>
+    <a class:list={["btn", dark ? "btn-ghost-dark" : "btn-secondary", { "btn-hero": !compact }]} href={`${base}contact/`}>Request service</a>
   </div>
+  {!compact && <p class="hero-alt">Prefer to text? <a href={sms}>Text photos to Shane</a></p>}
+  {!compact && <p class="hero-trust"><span>MA master plumber · Lic. 9630040-PL-M</span><span>Owner-operated</span><span>24/7 emergency service</span></p>}
 </div>
 
 <style>
-  .hero-copy h1 { margin: 0 0 .75rem; }
+  .hero-copy { position: relative; z-index: 2; }
+  .hero-copy h1 { margin: 0 0 .9rem; font-size: var(--hero-h1, clamp(2.7rem, 9.5vw, 4.5rem)); line-height: .92; letter-spacing: -.005em; text-wrap: balance; }
   .hero-copy .lede { margin: 0 0 1.25rem; max-width: 34rem; color: var(--color-text-muted); font-size: 1.08rem; }
+  .hero-copy .actions { gap: .65rem; }
+  .btn-hero { min-height: 54px; font-size: 1.3rem; padding-inline: 1.6rem; }
+  .hero-alt { margin: .8rem 0 0; font-size: .98rem; color: var(--color-text-muted); }
+  .hero-alt a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; color: var(--color-text); text-decoration: underline; text-underline-offset: .2em; }
+  .hero-trust { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin: .4rem 0 0; padding: .75rem 0 0; border-top: 1px solid var(--color-border); font-size: .86rem; font-weight: 600; color: var(--color-text-muted); max-width: 34rem; }
+  .hero-trust span { display: inline-flex; align-items: center; gap: .45rem; }
+  .hero-trust span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-action); }
   @media (min-width: 900px) { .hero-copy .lede { font-size: 1.2rem; } }
+  .is-compact h1 { margin-bottom: .75rem; line-height: var(--leading-tight); letter-spacing: .005em; text-wrap: wrap; }
   .is-dark h1 { color: var(--color-ink-on-dark); }
-  .is-dark .lede { color: rgba(255, 255, 255, .88); }
+  .is-dark .lede, .is-dark .hero-alt { color: rgba(255, 255, 255, .86); }
+  .is-dark .hero-alt a { color: var(--color-ink-on-dark); }
+  .is-dark .hero-trust { color: rgba(255, 255, 255, .78); border-top-color: rgba(255, 255, 255, .18); }
 </style>

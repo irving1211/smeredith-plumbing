@@ -86,5 +86,11 @@ const links = [
     .header-actions { margin-left: 0; }
     .header-request { display: inline-flex; }
     .menu { display: none; }
+    .header-nav a, .header-actions .btn { white-space: nowrap; }
+  }
+  /* 900-1179 px: the full row did not fit and "Our work" / "Service area" wrapped onto two lines. */
+  @media (min-width: 900px) and (max-width: 1179px) {
+    .header-nav { gap: 1rem; }
+    .call-number { display: none; }
   }
 </style>

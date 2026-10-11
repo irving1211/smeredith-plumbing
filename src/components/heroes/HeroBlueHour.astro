@@ -1,0 +1,56 @@
+---
+// Option 2: Blue hour. Shane's own van photo (dusk, snow, his lettering and decal) as a full-bleed cinematic hero.
+// Desktop: the whole frame with the headline over the dark side. Phones: a crop on the lettering and logo decal, with
+// the headline rising out of it. The only movement is the photo settling and one pass of light. Rules: ./README.md.
+import HeroCopy from '../HeroCopy.astro';
+const base = import.meta.env.BASE_URL;
+const src = (name: string, ext: string, widths: number[]) => widths.map((w) => `${base}images/hero/${name}-${w}.${ext} ${w}w`).join(', ');
+---
+
+<section class="home-hero hb" id="top" aria-labelledby="hero-h" data-hero="2">
+  <div class="hb-media">
+    <picture>
+      <source media="(min-width: 700px)" type="image/avif" srcset={src('van-wide', 'avif', [960, 1600])} sizes="100vw" />
+      <source media="(min-width: 700px)" type="image/webp" srcset={src('van-wide', 'webp', [960, 1600])} sizes="100vw" />
+      <source type="image/avif" srcset={src('van-tall', 'avif', [480, 640, 800, 960])} sizes="100vw" />
+      <img src={`${base}images/hero/van-tall-640.webp`} srcset={src('van-tall', 'webp', [480, 640, 800, 960])} sizes="100vw" width="960" height="900" alt="Shane's white work van at dusk, lettered with his services and the S. Meredith Plumbing & Heating logo" fetchpriority="high" decoding="async" />
+    </picture>
+    <span class="hb-light" aria-hidden="true"></span>
+    <span class="hb-shade" aria-hidden="true"></span>
+  </div>
+  <div class="container hb-inner">
+    <HeroCopy dark />
+  </div>
+  <p class="hb-caption">Shane's van. The number on the side is the one he answers.</p>
+</section>
+
+<style>
+  .hb { --hero-h1: clamp(3.1rem, 13.4vw, 7rem); --night: #0E131C; position: relative; overflow: hidden; background: var(--night); color: var(--color-ink-on-dark); padding: 0 0 2.25rem; }
+  .hb-media { position: relative; aspect-ratio: 960 / 900; max-height: 58vh; width: 100%; overflow: hidden; }
+  .hb-media picture, .hb-media img { display: block; width: 100%; height: 100%; }
+  .hb-media img { object-fit: cover; object-position: 50% 40%; }
+  .hb-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14, 19, 28, 0) 45%, rgba(14, 19, 28, .7) 78%, var(--night) 100%); }
+  .hb-light { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 30%, rgba(255, 214, 170, .22) 48%, transparent 66%); opacity: 0; mix-blend-mode: screen; }
+  .hb-inner { position: relative; margin-top: -4.5rem; }
+  .hb-caption { position: relative; margin: 1.25rem auto 0; padding: 0 var(--gutter); max-width: var(--max-width); font-size: .85rem; color: rgba(255, 255, 255, .62); }
+
+  @media (min-width: 700px) {
+    .hb { --hero-h1: clamp(3.4rem, 7.6vw, 7.4rem); min-height: clamp(560px, calc(100vh - 72px), 780px); display: grid; align-items: center; padding: 3.5rem 0; }
+    /* The photo fills the right of the band so the headline sits on the dark sky, never on the lettering. */
+    .hb-media { position: absolute; top: 0; bottom: 0; right: 0; left: max(30%, calc(50% - 40px)); width: auto; aspect-ratio: auto; max-height: none; }
+    .hb-media img { object-position: 100% 62%; }
+    .hb-shade { background:
+        linear-gradient(90deg, var(--night) 0%, rgba(14, 19, 28, .78) 22%, rgba(14, 19, 28, .1) 48%, rgba(14, 19, 28, 0) 70%),
+        linear-gradient(0deg, rgba(14, 19, 28, .7) 0%, rgba(14, 19, 28, 0) 30%); }
+    .hb-inner { margin-top: 0; width: 100%; }
+    .hb-inner :global(.hero-copy) { max-width: min(40rem, 50vw); }
+    .hb-caption { position: absolute; right: 1.5rem; bottom: 1.2rem; margin: 0; padding: .45rem .8rem; max-width: none; border-radius: 999px; background: rgba(14, 19, 28, .6); border: 1px solid rgba(255, 255, 255, .14); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hb-media img { animation: hb-settle 1.8s cubic-bezier(.2, .7, .2, 1) backwards; }
+    .hb-light { animation: hb-sweep 1.6s .35s ease-in-out backwards; }
+  }
+  @keyframes hb-settle { from { transform: scale(1.09); filter: brightness(.7); } }
+  @keyframes hb-sweep { from { opacity: 1; transform: translateX(-60%); } to { opacity: 0; transform: translateX(60%); } }
+</style>

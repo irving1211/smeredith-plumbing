@@ -1,7 +1,7 @@
 {
- "target": "http://127.0.0.1:52673/service-area/",
- "url": "http://127.0.0.1:52673/service-area/",
- "audited_at": "2026-10-11T00:37:20.773Z",
+ "target": "http://127.0.0.1:56156/service-area/",
+ "url": "http://127.0.0.1:56156/service-area/",
+ "audited_at": "2026-10-11T02:25:06.619Z",
  "breakpoints": [
   390,
   768,

@@ -1,10 +1,10 @@
 {
   "home": {
     "phone": {
-      "hero_height": 454,
-      "h1_top": 86,
-      "call_bottom": 427,
-      "request_bottom": 485,
+      "hero_height": 459,
+      "h1_top": 91,
+      "call_bottom": 431,
+      "request_bottom": 490,
       "logo_px": "none",
       "first_service_row_visible": true
     },
@@ -19,92 +19,92 @@
   },
   "hero-1": {
     "phone": {
-      "hero_height": 677,
-      "h1_top": 310,
-      "call_bottom": 650,
-      "request_bottom": 708,
-      "logo_px": "113x111",
+      "hero_height": 1050,
+      "h1_top": 175,
+      "call_bottom": 525,
+      "request_bottom": 590,
+      "logo_px": "none",
       "first_service_row_visible": false
     },
     "desktop": {
-      "hero_height": 444,
-      "h1_top": 116,
-      "call_bottom": 454,
-      "request_bottom": 454,
-      "logo_px": "161x158",
-      "first_service_row_visible": true
+      "hero_height": 727,
+      "h1_top": 136,
+      "call_bottom": 583,
+      "request_bottom": 583,
+      "logo_px": "none",
+      "first_service_row_visible": false
     }
   },
   "hero-2": {
     "phone": {
-      "hero_height": 675,
-      "h1_top": 307,
-      "call_bottom": 648,
-      "request_bottom": 706,
-      "logo_px": "173x171",
+      "hero_height": 938,
+      "h1_top": 354,
+      "call_bottom": 704,
+      "request_bottom": 769,
+      "logo_px": "390x366",
       "first_service_row_visible": false
     },
     "desktop": {
-      "hero_height": 444,
-      "h1_top": 116,
-      "call_bottom": 454,
-      "request_bottom": 454,
-      "logo_px": "212x209",
-      "first_service_row_visible": true
+      "hero_height": 728,
+      "h1_top": 137,
+      "call_bottom": 591,
+      "request_bottom": 591,
+      "logo_px": "680x728",
+      "first_service_row_visible": false
     }
   },
   "hero-3": {
     "phone": {
-      "hero_height": 697,
-      "h1_top": 325,
-      "call_bottom": 665,
-      "request_bottom": 723,
-      "logo_px": "99x98",
+      "hero_height": 1199,
+      "h1_top": 91,
+      "call_bottom": 440,
+      "request_bottom": 505,
+      "logo_px": "336x420",
       "first_service_row_visible": false
     },
     "desktop": {
-      "hero_height": 533,
-      "h1_top": 120,
-      "call_bottom": 538,
-      "request_bottom": 538,
-      "logo_px": "165x163",
-      "first_service_row_visible": true
+      "hero_height": 799,
+      "h1_top": 191,
+      "call_bottom": 609,
+      "request_bottom": 609,
+      "logo_px": "466x577",
+      "first_service_row_visible": false
     }
   },
   "hero-4": {
     "phone": {
-      "hero_height": 732,
-      "h1_top": 86,
-      "call_bottom": 427,
-      "request_bottom": 485,
-      "logo_px": "134x132",
+      "hero_height": 1173,
+      "h1_top": 91,
+      "call_bottom": 440,
+      "request_bottom": 505,
+      "logo_px": "358x448",
       "first_service_row_visible": false
     },
     "desktop": {
-      "hero_height": 524,
-      "h1_top": 116,
-      "call_bottom": 534,
-      "request_bottom": 534,
-      "logo_px": "206x203",
-      "first_service_row_visible": true
+      "hero_height": 795,
+      "h1_top": 185,
+      "call_bottom": 610,
+      "request_bottom": 610,
+      "logo_px": "493x616",
+      "first_service_row_visible": false
     }
   },
   "hero-5": {
     "phone": {
-      "hero_height": 675,
-      "h1_top": 307,
-      "call_bottom": 648,
-      "request_bottom": 706,
-      "logo_px": "175x172",
+      "hero_height": 907,
+      "h1_top": 380,
+      "call_bottom": 735,
+      "request_bottom": 800,
+      "logo_px": "358x269",
       "first_service_row_visible": false
     },
     "desktop": {
-      "hero_height": 444,
-      "h1_top": 116,
-      "call_bottom": 454,
-      "request_bottom": 454,
-      "logo_px": "217x214",
-      "first_service_row_visible": true
+      "hero_height": 687,
+      "h1_top": 120,
+      "call_bottom": 567,
+      "request_bottom": 567,
+      "logo_px": "459x574",
+      "first_service_row_visible": false
     }
   }
 }

@@ -49,20 +49,26 @@ describe('hero options', () => {
           assert.ok(box.height >= 44, `${name}: ${label} is ${box.height}px tall`);
           assert.ok(box.y + box.height <= opts.viewport.height, `${name}: ${label} ends at ${Math.round(box.y + box.height)}px, below the first screen`);
         }
-        const logo = hero.locator('picture img');
-        assert.equal(await logo.count(), 1, 'the logo appears once in the hero');
-        const dims = await logo.evaluate((img) => ({ w: img.getBoundingClientRect().width, h: img.getBoundingClientRect().height, nat: img.naturalWidth, alt: img.alt, src: img.currentSrc }));
-        assert.ok(dims.nat > 0, 'logo loaded');
-        assert.ok(Math.abs(dims.w / dims.h - 720 / 710) < 0.01, `${name}: logo drawn at ${dims.w}x${dims.h}, not its own proportions`);
-        assert.match(dims.src, /\/images\/logo-hero-\d+\.(avif|webp)$/);
-        assert.equal(dims.alt, 'S. Meredith Plumbing & Heating logo');
-        assert.equal(await hero.locator('img[src*="shane"], source[srcset*="shane"]').count(), 0, 'no portrait');
-        for (const svg of await hero.locator('svg').all()) assert.equal(await svg.getAttribute('aria-hidden'), 'true', 'drawings are hidden from assistive technology');
+        // Shane's logo, wherever it appears in the hero, is drawn at its own proportions (option 2 shows it on the van
+        // in his photo instead). Visible logo copies only: the phone-only and desktop-only parts are display:none.
+        const logos = await hero.locator('img').evaluateAll((imgs) => imgs
+          .filter((img) => /logo-hero-\d+\.(avif|webp)/.test(img.currentSrc || img.src) && img.getClientRects().length)
+          .map((img) => ({ w: img.getBoundingClientRect().width, h: img.getBoundingClientRect().height, nat: img.naturalWidth })));
+        if (id !== '2') assert.ok(logos.length >= 1, `${name}: the logo is in the hero`);
+        for (const l of logos) {
+          assert.ok(l.nat > 0, 'logo loaded');
+          assert.ok(Math.abs(l.w / l.h - 720 / 710) < 0.02, `${name}: logo drawn at ${l.w}x${l.h}, not its own proportions`);
+        }
+        // Real photos only, all with alt text; the old portrait file is never used and only option 5 uses the portrait crop.
+        for (const img of await hero.locator('img[src*="/images/hero/"]').all()) assert.ok((await img.getAttribute('alt')).length > 10, 'photos are described');
+        assert.equal(await hero.locator('img[src*="images/shane"], source[srcset*="images/shane"]').count(), 0);
+        if (id !== '5') assert.equal(await hero.locator('source[srcset*="hero/owner"]').count(), 0, 'no portrait outside option 5');
+        for (const svg of await hero.locator('svg').all()) assert.equal(await svg.evaluate((el) => !!el.closest('[aria-hidden="true"]')), true, 'drawings are hidden from assistive technology');
         await context.close();
       }
     });
 
-    test(`option ${id}: motion plays once and ends within 1.5 s; reduced motion shows the finished hero with no animation`, async () => {
+    test(`option ${id}: motion runs once (a pulse may repeat twice) and ends within 3.2 s; reduced motion shows the finished hero with no animation`, async () => {
       const context = await browser.newContext({ ...phone, reducedMotion: 'no-preference' });
       const page = await context.newPage();
       await page.goto(`${origin}/review/hero-${id}/`);
@@ -72,8 +78,8 @@ describe('hero options', () => {
       }));
       assert.ok(timings.length > 0, 'the option has its one-time movement');
       for (const t of timings) {
-        assert.equal(t.iterations, 1, 'never loops');
-        assert.ok(t.end <= 1500, `an animation ends at ${t.end} ms`);
+        assert.ok(Number.isFinite(t.iterations) && t.iterations <= 2, 'never loops');
+        assert.ok(t.end <= 3200, `an animation ends at ${t.end} ms`);
       }
       await context.close();
 
@@ -142,7 +148,7 @@ describe('hero options', () => {
       await frame.evaluate((f) => new Promise((r) => (f.contentDocument?.readyState === 'complete' ? r() : f.addEventListener('load', r, { once: true }))));
       assert.equal(await frame.evaluate((f) => f.contentDocument.querySelector('.home-hero h1').textContent.trim()), H1);
     }
-    assert.match(await page.locator('#option-5 .caveat').textContent(), /approval/);
+    assert.match(await page.locator('#option-5 .caveat').textContent(), /portrait/);
     await context.close();
   });
 

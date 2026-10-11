@@ -29,7 +29,7 @@
       "source": "Owner photo drop 2026-05-28 (harvest/owner-shane.jpg); GPS metadata stripped 2026-10-10",
       "rights": "Supplied by Shane for his own site",
       "status": "approved",
-      "notes": "Updated portrait after haircut still requested (scope.md open items)"
+      "notes": "Shane dislikes it (2026-10-10): off the live home page; used only in review hero option 5 as a two-tone print (Irving allowed keeping his image). Updated portrait still requested"
     },
     {
       "id": "van",
@@ -91,8 +91,8 @@
       "path": "src/components/heroes/*.astro (inline SVG)",
       "source": "Original code-drawn SVG made for the hero options (2026-10-10): receiver, pipe runs and fittings, fixtures, valve, desk phone, wrench",
       "rights": "Made for this site; no third-party artwork, icon set or stock",
-      "status": "pending",
-      "notes": "Review only until Irving picks a hero"
+      "status": "rejected",
+      "notes": "Round 1 drawings, rejected by Irving 2026-10-10; replaced by photo-led options. Only the handset glyph survives in option 1's call UI"
     },
     {
       "id": "plumber-character",
@@ -100,8 +100,8 @@
       "path": "src/components/heroes/HeroPlumber.astro (inline SVG)",
       "source": "Original simple figure drawn in code for hero option 5 (2026-10-10)",
       "rights": "Made for this site",
-      "status": "pending",
-      "notes": "Proposed brand extension. Not Shane's likeness and must not be described as him. Needs Shane's approval before any public use"
+      "status": "rejected",
+      "notes": "Round 1 option 5, rejected by Irving 2026-10-10; no longer in the build"
     },
     {
       "id": "zip-coverage-data",
@@ -120,6 +120,15 @@
       "rights": "Public domain source data",
       "status": "approved",
       "notes": "Static image behind the approximate ZIP pin; red = confirmed towns only"
+    },
+    {
+      "id": "hero-photos",
+      "type": "photo",
+      "path": "public/images/hero/{van-wide,van-tall,manifold,rough,finished,owner,wallpaper}-*.{avif,webp}",
+      "source": "Crops of Shane's own photos made by scripts/make-hero-photos.mjs (van-side.jpg; jobs/boiler-manifold-room/shot-1.jpg; jobs/kitchen-bath-remodel/shot-2.jpg and shot-3.jpg; shane.jpg in black and white; jobs/twin-water-heaters/shot-1.jpg blurred as a phone wallpaper). No retouching, no generated content, metadata (GPS) dropped",
+      "rights": "Supplied by Shane for his own site",
+      "status": "pending",
+      "notes": "Review only until Irving picks a hero"
     }
   ]
 }

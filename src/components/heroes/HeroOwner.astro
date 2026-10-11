@@ -1,0 +1,68 @@
+---
+// Option 5: Owner poster. Shane's supplied portrait as a two-tone print in the logo's red and charcoal, with a
+// split-flap "on call" board that flips once through his 14 confirmed towns and lands on 24/7. Shane has said he does
+// not like this portrait: this option shows how the owner-led version reads, ready for a new photo. Rules: ./README.md.
+import HeroCopy from '../HeroCopy.astro';
+import HeroPhoto from './HeroPhoto.astro';
+import LogoPicture from '../LogoPicture.astro';
+import { TOWNS } from '../../lib/service-area.js';
+
+const words = [...TOWNS.map((t) => t.name), '24/7'];
+---
+
+<section class="home-hero ho" id="top" aria-labelledby="hero-h" data-hero="5">
+  <div class="container ho-grid">
+    <figure class="ho-figure">
+      <div class="ho-print">
+        <HeroPhoto name="owner" widths={[480, 600, 720, 960]} width={960} height={1200} sizes="(min-width: 900px) 440px, 92vw" alt="Shane Meredith, owner of S. Meredith Plumbing & Heating" priority />
+      </div>
+      <span class="ho-badge" aria-hidden="true"><LogoPicture sizes="96px" priority={false} /></span>
+      <div class="ho-board" aria-hidden="true">
+        <span class="ho-board-label">On call</span>
+        <span class="ho-flap" style={`--n:${words.length - 1}`}>
+          <span class="ho-track">{words.map((w) => <span class="ho-word">{w}</span>)}</span>
+        </span>
+      </div>
+    </figure>
+    <HeroCopy dark />
+  </div>
+</section>
+
+<style>
+  .ho { --hero-h1: clamp(3.2rem, 13.6vw, 7rem); position: relative; overflow: hidden; color: var(--color-ink-on-dark); padding: 1.25rem 0 2.5rem; background:
+      radial-gradient(40rem 26rem at 20% 20%, rgba(211, 43, 44, .28), transparent 70%),
+      #121212; }
+  .ho-grid { display: grid; gap: 1.5rem; }
+  .ho-figure { position: relative; margin: 0; }
+  .ho-print { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px; background: linear-gradient(160deg, #E0393A, #A51D1F 55%, #5E1012); }
+  .ho-print :global(picture), .ho-print :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+  .ho-print :global(img) { mix-blend-mode: multiply; filter: contrast(1.15); }
+  .ho-print::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(0, 0, 0, .22) 1px, transparent 1.4px); background-size: 5px 5px; mix-blend-mode: multiply; opacity: .55; pointer-events: none; }
+  .ho-badge { position: absolute; top: 12px; left: 12px; width: 76px; height: 76px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 10px 24px rgba(0, 0, 0, .4); }
+  .ho-badge :global(picture) { width: 64px; }
+  .ho-board { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: stretch; gap: 6px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; }
+  .ho-board-label { display: grid; place-items: center; padding: 0 .7rem; border-radius: 4px; background: #fff; color: var(--color-text); font-size: 1rem; letter-spacing: .08em; }
+  .ho-flap { --row: 2.6rem; position: relative; flex: 1; height: var(--row); overflow: hidden; border-radius: 4px; background: #0B0B0B; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+  .ho-track { display: block; transform: translateY(calc(var(--n) * var(--row) * -1)); }
+  .ho-word { display: flex; align-items: center; height: var(--row); padding: 0 .8rem; font-size: 1.7rem; letter-spacing: .06em; color: #F4F1EA; white-space: nowrap; background: linear-gradient(#1C1C1C 50%, #0B0B0B 50%); }
+  .ho-word:last-child { color: #fff; background: linear-gradient(#DA3536 50%, #C42627 50%); }
+
+  @media (min-width: 900px) {
+    .ho { --hero-h1: clamp(3.6rem, 7.4vw, 7.6rem); padding: 3.25rem 0; }
+    .ho-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 27rem); gap: 3rem; align-items: center; }
+    .ho-figure { order: 2; }
+    .ho-print { aspect-ratio: 4 / 5; }
+    .ho-badge { top: auto; bottom: 74px; left: -28px; width: 104px; height: 104px; }
+    .ho-badge :global(picture) { width: 88px; }
+    .ho-board { left: -28px; right: 18px; bottom: 18px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ho-print :global(img) { animation: ho-print 1.3s cubic-bezier(.2, .7, .2, 1) backwards; }
+    .ho-track { animation: ho-flip 2.4s .5s steps(var(--n), jump-end) backwards; }
+    .ho-word { animation: ho-blur 2.4s .5s backwards; }
+  }
+  @keyframes ho-print { from { transform: scale(1.06); filter: contrast(1.6) brightness(1.15); } }
+  @keyframes ho-flip { from { transform: translateY(0); } }
+  @keyframes ho-blur { 0%, 98% { filter: blur(.4px); } 100% { filter: none; } }
+</style>

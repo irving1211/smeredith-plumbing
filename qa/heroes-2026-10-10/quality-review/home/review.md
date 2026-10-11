@@ -1,7 +1,7 @@
 # Frontend quality review — objective checks
 
-- Target: http://127.0.0.1:61599/
-- Audited: 2026-10-11T00:35:58.504Z
+- Target: http://127.0.0.1:56156/
+- Audited: 2026-10-11T02:25:02.675Z
 - Breakpoints: 390, 768, 1280 px (screenshots in `screens/`)
 - **Verdict: SHIP** (P0 0 · P1 0 · P2 1 · P3 0)
 
@@ -9,4 +9,4 @@
 
 | ID | Sev | Check | Evidence | Business impact | Fix | Verify |
 |---|---|---|---|---|---|---|
-| F001 | P2 | lcp-lazy @1280 | LCP element <IMG> http://127.0.0.1:61599/images/jobs/single-water-heater-open-basement/shot-1-900.webp is loading="lazy" | Lazy-loading the hero image delays the largest paint (Core Web Vitals). | Remove loading="lazy" from the hero/LCP image; consider fetchpriority="high". | Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone. |
+| F001 | P2 | lcp-lazy @1280 | LCP element <IMG> http://127.0.0.1:56156/images/jobs/single-water-heater-open-basement/shot-1-900.webp is loading="lazy" | Lazy-loading the hero image delays the largest paint (Core Web Vitals). | Remove loading="lazy" from the hero/LCP image; consider fetchpriority="high". | Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone. |

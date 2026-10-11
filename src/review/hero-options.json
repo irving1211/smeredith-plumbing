@@ -1,89 +1,84 @@
 {
   "_comment": "Review-only data for /review/ (built only when PUBLIC_REVIEW_ROUTES=1). Measurements are filled from qa/heroes-2026-10-10/ results; nothing here is shown on production pages.",
   "measured": {
-    "conditions": "Phone checks at 390 x 844 and 1280 x 800 in Chrome after animations settle (qa/heroes-2026-10-10/first-screen.json). Speed: Lighthouse 12.8.2 mobile (simulated 4G-class network, 4x slower CPU), all pages served from the same local server, 3 interleaved rounds, median shown; a second full pass agreed. Differences under about 150 ms in largest paint flip between passes and are noise; options 2 and 4 were one step (about 150 ms) slower in both passes because they draw the logo larger. Unthrottled, every option painted in 0.15-0.23 s. Accessibility: axe-core WCAG 2.2 AA on each full page, with motion and with reduced motion.",
+    "conditions": "Phone positions at 390 x 844 after the movement settles (qa/heroes-2026-10-10/first-screen.json). Speed: Lighthouse 12.8.2 mobile preset (simulated slow 4G, 4x CPU), every page from the same local server, 3 interleaved rounds, median shown; a photo-size pass was needed (first pass: up to 3.15 s and 520 KB) and is included. Differences under about 150 ms are noise. Layout shift measured with and without the font loading late (a size-matched fallback font keeps line breaks identical). Accessibility: axe-core WCAG 2.2 AA with motion and with reduced motion: 0 serious or critical on every option.",
     "rows": {
       "1": {
-        "Branding fidelity": "High: logo whole and prominent on desktop; red/charcoal pipe matches the logo's wrenches",
-        "Clarity": "Clear: the line literally connects a ringing phone to Shane. Small logo on phones (113 px)",
-        "Phone, first screen": "Call ends 650 px, Request 708 px down a 844 px screen; logo drawn 113x111 px (desktop 161x158)",
-        "Accessibility": "axe: 0 serious/critical (moving and still); drawing hidden from screen readers; static with reduced motion; no layout shift",
-        "Mobile speed (median of 3)": "score 99, first paint 1.13 s, largest paint 2.10 s (runs 2103-2108 ms), layout shift 0, 369 KB in 9 requests (live home: 350 KB, 8)"
+        "Brand and proof": "Logo as the caller avatar; the brand line acted out. Uses three verbatim Google review excerpts as proof",
+        "Conversion": "Strongest on phones: the first thing on screen is a call banner that is itself the call button, then Call, Request and Text photos",
+        "Phone, first screen": "Call ends 525 px, Request 590 px down an 844 px phone screen",
+        "Mobile speed (median of 3)": "score 98, largest paint 2.25 s (runs 2252-2256 ms), layout shift 0.003, 392 KB in 10 requests (live home: 2.03 s, 352 KB, 8)"
       },
       "2": {
-        "Branding fidelity": "Highest logo presence (largest logo, on white like the van decal); the only dark hero, so it reads as a brand moment",
-        "Clarity": "Clear on phones; the desk phone is a familiar picture. White text on charcoal",
-        "Phone, first screen": "Call ends 648 px, Request 706 px down a 844 px screen; logo drawn 173x171 px (desktop 212x209)",
-        "Accessibility": "axe: 0 serious/critical; white-on-charcoal text 13:1; static with reduced motion; no layout shift",
-        "Mobile speed (median of 3)": "score 98, first paint 1.13 s, largest paint 2.25 s (runs 2103-2254 ms), layout shift 0, 378 KB in 9 requests (live home: 350 KB, 8)"
+        "Brand and proof": "Most \"real business\" at a glance: his own van, lettering and decal, at dusk",
+        "Conversion": "Very clear, but on phones the photo comes first, so the buttons sit lowest of the five",
+        "Phone, first screen": "Call ends 704 px, Request 769 px down an 844 px phone screen",
+        "Mobile speed (median of 3)": "score 98, largest paint 2.25 s (runs 2103-2257 ms), layout shift 0, 400 KB in 9 requests (live home: 2.03 s, 352 KB, 8)"
       },
       "3": {
-        "Branding fidelity": "Medium-high: distinctive trade drawing; logo is the destination but small on phones (99 px)",
-        "Clarity": "Most explicit about problems Shane fixes (leak, no hot water, no heat) without new claims",
-        "Phone, first screen": "Call ends 665 px, Request 723 px down a 844 px screen; logo drawn 99x98 px (desktop 165x163)",
-        "Accessibility": "axe: 0 serious/critical; labels in the drawing are decorative (hidden), the same words exist as links below; no layout shift",
-        "Mobile speed (median of 3)": "score 99, first paint 1.13 s, largest paint 2.10 s (runs 2103-2178 ms), layout shift 0, 371 KB in 9 requests (live home: 350 KB, 8)"
+        "Brand and proof": "Shows his craft: a finished boiler, tank and copper manifold, marked up like a drawing, with a logo title block",
+        "Conversion": "Buttons high on phones; the photo follows directly below",
+        "Phone, first screen": "Call ends 440 px, Request 505 px down an 844 px phone screen",
+        "Mobile speed (median of 3)": "score 98, largest paint 2.40 s (runs 2335-2402 ms), layout shift 0.003, 417 KB in 10 requests (live home: 2.03 s, 352 KB, 8)"
       },
       "4": {
-        "Branding fidelity": "Highest recognition: reads like Shane's own van (his wording, his decal, his license line). Furnaces left off pending S5",
-        "Clarity": "Headline and actions come first, exactly where they are on the live page; the van panel sits below them",
-        "Phone, first screen": "Call ends 427 px, Request 485 px down a 844 px screen; logo drawn 134x132 px (desktop 206x203)",
-        "Accessibility": "axe: 0 serious/critical; panel hidden from screen readers (the service list is repeated as real links below); no layout shift",
-        "Mobile speed (median of 3)": "score 98, first paint 1.14 s, largest paint 2.25 s (runs 2253-2254 ms), layout shift 0, 379 KB in 9 requests (live home: 350 KB, 8)"
+        "Brand and proof": "Proof of a whole job, rough stage to finished room, and the only interactive option (drag or arrow keys)",
+        "Conversion": "Buttons high on phones; the compare frame follows directly below. Heaviest of the five (two photos)",
+        "Phone, first screen": "Call ends 440 px, Request 505 px down an 844 px phone screen",
+        "Mobile speed (median of 3)": "score 98, largest paint 2.40 s (runs 2342-2553 ms), layout shift 0, 449 KB in 11 requests (live home: 2.03 s, 352 KB, 8)"
       },
       "5": {
-        "Branding fidelity": "Friendly but introduces a new character: proposed brand extension needing Shane's approval; not his likeness",
-        "Clarity": "Instantly reads as \"a person answers\"",
-        "Phone, first screen": "Call ends 648 px, Request 706 px down a 844 px screen; logo drawn 175x172 px (desktop 217x214)",
-        "Accessibility": "axe: 0 serious/critical; figure hidden from screen readers; no layout shift",
-        "Mobile speed (median of 3)": "score 98, first paint 1.13 s, largest paint 2.25 s (runs 2253-2254 ms), layout shift 0, 379 KB in 9 requests (live home: 350 KB, 8)"
+        "Brand and proof": "Most personal: who picks up, his logo, his 14 towns flipping to 24/7. Uses the portrait he dislikes",
+        "Conversion": "Portrait first on phones, so the Request button sits near the bottom of the first screen",
+        "Phone, first screen": "Call ends 735 px, Request 800 px down an 844 px phone screen",
+        "Mobile speed (median of 3)": "score 98, largest paint 2.25 s (runs 2253-2258 ms), layout shift 0, 390 KB in 10 requests (live home: 2.03 s, 352 KB, 8)"
       }
     }
   },
   "recommendation": {
-    "id": "4",
+    "id": "1",
     "why": [
-      "It is the most recognisably Shane's: his own van wording, decal and license line, so a customer who has seen the van in a driveway recognises the site, and nothing in it is new artwork that needs separate approval.",
-      "It keeps the headline, Call and Request exactly where they are on the live page (Call ends at 427 px, Request at 485 px on a phone), the best action visibility of the five; the other options push them down 220-240 px (still on the first screen).",
-      "Cost: it is one simulation step (about 150 ms) slower to largest paint than options 1 and 3 and adds 29 KB, and it pushes the service list further down the phone page. If speed or a shorter page matters more, option 1 is the runner-up: the lightest option that still tells the \"answers the phone\" story.",
-      "Option 5 should not be chosen without Shane approving a new character for his brand."
+      "It is the one built around the action you want: on a phone the first thing a visitor sees is a call banner that calls Shane, followed by Call, Request and Text photos, with three customers saying in their own words that he answers and shows up.",
+      "It works without a new photo and without the portrait, and it is as fast as the live page within noise (2.25 s largest paint, 392 KB).",
+      "If you want the strongest \"this is a real local business\" picture, option 2 (the van at dusk) is the runner-up; its buttons sit lower on phones. Option 4 is the best proof of craft if you would rather lead with a finished job.",
+      "Combining is possible, as with Paci: for example option 2's van on desktop with option 1's call banner on phones."
     ]
   },
   "options": [
     {
       "id": "1",
-      "name": "Phone, pipe, logo",
-      "story": "One short ring of a phone, a red line runs through a pipe bend, and the line arrives at Shane's unchanged logo as a panel slides off it. The call reaches the person on the logo.",
-      "motion": "Phone wobbles once (0.5 s), red line draws through the pipe (0.35-1.0 s), cover slides off the logo (0.95-1.35 s). Then still.",
-      "caveat": ""
+      "name": "Incoming call",
+      "story": "The page opens on the promise: a phone rings, Shane picks up, and three customers' own words arrive as texts (verbatim from his Google reviews). On a phone the first thing you see is a call banner that is itself the call button.",
+      "motion": "Rings and pulses (0-1.6 s), the call connects and the voice line moves, then the three texts arrive (to about 3 s). Then still. With reduced motion: the answered call, straight away.",
+      "caveat": "The phone is an illustration of a call screen, not a screenshot of a real call."
     },
     {
       "id": "2",
-      "name": "The logo picks up",
-      "story": "A dark charcoal band, with the logo on a white plate like the decal on the white van. Beside it a desk phone's receiver lifts off its cradle once and stays lifted: the call is answered.",
-      "motion": "Two ring marks flash once (0.6 s); the receiver lifts and settles (0.3-0.85 s). Then still.",
-      "caveat": ""
+      "name": "Blue hour",
+      "story": "Shane's own van photo at dusk, full-bleed: his lettering, his decal, his number. The headline sits on the dark sky; the van is the proof that a real person with a real truck is on the other end.",
+      "motion": "The photo settles from a slight zoom and one pass of evening light crosses it (1.8 s). Then still.",
+      "caveat": "The van lettering in the photo includes Furnaces, which the site does not list yet (owner question S5)."
     },
     {
       "id": "3",
-      "name": "Plumbing diagram",
-      "story": "Drawn on grid paper like a riser diagram: a leaking tap, a water heater and a radiator (leak, no hot water, no heat) pipe into one line, through a valve, to Shane's logo. Whatever the problem, it runs to one person.",
-      "motion": "Red flow lines draw from each fixture to the logo (0.1-1.3 s). Then still.",
+      "name": "Mechanical room",
+      "story": "One of his cleanest finished jobs (boiler, storage tank and copper zone manifold) as a marked-up drawing sheet: a scan line passes, callouts name what you are looking at, and the title block carries his logo.",
+      "motion": "Scan line (1.1 s), then three callouts draw in one after another (to about 2 s). Then still.",
       "caveat": ""
     },
     {
       "id": "4",
-      "name": "Van lettering",
-      "story": "Headline first, then a white panel that reads like the side of Shane's van: his italic bullet list, the logo decal and the license line, with a pipe and a wrench along the bottom like the van's rocker panel.",
-      "motion": "The pipe slides in (0.5 s) and the wrench turns once as if tightening (0.25-0.95 s). Then still.",
-      "caveat": "The van also says Furnaces; it is left off until Shane confirms he offers furnace work (owner question S5)."
+      "name": "Rough to finished",
+      "story": "Two photos from the same job, the rough stage and the finished kitchen, in one frame. The divider sweeps once, then the visitor can drag it (or use the arrow keys) to compare. Proof of the whole job, not just the fixture.",
+      "motion": "One sweep of the divider (0.5-2.4 s), then it waits for the visitor. Without JavaScript or with reduced motion it rests half and half.",
+      "caveat": ""
     },
     {
       "id": "5",
-      "name": "A plumber answers",
-      "story": "A simple, original drawing of a plumber in a charcoal work shirt and red cap lifts a phone to his ear beside the logo. Friendly and direct.",
-      "motion": "Two ring marks flash once (0.55 s); the arm lifts the phone to the ear (0.35-0.95 s). Then still.",
-      "caveat": "Proposed brand extension, not Shane's likeness. The character is new artwork and needs Shane's approval before any public use; it would also need a decision on whether it appears anywhere else (van, cards, Google profile)."
+      "name": "Owner poster",
+      "story": "Shane's portrait as a red-and-charcoal print with his logo badge, and a split-flap board that flips once through his 14 confirmed towns and lands on 24/7. The most personal option: you see who picks up.",
+      "motion": "The print develops (1.3 s) while the board flips through the towns (0.5-2.9 s). Then still.",
+      "caveat": "Uses the portrait Shane has said he does not like. It is included because you allowed keeping his image; a new photo would drop straight into the same treatment."
     }
   ]
 }

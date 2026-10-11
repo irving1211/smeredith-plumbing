@@ -17,3 +17,18 @@
   font-weight: 700;
   src: url('../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2') format('woff2');
 }
+
+
+/* Metric-matched fallback for the display face. Barlow Condensed is about 68% as wide as Arial/Roboto bold (measured on
+   the headline, buttons and headings), so a fallback scaled to 68% wraps on the same lines. Line heights are set as
+   numbers on the font size, so if the real face arrives after first paint the text swaps without moving the page. */
+@font-face {
+  font-family: 'Barlow Condensed Fallback';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Roboto Bold'), local('Roboto-Bold'), local('Helvetica Neue Bold'), local('Arial');
+  size-adjust: 68%;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: 0%;
+}

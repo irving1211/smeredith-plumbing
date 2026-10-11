@@ -1,0 +1,100 @@
+---
+// Option 3: Mechanical room. One of Shane's finished jobs (the "Boiler Manifold Mechanical Room" in src/jobs.json) shown
+// as a marked-up drawing sheet: a scan line passes over the photo, then callouts name what you are looking at, and a
+// title block carries his logo. The photo is visible from the first frame; the markup is decoration (aria-hidden) and
+// names only what the photo shows. Rules: ./README.md.
+import HeroCopy from '../HeroCopy.astro';
+import HeroPhoto from './HeroPhoto.astro';
+import LogoPicture from '../LogoPicture.astro';
+
+// Callouts on the 400 x 500 photo frame: target point, label anchor, label.
+const marks = [
+  { x: 236, y: 112, lx: 246, ly: 44, label: 'Zone manifold', side: 'right' },
+  { x: 290, y: 372, lx: 306, ly: 268, label: 'Boiler', side: 'right' },
+  { x: 90, y: 262, lx: 18, ly: 418, label: 'Storage tank', side: 'left' },
+];
+---
+
+<section class="home-hero hm" id="top" aria-labelledby="hero-h" data-hero="3">
+  <div class="container hm-grid">
+    <HeroCopy dark />
+    <figure class="hm-sheet">
+      <div class="hm-photo">
+        <HeroPhoto name="manifold" widths={[480, 680, 840, 1120, 1600]} width={1600} height={2000} sizes="(min-width: 900px) 440px, 92vw" alt="A finished boiler, storage tank and copper zone manifold installed by Shane in a basement mechanical room" priority />
+        <span class="hm-scan" aria-hidden="true"></span>
+        <svg class="hm-marks" viewBox="0 0 400 500" aria-hidden="true" focusable="false">
+          {marks.map((m, i) => (
+            <g class="hm-mark" style={`--i:${i}`}>
+              <circle class="hm-ring" cx={m.x} cy={m.y} r="18" />
+              <circle class="hm-dot" cx={m.x} cy={m.y} r="4" />
+              <path class="hm-lead" pathLength="100" d={`M${m.x} ${m.y} L${m.side === 'right' ? m.lx + 6 : m.lx + 60} ${m.ly + 12}`} />
+              <g class="hm-chip">
+                <rect x={m.lx} y={m.ly} width={m.label.length * 8.6 + 22} height="26" rx="3" />
+                <text x={m.lx + 11} y={m.ly + 18}>{m.label}</text>
+              </g>
+            </g>
+          ))}
+          <g class="hm-ticks">
+            <path d="M8 8 h22 M8 8 v22 M392 8 h-22 M392 8 v22 M8 492 h22 M8 492 v-22 M392 492 h-22 M392 492 v-22" />
+          </g>
+        </svg>
+      </div>
+      <figcaption class="hm-title">
+        <span class="hm-logo"><LogoPicture sizes="56px" priority={false} /></span>
+        <span class="hm-title-text"><strong>S. Meredith Plumbing &amp; Heating</strong><span>Boiler, tank and zone manifold · a finished job</span></span>
+        <span class="hm-sheetno" aria-hidden="true">Sheet<b>01</b></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hm { --hero-h1: clamp(3.1rem, 13.2vw, 6.6rem); position: relative; overflow: hidden; color: var(--color-ink-on-dark); padding: 1.5rem 0 2.5rem; background:
+      linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px) 0 0 / 96px 96px,
+      linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px) 0 0 / 96px 96px,
+      linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px) 0 0 / 24px 24px,
+      radial-gradient(50rem 30rem at 80% 30%, rgba(211, 43, 44, .18), transparent 70%),
+      #1B1B1B; }
+  .hm-grid { display: grid; gap: 1.75rem; }
+  .hm-sheet { margin: 0; padding: 10px; border: 1px solid rgba(255, 255, 255, .22); background: rgba(0, 0, 0, .35); box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .8); max-width: 30rem; width: 100%; justify-self: center; }
+  .hm-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #111; }
+  .hm-photo :global(picture), .hm-photo :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .hm-photo :global(img) { filter: saturate(1.05) contrast(1.04); }
+  .hm-marks { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hm-ring { fill: rgba(211, 43, 44, .18); stroke: #fff; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; }
+  .hm-dot { fill: var(--color-action); stroke: #fff; stroke-width: 1.5; }
+  .hm-lead { fill: none; stroke: #fff; stroke-width: 2; stroke-dasharray: 100; stroke-dashoffset: 0; }
+  .hm-chip rect { fill: #141414; stroke: rgba(255, 255, 255, .55); stroke-width: 1; }
+  .hm-chip text { fill: #fff; font-family: var(--font-display); font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: .06em; }
+  .hm-ticks path { fill: none; stroke: rgba(255, 255, 255, .85); stroke-width: 2; }
+  /* A full-size layer carries the line so it can move with a transform (moving top would count as layout shift). */
+  .hm-scan { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+  .hm-scan::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--color-action); box-shadow: 0 0 18px 4px rgba(211, 43, 44, .7); }
+  .hm-title { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; gap: .75rem; margin-top: 10px; padding: .55rem .6rem; border: 1px solid rgba(255, 255, 255, .22); }
+  .hm-logo { display: grid; place-items: center; width: 56px; height: 56px; background: #fff; border-radius: 4px; padding: 3px; }
+  .hm-logo :global(picture) { width: 100%; }
+  .hm-title-text { display: grid; line-height: 1.25; min-width: 0; }
+  .hm-title-text strong { font-family: var(--font-display); font-size: 1.15rem; text-transform: uppercase; letter-spacing: .02em; }
+  .hm-title-text span { font-size: .84rem; color: rgba(255, 255, 255, .72); }
+  .hm-sheetno { display: grid; text-align: center; font-family: var(--font-display); text-transform: uppercase; font-size: .75rem; letter-spacing: .1em; color: rgba(255, 255, 255, .6); border-left: 1px solid rgba(255, 255, 255, .22); padding-left: .75rem; }
+  .hm-sheetno b { font-size: 1.6rem; color: #fff; letter-spacing: .02em; line-height: 1; }
+
+  @media (min-width: 900px) {
+    .hm { --hero-h1: clamp(3.4rem, 6.6vw, 6.6rem); padding: 3.5rem 0; }
+    .hm-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 28rem); gap: 3.5rem; align-items: center; }
+    .hm-sheet { transform: rotate(1.2deg); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hm-scan { animation: hm-scan 1.1s .15s cubic-bezier(.45, 0, .55, 1) backwards; }
+    .hm-ring { animation: hm-pop .45s calc(.9s + var(--i) * .3s) cubic-bezier(.2, 1.4, .4, 1) backwards; }
+    .hm-dot { animation: hm-fade .2s calc(.9s + var(--i) * .3s) backwards; }
+    .hm-lead { animation: hm-draw .4s calc(1.05s + var(--i) * .3s) ease-out backwards; }
+    .hm-chip { animation: hm-fade .3s calc(1.3s + var(--i) * .3s) ease-out backwards; }
+  }
+  @keyframes hm-scan { 0% { opacity: 1; transform: translateY(0); } 90% { opacity: 1; } 100% { opacity: 0; transform: translateY(calc(100% - 3px)); } }
+  @keyframes hm-pop { from { transform: scale(0); } }
+  @keyframes hm-fade { from { opacity: 0; } }
+  @keyframes hm-draw { from { stroke-dashoffset: 100; } }
+</style>

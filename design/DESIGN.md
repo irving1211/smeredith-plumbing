@@ -2,7 +2,7 @@
 schema_version: 1
 client: S. Meredith Plumbing & Heating
 project: smeredith-plumbing
-version: 1.1.0
+version: 1.2.0
 status: client-review
 approved_by: null
 approved_at: null
@@ -138,21 +138,21 @@ Only real, confirmed proof: the license number as Shane gave it, two verbatim re
 
 Everything in `design-method.md` §5, plus for this client: pulsing "live" dots and emergency pills, centered heroes, check-mark trust bullets, stat strips, numbered card grids, rotating carousels, scroll-reveal animation, sticky or floating call bars, uppercase tracked eyebrow labels, a red accent word inside a headline, tinted rounded icon squares, gradient or glass effects, any claim not in the approved-claims table, any "licensed and insured" wording, AI/automation wording on customer-facing pages, and any third-party widget that blocks the first screen or the form.
 
-## Hero options (review, 2026-10-10)
+## Hero options (review, 2026-10-10, round 2)
 
-Brief: `_context/claude-hero-coverage-prompt-2026-10-10.md`. Five working openings for Irving to choose from; **none is approved and none is live**. They are built only into the review build (`npm run build:review`: `/review/` and `/review/hero-1/` to `/hero-5/`), noindex and out of the sitemap. The live home keeps a copy-only hero (`src/components/heroes/HeroBaseline.astro`).
+Brief: `_context/claude-hero-coverage-prompt-2026-10-10.md`. Round 1 (code-drawn compositions) was rejected by Irving as low quality; round 2 follows the IF THEY HIRED ME catalog standard (Paci Plumbing, AlexProductions): Shane's real photos from the first frame, poster-scale headline, one signature system per option, motion that rewards and never gates. **None is approved and none is live.** Review build only (`npm run build:review`: `/review/`, `/review/hero-1/` to `/hero-5/`), noindex, not in the sitemap. The live home keeps the copy-only hero (`HeroBaseline`, compact).
 
-Shared by every option (`src/components/HeroCopy.astro`, `LogoPicture.astro`): the h1 "The plumber who answers the phone.", the existing lede (services, Saugus/North Shore/Boston, 24/7), Call 781-820-4592 and Request service; Shane's logo exactly as supplied (`logo-full.png`, 720 x 710), only resized (`scripts/make-logo-sizes.mjs`), never cropped, recoloured or redrawn. Evidence studied: the logo (charcoal and red, a house between two crossed pipe wrenches, wordmark band, phone number in the red base) and the van side (bold italic bullet list, logo decal, "License #9630040" by the door).
+Shared (`src/components/HeroCopy.astro`): h1 "The plumber who answers the phone." (poster size via `--hero-h1`), the existing lede, Call 781-820-4592 and Request service (54 px), "Text photos to Shane", and a trust line of owner-confirmed facts (MA master plumber Lic. 9630040-PL-M · owner-operated · 24/7 emergency service). Photos: crops of Shane's originals by `scripts/make-hero-photos.mjs` (AVIF + WebP, phone-sized variants). Logo: whole and unchanged wherever it appears.
 
-| # | Composition and hierarchy | Visual story | Evidence used |
-|---|---|---|---|
-| 1 | Phone: drawing band above the copy. Desktop: copy left, drawing right | A ringing receiver, a red line through a pipe and two bends, arriving at the logo | Logo (pipe wrenches, red/charcoal), the brand line |
-| 2 | Full-width charcoal band; logo on a white plate (like the decal on the white van) beside a desk phone; copy in white | The receiver lifts off its cradle: the call is answered | Logo, van decal on white |
-| 3 | Grid-paper band; riser-diagram drawing first (desktop: left), copy after | Leak, no hot water and no heat pipe into one line, through a valve, to the logo | Services Shane offers (heaters, boilers, general), the logo |
-| 4 | Copy first, then a white "van side" panel: bullet list, logo decal, license line, pipe and wrench along the bottom | Reads like Shane's van | Van lettering transcription (Furnaces left off pending S5) |
-| 5 | Drawing and logo side by side above the copy (desktop: left of the copy) | A simple, original plumber lifts a phone to his ear | The brand line; **proposed brand extension, needs Shane's approval; not his likeness** |
+| # | Option | Composition | Signature | Material |
+|---|---|---|---|---|
+| 1 | Incoming call | Dark; copy left, tilted phone right; on phones a call banner (a real call link) above the headline and a cropped phone below the actions | Rings, Shane picks up, three verbatim review excerpts arrive as texts | Brand line, `src/reviews.json`, logo |
+| 2 | Blue hour | Full-bleed van photo; headline on the dark sky (photo anchored right of the text column); on phones the lettering/decal crop with the headline rising out of it | Photo settles, one pass of evening light | `van-side.jpg` |
+| 3 | Mechanical room | Draftsman grid; copy left, a drawing sheet right with the photo, callouts and a logo title block | Scan line, then three callouts draw in | `jobs/boiler-manifold-room/shot-1.jpg` |
+| 4 | Rough to finished | Light; copy left, compare frame right with "Rough stage" / "Finished" and a logo badge | Divider sweeps once, then drag / arrow keys (labelled range control) | `jobs/kitchen-bath-remodel/shot-3.jpg` + `shot-2.jpg` (same job) |
+| 5 | Owner poster | Dark; red-and-charcoal portrait print with logo badge and split-flap board | Board flips through the 14 confirmed towns to 24/7 | `shane.jpg` (Shane dislikes it; kept because Irving allowed it) |
 
-Comparison, screenshots and measurements: `qa/heroes-2026-10-10/` and the vault report `_context/hero-coverage-implementation-2026-10-10.md`.
+Motion (candidate tier in `tokens.json`): CSS only (option 4 adds a few lines of JS for the drag control); runs once, ends within 3.2 s; text and buttons never move; static finished state with reduced motion or without JavaScript. Layout shift: a size-matched fallback for the display face (`Barlow Condensed Fallback`, Arial/Roboto at 68%) keeps poster headlines on the same lines if the font arrives late; moving parts use transforms only. Measured: `qa/heroes-2026-10-10/` (perf, first-screen, quality-review, v2-final).
 
 ## Coverage checker (2026-10-10)
 
@@ -189,3 +189,5 @@ ZIP first: one text field (`inputmode=numeric`, `autocomplete=postal-code`, neve
 - 2026-10-10 — status → client-review.
 - 2026-10-10 — **v1.1.0: hero options and ZIP-first coverage.** Portrait removed from the home page (owner dislikes it). Five review-only hero options built (above); the live home hero is copy only until Irving chooses. Motion candidate tier brief-once recorded for the chosen hero only. Lettering font role added (system Arial, option 4 only). Coverage checker changed from a town list to ZIP first with an approximate pin; the 14 confirmed towns are unchanged and are still the only "Yes"; a proposed expansion is kept separately in `src/service-area-proposed.json` and never answers Yes.
 - 2026-10-10 — v1.1.0: Hero options (review only), ZIP-first coverage checker, portrait removed from home, lettering font role, motion candidate.
+- 2026-10-10 — **v1.2.0: hero options round 2.** Irving rejected round 1 ("very low quality"). Rebuilt all five on Shane's real photos to the IF THEY HIRED ME standard; shared hero copy gains Text photos and a trust line (live home unchanged, compact). Added colour roles night, night-blue, call-green; display fallback face (size-adjust 68%) after measuring a 0.08 layout shift from late font swap on poster headlines; header nav no longer wraps at 900-1179 px. Photo variants sized for phones after the first speed pass (largest paint up to 3.15 s → 2.25-2.41 s).
+- 2026-10-10 — v1.2.0: Hero options round 2 (photo-led), fallback display face, hero colour roles.

@@ -1,7 +1,7 @@
 {
- "target": "http://127.0.0.1:61599/review/hero-2/",
- "url": "http://127.0.0.1:61599/review/hero-2/",
- "audited_at": "2026-10-11T00:36:20.764Z",
+ "target": "http://127.0.0.1:56156/review/hero-2/",
+ "url": "http://127.0.0.1:56156/review/hero-2/",
+ "audited_at": "2026-10-11T02:25:17.442Z",
  "breakpoints": [
   390,
   768,
@@ -12,24 +12,12 @@
  "counts": {
   "P0": 0,
   "P1": 0,
-  "P2": 1,
-  "P3": 1
+  "P2": 0,
+  "P3": 2
  },
  "findings": [
   {
    "id": "F001",
-   "kind": "objective",
-   "severity": "P2",
-   "check": "lcp-lazy",
-   "evidence": "LCP element <IMG> http://127.0.0.1:61599/images/jobs/single-water-heater-open-basement/shot-1-900.webp is loading=\"lazy\"",
-   "breakpoint": 1280,
-   "business_impact": "Lazy-loading the hero image delays the largest paint (Core Web Vitals).",
-   "recommendation": "Remove loading=\"lazy\" from the hero/LCP image; consider fetchpriority=\"high\".",
-   "verification": "Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone.",
-   "occurrences": 1
-  },
-  {
-   "id": "F002",
    "kind": "objective",
    "severity": "P3",
    "check": "canonical",
@@ -38,6 +26,18 @@
    "business_impact": "Duplicate URLs can split ranking signals.",
    "recommendation": "Add <link rel=\"canonical\">.",
    "verification": "Re-run: node scripts/audit.js <target> — the canonical finding must be gone.",
+   "occurrences": 1
+  },
+  {
+   "id": "F002",
+   "kind": "objective",
+   "severity": "P3",
+   "check": "token-color",
+   "evidence": "colours not in tokens.json: #0e131c (#top)",
+   "breakpoint": null,
+   "business_impact": "Colours outside the approved design system — brand drift.",
+   "recommendation": "Replace with the nearest design-token colour or add the colour to tokens.json with a source.",
+   "verification": "Re-run: node scripts/audit.js <target> — the token-color finding must be gone.",
    "occurrences": 1
   }
  ]

@@ -1,35 +1,84 @@
 {
- "target": "http://127.0.0.1:61599/review/hero-3/",
- "url": "http://127.0.0.1:61599/review/hero-3/",
- "audited_at": "2026-10-11T00:36:25.838Z",
+ "target": "http://127.0.0.1:56156/review/hero-3/",
+ "url": "http://127.0.0.1:56156/review/hero-3/",
+ "audited_at": "2026-10-11T02:25:22.811Z",
  "breakpoints": [
   390,
   768,
   1280
  ],
  "verdict": "SHIP",
- "unverified_contrast": [],
+ "unverified_contrast": [
+  {
+   "sel": "#hero-h",
+   "text": "The plumber who answers the phone.",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "p.lede",
+   "text": "Owner-operated by Shane Meredith. Plumbing, heatin",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "a.btn.btn-ghost-dark",
+   "text": "Request service",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "p.hero-alt",
+   "text": "Prefer to text?",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "a",
+   "text": "Text photos to Shane",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "span",
+   "text": "MA master plumber · Lic. 9630040-PL-M",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "span",
+   "text": "Owner-operated",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "span",
+   "text": "24/7 emergency service",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "strong",
+   "text": "S. Meredith Plumbing & Heating",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  },
+  {
+   "sel": "span",
+   "text": "Boiler, tank and zone manifold · a finished job",
+   "fg": "#ffffff",
+   "reason": "text over an image/translucent layer — check visually"
+  }
+ ],
  "counts": {
   "P0": 0,
   "P1": 0,
-  "P2": 1,
-  "P3": 1
+  "P2": 0,
+  "P3": 2
  },
  "findings": [
   {
    "id": "F001",
-   "kind": "objective",
-   "severity": "P2",
-   "check": "lcp-lazy",
-   "evidence": "LCP element <IMG> http://127.0.0.1:61599/images/jobs/single-water-heater-open-basement/shot-1-900.webp is loading=\"lazy\"",
-   "breakpoint": 1280,
-   "business_impact": "Lazy-loading the hero image delays the largest paint (Core Web Vitals).",
-   "recommendation": "Remove loading=\"lazy\" from the hero/LCP image; consider fetchpriority=\"high\".",
-   "verification": "Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone.",
-   "occurrences": 1
-  },
-  {
-   "id": "F002",
    "kind": "objective",
    "severity": "P3",
    "check": "canonical",
@@ -38,6 +87,18 @@
    "business_impact": "Duplicate URLs can split ranking signals.",
    "recommendation": "Add <link rel=\"canonical\">.",
    "verification": "Re-run: node scripts/audit.js <target> — the canonical finding must be gone.",
+   "occurrences": 1
+  },
+  {
+   "id": "F002",
+   "kind": "objective",
+   "severity": "P3",
+   "check": "token-color",
+   "evidence": "colours not in tokens.json: #1b1b1b (#top), #111111 (div.hm-photo)",
+   "breakpoint": null,
+   "business_impact": "Colours outside the approved design system — brand drift.",
+   "recommendation": "Replace with the nearest design-token colour or add the colour to tokens.json with a source.",
+   "verification": "Re-run: node scripts/audit.js <target> — the token-color finding must be gone.",
    "occurrences": 1
   }
  ]
