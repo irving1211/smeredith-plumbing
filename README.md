@@ -15,7 +15,7 @@ Any other `--branch` value publishes a **preview** at `https://<branch>.smeredit
 
 Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; the Cloudflare dashboard cannot change static HTML in this setup. Server secrets (Resend, Turnstile, GBP) are Pages secrets and are never in the repo.
 
-**Rollback:** `npx wrangler pages deployment list --project-name smeredithplumbing`, then re-deploy the previous production build, or promote it in the dashboard. Before the October 2026 work the production deployment was `a5326407` (commit `6a00cfa`).
+**Rollback:** `npx wrangler pages deployment list --project-name smeredithplumbing`, then re-deploy the previous production build, or promote it in the dashboard. Before the October 2026 work the production deployment was `a5326407` (commit `6a00cfa`). The redesign (lead-gen, mobile path and request form, ZIP coverage, Incoming call hero) went live on 2026-10-11 as deployment `fa6083bb` (commit `63d0973`); to undo it, re-deploy or promote `a5326407`.
 
 ## Commands
 
@@ -25,7 +25,9 @@ Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; t
 | `npm run build` | build to `dist/` |
 | `npm test` | build + unit/build tests (`tests/*.test.mjs`) |
 | `npm run test:e2e` | build + browser tests (`tests/e2e/*.e2e.mjs`, needs Chrome; set `CHROME_PATH` if it is not the system Chrome) |
-| `npm run test:all` | both |
+| `npm run test:all` | unit/build, browser, and the review-build hero tests |
+| `npm run build:review` | build with the review-only hero pages into `dist-review/` (never deploy it to main) |
+| `npm run build:zip` | rebuild the ZIP lookup data from Census files |
 | `npm run build:geo` | rebuild the service-area outline from Census boundaries |
 | `node scripts/strip-gps.mjs [--check]` | remove GPS location data from published photos (a test fails if any photo has it) |
 | `npm run optimize:images` | regenerate job photo sizes |
