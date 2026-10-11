@@ -76,6 +76,10 @@ const recommendation = data.recommendation as { id: string; why: string[] } | nu
   </Base>
 
 <script>
+  // Scale each 1280 px desktop preview to the width its box actually has.
+  const fit = () => document.querySelectorAll<HTMLElement>('.viewport.desktop').forEach((box) => box.style.setProperty('--s', String(box.clientWidth / 1280)));
+  fit();
+  window.addEventListener('resize', fit, { passive: true });
   document.querySelectorAll<HTMLButtonElement>('[data-replay]').forEach((button) => {
     button.addEventListener('click', () => {
       const section = button.closest('section');
@@ -100,8 +104,9 @@ const recommendation = data.recommendation as { id: string; why: string[] } | nu
   .viewport iframe:focus, .viewport iframe:focus-visible { outline: 6px solid var(--color-focus); outline-offset: -6px; }
   .phone { width: 234px; height: 506px; }
   .phone iframe { transform: scale(.6); }
-  .desktop { width: min(640px, 100%); aspect-ratio: 1280 / 800; }
-  .desktop iframe { transform: scale(.5); }
+  .frame-desktop { flex: 1 1 22rem; max-width: 640px; min-width: 0; }
+  .desktop { width: 100%; aspect-ratio: 1280 / 800; }
+  .desktop iframe { transform: scale(var(--s, .5)); }
   @media (max-width: 700px) { .frame-desktop { display: none; } }
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; margin: 1rem 0 0; font-size: .95rem; }
   .facts dt { font-weight: 700; }
