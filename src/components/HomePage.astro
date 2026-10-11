@@ -40,10 +40,9 @@ const picks = ['Carly C.', 'Daniel M.'].map((n) => reviewData.reviews.find((r) =
 const job = jobsRaw.find((j) => j.slug === 'single-water-heater-open-basement')!;
 const jobPhoto = job.photos[0];
 
-// Shane does not like the current portrait, so the home page no longer uses it; the van stands in for "Meet Shane".
-// 128 x 96 slot: small copies of the van photo (van-thumb-*.webp, made with sharp from van-side.jpg, GPS-free).
-const vanSrc = `${base}images/van/van-thumb-128.webp`;
-const vanSrcSet = `${base}images/van/van-thumb-128.webp 128w, ${base}images/van/van-thumb-256.webp 256w`;
+// Meet Shane leads with Shane himself (Irving, 2026-10-10). Colour crops of his supplied portrait, made by
+// scripts/make-hero-photos.mjs; shown at 150 px on phones and 300 px on desktops.
+const shaneSet = (ext: string) => [240, 360, 480, 720].map((w) => `${base}images/hero/shane-${w}.${ext} ${w}w`).join(', ');
 
 const faqs = [
   { q: 'Who answers the phone?', a: 'Shane Meredith, the owner. S. Meredith Plumbing & Heating is owner-operated, so you reach Shane directly. Call or text 781-820-4592, or send a request and he will follow up.' },
@@ -108,11 +107,26 @@ const faqs = [
 
     <section class="section" id="about" aria-labelledby="meet-h">
       <div class="container meet">
-        <img class="meet-photo" src={vanSrc} srcset={vanSrcSet} sizes="128px" alt="Shane's van, lettered with his services and number" width="128" height="96" loading="lazy" decoding="async" />
-        <div>
+        <figure class="meet-figure">
+          <picture>
+            <source type="image/avif" srcset={shaneSet('avif')} sizes="(min-width: 768px) 300px, 150px" />
+            <img class="meet-photo" src={`${base}images/hero/shane-360.webp`} srcset={shaneSet('webp')} sizes="(min-width: 768px) 300px, 150px" alt="Shane Meredith, owner of S. Meredith Plumbing & Heating" width="720" height="900" loading="lazy" decoding="async" />
+          </picture>
+          <figcaption class="meet-tag"><strong>Shane Meredith</strong><span>Owner · MA master plumber</span></figcaption>
+        </figure>
+        <div class="meet-copy">
           <h2 class="section-title" id="meet-h">Meet Shane</h2>
-          <p>Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>
-          <p class="more-link"><a href={`${base}about/`}>About Shane and the van</a></p>
+          <p class="meet-lede">Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>
+          <ul class="meet-facts">
+            <li>Massachusetts master plumber, license 9630040-PL-M</li>
+            <li>Owner-operated, based in Saugus</li>
+            <li>24/7 emergency service</li>
+          </ul>
+          <div class="actions">
+            <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call Shane</a>
+            <a class="btn btn-secondary" href={smsHref}>Text Shane</a>
+          </div>
+          <p class="more-link"><a href={`${base}about/`}>More about Shane and the van</a></p>
         </div>
       </div>
     </section>
@@ -120,7 +134,10 @@ const faqs = [
     <section class="section" id="work" aria-labelledby="job-h">
       <div class="container job">
         <figure class="job-photo">
-          <img src={`${base}${jobPhoto.src.replace(/^\//, '')}`} alt="A finished single water heater installation in an open basement" width={jobPhoto.width} height={jobPhoto.height} loading="lazy" decoding="async" />
+          <picture>
+            <source type="image/avif" srcset={[360, 540, 720].map((w) => `${base}images/hero/job-heater-${w}.avif ${w}w`).join(', ')} sizes="(min-width: 768px) 352px, 92vw" />
+            <img src={`${base}${jobPhoto.src.replace(/^\//, '')}`} srcset={[360, 540, 720].map((w) => `${base}images/hero/job-heater-${w}.webp ${w}w`).join(', ')} sizes="(min-width: 768px) 352px, 92vw" alt="A finished single water heater installation in an open basement" width={jobPhoto.width} height={jobPhoto.height} loading="lazy" decoding="async" />
+          </picture>
         </figure>
         <div class="job-copy">
           <h2 class="section-title" id="job-h">A recent job</h2>
@@ -183,10 +200,33 @@ const faqs = [
   .review-flag { margin: 0; padding: .6rem var(--gutter); background: var(--color-tint); font-size: .92rem; text-align: center; }
   .review-flag a { font-weight: 700; text-decoration: underline; }
 
-  .meet { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 1.1rem; align-items: start; }
-  .meet-photo { width: 128px; height: 96px; object-fit: cover; border-radius: var(--radius-sm); }
-  .meet p { margin: 0 0 .5rem; }
-  .meet .section-title { margin-bottom: .4rem; font-size: 1.9rem; }
+  .meet { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 1.1rem 1.25rem; align-items: start; }
+  .meet-figure { position: relative; margin: 0; }
+  .meet-figure picture { display: block; }
+  .meet-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; box-shadow: 0 18px 36px -18px rgba(49, 49, 49, .55); }
+  .meet-tag { display: grid; margin-top: .5rem; line-height: 1.25; }
+  .meet-tag strong { font-family: var(--font-display); font-size: 1.15rem; text-transform: uppercase; letter-spacing: .01em; }
+  .meet-tag span { font-size: .82rem; color: var(--color-text-muted); }
+  .meet-copy .section-title { margin-bottom: .45rem; }
+  .meet-lede { margin: 0 0 .75rem; font-size: 1.05rem; }
+  .meet-facts { margin: 0 0 1rem; padding: 0; list-style: none; display: grid; gap: .35rem; font-size: .95rem; }
+  .meet-facts li { display: flex; gap: .55rem; align-items: baseline; }
+  .meet-facts li::before { content: ''; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--color-action); transform: translateY(-2px); }
+  .meet-copy .actions { margin-bottom: .25rem; }
+  @media (max-width: 559px) {
+    /* Phones: photo and heading side by side; the words, facts and buttons full width underneath. */
+    .meet { row-gap: .35rem; }
+    .meet-figure, .meet-copy { display: contents; }
+    .meet-figure picture { grid-column: 1; grid-row: 1 / span 2; }
+    .meet-copy .section-title { grid-column: 2; grid-row: 1; align-self: end; }
+    .meet-tag { grid-column: 2; grid-row: 2; align-self: start; margin-top: 0; }
+    .meet-lede { margin-top: .9rem; }
+    .meet-lede, .meet-facts, .meet-copy .actions, .meet-copy .more-link { grid-column: 1 / -1; }
+  }
+  @media (min-width: 768px) {
+    .meet { grid-template-columns: 300px minmax(0, 36rem); gap: 2.5rem; align-items: center; }
+    .meet-tag strong { font-size: 1.35rem; }
+  }
 
   .job { display: grid; gap: 1.25rem; align-items: center; }
   .job-photo { margin: 0; }

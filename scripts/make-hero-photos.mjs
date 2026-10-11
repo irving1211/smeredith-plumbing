@@ -19,6 +19,10 @@ const jobs = [
   ['finished', 'public/images/jobs/kitchen-bath-remodel/shot-2.jpg', { left: 0, top: 180, width: 2160, height: 2700 }, [480, 680, 840, 1120]],
   // Owner portrait (supplied by Shane), black and white, contrast lifted; colour is added in CSS.
   ['owner', 'public/images/shane.jpg', { left: 160, top: 120, width: 1600, height: 2000 }, [480, 600, 720, 960], (s) => s.grayscale().linear(1.18, -18)],
+  // Owner portrait in colour for the home page's Meet Shane section (4:5, small sizes: it is shown at 150-300 px).
+  ['shane', 'public/images/shane.jpg', { left: 160, top: 120, width: 1600, height: 2000 }, [240, 360, 480, 720]],
+  // The home page's 'A recent job' photo (single water heater, open basement), shown at up to 352 px wide.
+  ['job-heater', 'public/images/jobs/single-water-heater-open-basement/shot-1.jpg', null, [360, 540, 720]],
   // A soft wallpaper for the phone option: twin water heaters, heavily blurred (decorative, tiny).
   ['wallpaper', 'public/images/jobs/twin-water-heaters/shot-1.jpg', null, [480], (s) => s.blur(18).modulate({ brightness: 0.55, saturation: 0.6 })],
 ];

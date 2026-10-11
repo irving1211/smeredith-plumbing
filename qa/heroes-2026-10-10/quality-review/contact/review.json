@@ -1,0 +1,56 @@
+{
+ "target": "http://127.0.0.1:50073/contact/",
+ "url": "http://127.0.0.1:50073/contact/",
+ "audited_at": "2026-10-11T03:49:31.160Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "FIX-FIRST",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 1,
+  "P2": 1,
+  "P3": 1
+ },
+ "findings": [
+  {
+   "id": "F001",
+   "kind": "objective",
+   "severity": "P1",
+   "check": "tap-target",
+   "evidence": "input is 177×21px (need ≥44×44; WCAG minimum 24×24)",
+   "breakpoint": 390,
+   "business_impact": "Small controls cause mis-taps on phones; WCAG 2.5.8 failure.",
+   "recommendation": "Give the control ≥44×44 px (min 24×24) via padding/min-height.",
+   "verification": "Re-run: node scripts/audit.js <target> — the tap-target finding must be gone.",
+   "occurrences": 1
+  },
+  {
+   "id": "F002",
+   "kind": "objective",
+   "severity": "P2",
+   "check": "tap-target",
+   "evidence": "input is 26×26px (need ≥44×44; WCAG minimum 24×24)",
+   "breakpoint": 390,
+   "business_impact": "Small controls cause mis-taps on phones; WCAG 2.5.8 failure.",
+   "recommendation": "Give the control ≥44×44 px (min 24×24) via padding/min-height.",
+   "verification": "Re-run: node scripts/audit.js <target> — the tap-target finding must be gone.",
+   "occurrences": 12
+  },
+  {
+   "id": "F003",
+   "kind": "objective",
+   "severity": "P3",
+   "check": "token-color",
+   "evidence": "colours not in tokens.json: #767676 (input)",
+   "breakpoint": null,
+   "business_impact": "Colours outside the approved design system — brand drift.",
+   "recommendation": "Replace with the nearest design-token colour or add the colour to tokens.json with a source.",
+   "verification": "Re-run: node scripts/audit.js <target> — the token-color finding must be gone.",
+   "occurrences": 1
+  }
+ ]
+}

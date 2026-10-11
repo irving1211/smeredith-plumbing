@@ -1,0 +1,32 @@
+{
+ "target": "http://127.0.0.1:50073/services/water-heater-replacement/",
+ "url": "http://127.0.0.1:50073/services/water-heater-replacement/",
+ "audited_at": "2026-10-11T03:49:36.987Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "SHIP",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "P3": 0
+ },
+ "findings": [
+  {
+   "id": "F001",
+   "kind": "objective",
+   "severity": "P2",
+   "check": "jsonld-missing-field",
+   "evidence": "Service missing telephone, address",
+   "breakpoint": null,
+   "business_impact": "Incomplete LocalBusiness data weakens local search signals.",
+   "recommendation": "Add name, telephone and address to the LocalBusiness block.",
+   "verification": "Re-run: node scripts/audit.js <target> — the jsonld-missing-field finding must be gone.",
+   "occurrences": 1
+  }
+ ]
+}

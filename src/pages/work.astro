@@ -55,7 +55,7 @@ const breadcrumb = {
               <figure class="job-card">
                 <div class="photo-strip" role="group" tabindex="0" aria-label={`${job.title}: ${job.photos.length} ${job.photos.length === 1 ? 'photo' : 'photos'}`}>
                   {job.photos.map((photo, i) => (
-                    <img src={photo.src} alt={`${job.title}, photo ${i + 1} of ${job.photos.length}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                    <img src={photo.src} srcset={`${photo.src.replace(/-900\.webp$/, '-480.webp')} 480w, ${photo.src} ${photo.width}w`} sizes="(min-width: 768px) 336px, 80vw" alt={`${job.title}, photo ${i + 1} of ${job.photos.length}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
                   ))}
                 </div>
                 <figcaption>

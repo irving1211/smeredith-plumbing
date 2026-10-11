@@ -1,0 +1,32 @@
+{
+ "target": "http://127.0.0.1:59362/work/",
+ "url": "http://127.0.0.1:59362/work/",
+ "audited_at": "2026-10-11T03:51:53.775Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "SHIP",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "P3": 0
+ },
+ "findings": [
+  {
+   "id": "F001",
+   "kind": "objective",
+   "severity": "P2",
+   "check": "lcp-lazy",
+   "evidence": "LCP element <IMG> http://127.0.0.1:59362/images/jobs/dark-tile-bath/shot-1-480.webp is loading=\"lazy\"",
+   "breakpoint": 1280,
+   "business_impact": "Lazy-loading the hero image delays the largest paint (Core Web Vitals).",
+   "recommendation": "Remove loading=\"lazy\" from the hero/LCP image; consider fetchpriority=\"high\".",
+   "verification": "Re-run: node scripts/audit.js <target> — the lcp-lazy finding must be gone.",
+   "occurrences": 1
+  }
+ ]
+}

@@ -1,4 +1,4 @@
-// Generates web-sized WebP copies of the gallery photos referenced in src/jobs.json.
+// Generates web-sized WebP copies (900 px and 480 px) of the gallery photos referenced in src/jobs.json.
 // Originals are left untouched. Re-run after adding a job: `node scripts/optimize-job-images.mjs`
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -20,6 +20,9 @@ for (const job of jobs) {
     if (!existsSync(outPath)) {
       await sharp(input).rotate().resize({ width: WIDTH, withoutEnlargement: true }).webp({ quality: 72 }).toFile(outPath);
     }
+    // A 480 px copy for small slots (service-page job cards render at about 236 px).
+    const smallPath = outPath.slice(0, -`-${WIDTH}.webp`.length) + '-480.webp';
+    if (!existsSync(smallPath)) await sharp(input).rotate().resize({ width: 480, withoutEnlargement: true }).webp({ quality: 72 }).toFile(smallPath);
     const { width, height } = await sharp(outPath).metadata();
     job.photos.push({ src: output, width, height, original });
   }

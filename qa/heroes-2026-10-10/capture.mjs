@@ -22,7 +22,7 @@ for (const path of paths) {
     const page = await context.newPage();
     await page.goto(`${origin}${path}`, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(2500); // let any one-shot animation settle
+    await page.waitForTimeout(4600); // let any one-shot animation settle (the call hero finishes at about 4.1 s)
     const name = `${prefix}-${slug(path)}-${label}`;
     await page.screenshot({ path: join(out, `${name}-first-screen.png`) });
     if (mobile) await page.screenshot({ path: join(out, `${name}-full.png`), fullPage: true });

@@ -68,18 +68,20 @@ describe('hero options', () => {
       }
     });
 
-    test(`option ${id}: motion runs once (a pulse may repeat twice) and ends within 3.2 s; reduced motion shows the finished hero with no animation`, async () => {
+    test(`option ${id}: motion runs once (a pulse may repeat) and ends within 3.2 s (option 1: 4.5 s); reduced motion shows the finished hero with no animation`, async () => {
       const context = await browser.newContext({ ...phone, reducedMotion: 'no-preference' });
       const page = await context.newPage();
       await page.goto(`${origin}/review/hero-${id}/`);
+      // Option 1 starts ringing when its phone is on screen: bring it into view first.
+      if (id === '1') { await page.locator('[data-hc-device]').scrollIntoViewIfNeeded(); await page.waitForTimeout(100); }
       const timings = await page.evaluate(() => document.getAnimations().map((a) => {
         const t = a.effect.getComputedTiming();
         return { iterations: t.iterations, end: t.endTime };
       }));
       assert.ok(timings.length > 0, 'the option has its one-time movement');
       for (const t of timings) {
-        assert.ok(Number.isFinite(t.iterations) && t.iterations <= 2, 'never loops');
-        assert.ok(t.end <= 3200, `an animation ends at ${t.end} ms`);
+        assert.ok(Number.isFinite(t.iterations) && t.iterations <= 3, 'never loops');
+        assert.ok(t.end <= (id === '1' ? 4500 : 3200), `an animation ends at ${t.end} ms`);
       }
       await context.close();
 
@@ -134,6 +136,35 @@ describe('hero options', () => {
       await context.close();
     });
   }
+
+  test('option 1 rings only once its phone is on screen, then shows the answered call; reduced motion and no-JS show the answered call', async () => {
+    const shown = (page, sel) => page.evaluate((s) => { const el = document.querySelector(s); const cs = getComputedStyle(el); return cs.visibility !== 'hidden' && Number(cs.opacity) > 0.5; }, sel);
+    const context = await browser.newContext({ ...phone, reducedMotion: 'no-preference' });
+    const page = await context.newPage();
+    await page.goto(`${origin}/review/hero-1/`);
+    assert.equal(await page.evaluate(() => document.querySelector('[data-hc]').className.includes('is-armed')), true, 'armed while the phone is below the fold');
+    assert.equal(await shown(page, '.hc-ringing'), true, 'waits on the ringing screen');
+    assert.equal(await page.locator('.hc-banner .hc-bkey-decline').isVisible(), true, 'both banner buttons are visible on a phone');
+    assert.equal(await page.locator('.hc-banner .hc-bkey-answer').isVisible(), true);
+    await page.locator('[data-hc-device]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1500);
+    assert.equal(await shown(page, '.hc-ringing'), true, 'still ringing 1.5 s after it comes into view');
+    await page.waitForTimeout(2900);
+    assert.equal(await shown(page, '.hc-ringing'), false, 'connected after about 2.5 s');
+    assert.equal(await shown(page, '.hc-live'), true);
+    await page.locator('[data-hc-dismiss]').click();
+    assert.equal(await page.locator('[data-hc-banner]').isVisible(), false, 'red hides the banner');
+    assert.equal(await page.locator('.hc-copy').getByRole('link', { name: 'Call 781-820-4592' }).isVisible(), true, 'Call stays');
+    await context.close();
+    for (const opts of [{ ...phone, reducedMotion: 'reduce' }, { ...phone, javaScriptEnabled: false }]) {
+      const ctx = await browser.newContext(opts);
+      const p = await ctx.newPage();
+      await p.goto(`${origin}/review/hero-1/`);
+      assert.equal(await shown(p, '.hc-live'), true, 'answered call shown at once');
+      assert.equal(await shown(p, '.hc-ringing'), false);
+      await ctx.close();
+    }
+  });
 
   test('the comparison page lists all five options with working phone and desktop previews, and is noindex', async () => {
     const context = await browser.newContext(desktop);

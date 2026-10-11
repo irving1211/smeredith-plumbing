@@ -16,14 +16,17 @@ test('the production build has no review pages, and the sitemap never lists them
   assert.doesNotMatch(readFileSync(join(dist, 'sitemap.xml'), 'utf8'), /review/);
 });
 
-test('the live home page keeps its search setup and drops the portrait Shane dislikes', () => {
+test('the live home page keeps its search setup and uses the chosen Incoming call hero', () => {
   const home = page('/');
   assert.match(home, /<meta name="google-site-verification" content="T1fr6tjXPBeZCzYliQAi5NbFYg6pVZYkxTW6no-cVG4"/);
   assert.match(home, /<link rel="canonical" href="https:\/\/smeredithplumbing\.com\/"/);
   assert.doesNotMatch(home, /noindex/);
-  assert.doesNotMatch(home, /images\/shane/, 'no portrait on the home page');
+  assert.doesNotMatch(home, /images\/shane(?:-640)?\.(?:jpg|webp)/, 'the old full-size portrait files are not used');
+  assert.match(home, /data-hero="1"/, 'Incoming call hero');
+  assert.match(home, /class="hc-banner-call" href="tel:\+17818204592"/);
+  assert.match(home, /images\/hero\/shane-\d+\.(?:avif|webp)/, 'Meet Shane shows his photo');
   assert.match(home, /<h1[^>]*>The plumber who answers the phone\.<\/h1>/);
-  assert.doesNotMatch(home, /@keyframes sm-/, 'no hero option motion ships on the live home page until one is chosen');
+  assert.doesNotMatch(home, /@keyframes (?:sm|hb|hm|hr|ho)-/, 'only the chosen hero\'s CSS ships on the live home page');
 });
 
 test('the ZIP checker is on the home and service-area pages with a no-JavaScript town picker beside it', () => {

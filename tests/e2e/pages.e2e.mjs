@@ -26,7 +26,7 @@ after(async () => {
 const ALL_PAGES = ['/', '/services/', ...services.map((s) => `/services/${s.slug}/`), ...areas.map((a) => `/areas/${a.slug}/`), '/about/', '/work/', '/service-area/', '/contact/', '/contact/thanks/', '/404.html'];
 
 describe('home page on a phone', () => {
-  test('the first screen shows what Shane does, the call and request actions, and the start of the service list', async () => {
+  test('the first screen shows what Shane does, the call banner, and the call and request actions', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/`);
@@ -37,17 +37,19 @@ describe('home page on a phone', () => {
     assert.match(await page.locator('h1').textContent(), /The plumber who answers the phone\./);
     assert.equal(await inFirstScreen(page.locator('.home-hero').getByRole('link', { name: /^Call 781-820-4592$/ })), true, 'call is on the first screen');
     assert.equal(await inFirstScreen(page.locator('.home-hero').getByRole('link', { name: 'Request service' })), true, 'request is on the first screen');
-    assert.equal(await inFirstScreen(page.locator('.vanlist .row-main').first()), true, 'the first service row is on the first screen');
+    // The chosen hero (Incoming call, Irving 2026-10-10) puts a call banner first; the service list now follows the phone.
+    assert.equal(await inFirstScreen(page.locator('.hc-banner-call')), true, 'the call banner is on the first screen');
+    assert.match(await page.locator('.hc-banner-call').getAttribute('href'), /^tel:\+17818204592$/);
     await context.close();
   });
 
-  test('the whole page is short: at most seven phone screens (it was about twenty-nine)', async () => {
+  test('the whole page is short: at most eight phone screens (it was about twenty-nine; the chosen call hero adds the full phone on phones)', async () => {
     const { context } = await phoneContext(browser);
     const page = await context.newPage();
     await page.goto(`${origin}/`);
     await page.waitForTimeout(400);
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
-    assert.ok(height <= 7 * 844, `home is ${height}px tall at 390px wide`);
+    assert.ok(height <= 8 * 844, `home is ${height}px tall at 390px wide`);
     await context.close();
   });
 

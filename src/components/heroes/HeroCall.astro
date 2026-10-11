@@ -1,12 +1,19 @@
 ---
-// Option 1: Incoming call. The page opens on the promise itself: a phone rings, Shane picks up, and three customers'
-// own words arrive as texts (verbatim excerpts from src/reviews.json). On phones the signature is a call banner that is
-// itself a real call link. Rules every hero follows: ./README.md. The phone drawing is decorative (aria-hidden).
+// Home hero (chosen by Irving 2026-10-10): Incoming call. The page opens on the promise itself: a phone rings, Shane
+// picks up, and three customers' own words arrive as texts (verbatim excerpts from src/reviews.json).
+//  - Phones: an incoming-call banner with both buttons comes first. Green is a real call link; red only dismisses the
+//    banner (the Call button below stays). The full phone, with its answer and decline keys, follows the actions.
+//  - The ringing starts when the phone is actually on screen (a phone visitor scrolls to it; a slow connection may
+//    still be loading), rings for about 2.5 s, then connects. JavaScript arms it; without JavaScript, or with reduced
+//    motion, the answered call is shown straight away.
+//  - The phone drawing is decorative (aria-hidden); everything it says is also on the page as text.
+// Rules every hero follows: ./README.md.
 import HeroCopy from '../HeroCopy.astro';
 import reviews from '../../reviews.json';
 
 const base = import.meta.env.BASE_URL;
-const logo = `${base}images/logo-hero-240.webp`;
+const logoAvif = `${base}images/logo-hero-240.avif`;
+const logoWebp = `${base}images/logo-hero-240.webp`;
 // Verbatim excerpts (substrings of the published review text), with the reviewer's first name and initial.
 const pick = (name: string, excerpt: string) => {
   const r = reviews.reviews.find((x) => x.name === name)!;
@@ -22,37 +29,43 @@ const handset = 'M0 28 C 0 12 12 2 30 0 L 90 0 C 108 2 120 12 120 28 L 120 34 Q 
 const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7, 0.9, 0.45, 0.6, 0.85, 0.5, 0.35, 0.55];
 ---
 
-<section class="home-hero hc" id="top" aria-labelledby="hero-h" data-hero="1">
+<section class="home-hero hc" id="top" aria-labelledby="hero-h" data-hero="1" data-hc>
   <div class="container hc-grid">
-    <a class="hc-banner" href="tel:+17818204592">
-      <span class="hc-banner-ava"><img src={logo} alt="" width="240" height="237" /></span>
-      <span class="hc-banner-text"><strong>Shane Meredith</strong><span>Owner · 781-820-4592</span></span>
-      <span class="hc-banner-key" aria-hidden="true"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span>
-      <span class="visually-hidden">Call Shane</span>
-    </a>
+    <div class="hc-banner" data-hc-banner>
+      <a class="hc-banner-call" href="tel:+17818204592">
+        <span class="hc-banner-ava"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
+        <span class="hc-banner-text"><strong>Shane Meredith</strong><span>781-820-4592</span></span>
+        <span class="hc-bslot" aria-hidden="true"></span>
+        <span class="hc-bkey hc-bkey-answer" aria-hidden="true"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span>
+        <span class="visually-hidden">Call Shane</span>
+      </a>
+      <button type="button" class="hc-bkey hc-bkey-decline js-only" data-hc-dismiss aria-label="Hide this call banner">
+        <svg viewBox="-4 -14 128 68" aria-hidden="true"><path d={handset} transform="rotate(135 60 20)" /></svg>
+      </button>
+    </div>
 
     <HeroCopy dark class="hc-copy" />
 
-    <div class="hc-device" aria-hidden="true">
+    <div class="hc-device" aria-hidden="true" data-hc-device>
       <div class="hc-phone">
         <div class="hc-screen" style={`--wall: url('${base}images/hero/wallpaper-480.webp')`}>
           <div class="hc-ringing">
             <p class="hc-label">incoming call</p>
             <div class="hc-avatar">
               <span class="hc-pulse hc-p1"></span><span class="hc-pulse hc-p2"></span><span class="hc-pulse hc-p3"></span>
-              <span class="hc-ava"><img src={logo} alt="" width="240" height="237" /></span>
+              <span class="hc-ava"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
             </div>
             <p class="hc-name">Shane Meredith</p>
             <p class="hc-sub">S. Meredith Plumbing &amp; Heating</p>
             <div class="hc-keys">
-              <span class="hc-key hc-decline"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(135 60 20)" /></svg></span>
-              <span class="hc-key hc-answer"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span>
+              <span class="hc-keywrap"><span class="hc-key hc-decline"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(135 60 20)" /></svg></span><span class="hc-keylabel">Decline</span></span>
+              <span class="hc-keywrap"><span class="hc-key hc-answer"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span><span class="hc-keylabel">Accept</span></span>
             </div>
           </div>
 
           <div class="hc-live">
             <div class="hc-head">
-              <span class="hc-ava hc-ava-sm"><img src={logo} alt="" width="240" height="237" /></span>
+              <span class="hc-ava hc-ava-sm"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
               <div>
                 <p class="hc-name hc-name-sm">Shane Meredith</p>
                 <p class="hc-on"><i></i>On the line</p>
@@ -64,93 +77,127 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
                 <li style={`--n:${i}`}><p>{t.text}</p><span>{t.name} · Google review</span></li>
               ))}
             </ul>
+            <span class="hc-key hc-decline hc-end"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(135 60 20)" /></svg></span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+<script is:inline>
+  // Arm the ring before first paint, then play it once the phone is on screen. Without this script (or with reduced
+  // motion) the CSS shows the answered call. The red banner button hides the banner; Call stays in the hero.
+  (function () {
+    var hero = document.currentScript.previousElementSibling;
+    var dismiss = hero.querySelector('[data-hc-dismiss]');
+    var banner = hero.querySelector('[data-hc-banner]');
+    if (dismiss && banner) dismiss.addEventListener('click', function () { banner.hidden = true; });
+    if (!window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    hero.classList.add('is-armed');
+    var device = hero.querySelector('[data-hc-device]');
+    var play = function () { hero.classList.remove('is-armed'); hero.classList.add('is-playing'); };
+    if (!('IntersectionObserver' in window) || !device) return play();
+    var io = new IntersectionObserver(function (entries) {
+      if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); play(); }
+    }, { threshold: 0.35 });
+    io.observe(device);
+  })();
+</script>
 
 <style>
   .hc { --hero-h1: clamp(3.1rem, 13.2vw, 6.4rem); position: relative; overflow: hidden; background:
       radial-gradient(60rem 36rem at 82% 45%, rgba(211, 43, 44, .32), transparent 60%),
       radial-gradient(40rem 30rem at 0% 100%, rgba(211, 43, 44, .12), transparent 70%),
-      #141414; color: var(--color-ink-on-dark); padding: 1rem 0 2.25rem; }
+      #141414; color: var(--color-ink-on-dark); padding: 1rem 0 2.5rem; }
   .hc::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, #000 30%, transparent); pointer-events: none; }
   .hc-grid { position: relative; display: grid; gap: 1.1rem; }
   .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  /* Phone-sized signature: the call banner is a real call link */
-  .hc-banner { display: grid; grid-template-columns: 48px minmax(0, 1fr) 52px; align-items: center; gap: .75rem; padding: .6rem .6rem .6rem .7rem; border-radius: 22px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); color: var(--color-ink-on-dark); text-decoration: none; min-height: 68px; }
+  /* Phones: an incoming-call banner with both buttons, decline then accept as on a phone. The link (avatar, name,
+     green key) is a real call link; the red key sits over a reserved slot in it and only hides the banner. */
+  .hc-banner { position: relative; padding: .55rem .55rem .55rem .7rem; border-radius: 24px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); }
+  .hc-banner-call { display: grid; grid-template-columns: 48px minmax(0, 1fr) 52px 52px; align-items: center; gap: .55rem; min-height: 58px; color: var(--color-ink-on-dark); text-decoration: none; border-radius: 18px; }
+  .hc-banner-call:focus-visible, .hc-bkey-decline:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
   .hc-banner-ava { width: 48px; height: 48px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; }
-  .hc-banner-ava img { width: 40px; height: auto; }
-  .hc-banner-text { display: grid; line-height: 1.2; }
+  .hc-banner-ava picture { width: 40px; }
+  .hc-banner-ava img { width: 100%; height: auto; }
+  .hc-banner-text { display: grid; line-height: 1.2; min-width: 0; }
   .hc-banner-text strong { font-size: 1.05rem; }
   .hc-banner-text span { font-size: .88rem; color: rgba(255, 255, 255, .78); }
-  .hc-banner-key { width: 52px; height: 52px; border-radius: 50%; background: #1E9E4C; display: grid; place-items: center; }
-  .hc-banner-key svg { width: 30px; fill: #fff; }
-  .hc-banner:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .hc-bkey { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; }
+  .hc-bkey svg { width: 30px; fill: #fff; }
+  .hc-bkey-answer { background: #1E9E4C; }
+  .hc-bkey-decline { position: absolute; top: 50%; right: calc(.55rem + 52px + .55rem); margin-top: -26px; background: #D13438; }
 
   /* The phone */
-  /* Phones: a compact, cropped phone below the actions (the banner above is the first-screen signature). */
-  .hc-device { display: grid; place-items: center; height: 330px; overflow: hidden; margin-top: .5rem; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
-  .hc-device .hc-phone { width: 270px; transform: none; }
-  .hc-phone { position: relative; width: 300px; aspect-ratio: 9 / 18.5; border-radius: 48px; padding: 11px; background: linear-gradient(145deg, #3a3a3a, #0c0c0c 40%, #1d1d1d); box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 40px 80px -20px rgba(0, 0, 0, .8), 0 0 120px rgba(211, 43, 44, .35); transform: perspective(1400px) rotateY(-14deg) rotateX(4deg) rotateZ(1.5deg); }
-  .hc-phone::before { content: ''; position: absolute; top: 20px; left: 50%; width: 92px; height: 26px; margin-left: -46px; border-radius: 16px; background: #000; z-index: 3; }
-  .hc-screen { position: relative; height: 100%; border-radius: 38px; overflow: hidden; color: #fff; background: linear-gradient(180deg, rgba(10, 10, 10, .55), rgba(10, 10, 10, .9)), var(--wall) center / cover, #222; }
-  .hc-ringing, .hc-live { position: absolute; inset: 0; padding: 70px 22px 26px; display: flex; flex-direction: column; align-items: center; }
+  .hc-device { display: grid; place-items: center; margin-top: .75rem; }
+  .hc-phone { position: relative; width: min(280px, 76vw); aspect-ratio: 9 / 18.5; border-radius: 46px; padding: 10px; background: linear-gradient(145deg, #3a3a3a, #0c0c0c 40%, #1d1d1d); box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 40px 80px -20px rgba(0, 0, 0, .8), 0 0 120px rgba(211, 43, 44, .35); }
+  .hc-phone::before { content: ''; position: absolute; top: 19px; left: 50%; width: 88px; height: 25px; margin-left: -44px; border-radius: 16px; background: #000; z-index: 3; }
+  .hc-screen { position: relative; height: 100%; border-radius: 37px; overflow: hidden; color: #fff; background: linear-gradient(180deg, rgba(10, 10, 10, .55), rgba(10, 10, 10, .9)), var(--wall) center / cover, #222; }
+  .hc-ringing, .hc-live { position: absolute; inset: 0; padding: 66px 20px 24px; display: flex; flex-direction: column; align-items: center; }
   .hc-ringing { opacity: 0; visibility: hidden; }
   .hc-label { margin: 0; font-size: .82rem; letter-spacing: .02em; color: rgba(255, 255, 255, .72); }
-  .hc-avatar { position: relative; width: 112px; height: 112px; margin: 22px 0 14px; }
+  .hc-avatar { position: relative; width: 108px; height: 108px; margin: 20px 0 14px; }
   .hc-ava { position: relative; z-index: 1; display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%; background: #fff; overflow: hidden; box-shadow: 0 6px 24px rgba(0, 0, 0, .45); }
-  .hc-ava img { width: 86%; height: auto; }
+  .hc-ava picture { display: grid; place-items: center; width: 86%; }
+  .hc-ava img { width: 100%; height: auto; }
   .hc-pulse { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .5); opacity: 0; }
-  .hc-name { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.85rem; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
-  .hc-sub { margin: .35rem 0 0; font-size: .85rem; color: rgba(255, 255, 255, .72); text-align: center; }
-  .hc-keys { margin-top: auto; display: flex; gap: 74px; }
-  .hc-key { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; }
-  .hc-key svg { width: 36px; fill: #fff; }
+  .hc-name { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.8rem; line-height: 1; text-transform: uppercase; letter-spacing: .01em; }
+  .hc-sub { margin: .35rem 0 0; font-size: .82rem; color: rgba(255, 255, 255, .72); text-align: center; }
+  .hc-keys { margin-top: auto; display: flex; justify-content: space-between; width: 100%; padding: 0 8px; }
+  .hc-keywrap { display: grid; justify-items: center; gap: .4rem; }
+  .hc-keylabel { font-size: .75rem; color: rgba(255, 255, 255, .8); }
+  .hc-key { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; }
+  .hc-key svg { width: 34px; fill: #fff; }
   .hc-decline { background: #E5484D; }
   .hc-answer { background: #2DBE60; }
 
-  .hc-live { padding-top: 62px; align-items: stretch; }
-  .hc-head { display: flex; align-items: center; gap: .75rem; padding: 0 2px; }
-  .hc-ava-sm { width: 52px; height: 52px; flex: none; }
-  .hc-name-sm { font-size: 1.45rem; }
-  .hc-on { margin: .2rem 0 0; display: flex; align-items: center; gap: .4rem; font-size: .82rem; color: #9BE7B4; }
+  .hc-live { padding-top: 58px; align-items: stretch; }
+  .hc-head { display: flex; align-items: center; gap: .7rem; padding: 0 2px; }
+  .hc-ava-sm { width: 50px; height: 50px; flex: none; }
+  .hc-name-sm { font-size: 1.4rem; }
+  .hc-on { margin: .2rem 0 0; display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: #9BE7B4; }
   .hc-on i { width: 8px; height: 8px; border-radius: 50%; background: #2DBE60; box-shadow: 0 0 0 4px rgba(45, 190, 96, .25); }
-  .hc-wave { display: flex; align-items: center; gap: 4px; height: 40px; margin: 16px 4px 14px; }
+  .hc-wave { display: flex; align-items: center; gap: 4px; height: 34px; margin: 12px 4px 12px; }
   .hc-wave span { flex: 1; height: 100%; border-radius: 3px; background: linear-gradient(#ff6b6b, var(--color-action)); transform: scaleY(var(--h)); transform-origin: center; opacity: .9; }
-  .hc-texts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .hc-texts li { justify-self: start; max-width: 92%; }
-  .hc-texts p { margin: 0; padding: .6rem .8rem; border-radius: 18px 18px 18px 6px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .1); font-size: .86rem; line-height: 1.35; }
-  .hc-texts span { display: block; margin: .25rem 0 0 .4rem; font-size: .7rem; color: rgba(255, 255, 255, .62); }
+  .hc-texts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .hc-texts li { justify-self: start; max-width: 94%; }
+  .hc-texts p { margin: 0; padding: .5rem .75rem; border-radius: 16px 16px 16px 6px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .1); font-size: .8rem; line-height: 1.3; }
+  .hc-texts span { display: block; margin: .2rem 0 0 .4rem; font-size: .68rem; color: rgba(255, 255, 255, .62); }
+  .hc-end { margin: auto auto 0; width: 54px; height: 54px; }
+  .hc-end svg { width: 30px; }
+
+  /* Armed by the script before first paint: the phone waits on the ringing screen until it is on screen. */
+  .hc.is-armed .hc-ringing { opacity: 1; visibility: visible; }
+  .hc.is-armed .hc-live { opacity: 0; }
 
   @media (min-width: 700px) {
     .hc-banner { display: none; }
-    .hc-device { height: auto; overflow: visible; margin: 0; -webkit-mask-image: none; mask-image: none; }
-    .hc-device .hc-phone { width: 300px; transform: perspective(1400px) rotateY(-14deg) rotateX(4deg) rotateZ(1.5deg); }
+    .hc-device { margin: 0; }
+    .hc-phone { width: 300px; transform: perspective(1400px) rotateY(-14deg) rotateX(4deg) rotateZ(1.5deg); }
     .hc-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 2rem; align-items: center; }
     .hc { padding: 3rem 0 3.5rem; --hero-h1: clamp(3.2rem, 7.4vw, 6.6rem); }
   }
-  @media (min-width: 700px) and (max-width: 899px) { .hc-device .hc-phone { width: 250px; } }
+  @media (min-width: 700px) and (max-width: 899px) { .hc-phone { width: 250px; } }
 
   @media (prefers-reduced-motion: no-preference) {
     .hc-banner { animation: hc-drop .55s .1s cubic-bezier(.2, .9, .3, 1.2) backwards; }
-    .hc-banner-key { animation: hc-throb .9s .5s ease-in-out 2 backwards; }
-    .hc-ringing { animation: hc-ringing 1.75s linear backwards; }
-    .hc-pulse { animation: hc-pulse 1.2s ease-out backwards; }
-    .hc-p2 { animation-delay: .35s; }
-    .hc-p3 { animation-delay: .7s; }
-    .hc-answer { animation: hc-throb .5s .9s ease-in-out 2 backwards; }
-    .hc-live { animation: hc-in .45s 1.6s ease-out backwards; }
-    .hc-wave span { animation: hc-wave .9s calc(1.7s + var(--i) * 20ms) ease-in-out backwards; }
-    .hc-texts li { animation: hc-text .45s calc(1.95s + var(--n) * .32s) cubic-bezier(.2, .9, .3, 1.1) backwards; }
+    .hc-banner .hc-bkey-answer { animation: hc-throb .9s .6s ease-in-out 2; }
+    /* Timeline once the phone is on screen: rings for about 2.5 s, connects, the line moves, the texts arrive. */
+    .hc.is-playing .hc-ringing { animation: hc-ringing 2.6s linear backwards; }
+    .hc.is-playing .hc-pulse { animation: hc-pulse 1.2s ease-out 2 backwards; }
+    .hc.is-playing .hc-p2 { animation-delay: .4s; }
+    .hc.is-playing .hc-p3 { animation-delay: .8s; }
+    .hc.is-playing .hc-answer { animation: hc-throb .55s .5s ease-in-out 3, hc-press .25s 2.2s ease-in; }
+    .hc.is-playing .hc-live { animation: hc-in .45s 2.5s ease-out backwards; }
+    .hc.is-playing .hc-wave span { animation: hc-wave .9s calc(2.6s + var(--i) * 20ms) ease-in-out backwards; }
+    .hc.is-playing .hc-texts li { animation: hc-text .45s calc(2.85s + var(--n) * .32s) cubic-bezier(.2, .9, .3, 1.1) backwards; }
   }
   @keyframes hc-drop { from { opacity: 0; transform: translateY(-18px) scale(.97); } }
   @keyframes hc-throb { 50% { transform: scale(1.12); } }
-  /* Visible while ringing, then gone: the static (and reduced-motion) state is the answered call. */
-  @keyframes hc-ringing { 0%, 88% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+  @keyframes hc-press { 50% { transform: scale(.86); } }
+  /* Visible while ringing, then gone: the resting (and reduced-motion) state is the answered call. */
+  @keyframes hc-ringing { 0%, 92% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
   @keyframes hc-pulse { from { opacity: .7; transform: scale(1); } to { opacity: 0; transform: scale(1.9); } }
   @keyframes hc-in { from { opacity: 0; transform: translateY(10px); } }
   @keyframes hc-wave { 0% { transform: scaleY(.15); } 35% { transform: scaleY(1); } 70% { transform: scaleY(.3); } }

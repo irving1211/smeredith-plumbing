@@ -128,7 +128,7 @@ const breadcrumb = {
           <div class="job-row">
             {relatedJobs.map((job) => (
               <figure class="job-thumb">
-                <img src={`${base}${job.photos[0].src.replace(/^\//, '')}`} alt={`${job.title} by S. Meredith Plumbing & Heating`} width={job.photos[0].width} height={job.photos[0].height} loading="lazy" decoding="async" />
+                <img src={`${base}${job.photos[0].src.replace(/^\//, '')}`} srcset={`${base}${job.photos[0].src.replace(/^\//, '').replace(/-900\.webp$/, '-480.webp')} 480w, ${base}${job.photos[0].src.replace(/^\//, '')} 900w`} sizes="(min-width: 768px) 236px, 45vw" alt={`${job.title} by S. Meredith Plumbing & Heating`} width={job.photos[0].width} height={job.photos[0].height} loading="lazy" decoding="async" />
                 <figcaption>{job.title}</figcaption>
               </figure>
             ))}

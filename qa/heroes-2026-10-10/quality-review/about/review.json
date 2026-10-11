@@ -1,0 +1,19 @@
+{
+ "target": "http://127.0.0.1:50073/about/",
+ "url": "http://127.0.0.1:50073/about/",
+ "audited_at": "2026-10-11T03:49:23.158Z",
+ "breakpoints": [
+  390,
+  768,
+  1280
+ ],
+ "verdict": "SHIP",
+ "unverified_contrast": [],
+ "counts": {
+  "P0": 0,
+  "P1": 0,
+  "P2": 0,
+  "P3": 0
+ },
+ "findings": []
+}

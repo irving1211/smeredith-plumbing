@@ -170,7 +170,12 @@ test('the homepage has no reveal animation: every section is readable as soon as
   const html = page('/');
   assert.doesNotMatch(html, /class="[^"]*\breveal\b/);
   assert.doesNotMatch(html, /IntersectionObserver\(\[|querySelectorAll\('section, \.work-card/);
-  assert.doesNotMatch(html, /opacity:\s*0\b/);
+  // The call hero's phone drawing (aria-hidden) keeps its ringing screen and pulse rings at opacity 0 at rest: those are
+  // decorative layers of the illustration, not page content waiting to be revealed. Everything else must be visible.
+  const css = html
+    .replace(/@keyframes hc-[a-z-]+\{(?:[^{}]*\{[^}]*\})*\}/g, '')
+    .replace(/\.hc[^{}<>]*\{[^}]*\}/g, '');
+  assert.doesNotMatch(css, /opacity:\s*0\b/);
 });
 
 test('webfonts: only the variable Inter file and the one Barlow Condensed weight are preloaded; no static Inter weights or retired serif ship', () => {

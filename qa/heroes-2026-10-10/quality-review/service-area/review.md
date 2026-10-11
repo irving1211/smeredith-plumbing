@@ -1,7 +1,7 @@
 # Frontend quality review — objective checks
 
-- Target: http://127.0.0.1:56156/service-area/
-- Audited: 2026-10-11T02:25:06.619Z
+- Target: http://127.0.0.1:50073/service-area/
+- Audited: 2026-10-11T03:49:27.162Z
 - Breakpoints: 390, 768, 1280 px (screenshots in `screens/`)
 - **Verdict: SHIP** (P0 0 · P1 0 · P2 0 · P3 0)
 

@@ -2,7 +2,7 @@
 schema_version: 1
 client: S. Meredith Plumbing & Heating
 project: smeredith-plumbing
-version: 1.2.0
+version: 1.3.0
 status: client-review
 approved_by: null
 approved_at: null
@@ -116,7 +116,7 @@ None in the interface. (The hero options' drawings are illustrations, not an ico
 
 Live pages: tier **none**. No scroll reveals, no fades, no parallax, no auto-advancing anything. Colour changes on hover and focus only; `prefers-reduced-motion` is honoured by the generated token file.
 
-Candidate (hero options only, review pages, `tokens.json` → `motion.candidate`): **brief-once**. CSS only, no library and no script; decorative drawings only; plays once on load and ends within 1.4 s; never loops, never flashes, no sound; the heading, text, buttons and the logo image never move or fade; the resting state is the design, shown at once with `prefers-reduced-motion: reduce` or when animations do not run. Tested in `tests/e2e/heroes.review.mjs` (animation count and end times, zero animations with reduced motion, layout shift < 0.01, heading and Call button never move).
+Home hero (Incoming call, live on this branch; `tokens.json` motion tier **subtle**). Option review pages use the same rules. CSS only, no library and no script; decorative drawings only; plays once on load and ends within 1.4 s; never loops, never flashes, no sound; the heading, text, buttons and the logo image never move or fade; the resting state is the design, shown at once with `prefers-reduced-motion: reduce` or when animations do not run. Tested in `tests/e2e/heroes.review.mjs` (animation count and end times, zero animations with reduced motion, layout shift < 0.01, heading and Call button never move).
 
 ## Accessibility
 
@@ -140,7 +140,7 @@ Everything in `design-method.md` §5, plus for this client: pulsing "live" dots 
 
 ## Hero options (review, 2026-10-10, round 2)
 
-Brief: `_context/claude-hero-coverage-prompt-2026-10-10.md`. Round 1 (code-drawn compositions) was rejected by Irving as low quality; round 2 follows the IF THEY HIRED ME catalog standard (Paci Plumbing, AlexProductions): Shane's real photos from the first frame, poster-scale headline, one signature system per option, motion that rewards and never gates. **None is approved and none is live.** Review build only (`npm run build:review`: `/review/`, `/review/hero-1/` to `/hero-5/`), noindex, not in the sitemap. The live home keeps the copy-only hero (`HeroBaseline`, compact).
+Brief: `_context/claude-hero-coverage-prompt-2026-10-10.md`. Round 1 (code-drawn compositions) was rejected by Irving as low quality; round 2 follows the IF THEY HIRED ME catalog standard (Paci Plumbing, AlexProductions): Shane's real photos from the first frame, poster-scale headline, one signature system per option, motion that rewards and never gates. **Irving chose option 1, Incoming call, on 2026-10-10; it is the live home hero on this branch** (the other four stay as review pages). Review build only (`npm run build:review`: `/review/`, `/review/hero-1/` to `/hero-5/`), noindex, not in the sitemap. The live home keeps the copy-only hero (`HeroBaseline`, compact).
 
 Shared (`src/components/HeroCopy.astro`): h1 "The plumber who answers the phone." (poster size via `--hero-h1`), the existing lede, Call 781-820-4592 and Request service (54 px), "Text photos to Shane", and a trust line of owner-confirmed facts (MA master plumber Lic. 9630040-PL-M · owner-operated · 24/7 emergency service). Photos: crops of Shane's originals by `scripts/make-hero-photos.mjs` (AVIF + WebP, phone-sized variants). Logo: whole and unchanged wherever it appears.
 
@@ -191,3 +191,5 @@ ZIP first: one text field (`inputmode=numeric`, `autocomplete=postal-code`, neve
 - 2026-10-10 — v1.1.0: Hero options (review only), ZIP-first coverage checker, portrait removed from home, lettering font role, motion candidate.
 - 2026-10-10 — **v1.2.0: hero options round 2.** Irving rejected round 1 ("very low quality"). Rebuilt all five on Shane's real photos to the IF THEY HIRED ME standard; shared hero copy gains Text photos and a trust line (live home unchanged, compact). Added colour roles night, night-blue, call-green; display fallback face (size-adjust 68%) after measuring a 0.08 layout shift from late font swap on poster headlines; header nav no longer wraps at 900-1179 px. Photo variants sized for phones after the first speed pass (largest paint up to 3.15 s → 2.25-2.41 s).
 - 2026-10-10 — v1.2.0: Hero options round 2 (photo-led), fallback display face, hero colour roles.
+- 2026-10-10 — **v1.3.0: Incoming call chosen (Irving).** Live home hero = HeroCall. Changes at Irving's request: the phone banner shows both buttons (green calls; red only hides the banner, Call stays), the full phone with Decline/Accept keys shows on phones, the ring lasts about 2.5 s (was 1.6 s) and starts only when the phone is on screen (armed before first paint; static answered call without JavaScript or with reduced motion). Meet Shane now leads with his photo (colour 4:5 crop, name, role, facts, Call/Text), replacing the van thumbnail; Shane has said he dislikes this portrait, so a new photo drops straight in. Optimisation: home photo for "A recent job" served as AVIF/WebP at 360-720 px (home 355 → 284 KB); 480 px copies for service-page and Work photos; About van not lazy (it is the desktop LCP). Measured cost of the richer hero: first paint about +150 ms on a 4x-slowed CPU (Lighthouse simulated 1.10 → 1.35 s), largest paint 2.03 → 2.33 s, both inside "good"; layout shift 0. Phone page is 7.9 screens (the full phone adds about 850 px).
+- 2026-10-10 — v1.3.0: Incoming call chosen; Meet Shane leads with his photo; image optimisation.
