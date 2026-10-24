@@ -62,7 +62,7 @@ Service ids (`emergency-plumbing`, `water-heater-replacement`, `boiler-service`,
 
 | Feature | Build setting | Also needs |
 |---|---|---|
-| Google Analytics 4 | `PUBLIC_GA4_ID=G-XXXX` (or `PUBLIC_GTM_ID`) | the privacy notice approved and published; property owned by Shane's account |
+| Google Analytics 4 (**ON by default since 2026-10-24**; property `G-27Q90RBC50`, set in `src/lib/analytics.js`) | `PUBLIC_GA4_ID=off` disables it for one build; `PUBLIC_GA4_ID=G-XXXX` swaps the property; `PUBLIC_GTM_ID` replaces direct gtag. It only sends from `smeredithplumbing.com` / `www.`: tests, local dev and `*.pages.dev` previews never reach Google. | **Still open:** Shane approves and publishes the privacy notice (`PUBLIC_PRIVACY_PUBLISHED=1`, Google's terms expect it), and the property is moved to / shared with Shane's account (Admin > Property access management). In GA mark `generate_lead`, `phone_click` and `request_form_click` as key events once they appear. |
 | Privacy notice (page, sitemap, footer and form links) | `PUBLIC_PRIVACY_PUBLISHED=1` | Shane's approval of the wording |
 | Interactive Google map (on request, on the Service area page) | `PUBLIC_GOOGLE_MAPS_KEY` | billing enabled, key restricted to the site, quota alert |
 | Live Google reviews (About page) | `PUBLIC_REVIEWS_LIVE=1` | Google Business Profile API approval and the `GBP_*` Pages secrets |

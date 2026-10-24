@@ -11,6 +11,7 @@ import barlowUrl from '@fontsource/barlow-condensed/files/barlow-condensed-latin
 import services from '../services.json';
 import { TOWNS } from '../lib/service-area.js';
 import { BUSINESS, PUBLISHED, UPDATED } from '../lib/site-facts.js';
+import { analyticsConfig } from '../lib/analytics.js';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
@@ -145,10 +146,10 @@ const faqJsonLd = faqs.length
     }
   : null;
 
-// Optional analytics. Nothing third-party loads unless an ID is configured at build time
-// (and the privacy notice has been updated to disclose it).
+// Analytics. Google Analytics 4 is on by default but only sends from the production hostnames (src/lib/analytics.js);
+// the privacy notice discloses it. Tag Manager (PUBLIC_GTM_ID) replaces direct gtag when set.
 const gtmId = import.meta.env.PUBLIC_GTM_ID || '';
-const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
+const { id: ga4Id, hosts: ga4Hosts } = analyticsConfig(import.meta.env);
 ---
 
 <!doctype html>
@@ -202,11 +203,17 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
       </script>
     )}
     {ga4Id && !gtmId && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
-        <script is:inline define:vars={{ ga4Id }}>
+      <script is:inline define:vars={{ ga4Id, ga4Hosts }}>
+        // Google Analytics 4. Nothing is loaded or sent unless this page is on one of the production hostnames, so local
+        // dev, browser tests and *.pages.dev previews never add visits to the real property.
+        (function () {
+          if (ga4Hosts.indexOf(location.hostname.toLowerCase()) === -1) return;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id;
+          document.head.appendChild(s);
           window.dataLayer = window.dataLayer || [];
-          window.gtag = function(){ window.dataLayer.push(arguments); };
+          window.gtag = function () { window.dataLayer.push(arguments); };
           window.gtag('js', new Date());
           // Report the page URL without one-time confirmation ids or visitor-typed towns (UTM tags are kept for attribution).
           window.gtag('config', ga4Id, {
@@ -218,8 +225,8 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
               } catch (e) { return location.href; }
             })(),
           });
-        </script>
-      </>
+        })();
+      </script>
     )}
     <style is:global>
       :root {

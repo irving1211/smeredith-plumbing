@@ -261,3 +261,23 @@ describe('footer', () => {
     });
   }
 });
+
+describe('analytics guard', () => {
+  // Google Analytics is on for the live site, but a test run (127.0.0.1), a preview URL or local dev must never reach Google,
+  // or fake visits would land in the real property.
+  test('pages served from a non-production hostname load no Google script and send nothing to Google', async () => {
+    const { context, events } = await phoneContext(browser);
+    const page = await context.newPage();
+    const google = [];
+    page.on('request', (req) => { if (/google|gstatic|doubleclick/i.test(new URL(req.url()).hostname)) google.push(req.url()); });
+    for (const path of ['/', '/contact/', '/services/']) await page.goto(`${origin}${path}`, { waitUntil: 'networkidle' });
+    assert.deepEqual(google, [], 'no request to a Google host');
+    assert.equal(await page.evaluate(() => typeof window.gtag), 'undefined', 'gtag is not defined off the production hostnames');
+    // The first-party event layer still records events locally (for the tests); it just has nowhere to send them.
+    await page.goto(`${origin}/`);
+    await page.locator('a[href^="tel:"]').first().evaluate((a) => a.addEventListener('click', (e) => e.preventDefault(), { once: true }));
+    await page.locator('a[href^="tel:"]').first().click();
+    assert.ok(events.some((e) => e.event === 'phone_click'), 'phone taps are still pushed to the dataLayer');
+    await context.close();
+  });
+});

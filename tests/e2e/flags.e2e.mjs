@@ -15,7 +15,7 @@ let browser, server, origin;
 before(async () => {
   execFileSync(process.execPath, [join(root, 'node_modules/astro/bin/astro.mjs'), 'build', '--outDir', outDir], {
     cwd: root,
-    env: { ...process.env, PUBLIC_GOOGLE_MAPS_KEY: 'TEST-KEY-NOT-REAL', PUBLIC_REVIEWS_LIVE: '1', PUBLIC_PRIVACY_PUBLISHED: '1', PUBLIC_GA4_ID: 'G-TEST000000' },
+    env: { ...process.env, PUBLIC_GOOGLE_MAPS_KEY: 'TEST-KEY-NOT-REAL', PUBLIC_REVIEWS_LIVE: '1', PUBLIC_PRIVACY_PUBLISHED: '1', PUBLIC_GA4_ID: 'G-TEST000000', PUBLIC_GA4_HOSTS: '127.0.0.1,localhost' },
     stdio: 'ignore',
   });
   ({ server, origin } = await serve(outDir));

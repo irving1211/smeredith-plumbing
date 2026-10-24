@@ -126,11 +126,14 @@ test('the map shows real outlines for every confirmed town and states what the c
   assert.doesNotMatch(home, /street-address|residential address/i, 'no address shown or requested');
 });
 
-test('no third-party scripts load unless a key is configured at build time', () => {
+test('the only third party the site talks to by default is Google Analytics 4, injected by script and only from the production hostnames', () => {
   for (const file of allHtml()) {
     const html = readFileSync(file, 'utf8');
+    // No <script src> to another site (Google Analytics is added by the inline loader, after a hostname check).
     assert.doesNotMatch(html, /<script[^>]+src="https?:\/\/(?!static\.cloudflareinsights)/, `${file} loads an external script`);
-    assert.doesNotMatch(html, /maps\.googleapis\.com|challenges\.cloudflare\.com|googletagmanager|google-analytics/, `${file} references a third party`);
+    assert.doesNotMatch(html, /maps\.googleapis\.com|challenges\.cloudflare\.com|google-analytics\.com|clarity\.ms|hotjar|fbq\(|gtm\.js/, `${file} references another third party`);
+    // Any Google tag reference is the GA4 gtag loader, never a Tag Manager container.
+    for (const ref of html.match(/googletagmanager\.com\/[a-z./]+/g) || []) assert.equal(ref, 'googletagmanager.com/gtag/js', `${file} loads ${ref}`);
   }
   assert.doesNotMatch(page('/'), /data-gmap-open/, 'no map button without a Maps key');
 });
@@ -225,11 +228,12 @@ test('the privacy notice is prepared but unpublished: noindex, not in the sitema
 test('the privacy notice describes what this build really does, and nothing it does not do', () => {
   const html = page('/privacy');
   const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/\s+/g, ' ');
-  for (const must of ['Cloudflare Web Analytics', 'sets no cookies of its own', 'session storage', 'random confirmation code', 'emailed to Shane', 'never your search words']) {
+  // Google Analytics 4 is built in (on by default since 2026-10-24), so the notice must say so and that it uses cookies.
+  for (const must of ['Cloudflare Web Analytics', 'sets no cookies of its own', 'session storage', 'random confirmation code', 'emailed to Shane', 'never your search words', 'This site uses Google Analytics', 'Google Analytics uses cookies']) {
     assert.ok(text.includes(must), `missing: ${must}`);
   }
   // features that are not built in must not be described as if they were
-  for (const mustNot of ['Google Analytics', 'Show interactive map', 'retrieved from Shane', 'Cloudflare Turnstile']) {
+  for (const mustNot of ['Show interactive map', 'retrieved from Shane', 'Cloudflare Turnstile']) {
     assert.ok(!text.includes(mustNot), `default build must not mention: ${mustNot}`);
   }
   assert.doesNotMatch(text, /we (do not|don't) sell/i, "a business-practice promise needs Shane's confirmation first");

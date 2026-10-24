@@ -4,10 +4,11 @@
 // those features. Status: prepared, awaiting Shane's approval. Until PUBLIC_PRIVACY_PUBLISHED=1 is set at
 // build time the page is noindex, left out of the sitemap, and not linked from anywhere.
 import Base from '../layouts/Base.astro';
+import { analyticsConfig } from '../lib/analytics.js';
 
 const base = import.meta.env.BASE_URL;
 const published = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
-const analytics = Boolean(import.meta.env.PUBLIC_GA4_ID || import.meta.env.PUBLIC_GTM_ID);
+const analytics = Boolean(analyticsConfig(import.meta.env).id || import.meta.env.PUBLIC_GTM_ID);
 const maps = Boolean(import.meta.env.PUBLIC_GOOGLE_MAPS_KEY);
 const liveReviews = import.meta.env.PUBLIC_REVIEWS_LIVE === '1';
 const turnstile = Boolean(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY);
@@ -35,7 +36,7 @@ const phone = '781-820-4592';
 
       <h2>Cookies, storage and visit counts</h2>
       <ul>
-        <li>This website sets no cookies of its own.</li>
+        <li>{analytics ? 'Apart from the Google Analytics cookies described below, this website sets no cookies of its own.' : 'This website sets no cookies of its own.'}</li>
         <li>After you send a request, your browser remembers a random confirmation code on your device so that reloading the thank-you page is not counted twice. The code contains no personal information.</li>
         <li>Page visits are counted with Cloudflare Web Analytics, which does not use cookies or follow you from site to site. Cloudflare also hosts this website and protects it from abuse, which involves handling IP addresses.</li>
         <li>To slow down abuse, the form's server briefly remembers how many requests came from an IP address in a short window. It is not kept as a record of visitors.</li>

@@ -257,10 +257,16 @@ test('images declare dimensions and gallery photos are lazy, optimized files', (
   }
 });
 
-test('conversion tracking: event hooks present, no third-party tags unless configured', () => {
+test('conversion tracking: event hooks present; Google Analytics 4 is on, guarded to the production hostnames, and nothing else tracks', () => {
   const home = page('/');
   assert.match(home, /data-track-events/);
-  assert.doesNotMatch(home, /googletagmanager\.com|google-analytics\.com|clarity\.ms/);
+  // GA4 (property "S. Meredith Plumbing and Heating"): exactly one id, loaded only when location.hostname is a production host.
+  assert.equal((home.match(/G-27Q90RBC50/g) || []).length, 1, 'the GA4 id appears once');
+  assert.match(home, /const ga4Hosts = \["smeredithplumbing\.com","www\.smeredithplumbing\.com"\]/);
+  assert.match(home, /ga4Hosts\.indexOf\(location\.hostname\.toLowerCase\(\)\) === -1\) return/, 'nothing is sent from other hostnames (tests, previews, local dev)');
+  assert.doesNotMatch(home, /google-analytics\.com|clarity\.ms|hotjar|gtm\.js/);
+  // Whatever the build, the privacy notice (kept unpublished until Shane approves) must describe it.
+  assert.match(page('/privacy/'), /Google Analytics/);
   const contact = page('/contact/');
   assert.match(contact, /<select[^>]*name="heard_about"/);
   for (const option of ['Google Search', 'Google Maps', 'Referral', 'Facebook', 'Instagram', 'Contractor or property manager', 'Previous customer', 'Other']) {
