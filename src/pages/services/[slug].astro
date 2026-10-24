@@ -18,10 +18,11 @@ const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — I'd like help with: ${service.title}. `)}`;
 // The service travels into the request form by its stable id (the form lets the visitor change it).
-const contactHref = `${base}contact/?service=${service.slug}`;
+const formId = (service as { service_id?: string }).service_id ?? service.slug;
+const contactHref = `${base}contact/?service=${formId}`;
 const pageUrl = `${origin}${base}services/${service.slug}/`;
 const hubUrl = `${origin}${base}services/`;
-const relatedJobs = jobs.filter((j) => j.service === service.slug).slice(0, 3);
+const relatedJobs = jobs.filter((j) => j.service === formId || (j as { tags?: string[] }).tags?.includes(service.slug)).slice(0, 3);
 const relatedServices = services.filter((s) => s.slug !== service.slug);
 const approvedTowns = TOWNS.map((t) => t.name);
 
@@ -140,7 +141,7 @@ const breadcrumb = {
       <section class="where" id="service-towns" aria-labelledby="service-towns-h">
         <h2 id="service-towns-h">Where Shane does this work</h2>
         <p>Based in Saugus and serving {approvedTowns.slice(1, -1).join(', ')} and {approvedTowns.at(-1)}. Check your town and the request form opens with this service already selected.</p>
-        <ServiceAreaChecker service={service.slug} showMap={false} uid="svc-area" />
+        <ServiceAreaChecker service={formId} showMap={false} uid="svc-area" />
         <ul class="link-pills">
           {areas.map((a) => <li><a href={`${base}areas/${a.slug}/`}>Plumber in {a.town}</a></li>)}
         </ul>

@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import jobsRaw from '../jobs.json';
 import services from '../services.json';
 import serviceOptions from '../service-options.json';
+import { townBySlug } from '../lib/service-area.js';
+import { monthLabel } from '../lib/job-dates.js';
 
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
@@ -12,7 +14,9 @@ const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').repla
 const request = (service: string) => `${base}contact/?service=${service}`;
 
 // Jobs grouped by the service they show, in the order Shane's work is listed on the home page.
-const groupOrder = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels'];
+const groupOrder = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels', 'general-plumbing'];
+const headings: Record<string, string> = { 'water-heater-replacement': 'Water heaters', 'boiler-service': 'Boilers', 'kitchen-bath-remodels': 'Kitchen and bath remodels', 'general-plumbing': 'General plumbing, repairs and pumps' };
+const where = (job: { town?: string; date?: string }) => [job.town ? townBySlug(job.town)?.name : '', monthLabel(job.date)].filter(Boolean).join(' · ');
 const groups = groupOrder
   .map((id) => ({
     id,
@@ -34,7 +38,7 @@ const breadcrumb = {
 
 <Base
   title="Recent Plumbing & Heating Jobs | S. Meredith, Saugus MA"
-  description="Photos of recent water heater, boiler and kitchen and bath remodel plumbing jobs by Shane Meredith across Saugus, the North Shore and Boston."
+  description="Photos of recent water heater, boiler, remodel and repair plumbing jobs by Shane Meredith in Saugus, Lynn, Somerville, Stoneham and across the North Shore."
   pageType="work"
   current="work"
 >
@@ -49,17 +53,18 @@ const breadcrumb = {
     {groups.map((g) => (
       <section class="section" aria-labelledby={`${g.id}-h`}>
         <div class="container">
-          <h2 class="section-title" id={`${g.id}-h`}>{g.option.short === 'Kitchen / bath remodel' ? 'Kitchen and bath remodels' : `${g.option.short}s`}</h2>
+          <h2 class="section-title" id={`${g.id}-h`}>{headings[g.id] ?? g.option.short}</h2>
           <div class="jobs">
             {g.jobs.map((job) => (
               <figure class="job-card">
                 <div class="photo-strip" role="group" tabindex="0" aria-label={`${job.title}: ${job.photos.length} ${job.photos.length === 1 ? 'photo' : 'photos'}`}>
                   {job.photos.map((photo, i) => (
-                    <img src={photo.src} srcset={`${photo.src.replace(/-900\.webp$/, '-480.webp')} 480w, ${photo.src} ${photo.width}w`} sizes="(min-width: 768px) 336px, 80vw" alt={`${job.title}, photo ${i + 1} of ${job.photos.length}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                    <img src={photo.src} srcset={`${photo.src.replace(/-900\.webp$/, '-480.webp')} 480w, ${photo.src} ${photo.width}w`} sizes="(min-width: 768px) 336px, 80vw" alt={(photo as { alt?: string }).alt || `${job.title}, photo ${i + 1} of ${job.photos.length}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
                   ))}
                 </div>
                 <figcaption>
                   <strong>{job.title}</strong>
+                  {where(job) && <span class="where-when">{where(job)}</span>}
                   <span>{job.desc}</span>
                 </figcaption>
               </figure>
@@ -95,4 +100,5 @@ const breadcrumb = {
   .job-card figcaption { display: grid; gap: .15rem; padding-top: .6rem; }
   .job-card figcaption span { color: var(--color-text-muted); font-size: .95rem; max-width: 36rem; }
   .group-actions { margin-top: .5rem; }
+  .job-card figcaption .where-when { color: var(--color-text-muted); font-size: .85rem; }
 </style>

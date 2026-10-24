@@ -12,6 +12,8 @@ const WIDTH = 900;
 
 for (const job of jobs) {
   const originals = job.photos?.map((p) => p.original) ?? job.images;
+  // Hand-written fields on a photo (alt text) survive regeneration.
+  const extras = new Map((job.photos ?? []).map((p) => [p.original, p.alt ? { alt: p.alt } : {}]));
   job.photos = [];
   for (const original of originals) {
     const input = join(root, 'public', original);
@@ -24,7 +26,7 @@ for (const job of jobs) {
     const smallPath = outPath.slice(0, -`-${WIDTH}.webp`.length) + '-480.webp';
     if (!existsSync(smallPath)) await sharp(input).rotate().resize({ width: 480, withoutEnlargement: true }).webp({ quality: 72 }).toFile(smallPath);
     const { width, height } = await sharp(outPath).metadata();
-    job.photos.push({ src: output, width, height, original });
+    job.photos.push({ src: output, width, height, original, ...(extras.get(original) ?? {}) });
   }
   delete job.images;
 }

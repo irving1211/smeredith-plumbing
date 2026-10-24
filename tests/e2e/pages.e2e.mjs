@@ -196,7 +196,7 @@ describe('the pages that took over the long homepage sections', () => {
     const broken = await page.locator('main img').evaluateAll((els) => els.filter((e) => !e.complete || e.naturalWidth === 0).map((e) => e.getAttribute('src')));
     assert.deepEqual(broken, []);
     const links = await page.locator('main .group-actions .btn-primary').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-    assert.deepEqual(links, ['/contact/?service=water-heater-replacement', '/contact/?service=boiler-service', '/contact/?service=kitchen-bath-remodels']);
+    assert.deepEqual(links, ['/contact/?service=water-heater-replacement', '/contact/?service=boiler-service', '/contact/?service=kitchen-bath-remodels', '/contact/?service=general-plumbing']);
     assert.equal(await page.locator('.photo-strip').first().getAttribute('tabindex'), '0', 'a scrolling photo row can be reached by keyboard');
     await context.close();
   });

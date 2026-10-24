@@ -35,6 +35,8 @@ Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; t
 | `npm run build:geo` | rebuild the service-area outline from Census boundaries |
 | `node scripts/strip-gps.mjs [--check]` | remove GPS location data from published photos (a test fails if any photo has it) |
 | `npm run optimize:images` | regenerate job photo sizes (900 px and 480 px WebP; the pages use these) |
+| `node scripts/retouch-diff.mjs <orig> <retouched> <out.jpg>` | how much of a Flow-retouched photo differs from the real one (reject anything that changed outside the clutter) |
+| `node scripts/retouch-patch.mjs <orig> <flow> <out.jpg> "x0,y0,x1,y1;..."` | paste Flow's clean pixels into small boxes of the real photo (boxes are fractions of the image) |
 
 **Job photo originals** (`public/images/jobs/*/shot-N.jpg`) are not used by any page, but Google Images and Facebook link crawlers still request those URLs, so they stay. Keep each one at 1600 px on the long side, JPEG quality about 78 (about 150-300 KB). Raw 12-megapixel phone photos were 2-2.7 MB each and drew over 1 GB of downloads in 30 days (Cloudflare analytics, 2026-10-24); on 2026-10-24 17 of them were shrunk in place from 36 MB to 9 MB total. A test fails if any published image is over 500 KB.
 
@@ -53,6 +55,15 @@ Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; t
 | Attribution rules | `src/lib/attribution.js` |
 | Contact endpoint | `functions/api/contact.ts` |
 | Live Google reviews (off until Google approves API access) | `functions/api/reviews.ts`, `src/components/LiveReviews.astro` |
+
+## Town pages and job photos
+
+- **A town page exists only where there is real work to show.** `src/areas.json` holds the copy; `src/jobs.json` holds each job (`town`, `date`, `tags`, photos with `alt`). A page without a job needs a dated `recent` note. `tests/town-evidence.test.mjs` fails the build if a town page has no evidence, names a town outside `src/service-area.json`, or repeats a claim the client records do not support (insured, same-day, free quote, guarantee, marine-grade, "commercial", and so on).
+- **Held until Shane supplies a job:** Melrose, Wakefield, Everett, Boston (no post or photo at all) and Tewksbury (one caption line, no photo). Georgetown, Weston, Billerica and North Reading appear in his photos but are not on the confirmed list, so they are never named as places he works.
+- **Where the photos came from:** Shane's public business Instagram, pulled 2026-10-24 and archived with a manifest in the vault (`_context/harvest/2026-10-24-instagram/`). Job photos only: no family, faces, house numbers or customer details. Each job's date is the month the photos were shared, shown as "Photos from <month year>".
+- **Adding a job:** put `shot-N.jpg` (long side 1600 px, metadata stripped) in `public/images/jobs/<slug>/`, add the job to `src/jobs.json` with a `photos[].original` and `alt`, then `npm run optimize:images`.
+- **Retouching photos (clutter only):** Google Flow can remove a bucket or tool bag, but on busy scenes it re-draws the plumbing (a Somerville rough-in came back with the valve box and copper moved). Rule: the real photo stays everywhere except small feathered boxes where Flow's clean pixels are pasted in, and the whole frame is diffed against the original first. Never regenerate a scene or invent an angle: a generated view shows pipe layout that does not exist.
+- **Service pages that reuse a form id:** a service in `src/services.json` may set `service_id` (for example `sump-pump-ejector-pumps` uses `general-plumbing`) so no new id is added to `service-options.json`.
 
 ## Stable ids (do not rename)
 

@@ -3,75 +3,252 @@
     "slug": "saugus",
     "town": "Saugus",
     "seo_title": "Plumber in Saugus, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Saugus, MA — 24/7 emergency, owner-operated",
-    "tagline": "Home base. Closest tools, fastest response.",
-    "meta_desc": "Saugus plumber, owner-operated and licensed: water heaters, boilers, gas lines, remodels and 24/7 emergency service. Call 781-820-4592 and Shane answers.",
-    "intro": "Saugus is home. S. Meredith Plumbing & Heating is based here and runs every job in Saugus personally — Cliftondale, East Saugus, Pranker's Pond, Lynnhurst, Bristow, the Town Common neighborhoods, and out toward Route 1.",
+    "h1": "Plumber in Saugus, MA: water heaters, boilers, remodels",
+    "tagline": "Home base for S. Meredith Plumbing & Heating.",
+    "meta_desc": "Saugus plumber, owner-operated: water heaters, boilers, leaks, remodel plumbing and 24/7 emergency calls. Master plumber, MA license 9630040-PL-M. 781-820-4592.",
+    "intro": "S. Meredith Plumbing & Heating is based in Saugus: Cliftondale, East Saugus, Pranker's Pond, Lynnhurst, Bristow, the Town Common neighborhoods and out toward Route 1. The jobs below are recent Saugus work from Shane's own photos.",
     "local_hooks": [
-      { "h": "Older housing stock around Cliftondale and East Saugus", "b": "Older homes mean older plumbing — cast iron stacks, galvanized supply lines, and 1960s-vintage water heaters that need watching. Pre-emptive replacement saves you from the 2 AM call." },
-      { "h": "Boiler season is long here", "b": "Heat runs from October through April most years. We service annually before the first cold snap and stay reachable on weekends through the heating season." },
-      { "h": "Saugus River flood-prone basements", "b": "Sump pumps and backwater valves matter more here than in inland towns. We install both and service them annually." }
+      {
+        "h": "A half bath added, and a house main upsized",
+        "b": "Shane added a small half bathroom on the first floor and fixed an illegally vented and piped laundry and kitchen. The water meter was raised out of its pit, the house main went up to 3/4 inch, and each fixture group runs back to a manifold at the owner's request."
+      },
+      {
+        "h": "A leaking saddle valve with no shut-offs",
+        "b": "An old saddle valve that was no longer in use leaked, and there were no shut-off valves under the sink, so the owner had to turn the water off to the whole house. New shut-offs went in under the sink and the leaking faucet was replaced."
+      },
+      {
+        "h": "Repeat customers",
+        "b": "One Saugus customer called Shane back for a few small jobs after an earlier emergency water line break: a rotted basket strainer, a garbage disposal, tidier piping under the sink and new laundry valves."
+      }
     ],
-    "common_calls": ["Water heater replacement", "Boiler service & repair", "Bath remodels", "Gas line for stove or dryer", "Emergency frozen pipe"]
+    "recent": [],
+    "common_calls": [
+      "Remodel plumbing",
+      "Water main and manifold work",
+      "Leaking valves and faucets",
+      "Kitchen sink and disposal",
+      "Toilets and tub drains"
+    ]
   },
   {
     "slug": "lynn",
     "town": "Lynn",
     "seo_title": "Plumber in Lynn, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Lynn, MA — North Shore boiler & water heater specialist",
-    "tagline": "Lynn's older housing stock, modern plumbing answers.",
-    "meta_desc": "Plumber serving Lynn, MA: boilers, water heaters, gas lines and emergency repairs. Owner-operated and licensed, based next door in Saugus. Call 781-820-4592.",
-    "intro": "Lynn has the densest stock of pre-war and triple-decker housing on the North Shore. That means cast iron drains, lead-to-galvanized water mains, and old boilers running well past their service life. Shane works in Lynn from his base next door in Saugus.",
+    "h1": "Plumber in Lynn, MA: boiler repair and house plumbing",
+    "tagline": "Next door to Saugus. Boiler repairs and plumbing maintenance in Lynn.",
+    "meta_desc": "Plumber serving Lynn, MA: combi boiler repair, water main shut-offs, pipe repair and emergency calls. Owner-operated, based in Saugus. License 9630040-PL-M.",
+    "intro": "Lynn is next door to Saugus. Shane has repaired a combi boiler in Lynn and done maintenance plumbing for a new homeowner there. Both jobs are below, with photos.",
     "local_hooks": [
-      { "h": "Pre-war triple-deckers", "b": "Multi-family buildings throughout Lynn share waste stacks and old plumbing that hasn't been touched in decades. Re-pipes and sectional repairs are common work in buildings like these." },
-      { "h": "Older boiler stock", "b": "1970s and 1980s cast iron boilers are still common in Lynn. Some are worth saving, many are not — we tell you straight." },
-      { "h": "Hard water means short water heater life", "b": "Lynn's water hardness shortens tank life. Tankless conversions and water-treatment options make sense for some homes — we'll quote both." }
+      {
+        "h": "A combi boiler that would not heat the house",
+        "b": "On a Navien combi boiler a failed three-way diverter valve could not send water to space heat. The call for heat kept running through the hot water heat exchanger, and the boiler's internal circulator pump wore out. Both parts were replaced under warranty, and the customer had heat and hot water again."
+      },
+      {
+        "h": "A new homeowner's first maintenance",
+        "b": "For a customer who had just bought a house in Lynn, Shane added a shut-off with a drain on the house side of the water meter, with adapters for the fine-thread brass water main, for emergencies. He also cut out corroding SharkBite fittings and repiped with press fittings."
+      }
     ],
-    "common_calls": ["Boiler replacement", "Water heater repair", "Frozen or burst pipe repair", "Bath remodel rough plumbing", "Emergency heat restoration"]
+    "recent": [],
+    "common_calls": [
+      "Combi boiler repair",
+      "Water main shut-off and drain",
+      "Replacing corroding fittings",
+      "Boiler circulator and diverter valve"
+    ]
   },
   {
     "slug": "revere",
     "town": "Revere",
     "seo_title": "Plumber in Revere, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Revere, MA — coastal salt-air water heater specialist",
-    "tagline": "Revere homes face the ocean. Your plumbing should be ready.",
-    "meta_desc": "Plumber serving Revere, MA: water heaters, boilers, gas lines and emergency repairs for coastal homes. Owner-operated, based in Saugus. Call 781-820-4592.",
-    "intro": "Revere is a coastal town — and coastal towns chew through water heaters and outdoor plumbing faster than inland markets. Salt air corrodes power-vent terminations, copper supply lines, and tank exteriors. Shane serves Revere from Saugus, next door.",
+    "h1": "Plumber in Revere, MA: water heater replacement",
+    "tagline": "A cold shower and water in the basement: an emergency heater swap in Revere.",
+    "meta_desc": "Plumber serving Revere, MA: emergency water heater replacement, boilers and plumbing repair. Owner-operated, in Saugus. License 9630040-PL-M. 781-820-4592.",
+    "intro": "Shane serves Revere from Saugus. The Revere job below is an emergency water heater replacement, with photos from August 2025. It shows what a failed tank can do before anyone notices.",
     "local_hooks": [
-      { "h": "Salt-air corrosion on outdoor terminations", "b": "Power-vent terminations, condensate drains, and exterior gas piping corrode 2–3x faster on the coast. We use marine-grade fasteners and inspect the exterior side annually." },
-      { "h": "Older Beachmont and Point of Pines housing", "b": "Pre-war coastal cottages, many converted to year-round homes, often have plumbing that doesn't match their current use. We re-pipe and update without ripping the place apart." },
-      { "h": "Multi-family conversions", "b": "Many Revere two- and three-families share old waste stacks. We handle stack ties and pressure-test before close-up." }
+      {
+        "h": "A cold shower, then 2 inches of water in the basement",
+        "b": "A shower turned cold, and the customer found about 2 inches of water in the basement. The emergency shut-off valve on the heater did not work, so the water to the whole house had to be shut off. Shane replaced the heater and the customer had hot water back."
+      },
+      {
+        "h": "If your heater is leaking",
+        "b": "Shut the water off to the heater, or to the house if the heater's own valve will not close, then call. That is what this customer had to do."
+      }
     ],
-    "common_calls": ["Water heater replacement (coastal)", "Boiler service", "Gas range hookup", "Drain & waste repair", "Sump pump install"]
+    "recent": [],
+    "common_calls": [
+      "Emergency water heater replacement",
+      "Heater shut-off valve that will not close",
+      "Water in the basement from a tank"
+    ]
   },
   {
     "slug": "malden",
     "town": "Malden",
     "seo_title": "Plumber in Malden, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Malden, MA — Linden, Edgeworth, & Maplewood",
-    "tagline": "Malden's mixed housing stock — one plumber for all of it.",
-    "meta_desc": "Plumber serving Malden, MA: boilers, water heaters, gas lines, remodels and emergency repairs. Owner-operated and licensed, based in Saugus. Call 781-820-4592.",
-    "intro": "Malden runs the full range — Victorian-era homes near the Town Common, mid-century duplexes in Maplewood, and newer construction in Linden. Different vintages, different plumbing answers. We work all of them.",
+    "h1": "Plumber in Malden, MA: remodel plumbing and repairs",
+    "tagline": "Bathroom remodel plumbing, water heaters and boilers in Malden.",
+    "meta_desc": "Plumber serving Malden, MA: bathroom remodel plumbing, water heaters, boilers and emergency repairs. Owner-operated, based in Saugus. License 9630040-PL-M.",
+    "intro": "Malden is on Shane's confirmed service list. He shared a bathroom remodel in Malden in June 2026. This page holds that job and will grow as more Malden work is photographed.",
     "local_hooks": [
-      { "h": "Victorian-era supply line replacement", "b": "Older Malden homes still have galvanized supply lines that should be replaced before they fail. We re-pipe in copper or PEX, your choice." },
-      { "h": "Newer construction in Linden", "b": "PEX, modern boilers, tankless water heaters — but still needing real service when something fails. We work newer homes too." },
-      { "h": "Two-family conversions and rentals", "b": "Many Malden owners run rentals. We handle the unglamorous side — annual servicing, code compliance, no-surprise tenant turnover." }
+      {
+        "h": "A Malden bathroom remodel",
+        "b": "Shane did the plumbing on a Malden bathroom remodel, shared in June 2026, in the same stretch as a Somerville bathroom remodel and a couple of service calls."
+      }
     ],
-    "common_calls": ["Boiler replacement", "Water heater swap", "Kitchen remodel rough plumbing", "Tenant turnover service", "Emergency burst pipe repair"]
+    "recent": [
+      {
+        "when": "2026-06",
+        "text": "Bathroom remodel plumbing in Malden."
+      }
+    ],
+    "common_calls": [
+      "Bathroom remodel plumbing",
+      "Shower valve replacement",
+      "Frost-free hose bibs"
+    ]
   },
   {
     "slug": "peabody",
     "town": "Peabody",
     "seo_title": "Plumber in Peabody, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Peabody, MA — West, South & Centre",
-    "tagline": "Peabody's residential plumbing — done by a craftsman, not a chain.",
-    "meta_desc": "Plumber serving Peabody, MA: boilers, water heaters, generator gas lines, remodels and emergencies. Owner-operated, based in Saugus. Call 781-820-4592.",
-    "intro": "Peabody mixes residential neighborhoods — West, South, Peabody Centre — with the kind of homes that reward a craftsman over a national chain. We work Peabody regularly, on jobs ranging from emergency boiler swaps to full bathroom remodels.",
+    "h1": "Plumber in Peabody, MA: vanity swaps and service calls",
+    "tagline": "Bathroom fixtures and service calls in Peabody, between bigger jobs.",
+    "meta_desc": "Plumber serving Peabody, MA: bathroom vanity and fixture swaps, water heaters, boilers and emergency repairs. Owner-operated, in Saugus. License 9630040-PL-M.",
+    "intro": "Shane works in Peabody between other jobs. The Peabody job below is a Saturday-morning vanity swap, shared in March 2026, done in between service calls.",
     "local_hooks": [
-      { "h": "West Peabody single-family homes", "b": "Larger lots, often with attached or detached generators that need a gas line. Shane handles the gas side of generator installs." },
-      { "h": "Mid-century homes in South Peabody", "b": "Many built in the 1950s and 60s — original plumbing, original boilers, often in need of upgrade before the next winter." },
-      { "h": "Peabody Centre two-families", "b": "Older multi-family stock with shared stacks. We handle stack ties and pressure tests cleanly." }
+      {
+        "h": "A Saturday-morning vanity swap",
+        "b": "An old oak vanity and a dated faucet came out and a new dark vanity with a black faucet went in. The photos show the bathroom before and after."
+      },
+      {
+        "h": "Small jobs are normal work",
+        "b": "Shane takes vanity swaps, faucet and toilet work alongside bigger water heater, boiler and remodel jobs. Send a photo of what you have and what you want."
+      }
     ],
-    "common_calls": ["Boiler service & replacement", "Generator gas line", "Bath remodel", "Water heater replacement", "Annual maintenance"]
+    "recent": [],
+    "common_calls": [
+      "Vanity and faucet swaps",
+      "Water heater replacement",
+      "Boiler repair",
+      "Bathroom fixtures"
+    ]
+  },
+  {
+    "slug": "somerville",
+    "town": "Somerville",
+    "seo_title": "Plumber in Somerville, MA | S. Meredith Plumbing & Heating",
+    "h1": "Plumber in Somerville, MA: remodel plumbing",
+    "tagline": "Rough-in and finish plumbing on Somerville remodels, from a master plumber in Saugus.",
+    "meta_desc": "Somerville plumber for remodels: bathroom, kitchen and laundry rough-in in two-families, water mains, water heaters. Owner-operated. License 9630040-PL-M.",
+    "intro": "Shane has done remodel plumbing in Somerville more than once. One job was the first floor of a two-family house, shown at the rough-in stage. Another was handed back to its owner, with photos from October 2025. Photos from both are below.",
+    "local_hooks": [
+      {
+        "h": "Two bathrooms, a kitchen and a laundry on one floor",
+        "b": "On the first floor of a two-family house Shane roughed in two wet-vented full bathrooms, an individually vented kitchen and an individually vented laundry. He upsized the water main to serve both units, added a new water heater for the first floor and moved a half-inch outdoor silcock line."
+      },
+      {
+        "h": "Working around the contractor's plan",
+        "b": "The general contractor did not want any studs drilled, so Shane ran all the vents in front of the studs, and the contractor planned to box them in. Routes like that are worth settling before the walls close."
+      },
+      {
+        "h": "More Somerville remodels",
+        "b": "Photos from October 2025 show another Somerville remodel turned over with fixtures set. Shane also shared a Somerville bathroom remodel in June 2026."
+      }
+    ],
+    "recent": [
+      {
+        "when": "2026-06",
+        "text": "Bathroom remodel plumbing in Somerville."
+      }
+    ],
+    "common_calls": [
+      "Remodel rough-in plumbing",
+      "Wet-vented bathrooms",
+      "Water heater for a separate unit",
+      "Water main upsizing",
+      "Kitchen and laundry venting"
+    ]
+  },
+  {
+    "slug": "stoneham",
+    "town": "Stoneham",
+    "seo_title": "Plumber in Stoneham, MA | S. Meredith Plumbing & Heating",
+    "h1": "Plumber in Stoneham, MA: remodel plumbing",
+    "tagline": "A new bathroom and laundry stack, and a repiped kitchen, in a Stoneham second-floor remodel.",
+    "meta_desc": "Stoneham plumber for remodels: new bathroom and laundry stacks, kitchen repipes, water heaters and repairs. Owner-operated, in Saugus. License 9630040-PL-M.",
+    "intro": "Shane has plumbed two remodels in Stoneham: a second-floor apartment (photos from June 2025) and a house that was wrapped up and ready for new homeowners (shared March 2026). Photos of the first one are below.",
+    "local_hooks": [
+      {
+        "h": "A new bathroom and a laundry on the second floor",
+        "b": "The existing bathroom stayed where it was. Shane added a new full bathroom and its stack at the front of the house, run up from the basement. He also ran a new laundry stack so the second-floor apartment could have a washer and dryer."
+      },
+      {
+        "h": "A kitchen kept in place and repiped",
+        "b": "The kitchen location stayed the same. Shane repiped it to bring it up to date and up to code."
+      }
+    ],
+    "recent": [
+      {
+        "when": "2026-03",
+        "text": "A second Stoneham remodel wrapped up, ready for the new homeowners to move in."
+      }
+    ],
+    "common_calls": [
+      "New bathroom on an existing stack run",
+      "Laundry stack for a washer and dryer",
+      "Kitchen repipe",
+      "Remodel plumbing"
+    ]
+  },
+  {
+    "slug": "lexington",
+    "town": "Lexington",
+    "seo_title": "Plumber in Lexington, MA | S. Meredith Plumbing & Heating",
+    "h1": "Plumber in Lexington, MA: remodels and point-of-use hot water",
+    "tagline": "A Lexington therapy office half bath and wash-down area, built around point-of-use water heaters.",
+    "meta_desc": "Lexington plumber: bathroom remodels, point-of-use water heater setups with mixing valves, boilers and repairs. Owner-operated, in Saugus. License 9630040-PL-M.",
+    "intro": "Shane remodeled a half bathroom and added a coffee wash-down area in a Lexington therapy office for its new owner (shared February 2026). The building's rules shaped how the hot water was set up.",
+    "local_hooks": [
+      {
+        "h": "Only point-of-use water heaters allowed",
+        "b": "The building only allows point-of-use water heaters. Shane gave each fixture a 1.0 GPM flow device, fed through a Sloan point-of-use compression mixing valve."
+      },
+      {
+        "h": "Why the mixing valve is there",
+        "b": "With the mixing valve in the line, the heaters can be set to their maximum temperature. That gives the most hot water at each fixture."
+      }
+    ],
+    "recent": [],
+    "common_calls": [
+      "Half bathroom remodel",
+      "Wash-down area plumbing",
+      "Point-of-use water heater setups",
+      "Mixing valves"
+    ]
+  },
+  {
+    "slug": "haverhill",
+    "town": "Haverhill",
+    "seo_title": "Plumber in Haverhill, MA | S. Meredith Plumbing & Heating",
+    "h1": "Plumber in Haverhill, MA: boilers and heating zones",
+    "tagline": "A five-zone high-efficiency boiler with an indirect tank, installed on a Haverhill house remodel.",
+    "meta_desc": "Haverhill plumber and heating installer: high-efficiency boilers, multi-zone heating, indirect hot water tanks. Owner-operated, in Saugus. License 9630040-PL-M.",
+    "intro": "Shane installed a five-zone high-efficiency boiler with an indirect hot water tank on a house remodel in Haverhill (shared May 2026). The photo is below.",
+    "local_hooks": [
+      {
+        "h": "Five heating zones on one boiler",
+        "b": "A zoned system heats separate parts of the house on their own thermostats. The photo shows the five-zone manifold beside the boiler."
+      },
+      {
+        "h": "An indirect tank for hot water",
+        "b": "An indirect tank is a separate insulated tank heated by the boiler, so the boiler supplies the hot water as well as the heat."
+      }
+    ],
+    "recent": [],
+    "common_calls": [
+      "High-efficiency boiler installation",
+      "Multi-zone heating",
+      "Indirect hot water tank"
+    ]
   }
 ]

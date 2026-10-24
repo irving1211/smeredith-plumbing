@@ -112,11 +112,11 @@ test('legacy WordPress URLs redirect permanently', () => {
   assert.deepEqual(find('/wp-sitemap-*')?.slice(1), ['/sitemap.xml', '301']);
 });
 
-test('/services/ is a real hub listing all six services', () => {
+test('/services/ is a real hub listing every service page', () => {
   const html = page('/services/');
   assert.equal(canonical(html), `${ORIGIN}/services/`);
   for (const s of services) assert.match(html, new RegExp(`href="/services/${s.slug}/"`));
-  assert.equal(services.length, 6);
+  assert.ok(services.length >= 6, 'at least the six original services stay on the hub');
 });
 
 test('every indexable page has one h1, a self canonical, and a unique title/description within limits', () => {

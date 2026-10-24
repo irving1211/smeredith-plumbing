@@ -3,6 +3,8 @@ import { jsonLd } from '../../lib/jsonld.js';
 import Base from '../../layouts/Base.astro';
 import areas from '../../areas.json';
 import services from '../../services.json';
+import jobsRaw from '../../jobs.json';
+import { monthLabel } from '../../lib/job-dates.js';
 
 export function getStaticPaths() {
   return areas.map((a) => ({ params: { town: a.slug }, props: { area: a } }));
@@ -16,6 +18,11 @@ const phoneTel = '+17818204592';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent(`Hi Shane — calling from ${area.town}. `)}`;
 const otherTowns = areas.filter((a) => a.slug !== area.slug);
 const contactHref = `${base}contact/?town=${area.slug}`;
+// Real jobs in this town (src/jobs.json, "town" = this slug). A town page only exists when there is something real to show.
+const townJobs = jobsRaw
+  .filter((j) => (j as { town?: string }).town === area.slug)
+  .map((j) => ({ ...j, photos: j.photos.map((p) => ({ ...p, src: `${base}${p.src.replace(/^\//, '')}` })) }));
+const recent = (area as { recent?: Array<{ when: string; text: string }> }).recent || [];
 
 // Breadcrumb schema only references real pages; the visible "Service area" link is a homepage section.
 const breadcrumb = {
@@ -64,7 +71,34 @@ const breadcrumb = {
         ))}
       </div>
 
-      <h2>Common calls from {area.town}</h2>
+      {townJobs.length > 0 && (
+        <section class="town-jobs" id="town-jobs" aria-labelledby="town-jobs-h">
+          <h2 id="town-jobs-h">Recent work in {area.town}</h2>
+          {townJobs.map((job) => (
+            <figure class="town-job">
+              <div class="town-photos">
+                {job.photos.map((photo, i) => (
+                  <img src={photo.src} srcset={`${photo.src.replace(/-900\.webp$/, '-480.webp')} 480w, ${photo.src} ${photo.width}w`} sizes="(min-width: 800px) 190px, 45vw" alt={(photo as { alt?: string }).alt || `${job.title}, photo ${i + 1}`} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+                ))}
+              </div>
+              <figcaption>
+                <strong>{job.title}</strong>
+                <span class="when">Photos from {monthLabel((job as { date?: string }).date)}</span>
+                <span>{job.desc}</span>
+              </figcaption>
+            </figure>
+          ))}
+          <p class="more-link"><a href={`${base}work/`}>All recent jobs →</a></p>
+        </section>
+      )}
+
+      {recent.length > 0 && (
+        <ul class="recent-notes">
+          {recent.map((r) => <li><span class="when">{monthLabel(r.when)}</span> {r.text}</li>)}
+        </ul>
+      )}
+
+      <h2>Job types seen in {area.town}</h2>
       <ul class="common-calls">
         {area.common_calls.map((c) => <li>{c}</li>)}
       </ul>
@@ -74,7 +108,7 @@ const breadcrumb = {
         <ul class="link-pills">
           {services.map((s) => <li><a href={`${base}services/${s.slug}/`}>{s.title}</a></li>)}
         </ul>
-        <p class="more-link"><a href={`${base}#work`}>See recent jobs →</a></p>
+        <p class="more-link"><a href={`${base}work/`}>See recent jobs →</a></p>
       </section>
 
       <div class="page-cta" id="town-cta">
@@ -136,6 +170,14 @@ const breadcrumb = {
     .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
     .link-pills a:hover { border-color: var(--red); color: var(--red); opacity: 1; }
     .where p, .related-services p { color: var(--ink-soft); line-height: 1.65; }
+    .town-job { margin: 0 0 2rem; }
+    .town-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
+    .town-photos img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); background: var(--paper-2); }
+    .town-job figcaption { display: grid; gap: .2rem; padding-top: .6rem; }
+    .town-job figcaption span { color: var(--ink-soft); line-height: 1.55; }
+    .town-job .when, .recent-notes .when { color: var(--ink-muted); font-size: .88rem; }
+    .recent-notes { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: .5rem; }
+    .recent-notes li { color: var(--ink-soft); }
     .job-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
     .job-thumb { margin: 0; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
     .job-thumb img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }

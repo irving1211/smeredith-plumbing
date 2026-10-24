@@ -33,10 +33,10 @@
   },
   {
     "slug": "water-heater-replacement",
-    "title": "Water Heater Replacement & Repair",
-    "seo_title": "Water Heater Replacement in Saugus, MA | S. Meredith",
-    "h1": "Water heater replacement in Saugus & the North Shore",
-    "tagline": "Tank, tankless, gas, electric, power-vent. Repair or replacement when yours quits.",
+    "title": "Water Heater Repair & Replacement",
+    "seo_title": "Water Heater Repair & Replacement | S. Meredith, Saugus MA",
+    "h1": "Water heater repair & replacement in Saugus & the North Shore",
+    "tagline": "Tank, tankless, gas, electric, power-vent. Repair when it can be repaired, replacement when it cannot.",
     "meta_desc": "Water heater repair and replacement in Saugus and the North Shore: tank, tankless, power-vent, gas and electric. Owner-operated. Call 781-820-4592.",
     "intro": "When a water heater fails it's almost never convenient. Shane replaces the common 40 and 50 gallon gas and electric tanks, power-vent units and tankless rough-ins: the old unit out, the new one set in and the lines connected.",
     "scenarios": [
@@ -295,5 +295,216 @@
       }
     ],
     "send_for_quote": "Send with your request: the plans, the town, your target dates, the general contractor's name and phone number, and whether the property has municipal water and sewer."
+  },
+  {
+    "slug": "water-heater-repair",
+    "service_id": "water-heater-replacement",
+    "title": "Water Heater Repair",
+    "seo_title": "Water Heater Repair in Saugus, MA | S. Meredith",
+    "h1": "Water heater repair in Saugus & the North Shore",
+    "tagline": "No hot water, water at the tank, or a pilot that will not stay lit. The first step is finding out what failed.",
+    "meta_desc": "Water heater repair in Saugus and the North Shore: no hot water, leaks, pilot and element problems. Shane diagnoses first. Call 781-820-4592.",
+    "intro": "Shane investigates no-hot-water and leak problems and tells you whether the heater is worth repairing or should be replaced. A tank with one failed part can often be repaired. A tank that leaks from the tank itself cannot.",
+    "scenarios": [
+      {
+        "h": "No hot water",
+        "b": "On a gas heater that can be a pilot that is out, a failed thermocouple or a control problem. On an electric heater it can be a failed element or thermostat. A diagnosis finds out which."
+      },
+      {
+        "h": "Water at the base of the tank",
+        "b": "Water can come from a fitting, a drain valve, the relief valve or the tank itself. Fittings and valves can usually be repaired. A leaking tank body means the heater has failed."
+      },
+      {
+        "h": "Rusty water, or hot water that runs out fast",
+        "b": "This can mean sediment, a failed part or a tank near the end of its life. Send a photo of the heater and its data label so the answer starts from the right equipment."
+      },
+      {
+        "h": "The heater's own shut-off will not close",
+        "b": "On a Revere job the valve on the heater did not work, so the water to the whole house had to be shut off. If yours will not shut, turn off the water to the house and call."
+      },
+      {
+        "h": "Repair or replace",
+        "b": "A sound tank with one failed part is worth repairing. An older tank that is leaking or rusted through is a replacement. Shane tells you which it is."
+      }
+    ],
+    "guarantee": "Master plumber (MA license 9630040-PL-M). Manufacturer warranties apply to the parts and equipment installed; we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about water heater repair",
+    "qa": [
+      {
+        "q": "Can a leaking water heater be repaired?",
+        "a": "It depends where the water comes from. A leak at a fitting, a drain valve or the relief valve is often fixable. Water coming through the tank body means the tank has failed and the answer is a {{water-heater-replacement|replacement}}. Shut the water off to the heater, or to the house if the heater's valve will not close, and call."
+      },
+      {
+        "q": "What usually causes no hot water on a gas water heater?",
+        "list": [
+          "A pilot that is out or will not stay lit.",
+          "A thermocouple or flame sensor that has failed.",
+          "A control or gas valve problem.",
+          "Sediment, or a tank near the end of its life."
+        ],
+        "a": "A diagnosis tells which one it is. Say the model, and what the heater is doing, when you request service."
+      },
+      {
+        "q": "Is it an emergency?",
+        "a": "Water on the basement floor or no hot water in cold weather usually is. Call, and see the {{emergency-plumbing|emergency page}}."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the water heater and its data label, whether it runs on gas or electric, where it is in the house, and what it is doing (leaking, no hot water, pilot out)."
+  },
+  {
+    "slug": "sump-pump-ejector-pumps",
+    "service_id": "general-plumbing",
+    "title": "Sump Pump & Ejector Pump Service",
+    "seo_title": "Sump & Ejector Pump Repair in Saugus, MA | S. Meredith",
+    "h1": "Sump pump and ejector pump installation and repair",
+    "tagline": "Pumps that keep a basement dry, or lift basement drains up to the main. Installed, replaced and repaired.",
+    "meta_desc": "Sump pump and ejector pump installation, replacement and repair in Saugus and the North Shore: basement laundry, bathrooms, failed pumps. Call 781-820-4592.",
+    "intro": "A sump pump moves groundwater out of a basement pit. An ejector pump lifts waste from a basement bathroom, laundry or kitchen up to the main drain. Shane installs, replaces and repairs both. The jobs below are ejector pumps he has set.",
+    "scenarios": [
+      {
+        "h": "A sump pump that has failed",
+        "b": "Shane checks the problem and discusses repair or replacement of the pump and its discharge."
+      },
+      {
+        "h": "A new sump pump",
+        "b": "Shane reviews the basement setup, the pit and where the discharge goes, then discusses which pump suits it."
+      },
+      {
+        "h": "Laundry or a living space in the basement",
+        "b": "When the main drain sits higher than the fixtures, an ejector pump lifts the waste up to it. On one job a Liberty 404 let a basement living space have its own laundry, so the customer no longer climbs two flights of stairs to wash clothes."
+      },
+      {
+        "h": "An ejector pump with a seized motor",
+        "b": "On one bathroom ejector the motor had seized, and the drain leaked where it met the basin, so sewage backed up and leaked under the foundation. Shane replaced it with a new Liberty Pro 370."
+      },
+      {
+        "h": "A fixture below the drain, outdoors too",
+        "b": "An outdoor pool bar sink was finished with a Liberty ejector pump."
+      }
+    ],
+    "guarantee": "Master plumber (MA license 9630040-PL-M). Manufacturer warranties apply to the parts and equipment installed; we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about sump and ejector pumps",
+    "qa": [
+      {
+        "q": "What is the difference between a sump pump and an ejector pump?",
+        "list": [
+          "A sump pump removes groundwater that collects in a basement pit.",
+          "An ejector pump lifts waste water from basement fixtures up to the main drain."
+        ],
+        "a": "If you are not sure which one you have, send a photo of the pit or basin and the pump."
+      },
+      {
+        "q": "How do I know a pump has failed?",
+        "a": "Common signs are a pump that hums without moving water, one that runs constantly or does not start, standing water in the pit, or a basement fixture that drains slowly or backs up. If the basement is already flooding, call and see the {{emergency-plumbing|emergency page}}."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the pit or basin and the pump label, what the pump is doing, and what drains to it (bathroom, laundry, sink)."
+  },
+  {
+    "slug": "leak-and-pipe-repair",
+    "service_id": "general-plumbing",
+    "title": "Plumbing Leak & Pipe Repair",
+    "seo_title": "Plumbing Leak & Pipe Repair in Saugus, MA | S. Meredith",
+    "h1": "Plumbing leak and pipe repair in Saugus & the North Shore",
+    "tagline": "Leaks at valves, fittings, faucets and pipes. Shane assesses first and explains the repair.",
+    "meta_desc": "Plumbing leak and pipe repair in Saugus and the North Shore: leaking valves, corroded fittings, drips and outdoor lines. Owner-operated. Call 781-820-4592.",
+    "intro": "Tell Shane where you see moisture or water loss and when it started. He assesses the leak and explains the repair. Most of the jobs below started as something small.",
+    "scenarios": [
+      {
+        "h": "A leaking valve or fixture",
+        "b": "On one Saugus job an unused saddle valve leaked, and with no shut-off valves under the sink the owner had to turn the water off to the whole house. New shut-offs went in and the leaking faucet was replaced."
+      },
+      {
+        "h": "Corroding fittings",
+        "b": "On a house in Lynn, corroding SharkBite fittings were cut out and the piping was repiped with press fittings."
+      },
+      {
+        "h": "A drip that causes a second failure",
+        "b": "On a heating zone a steady drip from a purge draw-off burned out a circulator pump, and the hot water stopped heating properly. The circulator was replaced."
+      },
+      {
+        "h": "Outdoor spigots and lines",
+        "b": "Old hose bibs swapped for frost-free ones. Before winter, shut the water off inside, drain the line, take hoses off and blow out the lines."
+      },
+      {
+        "h": "A leak you cannot see",
+        "b": "Moisture on a ceiling or wall, or a jump in the water bill. Shane discusses the right inspection once he knows where it shows up and when it started."
+      },
+      {
+        "h": "A burst or frozen pipe",
+        "b": "Shut the water off at the main and call. See the {{emergency-plumbing|emergency page}}."
+      }
+    ],
+    "guarantee": "Master plumber (MA license 9630040-PL-M). Manufacturer warranties apply to the parts and equipment installed; we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about leaks",
+    "qa": [
+      {
+        "q": "Should I shut the water off?",
+        "a": "Yes, if water is running where it should not be. Shut off the valve to the fixture, or the main if there is no fixture valve. If no shut-off works, that is part of the repair to discuss."
+      },
+      {
+        "q": "What should I tell Shane about a leak?",
+        "list": [
+          "Where you see the water or the stain.",
+          "When it started and whether it is getting worse.",
+          "Whether it runs all the time or only when something is used."
+        ],
+        "a": "A photo helps. Text one to the number above."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the leak or stain, where it is, when it started, and whether the water is shut off."
+  },
+  {
+    "slug": "general-plumbing",
+    "service_id": "general-plumbing",
+    "title": "General Plumbing Repair",
+    "seo_title": "General Plumbing Repair in Saugus, MA | S. Meredith",
+    "h1": "General plumbing repair in Saugus & the North Shore",
+    "tagline": "Faucets, toilets, tub drains, shower valves, sinks, filters and the small repairs that do not fit a category.",
+    "meta_desc": "General plumbing repair in Saugus and the North Shore: faucets, toilets, tub drains, shower valves, sinks and filters. Owner-operated. Call 781-820-4592.",
+    "intro": "General plumbing is lettered on the side of Shane's van. It covers the everyday repairs and fixture swaps that sit between a remodel and an emergency. Photos of recent examples are below.",
+    "scenarios": [
+      {
+        "h": "Faucets and sinks",
+        "b": "A new faucet where the old one leaked onto the counter. A rotted basket strainer and a worn garbage disposal replaced, with the piping under the sink tidied to give back storage space."
+      },
+      {
+        "h": "Toilets",
+        "b": "Toilets repaired or swapped for new ones, including running and leaking toilets."
+      },
+      {
+        "h": "Tub drains and shower valves",
+        "b": "Tub drain stoppers changed to a toe-touch style, tub spouts replaced, and shower valves opened up and worked on."
+      },
+      {
+        "h": "Laundry valves",
+        "b": "Old gate-style draw-offs replaced with single-handle valves that shut off all the way."
+      },
+      {
+        "h": "Outdoor hose bibs",
+        "b": "Old spigots swapped for frost-free ones."
+      },
+      {
+        "h": "Water filters and softeners",
+        "b": "A full-house water filter with a carbon water softener, for cleaner, softer water."
+      },
+      {
+        "h": "Pumps",
+        "b": "Ejector and sump pumps are on their own page: {{sump-pump-ejector-pumps|sump pump and ejector pump service}}."
+      }
+    ],
+    "guarantee": "Master plumber (MA license 9630040-PL-M). Manufacturer warranties apply to the parts and equipment installed; we go over the warranty and the workmanship in writing before the job.",
+    "qa_title": "Questions homeowners ask about small plumbing jobs",
+    "qa": [
+      {
+        "q": "Is a small repair worth a call?",
+        "a": "A dripping tub spout, a running toilet or a leaky faucet can cost more the longer it runs, and small water spots on a ceiling can mean more than they look. Call or text a photo, and Shane will tell you what it needs."
+      },
+      {
+        "q": "What if it does not fit a category?",
+        "a": "Call and ask. If it is a plumbing or heating question, Shane will say whether it is his kind of job."
+      }
+    ],
+    "send_for_quote": "Send with your request: a photo of the fixture or the problem, your town, and what it is doing."
   }
 ]

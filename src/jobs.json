@@ -186,5 +186,764 @@
         "original": "/images/jobs/dark-tile-bath/shot-1.jpg"
       }
     ]
+  },
+  {
+    "slug": "somerville-two-family-remodel-rough-in",
+    "title": "Somerville remodel rough-in: 2 baths, kitchen, laundry",
+    "desc": "First floor of a two-family: two wet-vented bathrooms, an individually vented kitchen and laundry, an upsized water main and a new water heater for that unit. The vents run in front of the studs so none were drilled.",
+    "service": "kitchen-bath-remodels",
+    "town": "somerville",
+    "date": "2025-07",
+    "tags": [
+      "new-construction-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/somerville-two-family-remodel-rough-in/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/somerville-two-family-remodel-rough-in/shot-1.jpg",
+        "alt": "Copper supply rough-in at a shower valve in an opened wall, Somerville"
+      },
+      {
+        "src": "/images/jobs/somerville-two-family-remodel-rough-in/shot-2-900.webp",
+        "width": 720,
+        "height": 960,
+        "original": "/images/jobs/somerville-two-family-remodel-rough-in/shot-2.jpg",
+        "alt": "Shower pan set between framed studs before the walls are closed"
+      },
+      {
+        "src": "/images/jobs/somerville-two-family-remodel-rough-in/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/somerville-two-family-remodel-rough-in/shot-3.jpg",
+        "alt": "White PVC drain and vent piping under the floor of a Somerville remodel"
+      },
+      {
+        "src": "/images/jobs/somerville-two-family-remodel-rough-in/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/somerville-two-family-remodel-rough-in/shot-4.jpg",
+        "alt": "Waste and vent piping run in front of the framing"
+      }
+    ]
+  },
+  {
+    "slug": "somerville-remodel-turned-over",
+    "title": "Somerville remodel, turned over",
+    "desc": "Fixtures set on another Somerville remodel, handed back to the owner in October 2025.",
+    "service": "kitchen-bath-remodels",
+    "town": "somerville",
+    "date": "2025-10",
+    "photos": [
+      {
+        "src": "/images/jobs/somerville-remodel-turned-over/shot-1-900.webp",
+        "width": 900,
+        "height": 675,
+        "original": "/images/jobs/somerville-remodel-turned-over/shot-1.jpg",
+        "alt": "Finished bathroom with toilet and vanity, Somerville"
+      },
+      {
+        "src": "/images/jobs/somerville-remodel-turned-over/shot-2-900.webp",
+        "width": 900,
+        "height": 675,
+        "original": "/images/jobs/somerville-remodel-turned-over/shot-2.jpg",
+        "alt": "Second bathroom with a gray vanity and toilet, Somerville"
+      },
+      {
+        "src": "/images/jobs/somerville-remodel-turned-over/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/somerville-remodel-turned-over/shot-3.jpg",
+        "alt": "Tiled shower with black trim and a hand shower"
+      },
+      {
+        "src": "/images/jobs/somerville-remodel-turned-over/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/somerville-remodel-turned-over/shot-4.jpg",
+        "alt": "Kitchen sink and dishwasher on a finished Somerville remodel"
+      }
+    ]
+  },
+  {
+    "slug": "stoneham-second-floor-remodel",
+    "title": "Stoneham second-floor remodel",
+    "desc": "A new full bathroom and its stack run up from the basement, a new laundry stack for a washer and dryer in the second-floor apartment, and the kitchen repiped in the same location.",
+    "service": "kitchen-bath-remodels",
+    "town": "stoneham",
+    "date": "2025-06",
+    "tags": [
+      "new-construction-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/stoneham-second-floor-remodel/shot-1-900.webp",
+        "width": 900,
+        "height": 675,
+        "original": "/images/jobs/stoneham-second-floor-remodel/shot-1.jpg",
+        "alt": "New second-floor bathroom with vanity and shower, Stoneham"
+      },
+      {
+        "src": "/images/jobs/stoneham-second-floor-remodel/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/stoneham-second-floor-remodel/shot-2.jpg",
+        "alt": "New shower stall in the added bathroom"
+      },
+      {
+        "src": "/images/jobs/stoneham-second-floor-remodel/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/stoneham-second-floor-remodel/shot-3.jpg",
+        "alt": "Repiped kitchen sink with garbage disposal"
+      },
+      {
+        "src": "/images/jobs/stoneham-second-floor-remodel/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/stoneham-second-floor-remodel/shot-4.jpg",
+        "alt": "Stacked washer and dryer on the new second-floor laundry hookup"
+      }
+    ]
+  },
+  {
+    "slug": "lexington-therapy-office-half-bath",
+    "title": "Lexington therapy office half bath",
+    "desc": "A half bathroom remodel and a new coffee wash-down area for a therapy office. The building only allows point-of-use water heaters, so each fixture got a 1.0 GPM flow device fed through a Sloan point-of-use compression mixing valve, which lets the heaters run at their top setting for the most hot water at each fixture.",
+    "service": "kitchen-bath-remodels",
+    "town": "lexington",
+    "date": "2026-02",
+    "photos": [
+      {
+        "src": "/images/jobs/lexington-therapy-office-half-bath/shot-1-900.webp",
+        "width": 640,
+        "height": 853,
+        "original": "/images/jobs/lexington-therapy-office-half-bath/shot-1.jpg",
+        "alt": "Copper hot and cold piping and trap under a sink in a Lexington office"
+      }
+    ]
+  },
+  {
+    "slug": "haverhill-five-zone-boiler",
+    "title": "Haverhill five-zone boiler with indirect tank",
+    "desc": "A five-zone high-efficiency boiler with an indirect hot water tank, installed on a house remodel in Haverhill.",
+    "service": "boiler-service",
+    "town": "haverhill",
+    "date": "2026-05",
+    "photos": [
+      {
+        "src": "/images/jobs/haverhill-five-zone-boiler/shot-1-900.webp",
+        "width": 640,
+        "height": 853,
+        "original": "/images/jobs/haverhill-five-zone-boiler/shot-1.jpg",
+        "alt": "High-efficiency boiler, indirect tank and five-zone manifold in a Haverhill basement"
+      }
+    ]
+  },
+  {
+    "slug": "lynn-navien-combi-repair",
+    "title": "Lynn Navien combi boiler repair",
+    "desc": "A failed three-way diverter valve kept the call for heat circulating through the hot water heat exchanger and wore out the boiler's internal circulator. Both parts were replaced under warranty.",
+    "service": "boiler-service",
+    "town": "lynn",
+    "date": "2025-11",
+    "photos": [
+      {
+        "src": "/images/jobs/lynn-navien-combi-repair/shot-1-900.webp",
+        "width": 720,
+        "height": 960,
+        "original": "/images/jobs/lynn-navien-combi-repair/shot-1.jpg",
+        "alt": "Diverter valve and circulator pump from a Navien combi boiler"
+      },
+      {
+        "src": "/images/jobs/lynn-navien-combi-repair/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/lynn-navien-combi-repair/shot-2.jpg",
+        "alt": "Inside the Navien combi boiler during the repair"
+      },
+      {
+        "src": "/images/jobs/lynn-navien-combi-repair/shot-3-900.webp",
+        "width": 720,
+        "height": 960,
+        "original": "/images/jobs/lynn-navien-combi-repair/shot-3.jpg",
+        "alt": "Navien boiler display after the repair"
+      }
+    ]
+  },
+  {
+    "slug": "lynn-new-house-maintenance",
+    "title": "Lynn new-house plumbing maintenance",
+    "desc": "For a customer who had just bought a house in Lynn: a shut-off with a drain added on the house side of the water meter, with adapters for the fine-thread brass water main, and corroding SharkBite fittings cut out and repiped with press fittings.",
+    "service": "general-plumbing",
+    "town": "lynn",
+    "date": "2026-01",
+    "tags": [
+      "leak-and-pipe-repair"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/lynn-new-house-maintenance/shot-1-900.webp",
+        "width": 900,
+        "height": 1194,
+        "original": "/images/jobs/lynn-new-house-maintenance/shot-1.jpg",
+        "alt": "New shut-off and drain on the house side of the water meter"
+      },
+      {
+        "src": "/images/jobs/lynn-new-house-maintenance/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/lynn-new-house-maintenance/shot-2.jpg",
+        "alt": "Copper water main piping at the meter in a Lynn basement"
+      },
+      {
+        "src": "/images/jobs/lynn-new-house-maintenance/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/lynn-new-house-maintenance/shot-3.jpg",
+        "alt": "Copper supply repiped with press fittings beside a drain"
+      },
+      {
+        "src": "/images/jobs/lynn-new-house-maintenance/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/lynn-new-house-maintenance/shot-4.jpg",
+        "alt": "Repiped copper lines under the floor joists"
+      }
+    ]
+  },
+  {
+    "slug": "revere-emergency-water-heater",
+    "title": "Revere emergency water heater replacement",
+    "desc": "A shower ran cold and the customer found about 2 inches of water in the basement. The emergency shut-off valve on the heater did not work, so the water to the house had to be shut off. The heater was replaced and hot water came back.",
+    "service": "water-heater-replacement",
+    "town": "revere",
+    "date": "2025-08",
+    "tags": [
+      "emergency-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/revere-emergency-water-heater/shot-1-900.webp",
+        "width": 900,
+        "height": 904,
+        "original": "/images/jobs/revere-emergency-water-heater/shot-1.jpg",
+        "alt": "New gas water heater in a Revere basement"
+      },
+      {
+        "src": "/images/jobs/revere-emergency-water-heater/shot-2-900.webp",
+        "width": 900,
+        "height": 904,
+        "original": "/images/jobs/revere-emergency-water-heater/shot-2.jpg",
+        "alt": "Base of the new water heater with its gas connection"
+      }
+    ]
+  },
+  {
+    "slug": "peabody-vanity-swap",
+    "title": "Peabody vanity swap",
+    "desc": "A Saturday-morning vanity swap in Peabody, between service calls. The old oak vanity first, then the new one.",
+    "service": "kitchen-bath-remodels",
+    "town": "peabody",
+    "date": "2026-03",
+    "photos": [
+      {
+        "src": "/images/jobs/peabody-vanity-swap/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/peabody-vanity-swap/shot-1.jpg",
+        "alt": "Old oak vanity before the swap, Peabody"
+      },
+      {
+        "src": "/images/jobs/peabody-vanity-swap/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/peabody-vanity-swap/shot-2.jpg",
+        "alt": "New dark vanity with a black faucet"
+      }
+    ]
+  },
+  {
+    "slug": "saugus-half-bath-and-water-main",
+    "title": "Saugus half bath and house main upgrade",
+    "desc": "A small half bathroom added on the first floor, plus fixing an illegally vented and piped laundry and kitchen. The water meter was raised out of its pit, the house main upsized to 3/4 inch, and each fixture group run back to a manifold at the owner's request.",
+    "service": "kitchen-bath-remodels",
+    "town": "saugus",
+    "date": "2025-08",
+    "tags": [
+      "new-construction-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/saugus-half-bath-and-water-main/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-half-bath-and-water-main/shot-1.jpg",
+        "alt": "Water meter raised out of its pit with new copper"
+      },
+      {
+        "src": "/images/jobs/saugus-half-bath-and-water-main/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-half-bath-and-water-main/shot-2.jpg",
+        "alt": "Manifold with separate supply lines and new drain piping"
+      },
+      {
+        "src": "/images/jobs/saugus-half-bath-and-water-main/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-half-bath-and-water-main/shot-3.jpg",
+        "alt": "New PVC drain and vent piping above the manifold"
+      },
+      {
+        "src": "/images/jobs/saugus-half-bath-and-water-main/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-half-bath-and-water-main/shot-4.jpg",
+        "alt": "New water heater and drain line in a narrow Saugus basement run"
+      }
+    ]
+  },
+  {
+    "slug": "saugus-kitchen-sink-and-laundry-valves",
+    "title": "Saugus kitchen sink and laundry valves",
+    "desc": "A repeat customer: a rotted basket strainer and a failing garbage disposal replaced, the piping under the kitchen sink tidied to give the storage space back, and old gate-style laundry draw-offs replaced with single-handle valves that shut off fully.",
+    "service": "general-plumbing",
+    "town": "saugus",
+    "date": "2025-08",
+    "tags": [
+      "leak-and-pipe-repair"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-1.jpg",
+        "alt": "New basket strainer and disposal with tidied drain piping"
+      },
+      {
+        "src": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-2-900.webp",
+        "width": 900,
+        "height": 1194,
+        "original": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-2.jpg",
+        "alt": "Reworked piping under a kitchen sink"
+      },
+      {
+        "src": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-3-900.webp",
+        "width": 900,
+        "height": 1194,
+        "original": "/images/jobs/saugus-kitchen-sink-and-laundry-valves/shot-3.jpg",
+        "alt": "Single-handle laundry valves on the basement wall"
+      }
+    ]
+  },
+  {
+    "slug": "saugus-bathroom-service-visit",
+    "title": "Saugus bathroom service visit",
+    "desc": "Photos from one Saugus service visit: two toilet swaps, tub drain stoppers, and a shower valve opened up for work.",
+    "service": "general-plumbing",
+    "town": "saugus",
+    "date": "2025-09",
+    "photos": [
+      {
+        "src": "/images/jobs/saugus-bathroom-service-visit/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-bathroom-service-visit/shot-1.jpg",
+        "alt": "Older toilet before the swap"
+      },
+      {
+        "src": "/images/jobs/saugus-bathroom-service-visit/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-bathroom-service-visit/shot-2.jpg",
+        "alt": "New elongated toilet in the same spot"
+      },
+      {
+        "src": "/images/jobs/saugus-bathroom-service-visit/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-bathroom-service-visit/shot-3.jpg",
+        "alt": "Tub drain before the new stopper"
+      },
+      {
+        "src": "/images/jobs/saugus-bathroom-service-visit/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saugus-bathroom-service-visit/shot-4.jpg",
+        "alt": "Tub drain with a new stopper"
+      },
+      {
+        "src": "/images/jobs/saugus-bathroom-service-visit/shot-5-900.webp",
+        "width": 900,
+        "height": 1194,
+        "original": "/images/jobs/saugus-bathroom-service-visit/shot-5.jpg",
+        "alt": "Shower valve body in the opened wall"
+      }
+    ]
+  },
+  {
+    "slug": "saugus-saddle-valve-leak",
+    "title": "Saugus leak from an old saddle valve",
+    "desc": "A leak from an unused saddle valve forced the owner to shut off water to the whole house because there were no shut-off valves under the sink. New shut-offs went in under the sink and the leaking faucet was replaced.",
+    "service": "general-plumbing",
+    "town": "saugus",
+    "date": "2025-07",
+    "tags": [
+      "leak-and-pipe-repair"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/saugus-saddle-valve-leak/shot-1-900.webp",
+        "width": 900,
+        "height": 915,
+        "original": "/images/jobs/saugus-saddle-valve-leak/shot-1.jpg",
+        "alt": "Corroded saddle valve removed from a supply line"
+      },
+      {
+        "src": "/images/jobs/saugus-saddle-valve-leak/shot-2-900.webp",
+        "width": 900,
+        "height": 915,
+        "original": "/images/jobs/saugus-saddle-valve-leak/shot-2.jpg",
+        "alt": "New shut-off valves on the supply lines under a sink"
+      }
+    ]
+  },
+  {
+    "slug": "power-vent-water-heater-50-gallon",
+    "title": "50-gallon power-vent water heater",
+    "desc": "Old tank out, new 50-gallon power-vent water heater in, beside the furnace.",
+    "service": "water-heater-replacement",
+    "date": "2025-07",
+    "photos": [
+      {
+        "src": "/images/jobs/power-vent-water-heater-50-gallon/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/power-vent-water-heater-50-gallon/shot-1.jpg",
+        "alt": "Old gas water heater next to a furnace"
+      },
+      {
+        "src": "/images/jobs/power-vent-water-heater-50-gallon/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/power-vent-water-heater-50-gallon/shot-2.jpg",
+        "alt": "New 50-gallon power-vent water heater in the same spot"
+      }
+    ]
+  },
+  {
+    "slug": "atmospheric-water-heater-40-gallon",
+    "title": "40-gallon water heater and new shower trim",
+    "desc": "A 40-gallon atmospheric water heater replaced, along with new shower trim to replace a broken shower head and an old hand-held.",
+    "service": "water-heater-replacement",
+    "date": "2025-07",
+    "tags": [
+      "general-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/atmospheric-water-heater-40-gallon/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/atmospheric-water-heater-40-gallon/shot-1.jpg",
+        "alt": "Old water heater in a basement before replacement"
+      },
+      {
+        "src": "/images/jobs/atmospheric-water-heater-40-gallon/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/atmospheric-water-heater-40-gallon/shot-2.jpg",
+        "alt": "New 40-gallon atmospheric water heater"
+      },
+      {
+        "src": "/images/jobs/atmospheric-water-heater-40-gallon/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/atmospheric-water-heater-40-gallon/shot-3.jpg",
+        "alt": "New water heater with its copper piping"
+      },
+      {
+        "src": "/images/jobs/atmospheric-water-heater-40-gallon/shot-4-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/atmospheric-water-heater-40-gallon/shot-4.jpg",
+        "alt": "New shower head and hand shower on tile"
+      }
+    ]
+  },
+  {
+    "slug": "emergency-water-heater-beside-boiler",
+    "title": "Emergency water heater replacement beside a boiler",
+    "desc": "Emergency water heater replacement in a basement with a green cast-iron boiler.",
+    "service": "water-heater-replacement",
+    "date": "2025-10",
+    "tags": [
+      "emergency-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/emergency-water-heater-beside-boiler/shot-1-900.webp",
+        "width": 900,
+        "height": 1188,
+        "original": "/images/jobs/emergency-water-heater-beside-boiler/shot-1.jpg",
+        "alt": "New water heater next to a green cast-iron boiler"
+      },
+      {
+        "src": "/images/jobs/emergency-water-heater-beside-boiler/shot-2-900.webp",
+        "width": 900,
+        "height": 1187,
+        "original": "/images/jobs/emergency-water-heater-beside-boiler/shot-2.jpg",
+        "alt": "Close view of the new water heater and its gas piping"
+      }
+    ]
+  },
+  {
+    "slug": "heat-pump-and-50-gallon-water-heaters",
+    "title": "Heat pump water heater, 50-gallon replacement, pool-bar ejector pump",
+    "desc": "A few jobs from one busy week: a natural gas water heater converted to a hybrid heat pump water heater, a 50-gallon water heater replacement, and a Liberty ejector pump finished for an outdoor pool bar sink.",
+    "service": "water-heater-replacement",
+    "date": "2026-08",
+    "tags": [
+      "sump-pump-ejector-pumps"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-1-900.webp",
+        "width": 900,
+        "height": 1176,
+        "original": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-1.jpg",
+        "alt": "Hybrid heat pump water heater with copper piping"
+      },
+      {
+        "src": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-2-900.webp",
+        "width": 900,
+        "height": 1176,
+        "original": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-2.jpg",
+        "alt": "New 50-gallon gas water heater against a brick wall"
+      },
+      {
+        "src": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-3-900.webp",
+        "width": 900,
+        "height": 1176,
+        "original": "/images/jobs/heat-pump-and-50-gallon-water-heaters/shot-3.jpg",
+        "alt": "Outdoor pool bar sink served by an ejector pump"
+      }
+    ]
+  },
+  {
+    "slug": "indirect-tank-replacement-80-gallon",
+    "title": "80-gallon indirect tank replacement",
+    "desc": "An 80-gallon indirect tank replaced after its coil ruptured, which let domestic water pressure into the boiler system and made the pressure relief valve discharge.",
+    "service": "boiler-service",
+    "date": "2026-06",
+    "photos": [
+      {
+        "src": "/images/jobs/indirect-tank-replacement-80-gallon/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/indirect-tank-replacement-80-gallon/shot-1.jpg",
+        "alt": "New 80-gallon indirect tank beside the boiler piping"
+      },
+      {
+        "src": "/images/jobs/indirect-tank-replacement-80-gallon/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/indirect-tank-replacement-80-gallon/shot-2.jpg",
+        "alt": "The old blue tank beside the same piping"
+      }
+    ]
+  },
+  {
+    "slug": "saturday-emergency-boiler-replacement",
+    "title": "Emergency Saturday boiler replacement",
+    "desc": "The customer needed heat for cool fall nights, so the new boiler was piped and wired as the priority on a Saturday, with a few loose ends left to button up afterwards.",
+    "service": "boiler-service",
+    "date": "2025-10",
+    "tags": [
+      "emergency-plumbing"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/saturday-emergency-boiler-replacement/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saturday-emergency-boiler-replacement/shot-1.jpg",
+        "alt": "Old red boiler and piping before the replacement"
+      },
+      {
+        "src": "/images/jobs/saturday-emergency-boiler-replacement/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saturday-emergency-boiler-replacement/shot-2.jpg",
+        "alt": "New blue boiler with fresh copper piping and expansion tank"
+      },
+      {
+        "src": "/images/jobs/saturday-emergency-boiler-replacement/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/saturday-emergency-boiler-replacement/shot-3.jpg",
+        "alt": "Close view of the new boiler piping"
+      }
+    ]
+  },
+  {
+    "slug": "boiler-circulator-and-indirect-zone",
+    "title": "Burned-out circulator on an indirect water heater zone",
+    "desc": "A steady drip from a purge draw-off on an indirect water heater's heating zone burned out the circulator pump, so the hot water stopped heating properly. The circulator was replaced.",
+    "service": "boiler-service",
+    "date": "2025-08",
+    "tags": [
+      "leak-and-pipe-repair"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/boiler-circulator-and-indirect-zone/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/boiler-circulator-and-indirect-zone/shot-1.jpg",
+        "alt": "Zone piping with a blue-handled valve"
+      },
+      {
+        "src": "/images/jobs/boiler-circulator-and-indirect-zone/shot-2-900.webp",
+        "width": 900,
+        "height": 1194,
+        "original": "/images/jobs/boiler-circulator-and-indirect-zone/shot-2.jpg",
+        "alt": "Old circulator pump on the indirect zone"
+      },
+      {
+        "src": "/images/jobs/boiler-circulator-and-indirect-zone/shot-3-900.webp",
+        "width": 900,
+        "height": 1199,
+        "original": "/images/jobs/boiler-circulator-and-indirect-zone/shot-3.jpg",
+        "alt": "New circulator pump on the same zone"
+      }
+    ]
+  },
+  {
+    "slug": "ejector-pump-basement-laundry",
+    "title": "Basement laundry on an ejector pump",
+    "desc": "A basement living space had no way to run laundry drains to the main by gravity, so a Liberty 404 ejector pump lifts the drain up to it. The customer no longer climbs two flights of stairs to do laundry.",
+    "service": "general-plumbing",
+    "date": "2025-09",
+    "tags": [
+      "sump-pump-ejector-pumps"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/ejector-pump-basement-laundry/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/ejector-pump-basement-laundry/shot-1.jpg",
+        "alt": "Ejector pump basin and white PVC discharge piping"
+      },
+      {
+        "src": "/images/jobs/ejector-pump-basement-laundry/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/ejector-pump-basement-laundry/shot-2.jpg",
+        "alt": "Washer and dryer with vent run in the basement"
+      }
+    ]
+  },
+  {
+    "slug": "ejector-pump-swap",
+    "title": "Bathroom ejector pump replaced",
+    "desc": "An old bathroom ejector pump with a seized motor, and a leak where the drain met the basin that let sewage back up under the foundation. Replaced with a new Liberty Pro 370.",
+    "service": "general-plumbing",
+    "date": "2026-08",
+    "tags": [
+      "sump-pump-ejector-pumps"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/ejector-pump-swap/shot-1-900.webp",
+        "width": 720,
+        "height": 960,
+        "original": "/images/jobs/ejector-pump-swap/shot-1.jpg",
+        "alt": "New ejector pump in its basin with the white discharge pipe"
+      }
+    ]
+  },
+  {
+    "slug": "frost-free-hose-bib-swap",
+    "title": "Frost-free hose bib swap",
+    "desc": "An outdoor spigot replaced with a frost-free one. For winter: shut the water off inside, drain it, take hoses off and blow out the lines.",
+    "service": "general-plumbing",
+    "date": "2025-10",
+    "tags": [
+      "leak-and-pipe-repair"
+    ],
+    "photos": [
+      {
+        "src": "/images/jobs/frost-free-hose-bib-swap/shot-1-900.webp",
+        "width": 900,
+        "height": 900,
+        "original": "/images/jobs/frost-free-hose-bib-swap/shot-1.jpg",
+        "alt": "New frost-free hose bib on vinyl siding"
+      },
+      {
+        "src": "/images/jobs/frost-free-hose-bib-swap/shot-2-900.webp",
+        "width": 900,
+        "height": 900,
+        "original": "/images/jobs/frost-free-hose-bib-swap/shot-2.jpg",
+        "alt": "Frost-free hose bib with a hose attached"
+      }
+    ]
+  },
+  {
+    "slug": "jacuzzi-tub-to-walk-in-shower",
+    "title": "Jacuzzi tub out, walk-in shower in",
+    "desc": "A Saturday swap: an old jacuzzi tub taken out and a walk-in shower stall put in.",
+    "service": "kitchen-bath-remodels",
+    "date": "2026-08",
+    "photos": [
+      {
+        "src": "/images/jobs/jacuzzi-tub-to-walk-in-shower/shot-1-900.webp",
+        "width": 900,
+        "height": 1196,
+        "original": "/images/jobs/jacuzzi-tub-to-walk-in-shower/shot-1.jpg",
+        "alt": "Bathroom alcove stripped back after the old tub came out"
+      },
+      {
+        "src": "/images/jobs/jacuzzi-tub-to-walk-in-shower/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/jacuzzi-tub-to-walk-in-shower/shot-2.jpg",
+        "alt": "New walk-in shower stall set in the alcove"
+      }
+    ]
+  },
+  {
+    "slug": "whole-house-water-filter",
+    "title": "Whole-house water filter with carbon water softener",
+    "desc": "A full-house water filter with a carbon water softener, for cleaner, softer water. The photos run from the bare supply line to the installed filter housings.",
+    "service": "general-plumbing",
+    "date": "2026-08",
+    "photos": [
+      {
+        "src": "/images/jobs/whole-house-water-filter/shot-1-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/whole-house-water-filter/shot-1.jpg",
+        "alt": "Supply line and water meter before the filter"
+      },
+      {
+        "src": "/images/jobs/whole-house-water-filter/shot-2-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/whole-house-water-filter/shot-2.jpg",
+        "alt": "New blue filter housing on the copper supply line"
+      },
+      {
+        "src": "/images/jobs/whole-house-water-filter/shot-3-900.webp",
+        "width": 900,
+        "height": 1200,
+        "original": "/images/jobs/whole-house-water-filter/shot-3.jpg",
+        "alt": "Filter housing and carbon tank on the supply line"
+      }
+    ]
   }
 ]

@@ -212,7 +212,7 @@ describe('ZIP checker', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/`);
     const links = await page.locator('#area .area-townlist a[href^="/areas/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-    assert.deepEqual(links.sort(), ['/areas/lynn/', '/areas/malden/', '/areas/peabody/', '/areas/revere/', '/areas/saugus/']);
+    assert.deepEqual(links.sort(), ['/areas/haverhill/', '/areas/lexington/', '/areas/lynn/', '/areas/malden/', '/areas/peabody/', '/areas/revere/', '/areas/saugus/', '/areas/somerville/', '/areas/stoneham/']);
     await page.locator('#area .area-townlist summary').click();
     assert.equal(await page.locator('#area .area-townlist a[href="/areas/lynn/"]').isVisible(), true);
     await context.close();

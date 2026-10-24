@@ -26,9 +26,11 @@ function allHtml(dir = dist) {
 
 test('every service page has a service id that exists in the shared option list', () => {
   const ids = new Set(options.map((o) => o.id));
-  for (const s of services) assert.ok(ids.has(s.slug), `${s.slug} missing from service-options.json`);
+  // A service page uses its own slug as the form id unless it names an existing id in service_id (new pages added in October 2026 reuse one).
+  const formId = (s) => s.service_id ?? s.slug;
+  for (const s of services) assert.ok(ids.has(formId(s)), `${s.slug} maps to ${formId(s)}, which is missing from service-options.json`);
   for (const id of ids) {
-    if (!services.some((s) => s.slug === id)) assert.ok(['general-plumbing', 'other', 'not-sure'].includes(id), `${id} has no page and is not a catch-all`);
+    if (!services.some((s) => formId(s) === id)) assert.ok(['general-plumbing', 'other', 'not-sure'].includes(id), `${id} has no page and is not a catch-all`);
   }
   assert.equal(options.filter((o) => o.default).length, 1, 'exactly one default option');
 });
@@ -36,10 +38,11 @@ test('every service page has a service id that exists in the shared option list'
 test('service-page CTAs carry the service id into the request form', () => {
   for (const s of services) {
     const links = hrefs(page(`/services/${s.slug}`));
-    const withService = links.filter((h) => h === `/contact/?service=${s.slug}`);
+    const id = s.service_id ?? s.slug;
+    const withService = links.filter((h) => h === `/contact/?service=${id}`);
     assert.ok(withService.length >= 2, `${s.slug}: hero and closing CTA should both carry ?service= (found ${withService.length})`);
     for (const h of links.filter((h) => h.startsWith('/contact/?service='))) {
-      assert.equal(h, `/contact/?service=${s.slug}`, `${s.slug} links to a different service id: ${h}`);
+      assert.equal(h, `/contact/?service=${id}`, `${s.slug} links to a different service id: ${h}`);
     }
   }
 });
