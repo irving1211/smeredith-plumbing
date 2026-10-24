@@ -15,7 +15,11 @@ Any other `--branch` value publishes a **preview** at `https://<branch>.smeredit
 
 Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; the Cloudflare dashboard cannot change static HTML in this setup. Server secrets (Resend, Turnstile, GBP) are Pages secrets and are never in the repo.
 
-**Rollback:** `npx wrangler pages deployment list --project-name smeredithplumbing`, then re-deploy the previous production build, or promote it in the dashboard. Before the October 2026 work the production deployment was `a5326407` (commit `6a00cfa`). The redesign (lead-gen, mobile path and request form, ZIP coverage, Incoming call hero) went live on 2026-10-11 as deployment `fa6083bb` (commit `63d0973`); to undo it, re-deploy or promote `a5326407`.
+**Rollback:** `npx wrangler pages deployment list --project-name smeredithplumbing`, then re-deploy the previous production build, or promote it in the dashboard. Before the October 2026 work the production deployment was `a5326407` (commit `6a00cfa`). The redesign (lead-gen, mobile path and request form, ZIP coverage, Incoming call hero) went live on 2026-10-11 as deployment `fa6083bb` (commit `63d0973`); to undo it, re-deploy or promote `a5326407`. The GEO-audit fixes and the footer merge went live on 2026-10-24 as deployment `dec62e3a` (commit `8b98c07`); to undo only those, promote `fa6083bb`.
+
+**Editorial dates:** `src/lib/site-facts.js` holds `PUBLISHED` and `UPDATED`. They feed the WebPage schema, the `article:*` meta tags, the footer's "Updated" date, `llms.txt`, the `/ai/*.json` files and the feed. They are deliberately not the build date: bump `UPDATED` only when the words or facts on the site change.
+
+**AI-crawler access is partly a Cloudflare setting, not code.** Cloudflare's "Block AI bots" and "Managed robots.txt" (zone settings on Shane's account) can prepend `Disallow: /` for GPTBot, ClaudeBot, Google-Extended and others to the live `robots.txt` and return 403 to those crawlers, whatever `public/robots.txt` says. Check with `curl -s https://smeredithplumbing.com/robots.txt` and `curl -sI -A "GPTBot/1.1" https://smeredithplumbing.com/`.
 
 ## Commands
 
