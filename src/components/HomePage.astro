@@ -8,7 +8,7 @@ import services from '../services.json';
 import serviceOptions from '../service-options.json';
 import reviewData from '../reviews.json';
 import ServiceAreaChecker from './ServiceAreaChecker.astro';
-import { TOWNS } from '../lib/service-area.js';
+import { homeFaqs } from '../lib/faqs.js';
 
 interface Props {
   /** Review label: which option this copy of the page shows (review pages only). */
@@ -44,11 +44,8 @@ const jobPhoto = job.photos[0];
 // scripts/make-hero-photos.mjs; shown at 150 px on phones and 300 px on desktops.
 const shaneSet = (ext: string) => [240, 360, 480, 720].map((w) => `${base}images/hero/shane-${w}.${ext} ${w}w`).join(', ');
 
-const faqs = [
-  { q: 'Who answers the phone?', a: 'Shane Meredith, the owner. S. Meredith Plumbing & Heating is owner-operated, so you reach Shane directly. Call or text 781-820-4592, or send a request and he will follow up.' },
-  { q: 'What areas do you serve?', a: `Based in Saugus, MA. Shane serves ${TOWNS.map((t) => t.name).join(', ')}. If your town is not on that list, contact Shane to confirm availability.` },
-  { q: 'Is Shane licensed?', a: 'Shane holds Massachusetts master plumber license 9630040-PL-M.' },
-];
+// One list feeds this accordion, the FAQPage schema and /ai/faq.json (src/lib/faqs.js).
+const faqs = homeFaqs();
 ---
 
 <Base
@@ -83,7 +80,7 @@ const faqs = [
             </li>
           ))}
         </ul>
-        <p class="more-link">Not sure what you need? <a href={request('not-sure')}>Describe it in the form</a> and Shane will sort it out. <a href={`${base}services/`}>All services</a></p>
+        <p class="more-link">Not sure what you need? <a href={request('not-sure')}>Describe it in the form</a> and the owner will sort it out. <a href={`${base}services/`}>All services</a></p>
       </div>
     </section>
 
@@ -101,7 +98,7 @@ const faqs = [
             </li>
           ))}
         </ul>
-        <p class="more-link"><a href={`${base}about/#reviews`}>More reviews</a> · <a href={googleReviewsUrl} target="_blank" rel="noopener">Read them on Google</a></p>
+        <p class="more-link"><a href={`${base}about/#reviews`}>More reviews</a> · <a href={googleReviewsUrl} target="_blank" rel="noopener nofollow ugc">Read them on Google</a></p>
       </div>
     </section>
 
@@ -123,10 +120,10 @@ const faqs = [
             <li>24/7 emergency service</li>
           </ul>
           <div class="actions">
-            <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call Shane</a>
-            <a class="btn btn-secondary" href={smsHref}>Text Shane</a>
+            <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <a class="btn btn-secondary" href={smsHref}>Send a text</a>
           </div>
-          <p class="more-link"><a href={`${base}about/`}>More about Shane and the van</a></p>
+          <p class="more-link"><a href={`${base}about/`}>More about the owner and the van</a></p>
         </div>
       </div>
     </section>
@@ -152,7 +149,7 @@ const faqs = [
 
     <section class="section" id="area" aria-labelledby="area-h">
       <div class="container">
-        <h2 class="section-title" id="area-h">Does Shane cover your area?</h2>
+        <h2 class="section-title" id="area-h">Is your town covered?</h2>
         <p class="section-note">Based in Saugus. Enter your ZIP code to see the area on a map and what to do next.</p>
         <ServiceAreaChecker showMap={false} />
         <p class="more-link"><a href={`${base}service-area/`}>Full service area and map</a></p>
@@ -180,7 +177,7 @@ const faqs = [
         <p>Phone first for anything urgent. For planned work, the request form takes a minute and can include a photo.</p>
         <div class="actions">
           <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
-          <a class="btn btn-ghost-dark" href={smsHref}>Text Shane</a>
+          <a class="btn btn-ghost-dark" href={smsHref}>Send a text</a>
           <a class="btn btn-ghost-dark" href={request()}>Request service</a>
         </div>
         <ul class="contact-meta">

@@ -1,4 +1,6 @@
 ---
+import { UPDATED, formatDate } from '../lib/site-facts.js';
+
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
@@ -22,7 +24,7 @@ const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
     <nav class="footer-links" aria-label="Footer">
       <a href={`${base}services/`}>Services</a>
       <a href={`${base}work/`}>Our work</a>
-      <a href={`${base}about/`}>About Shane</a>
+      <a href={`${base}about/`}>About</a>
       <a href={`${base}service-area/`}>Service area</a>
       <a href={`${base}contact/`}>Request service</a>
       {privacyPublished && <a href={`${base}privacy/`}>Privacy</a>}
@@ -33,13 +35,17 @@ const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
       <p>24/7 emergency service</p>
       <p class="footer-social"><a href={facebookUrl} rel="noopener" target="_blank">Facebook</a> · <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a></p>
     </div>
-    <p class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating</p>
+    <p class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating · Updated <time datetime={UPDATED}>{formatDate(UPDATED)}</time></p>
     <p class="footer-credit">Website by <strong>IC Business Systems</strong>. <a href={builderInstagramUrl} rel="noopener" target="_blank">Want one like this? DM us on Instagram.</a></p>
   </div>
 </footer>
 
 <style>
   .site-footer { background: var(--color-dark); color: var(--color-ink-on-dark); padding: 2.5rem 0 2rem; margin-top: 3rem; }
+  /* Pages that end on the dark call-to-action band: the band and the footer are one dark block, so no cream strip between
+     them (it made the band look like a first footer). A hairline keeps the two parts distinct. Pages that end on a light
+     section keep the 3rem of breathing room. */
+  :global(main:has(> .band.on-dark:last-child)) ~ .site-footer { margin-top: 0; border-top: 1px solid rgba(255, 255, 255, .16); }
   .footer-grid { display: grid; gap: 1.75rem; }
   .footer-brand { display: flex; gap: .9rem; align-items: center; }
   .footer-brand p { margin: 0; line-height: 1.45; font-size: .95rem; }

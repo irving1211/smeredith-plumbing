@@ -12,7 +12,7 @@ const phoneTel = '+17818204592';
 const links = [
   { id: 'services', href: `${base}services/`, label: 'Services' },
   { id: 'work', href: `${base}work/`, label: 'Our work' },
-  { id: 'about', href: `${base}about/`, label: 'About Shane' },
+  { id: 'about', href: `${base}about/`, label: 'About' },
   { id: 'service-area', href: `${base}service-area/`, label: 'Service area' },
 ];
 ---
@@ -20,8 +20,8 @@ const links = [
 <header class="site-header">
   <div class="container header-row">
     <a class="brand" href={base}>
-      <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="" width="40" height="40" />
-      <span class="brand-wordmark">
+      <img class="brand-icon" src={`${base}images/logo-icon-128.webp`} alt="S. Meredith Plumbing &amp; Heating" width="40" height="40" />
+      <span class="brand-wordmark" aria-hidden="true">
         <strong>S. Meredith</strong>
         <em>Plumbing &amp; Heating</em>
       </span>

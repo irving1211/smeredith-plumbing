@@ -1,0 +1,11 @@
+# ai.txt: what AI crawlers and assistants may do on smeredithplumbing.com (robots.txt syntax).
+# S. Meredith Plumbing & Heating is a local plumber. Being found and cited by AI search and answer engines is the goal.
+
+User-Agent: *
+Allow: /
+
+# A plain-markdown map of the site: https://smeredithplumbing.com/llms.txt
+# Business facts as JSON:           https://smeredithplumbing.com/ai/summary.json
+# Questions and answers as JSON:    https://smeredithplumbing.com/ai/faq.json
+# Services as JSON:                 https://smeredithplumbing.com/ai/service.json
+# Contact for crawler questions:    shane@smeredithplumbing.com

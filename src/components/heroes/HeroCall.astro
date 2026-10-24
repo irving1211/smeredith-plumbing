@@ -14,6 +14,9 @@ import reviews from '../../reviews.json';
 const base = import.meta.env.BASE_URL;
 const logoAvif = `${base}images/logo-hero-240.avif`;
 const logoWebp = `${base}images/logo-hero-240.webp`;
+// The logo is drawn as the caller's picture. The banner avatar and the whole phone are aria-hidden (their words are on the
+// page as text), so a real alt costs screen-reader users nothing and gives search and image engines the description.
+const logoAlt = 'S. Meredith Plumbing & Heating logo';
 // Verbatim excerpts (substrings of the published review text), with the reviewer's first name and initial.
 const pick = (name: string, excerpt: string) => {
   const r = reviews.reviews.find((x) => x.name === name)!;
@@ -33,11 +36,11 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
   <div class="container hc-grid">
     <div class="hc-banner" data-hc-banner>
       <a class="hc-banner-call" href="tel:+17818204592">
-        <span class="hc-banner-ava"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
+        <span class="hc-banner-ava" aria-hidden="true"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt={logoAlt} width="240" height="237" /></picture></span>
         <span class="hc-banner-text"><strong>Shane Meredith</strong><span>781-820-4592</span></span>
         <span class="hc-bslot" aria-hidden="true"></span>
         <span class="hc-bkey hc-bkey-answer" aria-hidden="true"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span>
-        <span class="visually-hidden">Call Shane</span>
+        <span class="visually-hidden">Call now</span>
       </a>
       <button type="button" class="hc-bkey hc-bkey-decline js-only" data-hc-dismiss aria-label="Hide this call banner">
         <svg viewBox="-4 -14 128 68" aria-hidden="true"><path d={handset} transform="rotate(135 60 20)" /></svg>
@@ -53,7 +56,7 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
             <p class="hc-label">incoming call</p>
             <div class="hc-avatar">
               <span class="hc-pulse hc-p1"></span><span class="hc-pulse hc-p2"></span><span class="hc-pulse hc-p3"></span>
-              <span class="hc-ava"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
+              <span class="hc-ava"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt={logoAlt} width="240" height="237" /></picture></span>
             </div>
             <p class="hc-name">Shane Meredith</p>
             <p class="hc-sub">S. Meredith Plumbing &amp; Heating</p>
@@ -65,7 +68,7 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
 
           <div class="hc-live">
             <div class="hc-head">
-              <span class="hc-ava hc-ava-sm"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt="" width="240" height="237" /></picture></span>
+              <span class="hc-ava hc-ava-sm"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt={logoAlt} width="240" height="237" /></picture></span>
               <div>
                 <p class="hc-name hc-name-sm">Shane Meredith</p>
                 <p class="hc-on"><i></i>On the line</p>

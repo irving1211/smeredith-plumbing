@@ -305,3 +305,125 @@ test('internal links: every href on every page points at a page, file or in-page
   }
   assert.deepEqual([...new Set(broken)], []);
 });
+
+// ---- GEO audit remediation (2026-10-24, report: geo-report.pdf, smeredithplumbing.com scored 62) ----
+const serviceArea = JSON.parse(readFileSync(join(root, 'src/service-area.json'), 'utf8'));
+const BRAND = 'S. Meredith Plumbing & Heating';
+const raw = (path) => readFileSync(join(dist, path), 'utf8');
+
+test('GEO: Organization, WebSite and WebPage schema carry name, logo, contact, byline and editorial dates', () => {
+  const blocks = jsonLd(page('/'));
+  const plumber = blocks.find((b) => b['@type'] === 'Plumber');
+  const org = blocks.find((b) => b['@type'] === 'Organization');
+  assert.ok(org, 'Organization schema present on home');
+  assert.equal(org.name, BRAND);
+  assert.equal(org.url, `${ORIGIN}/`);
+  assert.equal(org.logo.url, `${ORIGIN}/images/logo.jpg`);
+  assert.equal(org.telephone, '+1-781-820-4592');
+  assert.equal(org.contactPoint[0].telephone, '+1-781-820-4592');
+  assert.equal(org.address.addressLocality, 'Saugus');
+  assert.ok(org.sameAs.length >= 2);
+  assert.equal(org['@id'], plumber['@id'], 'Organization and Plumber share an @id, so JSON-LD merges them into one entity');
+  assert.ok(blocks.some((b) => b['@type'] === 'WebSite' && b.name === BRAND), 'WebSite schema on home');
+  assert.ok(!jsonLd(page('/about/')).some((b) => b['@type'] === 'WebSite'), 'WebSite belongs on the home page only');
+  for (const path of INDEXABLE) {
+    const html = page(path);
+    const wp = jsonLd(html).find((b) => b['@type'] === 'WebPage');
+    assert.ok(wp, `${path} WebPage schema`);
+    assert.equal(wp.url, `${ORIGIN}${path}`);
+    assert.equal(wp.author.name, 'Shane Meredith', `${path} byline`);
+    assert.match(wp.datePublished, /^\d{4}-\d{2}-\d{2}$/);
+    assert.match(wp.dateModified, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(wp.dateModified >= wp.datePublished, `${path} modified is not before published`);
+    assert.equal(meta(html, 'author'), 'Shane Meredith', `${path} author meta`);
+    assert.match(html, /<meta property="article:modified_time" content="\d{4}-\d{2}-\d{2}"/);
+    assert.match(html, /<time datetime="\d{4}-\d{2}-\d{2}"[^>]*>/, `${path} shows a visible updated date`);
+  }
+  for (const path of NOINDEX) assert.ok(!jsonLd(readFileSync(fileFor(path), 'utf8')).some((b) => b['@type'] === 'WebPage'), `${path} is noindex: no WebPage`);
+});
+
+test('GEO: the business name agrees in the title, og:title, H1 and schema on the home page', () => {
+  const html = page('/');
+  assert.ok(title(html).startsWith(BRAND));
+  assert.ok(decode(html.match(/<meta property="og:title" content="([^"]*)"/)[1]).startsWith(BRAND));
+  const h1 = decode(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1].replace(/<[^>]+>/g, ''));
+  assert.ok(h1.startsWith(BRAND), `H1 is "${h1}"`);
+  assert.ok(h1.endsWith('The plumber who answers the phone.'));
+  for (const b of jsonLd(html).filter((x) => ['Plumber', 'Organization', 'WebSite'].includes(x['@type']))) assert.equal(b.name, BRAND);
+});
+
+test('GEO: llms.txt, ai.txt, /ai/*.json and the feed are built from the site data and list every service and town', () => {
+  const llms = raw('llms.txt');
+  assert.match(llms, /^# S\. Meredith Plumbing & Heating\n\n> /);
+  for (const s of services) assert.ok(llms.includes(`${ORIGIN}/services/${s.slug}/`), `llms.txt lists ${s.slug}`);
+  for (const t of serviceArea.towns) assert.ok(llms.includes(t.name), `llms.txt lists ${t.name}`);
+  assert.doesNotMatch(llms, /insured|same-day|free estimate|guarantee/i, 'llms.txt makes no unapproved claim');
+
+  const ai = raw('.well-known/ai.txt');
+  assert.match(ai, /^User-Agent: \*$/m);
+  assert.match(ai, /^Allow: \/$/m);
+
+  const summary = JSON.parse(raw('ai/summary.json'));
+  assert.equal(summary.name, BRAND);
+  assert.equal(summary.contact.phone, '781-820-4592');
+  assert.deepEqual(summary.serviceArea.confirmedTowns, serviceArea.towns.map((t) => t.name));
+  assert.equal(summary.services.length, services.length);
+
+  const svc = JSON.parse(raw('ai/service.json'));
+  assert.equal(svc.services.length, services.length);
+  for (const s of svc.services) assert.ok(existsSync(fileFor(new URL(s.url).pathname)), `${s.url} is a real page`);
+
+  const faq = JSON.parse(raw('ai/faq.json'));
+  const homeText = visibleText(page('/'));
+  assert.ok(faq.faqs.length >= 3);
+  for (const f of faq.faqs) {
+    assert.ok(homeText.includes(f.question), `faq.json question is visible on the home page: ${f.question}`);
+    assert.ok(homeText.includes(f.answer), `faq.json answer is visible on the home page: ${f.question}`);
+  }
+
+  const feed = raw('feed.xml');
+  assert.match(feed, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<rss version="2\.0"/);
+  for (const s of services) assert.ok(feed.includes(`<link>${ORIGIN}/services/${s.slug}/</link>`), `feed lists ${s.slug}`);
+  assert.doesNotMatch(feed, /<pubDate>/, 'no fabricated per-item dates');
+  assert.match(page('/'), /<link rel="alternate" type="application\/rss\+xml"[^>]*href="\/feed\.xml"/);
+  assert.match(feed, /&amp;/, 'ampersands in titles are escaped');
+});
+
+test('GEO: robots.txt welcomes the named AI crawlers and never blocks the site', () => {
+  const robots = raw('robots.txt');
+  for (const bot of ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'PerplexityBot', 'Google-Extended']) {
+    assert.match(robots, new RegExp(`^User-agent: ${bot}$`, 'm'), `${bot} is named`);
+  }
+  assert.doesNotMatch(robots, /^Disallow:\s*\/\s*$/m, 'the repo robots.txt never disallows the whole site');
+});
+
+test("GEO: home images all carry descriptive alt text; the owner's first name is not over-repeated", () => {
+  const html = page('/');
+  const imgs = html.match(/<img\b[^>]*>/g);
+  assert.ok(imgs.length >= 8);
+  for (const img of imgs) {
+    const alt = decode((img.match(/\salt="([^"]*)"/) || [, ''])[1]);
+    assert.ok(alt.length >= 10, `descriptive alt needed: ${img}`);
+  }
+  const words = visibleText(html).toLowerCase().match(/[a-z']+/g);
+  const density = (words.filter((w) => w === 'shane').length / words.length) * 100;
+  assert.ok(density < 3, `"shane" is ${density.toFixed(2)}% of the home page words (limit 3%)`);
+});
+
+test('GEO: review-region links to the platform that hosts the reviews are rel="nofollow ugc"', () => {
+  for (const path of ['/', '/about/']) {
+    const links = page(path).match(/<a\b[^>]*href="https:\/\/share\.google\/[^"]*"[^>]*>/g) || [];
+    assert.ok(links.length >= 1, `${path} links to the Google reviews`);
+    for (const a of links) assert.match(a, /rel="[^"]*\bugc\b[^"]*"/, `${path}: ${a}`);
+  }
+});
+
+test('GEO: WebMCP exposes only the read-only ZIP checker, never the request form (its honeypot would drop a real lead)', () => {
+  assert.match(page('/'), /<form[^>]*toolname="check_service_area"[^>]*tooldescription="[^"]+"/);
+  assert.doesNotMatch(page('/contact/'), /\btoolname=/);
+});
+
+test('footer: pages that end on the dark call-to-action band close the cream gap above the footer', () => {
+  // The rule lives in the footer component's CSS; the browser-level proof is in tests/e2e/pages.e2e.mjs.
+  assert.match(page('/'), /main:has\(>\s*\.band\.on-dark:last-child\)\s*~\s*\.site-footer[^{]*\{[^}]*margin-top:\s*0/);
+});

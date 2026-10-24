@@ -25,7 +25,8 @@ test('the live home page keeps its search setup and uses the chosen Incoming cal
   assert.match(home, /data-hero="1"/, 'Incoming call hero');
   assert.match(home, /class="hc-banner-call" href="tel:\+17818204592"/);
   assert.match(home, /images\/hero\/shane-\d+\.(?:avif|webp)/, 'Meet Shane shows his photo');
-  assert.match(home, /<h1[^>]*>The plumber who answers the phone\.<\/h1>/);
+  // The business name leads the H1 as screen-reader/search text (class h1-brand, not drawn); the visible headline is unchanged.
+  assert.match(home, /<h1[^>]*><span class="h1-brand"[^>]*>S\. Meredith Plumbing &amp; Heating: <\/span>The plumber who answers the phone\.<\/h1>/);
   assert.doesNotMatch(home, /@keyframes (?:sm|hb|hm|hr|ho)-/, 'only the chosen hero\'s CSS ships on the live home page');
 });
 

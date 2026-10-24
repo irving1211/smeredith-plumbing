@@ -16,7 +16,7 @@ const sms = `sms:+17818204592?body=${encodeURIComponent('Hi Shane — ')}`;
 ---
 
 <div class:list={['hero-copy', { 'is-dark': dark, 'is-compact': compact }, className]}>
-  <h1 id="hero-h">The plumber who answers the phone.</h1>
+  <h1 id="hero-h"><span class="h1-brand">S. Meredith Plumbing &amp; Heating: </span>The plumber who answers the phone.</h1>
   <p class="lede">Owner-operated by Shane Meredith. Plumbing, heating, gas &amp; additions across Saugus, the North Shore &amp; Boston. 24/7 emergency service.</p>
   <div class="actions">
     <a class:list={["btn btn-primary", { "btn-hero": !compact }]} href="tel:+17818204592">Call 781-820-4592</a>
@@ -28,6 +28,9 @@ const sms = `sms:+17818204592?body=${encodeURIComponent('Hi Shane — ')}`;
 
 <style>
   .hero-copy { position: relative; z-index: 2; }
+  /* The business name leads the page's one H1 so the title, og:title, schema name and H1 all agree. The header already shows
+     the name on screen, so here it is spoken (screen readers) and read (search engines) but not drawn a second time. */
+  .h1-brand { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .hero-copy h1 { margin: 0 0 .9rem; font-size: var(--hero-h1, clamp(2.7rem, 9.5vw, 4.5rem)); line-height: .92; letter-spacing: -.005em; text-wrap: balance; }
   .hero-copy .lede { margin: 0 0 1.25rem; max-width: 34rem; color: var(--color-text-muted); font-size: 1.08rem; }
   .hero-copy .actions { gap: .65rem; }

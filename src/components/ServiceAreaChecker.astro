@@ -30,10 +30,12 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
 ---
 
 <div class="area-checker" data-area-checker data-base={base} data-service={service} data-maps-key={mapsKey} data-proj={proj}>
-  <form class="zip-form js-only" data-zip-form novalidate>
+  {/* WebMCP (experimental, Chrome): exposes this read-only lookup as an agent tool. The request form is NOT exposed: it has a
+       honeypot field an agent could fill, which would silently drop a real lead. Browsers without WebMCP ignore the attributes. */}
+  <form class="zip-form js-only" data-zip-form novalidate toolname="check_service_area" tooldescription="Check whether S. Meredith Plumbing & Heating, a plumber based in Saugus, MA, serves a Massachusetts ZIP code. The answer and the next step appear on the page.">
     <label for={`${uid}-zip`}>Your ZIP code</label>
     <div class="zip-row">
-      <input id={`${uid}-zip`} name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="10" spellcheck="false" aria-describedby={`${uid}-zip-hint`} data-zip-input />
+      <input id={`${uid}-zip`} name="zip" type="text" toolparamdescription="5-digit Massachusetts ZIP code"inputmode="numeric" autocomplete="postal-code" maxlength="10" spellcheck="false" aria-describedby={`${uid}-zip-hint`} data-zip-input />
       <button type="submit" class="btn btn-primary">Check</button>
     </div>
     <p class="hint" id={`${uid}-zip-hint`}>Only used to check the area on this page. It isn't saved or sent anywhere.</p>
@@ -51,7 +53,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
       {service && <input type="hidden" name="service" value={service} />}
       <button type="submit" class="btn btn-primary">Request service</button>
     </form>
-    <p class="nojs-call">Town not listed? <a href="tel:+17818204592">Call 781-820-4592</a> and Shane will tell you.</p>
+    <p class="nojs-call">Town not listed? <a href="tel:+17818204592">Call 781-820-4592</a> and the owner will tell you.</p>
   </noscript>
 
   <p class="visually-hidden" role="status" aria-live="polite" data-area-live></p>
@@ -60,7 +62,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
     <p class="area-note" data-area-note hidden></p>
     <div class="pinmap" data-pinmap hidden>
       <div class="pinmap-frame">
-        <img data-pinmap-img src={`${base}data/area-map.svg`} alt="" width={vw} height={vh} loading="lazy" decoding="async" />
+        <img data-pinmap-img src={`${base}data/area-map.svg`} alt="Map of the S. Meredith Plumbing &amp; Heating service area around Saugus, MA, with a pin where the ZIP code or town you entered falls" width={vw} height={vh} loading="lazy" decoding="async" />
         <span class="pin" data-pin aria-hidden="true"><span class="pin-ring"></span><span class="pin-dot"></span></span>
       </div>
       <p class="pinmap-cap" data-pin-caption></p>
@@ -116,7 +118,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
   )}
 
   <details class="area-townlist" open={showMap ? true : undefined}>
-    <summary>Towns Shane serves ({TOWNS.length})</summary>
+    <summary>Towns we serve ({TOWNS.length})</summary>
     <ul class="area-towns">
       {TOWNS.map((t) => (
         <li class={pageSlugs.has(t.slug) ? '' : 'town-plain'}>
@@ -124,7 +126,7 @@ const proj = JSON.stringify({ proj: geo.proj, viewBox: geo.viewBox });
         </li>
       ))}
     </ul>
-    <p class="area-confirmed">Confirmed by Shane {CONFIRMED_ON}. Towns with a page are linked. Somewhere else nearby? Call: if it's close, he'll tell you.</p>
+    <p class="area-confirmed">Confirmed by the owner {CONFIRMED_ON}. Towns with a page are linked. Somewhere else nearby? Call: if it's close, he'll tell you.</p>
   </details>
 </div>
 

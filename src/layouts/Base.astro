@@ -10,6 +10,7 @@ import interVariableUrl from '@fontsource-variable/inter/files/inter-latin-wght-
 import barlowUrl from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url';
 import services from '../services.json';
 import { TOWNS } from '../lib/service-area.js';
+import { BUSINESS, PUBLISHED, UPDATED } from '../lib/site-facts.js';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
@@ -75,10 +76,7 @@ const localBusinessJsonLd = {
     addressCountry: 'US',
   },
   areaServed: areaServed.map((city) => ({ '@type': 'City', name: `${city}, MA` })),
-  sameAs: [
-    'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/',
-    'https://www.instagram.com/s.meredith_plumbing_heating/',
-  ],
+  sameAs: BUSINESS.sameAs,
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Plumbing & Heating Services',
@@ -94,6 +92,46 @@ const localBusinessJsonLd = {
 
 const base = import.meta.env.BASE_URL;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? site).href;
+
+// The same entity as the Plumber block above, stated as a plain Organization (same @id). JSON-LD merges nodes that
+// share an @id, so Google reads ONE business with both types; tools that read each block on its own also find an
+// Organization with name, url, logo, contact point, address and profile links.
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${site}/#business`,
+  name: business,
+  url: `${site}/`,
+  logo: { '@type': 'ImageObject', url: `${site}/images/logo.jpg`, width: 1156, height: 1150 },
+  telephone: BUSINESS.phoneE164,
+  email: publicEmail,
+  address: localBusinessJsonLd.address,
+  contactPoint: [{ '@type': 'ContactPoint', contactType: 'customer service', telephone: BUSINESS.phoneE164, email: publicEmail, availableLanguage: 'English' }],
+  founder: localBusinessJsonLd.founder,
+  sameAs: BUSINESS.sameAs,
+};
+
+// WebSite belongs on the home page only; WebPage (with the byline and the editorial dates) on every indexable page.
+const websiteJsonLd = pageType === 'home' && !noindex
+  ? { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: business, inLanguage: 'en-US', publisher: { '@id': `${site}/#business` } }
+  : null;
+const webPageJsonLd = noindex
+  ? null
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      '@id': `${canonicalURL}#webpage`,
+      url: canonicalURL,
+      name: title,
+      description,
+      inLanguage: 'en-US',
+      isPartOf: { '@id': `${site}/#website` },
+      about: { '@id': `${site}/#business` },
+      publisher: { '@id': `${site}/#business` },
+      author: { '@type': 'Person', name: BUSINESS.owner, jobTitle: BUSINESS.ownerTitle, url: `${site}/about/` },
+      datePublished: PUBLISHED,
+      dateModified: UPDATED,
+    };
 
 const faqJsonLd = faqs.length
   ? {
@@ -128,6 +166,15 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     {!noindex && <meta property="og:url" content={canonicalURL} />}
     <meta property="og:site_name" content={business} />
     <meta property="og:image" content="https://smeredithplumbing.com/images/logo.jpg" />
+    {!noindex && (
+      <>
+        <meta name="author" content={BUSINESS.owner} />
+        <meta property="article:author" content={BUSINESS.owner} />
+        <meta property="article:published_time" content={PUBLISHED} />
+        <meta property="article:modified_time" content={UPDATED} />
+      </>
+    )}
+    <link rel="alternate" type="application/rss+xml" title={`${business} services and work`} href={`${base}feed.xml`} />
     <meta name="theme-color" content="#313131" />
     <!-- Both fonts are preloaded so neither swaps in after first paint: that swap is what moved text (and buttons) on
          pages measured without the Inter preload (layout shift 0.02-0.03; zero with it). On a throttled phone (4x CPU,
@@ -138,7 +185,10 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID || '';
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
     <script type="application/ld+json" set:html={jsonLd(localBusinessJsonLd)} />
-    {faqJsonLd && <script type="application/ld+json" set:html={jsonLd(faqJsonLd)} />}
+    <script type="application/ld+json" set:html={jsonLd(organizationJsonLd)} />
+    {websiteJsonLd && <script type="application/ld+json" set:html={jsonLd(websiteJsonLd)} />}
+    {webPageJsonLd && <script type="application/ld+json" set:html={jsonLd(webPageJsonLd)} />}
+    {faqJsonLd &&<script type="application/ld+json" set:html={jsonLd(faqJsonLd)} />}
     <slot name="head" />
     <!-- Controls that need JavaScript (the ZIP checker) are hidden without it; a no-JS path sits next to each. -->
     <noscript><style>.js-only { display: none !important; }</style></noscript>

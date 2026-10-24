@@ -146,7 +146,7 @@ describe('header menu on a phone', () => {
     assert.equal(await page.locator('.menu-panel').isVisible(), false);
     await page.click('.menu > summary');
     assert.equal(await page.locator('.menu-panel').isVisible(), true);
-    assert.deepEqual(await page.locator('.menu-panel a').allTextContents(), ['Services', 'Our work', 'About Shane', 'Service area', 'Request service']);
+    assert.deepEqual(await page.locator('.menu-panel a').allTextContents(), ['Services', 'Our work', 'About', 'Service area', 'Request service']);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('.menu-panel').isVisible(), false);
     assert.equal(await page.evaluate(() => document.activeElement.tagName), 'SUMMARY', 'focus returns to the Menu button');
@@ -165,8 +165,8 @@ describe('header menu on a phone', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/about/`);
     assert.equal(await page.locator('.menu').isVisible(), false);
-    assert.deepEqual(await page.locator('.header-nav a').allTextContents(), ['Services', 'Our work', 'About Shane', 'Service area']);
-    assert.equal(await page.locator('.header-nav a[aria-current="page"]').textContent(), 'About Shane');
+    assert.deepEqual(await page.locator('.header-nav a').allTextContents(), ['Services', 'Our work', 'About', 'Service area']);
+    assert.equal(await page.locator('.header-nav a[aria-current="page"]').textContent(), 'About');
     await context.close();
   });
 });
@@ -224,4 +224,40 @@ describe('the pages that took over the long homepage sections', () => {
     assert.equal(await page.inputValue('#address'), 'Revere');
     await context.close();
   });
+});
+
+describe('footer', () => {
+  // Reported 2026-10-24: the dark "Call, text or send the details" band and the dark footer looked like two footers because
+  // a cream strip (the footer's 3rem top margin) sat between them. Pages ending on that band must have no strip.
+  const gapAboveFooter = (page) =>
+    page.evaluate(() => {
+      const main = document.querySelector('main').getBoundingClientRect();
+      const footer = document.querySelector('footer.site-footer').getBoundingClientRect();
+      return Math.round(footer.top - main.bottom);
+    });
+
+  for (const [label, opts] of [['phone', {}], ['desktop', { viewport: { width: 1280, height: 900 }, isMobile: false, hasTouch: false }]]) {
+    test(`${label}: no cream strip between the dark call-to-action band and the footer`, async () => {
+      const { context } = await phoneContext(browser, opts);
+      const page = await context.newPage();
+      for (const path of ['/', '/work/', '/about/', '/service-area/']) {
+        await page.goto(`${origin}${path}`);
+        assert.equal(await page.locator('main > :last-child').evaluate((el) => el.classList.contains('band') && el.classList.contains('on-dark')), true, `${path} ends on the dark band`);
+        assert.equal(await gapAboveFooter(page), 0, `${path} has a gap above the footer`);
+        const bg = (sel) => page.locator(sel).evaluate((el) => getComputedStyle(el).backgroundColor);
+        assert.equal(await bg('main > .band.on-dark:last-child'), await bg('footer.site-footer'), `${path}: band and footer are the same dark colour`);
+      }
+      await context.close();
+    });
+
+    test(`${label}: pages that end on a light section keep their breathing room above the footer`, async () => {
+      const { context } = await phoneContext(browser, opts);
+      const page = await context.newPage();
+      for (const path of ['/services/', '/contact/', '/services/boiler-service/', '/areas/lynn/']) {
+        await page.goto(`${origin}${path}`);
+        assert.ok((await gapAboveFooter(page)) >= 40, `${path} lost its space above the footer`);
+      }
+      await context.close();
+    });
+  }
 });

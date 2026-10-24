@@ -15,7 +15,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const dist = join(root, 'dist-review');
 const axePath = createRequire(import.meta.url).resolve('axe-core/axe.min.js');
 const OPTIONS = ['1', '2', '3', '4', '5'];
-const H1 = 'The plumber who answers the phone.';
+// The H1's text includes the business name as a not-drawn lead-in (HeroCopy .h1-brand); the drawn headline is the rest.
+const H1 = 'S. Meredith Plumbing & Heating: The plumber who answers the phone.';
 let browser, server, origin;
 
 before(async () => {
