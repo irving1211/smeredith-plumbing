@@ -310,6 +310,7 @@ test('internal links: every href on every page points at a page, file or in-page
 const serviceArea = JSON.parse(readFileSync(join(root, 'src/service-area.json'), 'utf8'));
 const BRAND = 'S. Meredith Plumbing & Heating';
 const raw = (path) => readFileSync(join(dist, path), 'utf8');
+const { homeFaqs } = await import(new URL('../src/lib/faqs.js', import.meta.url));
 
 test('GEO: Organization, WebSite and WebPage schema carry name, logo, contact, byline and editorial dates', () => {
   const blocks = jsonLd(page('/'));
@@ -370,8 +371,17 @@ test('GEO: llms.txt, ai.txt, /ai/*.json and the feed are built from the site dat
   assert.equal(summary.services.length, services.length);
 
   const svc = JSON.parse(raw('ai/service.json'));
-  assert.equal(svc.services.length, services.length);
-  for (const s of svc.services) assert.ok(existsSync(fileFor(new URL(s.url).pathname)), `${s.url} is a real page`);
+  assert.equal(svc.name, BRAND);
+  assert.equal(svc.capabilities.length, services.length);
+  for (const s of svc.capabilities) assert.ok(existsSync(fileFor(new URL(s.url).pathname)), `${s.url} is a real page`);
+
+  const full = raw('llms-full.txt');
+  assert.match(full, /^# S\. Meredith Plumbing & Heating\n\n> /);
+  for (const s of services) assert.ok(full.includes(s.title) && full.includes(`${ORIGIN}/services/${s.slug}/`), `llms-full.txt covers ${s.slug}`);
+  assert.ok(full.includes(homeFaqs()[0].a), 'llms-full.txt carries the FAQ');
+  assert.ok(full.split(/\s+/).length > llms.split(/\s+/).length, 'llms-full.txt is the longer one');
+  assert.match(llms, /^## Optional$/m);
+  assert.ok(llms.includes(`${ORIGIN}/llms-full.txt`), 'llms.txt points at llms-full.txt');
 
   const faq = JSON.parse(raw('ai/faq.json'));
   const homeText = visibleText(page('/'));
@@ -391,7 +401,8 @@ test('GEO: llms.txt, ai.txt, /ai/*.json and the feed are built from the site dat
 
 test('GEO: robots.txt welcomes the named AI crawlers and never blocks the site', () => {
   const robots = raw('robots.txt');
-  for (const bot of ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'PerplexityBot', 'Google-Extended']) {
+  // The first five are the audit tool's citation bots: each needs its own User-agent line, not just the "*" rule.
+  for (const bot of ['Googlebot', 'Applebot', 'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Google-Extended']) {
     assert.match(robots, new RegExp(`^User-agent: ${bot}$`, 'm'), `${bot} is named`);
   }
   assert.doesNotMatch(robots, /^Disallow:\s*\/\s*$/m, 'the repo robots.txt never disallows the whole site');
@@ -405,9 +416,15 @@ test("GEO: home images all carry descriptive alt text; the owner's first name is
     const alt = decode((img.match(/\salt="([^"]*)"/) || [, ''])[1]);
     assert.ok(alt.length >= 10, `descriptive alt needed: ${img}`);
   }
-  const words = visibleText(html).toLowerCase().match(/[a-z']+/g);
-  const density = (words.filter((w) => w === 'shane').length / words.length) * 100;
-  assert.ok(density < 3, `"shane" is ${density.toFixed(2)}% of the home page words (limit 3%)`);
+  // The audit tool flags any single non-brand word above 2.5% of the page's 4+ letter words (and used 5+ times).
+  // Its stop-word list is longer than this one, so this guard watches the words this page actually leans on.
+  const body = html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<style[\s\S]*?<\/style>/g, ' ').replace(/<noscript[\s\S]*?<\/noscript>/g, ' ');
+  const words = decode(body.replace(/<[^>]+>/g, ' ')).toLowerCase().match(/\b[a-z]{4,}\b/g);
+  for (const word of ['service', 'shane', 'call', 'request', 'owner']) {
+    const density = (words.filter((w) => w === word).length / words.length) * 100;
+    assert.ok(density <= 2.4, `"${word}" is ${density.toFixed(2)}% of the home page words (the audit flags above 2.5%)`);
+  }
+  assert.match(html, /<h3\b/, 'a real H3 sits under the H2s (the audit wants H2 and H3 together)');
 });
 
 test('GEO: review-region links to the platform that hosts the reviews are rel="nofollow ugc"', () => {

@@ -68,7 +68,7 @@ const faqs = homeFaqs();
     <section class="section" id="services" aria-labelledby="need-h">
       <div class="container">
         <h2 class="section-title" id="need-h">What do you need?</h2>
-        <p class="section-note">Tap a service and the request form opens with it already chosen. Details shows what each one covers.</p>
+        <p class="section-note">Tap a row and the request form opens with it already chosen. Details shows what each one covers.</p>
         <ul class="vanlist">
           {rows.map((r) => (
             <li>
@@ -112,12 +112,12 @@ const faqs = homeFaqs();
           <figcaption class="meet-tag"><strong>Shane Meredith</strong><span>Owner · MA master plumber</span></figcaption>
         </figure>
         <div class="meet-copy">
-          <h2 class="section-title" id="meet-h">Meet Shane</h2>
-          <p class="meet-lede">Shane Meredith runs S. Meredith Plumbing &amp; Heating personally. You call, Shane answers.</p>
+          <h2 class="section-title" id="meet-h">Meet your plumber</h2>
+          <p class="meet-lede">He runs S. Meredith Plumbing &amp; Heating personally. You call, he answers.</p>
           <ul class="meet-facts">
             <li>Massachusetts master plumber, license 9630040-PL-M</li>
             <li>Owner-operated, based in Saugus</li>
-            <li>24/7 emergency service</li>
+            <li>24/7 emergency services</li>
           </ul>
           <div class="actions">
             <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
@@ -138,9 +138,10 @@ const faqs = homeFaqs();
         </figure>
         <div class="job-copy">
           <h2 class="section-title" id="job-h">A recent job</h2>
+          <h3 class="job-title">{job.title}</h3>
           <p>{job.desc}</p>
           <div class="actions">
-            <a class="btn btn-primary" href={request('water-heater-replacement')}>Request water heater service</a>
+            <a class="btn btn-primary" href={request('water-heater-replacement')}>Request a water heater estimate</a>
             <a class="btn btn-secondary" href={`${base}work/`}>See more work</a>
           </div>
         </div>
@@ -152,7 +153,7 @@ const faqs = homeFaqs();
         <h2 class="section-title" id="area-h">Is your town covered?</h2>
         <p class="section-note">Based in Saugus. Enter your ZIP code to see the area on a map and what to do next.</p>
         <ServiceAreaChecker showMap={false} />
-        <p class="more-link"><a href={`${base}service-area/`}>Full service area and map</a></p>
+        <p class="more-link"><a href={`${base}service-area/`}>Full list of towns and map</a></p>
       </div>
     </section>
 
@@ -167,7 +168,7 @@ const faqs = homeFaqs();
             </details>
           ))}
         </div>
-        <p class="more-link">More answers are on each <a href={`${base}services/`}>service page</a>.</p>
+        <p class="more-link">More answers are on each page under <a href={`${base}services/`}>Services</a>.</p>
       </div>
     </section>
 
@@ -182,7 +183,7 @@ const faqs = homeFaqs();
         </div>
         <ul class="contact-meta">
           <li><span class="lbl">Email</span><a href={`mailto:${publicEmail}`}>{publicEmail}</a></li>
-          <li><span class="lbl">Hours</span>24/7 emergency service</li>
+          <li><span class="lbl">Hours</span>24/7 emergency services</li>
           <li><span class="lbl">Area</span>Saugus, the North Shore &amp; Boston</li>
         </ul>
       </div>
@@ -228,6 +229,7 @@ const faqs = homeFaqs();
   .job { display: grid; gap: 1.25rem; align-items: center; }
   .job-photo { margin: 0; }
   .job-photo img { width: 100%; max-width: 22rem; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--radius-sm); }
+  .job-title { font-size: 1.2rem; margin: .5rem 0 .35rem; }
   .job-copy p { margin: 0 0 1rem; max-width: 32rem; }
   @media (min-width: 768px) {
     .job { grid-template-columns: 22rem 1fr; gap: 3rem; }

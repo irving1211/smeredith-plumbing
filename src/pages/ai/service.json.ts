@@ -3,14 +3,18 @@ import services from '../../services.json';
 import { TOWNS } from '../../lib/service-area.js';
 import { SITE, BUSINESS, UPDATED } from '../../lib/site-facts.js';
 
-// /ai/service.json: each service the company offers, with its page, a one-line summary and the situations it covers.
+// /ai/service.json: what the company can do, one capability per service, each with its page, a one-line summary and the
+// situations it covers. Shape follows the AI-discovery convention: top-level name + a non-empty capabilities list.
 export const GET: APIRoute = () => {
   const body = {
-    provider: { name: BUSINESS.name, url: `${SITE}/`, phone: BUSINESS.phone },
+    name: BUSINESS.name,
+    url: `${SITE}/`,
+    description: BUSINESS.summary,
+    phone: BUSINESS.phone,
     areaServed: TOWNS.map((t) => `${t.name}, ${BUSINESS.region}`),
     emergencyService: BUSINESS.hours,
     dateModified: UPDATED,
-    services: services.map((s) => ({
+    capabilities: services.map((s) => ({
       name: s.title,
       url: `${SITE}/services/${s.slug}/`,
       summary: s.meta_desc,

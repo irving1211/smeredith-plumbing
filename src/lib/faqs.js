@@ -6,14 +6,14 @@ import { BUSINESS } from './site-facts.js';
 export const homeFaqs = () => [
   {
     q: 'Who answers the phone?',
-    a: `${BUSINESS.owner}, the owner. ${BUSINESS.name} is owner-operated, so you reach the owner directly. Call or text ${BUSINESS.phone}, or send a request and he will follow up.`,
+    a: `${BUSINESS.owner}. ${BUSINESS.name} is owner-operated, so you reach him directly. Phone or text ${BUSINESS.phone}, or send a request and he will follow up.`,
   },
   {
     q: 'What areas do you serve?',
-    a: `Based in ${BUSINESS.locality}, ${BUSINESS.region}, the company serves ${TOWNS.map((t) => t.name).join(', ')}. If your town is not on that list, call or send a request to confirm availability.`,
+    a: `Based in ${BUSINESS.locality}, ${BUSINESS.region}, the company serves ${TOWNS.map((t) => t.name).join(', ')}. If your town is not on that list, phone or send a request to confirm availability.`,
   },
   {
     q: 'Are you licensed?',
-    a: `Yes. ${BUSINESS.owner} holds ${BUSINESS.license}.`,
+    a: `Yes, ${BUSINESS.license}.`,
   },
 ];

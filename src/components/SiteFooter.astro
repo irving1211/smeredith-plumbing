@@ -25,14 +25,14 @@ const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
       <a href={`${base}services/`}>Services</a>
       <a href={`${base}work/`}>Our work</a>
       <a href={`${base}about/`}>About</a>
-      <a href={`${base}service-area/`}>Service area</a>
-      <a href={`${base}contact/`}>Request service</a>
+      <a href={`${base}service-area/`}>Areas we serve</a>
+      <a href={`${base}contact/`}>Contact</a>
       {privacyPublished && <a href={`${base}privacy/`}>Privacy</a>}
     </nav>
     <div class="footer-contact">
       <a class="footer-phone" href={`tel:${phoneTel}`}>{phone}</a>
       <a href={`mailto:${publicEmail}`}>{publicEmail}</a>
-      <p>24/7 emergency service</p>
+      <p>24/7 emergency services</p>
       <p class="footer-social"><a href={facebookUrl} rel="noopener" target="_blank">Facebook</a> · <a href={instagramUrl} rel="noopener" target="_blank">Instagram</a></p>
     </div>
     <p class="footer-fineprint">© {new Date().getFullYear()} S. Meredith Plumbing &amp; Heating · Updated <time datetime={UPDATED}>{formatDate(UPDATED)}</time></p>

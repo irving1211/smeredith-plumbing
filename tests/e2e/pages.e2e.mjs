@@ -146,7 +146,7 @@ describe('header menu on a phone', () => {
     assert.equal(await page.locator('.menu-panel').isVisible(), false);
     await page.click('.menu > summary');
     assert.equal(await page.locator('.menu-panel').isVisible(), true);
-    assert.deepEqual(await page.locator('.menu-panel a').allTextContents(), ['Services', 'Our work', 'About', 'Service area', 'Request service']);
+    assert.deepEqual(await page.locator('.menu-panel a').allTextContents(), ['Services', 'Our work', 'About', 'Areas we serve', 'Request service']);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('.menu-panel').isVisible(), false);
     assert.equal(await page.evaluate(() => document.activeElement.tagName), 'SUMMARY', 'focus returns to the Menu button');
@@ -165,7 +165,7 @@ describe('header menu on a phone', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/about/`);
     assert.equal(await page.locator('.menu').isVisible(), false);
-    assert.deepEqual(await page.locator('.header-nav a').allTextContents(), ['Services', 'Our work', 'About', 'Service area']);
+    assert.deepEqual(await page.locator('.header-nav a').allTextContents(), ['Services', 'Our work', 'About', 'Areas we serve']);
     assert.equal(await page.locator('.header-nav a[aria-current="page"]').textContent(), 'About');
     await context.close();
   });

@@ -24,8 +24,8 @@ const pick = (name: string, excerpt: string) => {
   return { name, text: excerpt };
 };
 const texts = [
-  pick('Daniel M.', 'Shane said “I can fix it,” and he did.'),
-  pick('Carly C.', 'Shane came out quickly and replaced the water heater without any delays.'),
+  pick('Daniel M.', '“I can fix it,” and he did.'),
+  pick('Carly C.', 'replaced the water heater without any delays.'),
   pick('Luke B.', 'he arrived exactly when he said he would.'),
 ];
 const handset = 'M0 28 C 0 12 12 2 30 0 L 90 0 C 108 2 120 12 120 28 L 120 34 Q 120 40 114 40 L 92 40 Q 86 40 86 34 L 86 24 Q 86 18 80 18 L 40 18 Q 34 18 34 24 L 34 34 Q 34 40 28 40 L 6 40 Q 0 40 0 34 Z';
@@ -40,7 +40,7 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
         <span class="hc-banner-text"><strong>Shane Meredith</strong><span>781-820-4592</span></span>
         <span class="hc-bslot" aria-hidden="true"></span>
         <span class="hc-bkey hc-bkey-answer" aria-hidden="true"><svg viewBox="-4 -14 128 68"><path d={handset} transform="rotate(180 60 20)" /></svg></span>
-        <span class="visually-hidden">Call now</span>
+        <span class="visually-hidden">Phone now</span>
       </a>
       <button type="button" class="hc-bkey hc-bkey-decline js-only" data-hc-dismiss aria-label="Hide this call banner">
         <svg viewBox="-4 -14 128 68" aria-hidden="true"><path d={handset} transform="rotate(135 60 20)" /></svg>
@@ -70,7 +70,7 @@ const bars = [0.35, 0.6, 0.9, 0.5, 0.75, 1, 0.55, 0.8, 0.4, 0.95, 0.65, 0.3, 0.7
             <div class="hc-head">
               <span class="hc-ava hc-ava-sm"><picture><source type="image/avif" srcset={logoAvif} /><img src={logoWebp} alt={logoAlt} width="240" height="237" /></picture></span>
               <div>
-                <p class="hc-name hc-name-sm">Shane Meredith</p>
+                <p class="hc-name hc-name-sm">S. Meredith</p>
                 <p class="hc-on"><i></i>On the line</p>
               </div>
             </div>
