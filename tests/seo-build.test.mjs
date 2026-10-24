@@ -444,3 +444,12 @@ test('footer: pages that end on the dark call-to-action band close the cream gap
   // The rule lives in the footer component's CSS; the browser-level proof is in tests/e2e/pages.e2e.mjs.
   assert.match(page('/'), /main:has\(>\s*\.band\.on-dark:last-child\)\s*~\s*\.site-footer[^{]*\{[^}]*margin-top:\s*0/);
 });
+
+test('performance: every published photo is web-sized (the 12-megapixel phone originals were 2-2.7 MB each and drew ~1 GB of downloads in 30 days)', () => {
+  const big = [];
+  const walk = (dir) => readdirSync(dir).flatMap((n) => (statSync(join(dir, n)).isDirectory() ? walk(join(dir, n)) : [join(dir, n)]));
+  for (const file of walk(join(dist, 'images'))) {
+    if (/\.(jpe?g|png)$/i.test(file) && statSync(file).size > 500_000) big.push(`${relative(dist, file)} ${(statSync(file).size / 1024).toFixed(0)} KB`);
+  }
+  assert.deepEqual(big, [], 'resize before adding: longest side 1600 px, JPEG quality ~78 (see README)');
+});

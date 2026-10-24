@@ -34,7 +34,9 @@ Build-time settings (`PUBLIC_*`) must be in the shell that runs `astro build`; t
 | `npm run build:zip` | rebuild the ZIP lookup data from Census files |
 | `npm run build:geo` | rebuild the service-area outline from Census boundaries |
 | `node scripts/strip-gps.mjs [--check]` | remove GPS location data from published photos (a test fails if any photo has it) |
-| `npm run optimize:images` | regenerate job photo sizes |
+| `npm run optimize:images` | regenerate job photo sizes (900 px and 480 px WebP; the pages use these) |
+
+**Job photo originals** (`public/images/jobs/*/shot-N.jpg`) are not used by any page, but Google Images and Facebook link crawlers still request those URLs, so they stay. Keep each one at 1600 px on the long side, JPEG quality about 78 (about 150-300 KB). Raw 12-megapixel phone photos were 2-2.7 MB each and drew over 1 GB of downloads in 30 days (Cloudflare analytics, 2026-10-24); on 2026-10-24 17 of them were shrunk in place from 36 MB to 9 MB total. A test fails if any published image is over 500 KB.
 
 ## Where things live
 
