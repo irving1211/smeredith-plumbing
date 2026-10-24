@@ -22,8 +22,9 @@ const INDEXABLE = [
   '/work/',
   '/about/',
   '/contact/',
+  '/privacy/', // published by default since 2026-10-24 (src/lib/privacy.js)
 ];
-const NOINDEX = ['/contact/thanks/', '/404.html', '/privacy/'];
+const NOINDEX = ['/contact/thanks/', '/404.html'];
 
 function fileFor(path) {
   if (path.endsWith('.html')) return join(dist, path);
@@ -458,4 +459,18 @@ test('performance: every published photo is web-sized (the 12-megapixel phone or
     if (/\.(jpe?g|png)$/i.test(file) && statSync(file).size > 500_000) big.push(`${relative(dist, file)} ${(statSync(file).size / 1024).toFixed(0)} KB`);
   }
   assert.deepEqual(big, [], 'resize before adding: longest side 1600 px, JPEG quality ~78 (see README)');
+});
+
+test('legal: every page shows the license TYPE and number (248 CMR 3.06(2)(e)); no separate gas-fitter license is claimed', () => {
+  for (const path of [...INDEXABLE, ...NOINDEX]) {
+    const text = visibleText(readFileSync(fileFor(path), 'utf8'));
+    assert.match(text, /master plumber/i, `${path} names the license type`);
+    assert.match(text, /9630040-PL-M/, `${path} shows the license number`);
+  }
+  const plumber = jsonLd(page('/')).find((b) => b['@type'] === 'Plumber');
+  assert.match(plumber.hasCredential.name, /Master Plumber license 9630040-PL-M/);
+  // The Board's fact sheet: a master plumber license covers gas fitting. A SEPARATE gas-fitter license may only be claimed with its own number.
+  for (const file of [...allHtmlFiles(), ...['llms.txt', 'llms-full.txt', 'ai/service.json', 'ai/summary.json', 'ai/faq.json'].map((f) => join(dist, f))]) {
+    assert.doesNotMatch(readFileSync(file, 'utf8'), /licensed (massachusetts )?(plumber and )?gas fitter/i, `${file} claims a gas-fitter license`);
+  }
 });

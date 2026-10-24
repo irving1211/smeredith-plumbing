@@ -215,14 +215,17 @@ test('priority service pages answer real customer questions without prices, prom
   for (const slug of ['gas-installation', 'emergency-plumbing']) assert.doesNotMatch(page(`/services/${slug}`), /<section class="homeowner-qa"/);
 });
 
-test('the privacy notice is prepared but unpublished: noindex, not in the sitemap, linked from nowhere', () => {
+test('the privacy notice is published (approved by Irving for Shane, 2026-10-24): indexable, in the sitemap, linked from the footer of every page and from the request form', () => {
   const html = page('/privacy');
-  assert.match(html, /<meta name="robots" content="noindex/);
-  assert.doesNotMatch(readFileSync(join(dist, 'sitemap.xml'), 'utf8'), /privacy/);
+  assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/smeredithplumbing\.com\/privacy\/"/);
+  assert.match(readFileSync(join(dist, 'sitemap.xml'), 'utf8'), /<loc>https:\/\/smeredithplumbing\.com\/privacy\/<\/loc>/);
   for (const file of allHtml()) {
     if (file.endsWith(join('privacy', 'index.html'))) continue;
-    assert.doesNotMatch(readFileSync(file, 'utf8'), /href="\/privacy\/"/, `${file} links to the unpublished notice`);
+    const text = readFileSync(file, 'utf8');
+    if (/<footer class="site-footer/.test(text)) assert.match(text, /<a href="\/privacy\/"[^>]*>Privacy<\/a>/, `${file} footer links to the privacy notice`);
   }
+  assert.match(page('/contact'), /What you enter is emailed to Shane[\s\S]{0,80}<a href="\/privacy\/"[^>]*>Privacy notice<\/a>/, 'the form links to the notice');
 });
 
 test('the privacy notice describes what this build really does, and nothing it does not do', () => {

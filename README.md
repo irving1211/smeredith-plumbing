@@ -62,13 +62,22 @@ Service ids (`emergency-plumbing`, `water-heater-replacement`, `boiler-service`,
 
 | Feature | Build setting | Also needs |
 |---|---|---|
-| Google Analytics 4 (**ON by default since 2026-10-24**; property `G-27Q90RBC50`, set in `src/lib/analytics.js`) | `PUBLIC_GA4_ID=off` disables it for one build; `PUBLIC_GA4_ID=G-XXXX` swaps the property; `PUBLIC_GTM_ID` replaces direct gtag. It only sends from `smeredithplumbing.com` / `www.`: tests, local dev and `*.pages.dev` previews never reach Google. | **Still open:** Shane approves and publishes the privacy notice (`PUBLIC_PRIVACY_PUBLISHED=1`, Google's terms expect it), and the property is moved to / shared with Shane's account (Admin > Property access management). In GA mark `generate_lead`, `phone_click` and `request_form_click` as key events once they appear. |
-| Privacy notice (page, sitemap, footer and form links) | `PUBLIC_PRIVACY_PUBLISHED=1` | Shane's approval of the wording |
+| Google Analytics 4 (**ON by default since 2026-10-24**; property `G-27Q90RBC50`, set in `src/lib/analytics.js`) | `PUBLIC_GA4_ID=off` disables it for one build; `PUBLIC_GA4_ID=G-XXXX` swaps the property; `PUBLIC_GTM_ID` replaces direct gtag. It only sends from `smeredithplumbing.com` / `www.`: tests, local dev and `*.pages.dev` previews never reach Google. | **Still open:** the property is moved to / shared with Shane's account (Admin > Property access management). In GA mark `generate_lead`, `phone_click` and `request_form_click` as key events once they appear. |
+| Privacy notice (page, sitemap, footer and form links) (**PUBLISHED by default since 2026-10-24**: Irving approved the wording on Shane's behalf; Google Analytics expects one) | `PUBLIC_PRIVACY_PUBLISHED=0` withdraws it for one build (noindex, out of the sitemap, unlinked); logic in `src/lib/privacy.js` | Update the "Last updated" date in `src/pages/privacy.astro` whenever its wording changes |
 | Interactive Google map (on request, on the Service area page) | `PUBLIC_GOOGLE_MAPS_KEY` | billing enabled, key restricted to the site, quota alert |
 | Live Google reviews (About page) | `PUBLIC_REVIEWS_LIVE=1` | Google Business Profile API approval and the `GBP_*` Pages secrets |
 | Cloudflare Turnstile on the form | `PUBLIC_TURNSTILE_SITE_KEY` | `TURNSTILE_SECRET_KEY` Pages secret (set both together) |
 
 Server secrets: `RESEND_API_KEY` (and optional `RESEND_FROM_EMAIL`), `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `CONTACT_MAIL_PROVIDER` (see `cloudflare-mail.env.example`). Without a configured provider the form reports a delivery failure honestly and offers call, text and email.
+
+## Massachusetts legal notes (researched 2026-10-24; not legal advice, confirm with the Board or an attorney)
+
+- **License type AND number on every ad or listing** (Board consumer fact sheet; 248 CMR 3.06(2)(e)): the site shows "Master plumber, MA license 9630040-PL-M" in the footer of every page. The same must appear on the Google profile, Facebook, Instagram, the van, estimates and invoices. A test enforces it on the site.
+- **Gas work:** per the Board's fact sheet a licensed master or journeyman *plumber* may perform gas fitter work, so Shane's master plumber license covers it; the site must not claim a *separate* "licensed gas fitter" license unless Shane has one and gives its number (a test enforces this).
+- **Home improvement contractor (HIC) registration, M.G.L. c.142A:** residential repair/renovation of owner-occupied 1-4 unit homes needs registration, and ads must show the registration number (§17(8)). Licensed plumbers are exempt only when acting "exclusively within the scope of the profession for which they are currently licensed" (§14). Plumbing, gas and boiler work is within scope; tile, framing or general remodel work is not. **Open question for Shane:** does he or his company perform any non-plumbing remodel work? If yes, he needs an HIC registration and its number on the site. The site wording stays "plumbing for remodels".
+- **Claims must be true** (M.G.L. c.93A; 248 CMR 3.06(2)(a),(d)): no "insured" claim until Shane supplies a certificate of insurance (permit applicants do attest to liability insurance or a homeowner waiver, which is not the same as proof for advertising).
+- **Privacy:** no Massachusetts comprehensive privacy law was in force as of the June 2026 sources found (House and Senate bills in conference); 201 CMR 17.00 (written information security program) applies to any business holding name + SSN / driver's license / financial account numbers, which this site does not collect. Recheck the privacy bill.
+- **Texting customers** (review requests, missed-call text-back): needs customer consent, an opt-out, and carrier registration (A2P 10DLC); Massachusetts is an all-party-consent state for recording calls, so any call-recording feature must announce itself.
 
 ## Rules that are enforced by tests
 

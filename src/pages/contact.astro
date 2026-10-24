@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import serviceOptions from '../service-options.json';
 import heardAbout from '../heard-about.json';
 import { TOWNS } from '../lib/service-area.js';
+import { isPrivacyPublished } from '../lib/privacy.js';
 import { DEFAULT_PLACEHOLDER, ISSUE_SATISFIES_DESCRIPTION, NON_ANSWERS, TIMING, announceFor, fieldName, placeholderFor, questionsFor } from '../lib/request-questions.js';
 import questionData from '../request-questions.json';
 
@@ -18,7 +19,7 @@ const townNames = Object.fromEntries(TOWNS.map((t) => [t.slug, t.name]));
 // Optional bot protection. Renders only when a Turnstile site key is present at build time AND the
 // Pages secret TURNSTILE_SECRET_KEY is set (see docs). Off by default: no third-party script loads.
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '';
-const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
+const privacyPublished = isPrivacyPublished(import.meta.env);
 
 // Tile order: the emergency tile first (it is full width), then Shane's priority work, then the catch-alls.
 const tileOrder = ['water-heater-replacement', 'boiler-service', 'kitchen-bath-remodels', 'new-construction-plumbing', 'gas-installation', 'general-plumbing', 'not-sure', 'other'];

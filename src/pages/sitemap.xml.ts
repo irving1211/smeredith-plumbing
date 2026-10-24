@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import services from '../services.json';
 import areas from '../areas.json';
+import { isPrivacyPublished } from '../lib/privacy.js';
 
 // Indexable pages only. Utility pages (thank-you, 404) are excluded. No <lastmod>:
 // a build date is not a content-change date, and a fabricated lastmod gets ignored.
@@ -25,8 +26,8 @@ export const GET: APIRoute = ({ site }) => {
     { loc: `${origin}${base}/work/`, priority: '0.7', changefreq: 'monthly' },
     { loc: `${origin}${base}/about/`, priority: '0.7', changefreq: 'monthly' },
     { loc: `${origin}${base}/contact/`, priority: '0.7', changefreq: 'monthly' },
-    // The privacy notice joins the sitemap only once Shane has approved it (PUBLIC_PRIVACY_PUBLISHED=1).
-    ...(import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1' ? [{ loc: `${origin}${base}/privacy/`, priority: '0.3', changefreq: 'yearly' }] : []),
+    // The privacy notice is in the sitemap while it is published (the default; PUBLIC_PRIVACY_PUBLISHED=0 withdraws it).
+    ...(isPrivacyPublished(import.meta.env) ? [{ loc: `${origin}${base}/privacy/`, priority: '0.3', changefreq: 'yearly' }] : []),
   ];
 
   const xml =

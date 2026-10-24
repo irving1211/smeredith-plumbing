@@ -1,5 +1,6 @@
 ---
 import { UPDATED, formatDate } from '../lib/site-facts.js';
+import { isPrivacyPublished } from '../lib/privacy.js';
 
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
@@ -8,7 +9,7 @@ const publicEmail = 'shane@smeredithplumbing.com';
 const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
 const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
 const builderInstagramUrl = 'https://www.instagram.com/icbizsystems/';
-const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
+const privacyPublished = isPrivacyPublished(import.meta.env);
 ---
 
 <footer class="site-footer on-dark">
@@ -18,7 +19,7 @@ const privacyPublished = import.meta.env.PUBLIC_PRIVACY_PUBLISHED === '1';
       <p>
         <strong>S. Meredith Plumbing &amp; Heating</strong>
         Saugus, MA<br />
-        MA Lic. 9630040-PL-M · Owner-operated
+        Master plumber · MA Lic. 9630040-PL-M · Owner-operated
       </p>
     </div>
     <nav class="footer-links" aria-label="Footer">
