@@ -457,10 +457,11 @@
       },
       {
         "src": "/images/jobs/peabody-vanity-swap/shot-2-900.webp",
-        "width": 900,
+        "width": 896,
         "height": 1200,
         "original": "/images/jobs/peabody-vanity-swap/shot-2.jpg",
-        "alt": "New dark vanity with a black faucet"
+        "alt": "New dark vanity with a black faucet",
+        "edited": "Widened with Google Flow (surroundings only). The untouched photo is in the vault harvest folder."
       }
     ]
   },
@@ -880,9 +881,10 @@
       {
         "src": "/images/jobs/frost-free-hose-bib-swap/shot-1-900.webp",
         "width": 900,
-        "height": 900,
+        "height": 672,
         "original": "/images/jobs/frost-free-hose-bib-swap/shot-1.jpg",
-        "alt": "New frost-free hose bib on vinyl siding"
+        "alt": "New frost-free hose bib on vinyl siding",
+        "edited": "Widened with Google Flow (surroundings only). The untouched photo is in the vault harvest folder."
       },
       {
         "src": "/images/jobs/frost-free-hose-bib-swap/shot-2-900.webp",

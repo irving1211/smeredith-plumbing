@@ -13,7 +13,7 @@ const WIDTH = 900;
 for (const job of jobs) {
   const originals = job.photos?.map((p) => p.original) ?? job.images;
   // Hand-written fields on a photo (alt text) survive regeneration.
-  const extras = new Map((job.photos ?? []).map((p) => [p.original, p.alt ? { alt: p.alt } : {}]));
+  const extras = new Map((job.photos ?? []).map((p) => [p.original, { ...(p.alt ? { alt: p.alt } : {}), ...(p.edited ? { edited: p.edited } : {}) }]));
   job.photos = [];
   for (const original of originals) {
     const input = join(root, 'public', original);
