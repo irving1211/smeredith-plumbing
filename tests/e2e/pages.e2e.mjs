@@ -197,7 +197,17 @@ describe('the pages that took over the long homepage sections', () => {
     assert.deepEqual(broken, []);
     const links = await page.locator('main .group-actions .btn-primary').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
     assert.deepEqual(links, ['/contact/?service=water-heater-replacement', '/contact/?service=boiler-service', '/contact/?service=kitchen-bath-remodels', '/contact/?service=general-plumbing']);
-    assert.equal(await page.locator('.photo-strip').first().getAttribute('tabindex'), '0', 'a scrolling photo row can be reached by keyboard');
+    // No sideways-scrolling photo rows: every photo of a job is visible at once, and a tap opens a larger view.
+    const scrollers = await page.locator('main *').evaluateAll((els) => els.filter((e) => ['auto', 'scroll'].includes(getComputedStyle(e).overflowX) && e.scrollWidth > e.clientWidth + 1).map((e) => e.className));
+    assert.deepEqual(scrollers, [], 'no element scrolls sideways');
+    const lead = page.locator('.job-media a[data-lightbox]').first();
+    await lead.scrollIntoViewIfNeeded();
+    await lead.click();
+    assert.equal(await page.locator('#lightbox').evaluate((d) => d.open), true, 'tapping a photo opens the viewer');
+    assert.ok((await page.locator('#lightbox .lb-img').getAttribute('src')).endsWith('.webp'));
+    assert.ok((await page.locator('#lightbox .lb-img').getAttribute('alt')).length > 5, 'the enlarged photo keeps its description');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#lightbox').evaluate((d) => d.open), false, 'Escape closes the viewer');
     await context.close();
   });
 
