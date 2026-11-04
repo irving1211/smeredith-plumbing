@@ -3,6 +3,7 @@
 // sections, navigation, checker and footer; only the hero (passed in the "hero" slot) changes. The hero is a slot, not
 // a prop, so each page bundles only its own hero's CSS.
 import Base from '../layouts/Base.astro';
+import { BUSINESS } from '../lib/site-facts.js';
 import jobsRaw from '../jobs.json';
 import services from '../services.json';
 import serviceOptions from '../service-options.json';
@@ -22,7 +23,7 @@ const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const publicEmail = 'shane@smeredithplumbing.com';
 const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
-const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
+const googleReviewsUrl = BUSINESS.googleProfile; // public Google Business Profile (Maps CID), src/lib/site-facts.js
 const request = (service = '') => `${base}contact/${service ? `?service=${service}` : ''}`;
 
 // Shane's own list from the van, in the order that matches the work he wants most. Each row opens the

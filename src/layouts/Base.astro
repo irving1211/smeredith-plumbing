@@ -54,8 +54,11 @@ const business = 'S. Meredith Plumbing & Heating';
 const areaServed = TOWNS.map((t) => t.name);
 
 // Service-area business: locality only, never a street address. No aggregateRating/review markup
-// (self-serving LocalBusiness reviews are not eligible for review snippets) and no regular
-// openingHours until Shane confirms routine hours beyond 24/7 emergency availability.
+// (self-serving LocalBusiness reviews are not eligible for review snippets). This is the ONE business node
+// (Plumber is a LocalBusiness and so an Organization subtype): it also carries the logo, contact point and
+// profile links a separate Organization block used to repeat under the same @id.
+// Hours: 24 hours, 7 days, matching the public Google Business Profile ("Open 24 hours" every day, checked
+// logged out 2026-11-04) and the site's 24/7 wording. If the Google profile hours change, change these too.
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Plumber',
@@ -63,9 +66,16 @@ const localBusinessJsonLd = {
   name: business,
   url: `${site}/`,
   image: `${site}/images/logo.jpg`,
-  logo: `${site}/images/logo.jpg`,
+  logo: { '@type': 'ImageObject', url: `${site}/images/logo.jpg`, width: 1156, height: 1150 },
   telephone: '+1-781-820-4592',
   email: publicEmail,
+  contactPoint: [{ '@type': 'ContactPoint', contactType: 'customer service', telephone: BUSINESS.phoneE164, email: publicEmail, availableLanguage: 'English' }],
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '00:00',
+    closes: '23:59',
+  }],
   priceRange: '$$',
   description: 'Owner-operated plumbing and heating company based in Saugus, MA, serving the North Shore and Boston: water heaters, boilers, gas lines, remodel and new-construction plumbing, and 24/7 emergency service.',
   founder: { '@type': 'Person', name: 'Shane Meredith' },
@@ -100,24 +110,6 @@ const localBusinessJsonLd = {
 
 const base = import.meta.env.BASE_URL;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? site).href;
-
-// The same entity as the Plumber block above, stated as a plain Organization (same @id). JSON-LD merges nodes that
-// share an @id, so Google reads ONE business with both types; tools that read each block on its own also find an
-// Organization with name, url, logo, contact point, address and profile links.
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': `${site}/#business`,
-  name: business,
-  url: `${site}/`,
-  logo: { '@type': 'ImageObject', url: `${site}/images/logo.jpg`, width: 1156, height: 1150 },
-  telephone: BUSINESS.phoneE164,
-  email: publicEmail,
-  address: localBusinessJsonLd.address,
-  contactPoint: [{ '@type': 'ContactPoint', contactType: 'customer service', telephone: BUSINESS.phoneE164, email: publicEmail, availableLanguage: 'English' }],
-  founder: localBusinessJsonLd.founder,
-  sameAs: BUSINESS.sameAs,
-};
 
 // WebSite belongs on the home page only; WebPage (with the byline and the editorial dates) on every indexable page.
 const websiteJsonLd = pageType === 'home' && !noindex
@@ -193,7 +185,6 @@ const { id: ga4Id, hosts: ga4Hosts } = analyticsConfig(import.meta.env);
     <link rel="icon" type="image/png" href={`${base}images/logo-icon.png`} />
     <link rel="apple-touch-icon" href={`${base}images/logo-icon.png`} />
     <script type="application/ld+json" set:html={jsonLd(localBusinessJsonLd)} />
-    <script type="application/ld+json" set:html={jsonLd(organizationJsonLd)} />
     {websiteJsonLd && <script type="application/ld+json" set:html={jsonLd(websiteJsonLd)} />}
     {webPageJsonLd && <script type="application/ld+json" set:html={jsonLd(webPageJsonLd)} />}
     {faqJsonLd &&<script type="application/ld+json" set:html={jsonLd(faqJsonLd)} />}

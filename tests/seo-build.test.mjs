@@ -158,18 +158,26 @@ test('sitemap lists exactly the indexable URLs with no fabricated lastmod', () =
   assert.match(robots, /Sitemap: https:\/\/smeredithplumbing\.com\/sitemap\.xml/);
 });
 
-test('structured data: no self-serving review markup, no private address, no 24h regular hours', () => {
+test('structured data: no self-serving review markup, no private address, hours only as 24/7 on the business node', () => {
   for (const file of allHtmlFiles()) {
     const raw = readFileSync(file, 'utf8');
     for (const block of jsonLd(raw)) {
       const s = JSON.stringify(block);
       assert.doesNotMatch(s, /aggregateRating|"review"|"Review"/, `${file} has review markup`);
       assert.doesNotMatch(s, /streetAddress/, `${file} exposes a street address`);
-      assert.doesNotMatch(s, /openingHoursSpecification/, `${file} encodes regular hours`);
+      if (block['@type'] !== 'Plumber') assert.doesNotMatch(s, /openingHoursSpecification/, `${file}: hours outside the business node`);
     }
   }
   const business = jsonLd(page('/')).find((b) => b['@type'] === 'Plumber');
   assert.ok(business, 'Plumber schema present on home');
+  // Must match the public Google Business Profile, which shows "Open 24 hours" every day (checked 2026-11-04).
+  assert.deepEqual(business.openingHoursSpecification, [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '00:00',
+    closes: '23:59',
+  }]);
+  assert.ok(business.sameAs.includes('https://maps.google.com/?cid=1614689343180159048'), 'sameAs links the Google Business Profile');
   assert.equal(business.name, 'S. Meredith Plumbing & Heating');
   assert.equal(business.telephone, '+1-781-820-4592');
 });
@@ -319,11 +327,11 @@ const BRAND = 'S. Meredith Plumbing & Heating';
 const raw = (path) => readFileSync(join(dist, path), 'utf8');
 const { homeFaqs } = await import(new URL('../src/lib/faqs.js', import.meta.url));
 
-test('GEO: Organization, WebSite and WebPage schema carry name, logo, contact, byline and editorial dates', () => {
+test('GEO: one business node (Plumber), WebSite and WebPage schema carry name, logo, contact, byline and editorial dates', () => {
   const blocks = jsonLd(page('/'));
-  const plumber = blocks.find((b) => b['@type'] === 'Plumber');
-  const org = blocks.find((b) => b['@type'] === 'Organization');
-  assert.ok(org, 'Organization schema present on home');
+  const org = blocks.find((b) => b['@type'] === 'Plumber');
+  assert.ok(org, 'Plumber (a LocalBusiness, so an Organization subtype) schema present on home');
+  assert.ok(!blocks.some((b) => b['@type'] === 'Organization'), 'no separate Organization node');
   assert.equal(org.name, BRAND);
   assert.equal(org.url, `${ORIGIN}/`);
   assert.equal(org.logo.url, `${ORIGIN}/images/logo.jpg`);
@@ -331,7 +339,15 @@ test('GEO: Organization, WebSite and WebPage schema carry name, logo, contact, b
   assert.equal(org.contactPoint[0].telephone, '+1-781-820-4592');
   assert.equal(org.address.addressLocality, 'Saugus');
   assert.ok(org.sameAs.length >= 2);
-  assert.equal(org['@id'], plumber['@id'], 'Organization and Plumber share an @id, so JSON-LD merges them into one entity');
+  assert.equal(org['@id'], `${ORIGIN}/#business`);
+  // Exactly one typed node per page declares the business @id; anything else (a service's provider) only references it.
+  const typedBusinessNodes = (o) => (o && typeof o === 'object'
+    ? (o['@id'] === `${ORIGIN}/#business` && o['@type'] ? 1 : 0) + Object.values(o).reduce((n, v) => n + typedBusinessNodes(v), 0)
+    : 0);
+  for (const file of allHtmlFiles()) {
+    const n = jsonLd(readFileSync(file, 'utf8')).reduce((sum, b) => sum + typedBusinessNodes(b), 0);
+    assert.equal(n, 1, `${file}: ${n} typed nodes declare the business @id`);
+  }
   assert.ok(blocks.some((b) => b['@type'] === 'WebSite' && b.name === BRAND), 'WebSite schema on home');
   assert.ok(!jsonLd(page('/about/')).some((b) => b['@type'] === 'WebSite'), 'WebSite belongs on the home page only');
   for (const path of INDEXABLE) {
@@ -436,7 +452,7 @@ test("GEO: home images all carry descriptive alt text; the owner's first name is
 
 test('GEO: review-region links to the platform that hosts the reviews are rel="nofollow ugc"', () => {
   for (const path of ['/', '/about/']) {
-    const links = page(path).match(/<a\b[^>]*href="https:\/\/share\.google\/[^"]*"[^>]*>/g) || [];
+    const links = page(path).match(/<a\b[^>]*href="https:\/\/maps\.google\.com\/\?cid=1614689343180159048"[^>]*>/g) || [];
     assert.ok(links.length >= 1, `${path} links to the Google reviews`);
     for (const a of links) assert.match(a, /rel="[^"]*\bugc\b[^"]*"/, `${path}: ${a}`);
   }

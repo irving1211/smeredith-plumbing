@@ -1,6 +1,7 @@
 ---
 import { jsonLd } from '../lib/jsonld.js';
 import Base from '../layouts/Base.astro';
+import { BUSINESS } from '../lib/site-facts.js';
 import LiveReviews from '../components/LiveReviews.astro';
 import reviewData from '../reviews.json';
 
@@ -12,7 +13,7 @@ const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — ')}`;
 const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
 const facebookUrl = 'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/';
 const instagramUrl = 'https://www.instagram.com/s.meredith_plumbing_heating/';
-const googleReviewsUrl = 'https://share.google/1tEzgdGC624rLynKF';
+const googleReviewsUrl = BUSINESS.googleProfile; // public Google Business Profile (Maps CID), src/lib/site-facts.js
 // Live Google reviews are built in only after Google approves Business Profile API access (see docs).
 const reviewsLive = import.meta.env.PUBLIC_REVIEWS_LIVE === '1';
 

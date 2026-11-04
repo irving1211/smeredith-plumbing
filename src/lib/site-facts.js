@@ -17,7 +17,11 @@ export const BUSINESS = {
   hours: '24/7 emergency service',
   tagline: 'The plumber who answers the phone.',
   summary: 'Owner-operated plumbing and heating company based in Saugus, MA, serving the North Shore and Boston: water heaters, boilers, gas lines, remodel and new-construction plumbing, and 24/7 emergency service.',
+  // Public Google Business Profile (Maps CID). Checked logged out 2026-11-04: "S. Meredith Plumbing and Heating",
+  // (781) 820-4592, Plumber, website smeredithplumbing.com, "Open 24 hours" every day.
+  googleProfile: 'https://maps.google.com/?cid=1614689343180159048',
   sameAs: [
+    'https://maps.google.com/?cid=1614689343180159048',
     'https://www.facebook.com/people/S-Meredith-Plumbing-Heating/61577781267131/',
     'https://www.instagram.com/s.meredith_plumbing_heating/',
   ],

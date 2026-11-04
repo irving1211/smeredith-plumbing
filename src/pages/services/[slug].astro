@@ -42,12 +42,8 @@ const serviceJsonLd = {
   name: service.title,
   description: service.meta_desc,
   url: pageUrl,
-  provider: {
-    '@type': 'Plumber',
-    '@id': `${origin}/#business`,
-    name: 'S. Meredith Plumbing & Heating',
-    telephone: '+1-781-820-4592',
-  },
+  // A reference to the one business node in the base layout (same page), not a second copy of it.
+  provider: { '@id': `${origin}/#business` },
   areaServed: approvedTowns.map((town) => ({ '@type': 'City', name: `${town}, MA` })),
 };
 
