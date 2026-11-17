@@ -277,7 +277,10 @@ describe('GA4 (built with a test property id; Google\'s script is stubbed)', () 
     const page = await context.newPage();
     await stubGoogle(page);
     await page.goto(`${origin}/services/boiler-service/`);
+    // A call tap must flush gtag's ~5 s batch at once (pagehide signal), or the dialer hand-off loses the event on phones.
+    await page.evaluate(() => { window.__flushes = 0; window.addEventListener('pagehide', () => { window.__flushes += 1; }); });
     await page.locator('.page-hero .hero-cta').getByRole('link', { name: /Call 781/ }).evaluate((el) => { el.addEventListener('click', (e) => e.preventDefault()); el.click(); });
+    assert.equal(await page.evaluate(() => window.__flushes), 1, 'the call tap asks gtag to send its queue immediately');
     await page.locator('.page-hero .hero-cta').getByRole('link', { name: /Request service online/ }).evaluate((el) => { el.addEventListener('click', (e) => e.preventDefault()); el.click(); });
     await page.waitForTimeout(200);
     const phone = gtag(events, 'event', 'phone_click')[0]['2'];
