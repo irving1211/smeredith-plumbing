@@ -29,7 +29,13 @@
         "b": "If you smell gas, leave the building and call the utility first — then call us for the repair side. Master plumber (MA license 9630040-PL-M), code-compliant repair, pressure-tested before sign-off."
       }
     ],
-    "guarantee": "Massachusetts master plumber, license 9630040-PL-M (a master plumber license also covers gas fitting work). Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job."
+    "guarantee": "Massachusetts master plumber, license 9630040-PL-M (a master plumber license also covers gas fitting work). Manufacturer warranties apply to the parts and equipment installed, and the workmanship is gone over in writing for each job.",
+    "qa": [
+      {
+        "q": "What should I do when there is no heat?",
+        "a": "Try the safe checks on the {{no-heat-emergency|no heat page}} first (thermostat, boiler switch, fuel, fault code), keep the pipes from freezing, then call. Shane takes emergency calls 24/7."
+      }
+    ]
   },
   {
     "slug": "water-heater-replacement",
@@ -92,32 +98,32 @@
   },
   {
     "slug": "boiler-service",
-    "title": "High-Efficiency Boiler Service & Replacement",
-    "seo_title": "Boiler Repair & Replacement in Saugus, MA | S. Meredith",
-    "h1": "Boiler repair & replacement, Saugus to Boston",
-    "tagline": "Service, repair and full replacements, with 24/7 emergency service when the heat goes out.",
-    "meta_desc": "Boiler service, repair and replacement from Saugus to Boston. Multi-zone systems, combi units and indirect tanks. Licensed, owner-operated. Call 781-820-4592.",
-    "intro": "Heat is not optional in January. Shane services and replaces high-efficiency boilers — cast iron and mod-con, multi-zone systems with indirect tanks, Combi units that handle heat and hot water on one box. When a boiler dies in a cold snap, call: emergency service is 24/7.",
+    "title": "Boiler Repair & Service",
+    "seo_title": "Boiler Repair & Service in Saugus, MA | S. Meredith",
+    "h1": "Boiler repair & service, Saugus to Boston",
+    "tagline": "No-heat calls, fault codes, circulators, combis and yearly service, with 24/7 emergency service when the heat goes out.",
+    "meta_desc": "Boiler repair and yearly service from Saugus to Boston: no-heat calls, fault codes, circulators, Navien combis and indirect tanks. 24/7. Call 781-820-4592.",
+    "intro": "Heat is not optional in January. Shane repairs and services boilers: cast iron and high-efficiency, gas and oil, multi-zone systems with indirect tanks, and combi units that handle heat and hot water in one box. When a boiler quits in a cold snap, call: emergency service is 24/7.",
     "scenarios": [
       {
         "h": "Annual cleaning and service",
-        "b": "Combustion analysis, electrode check, low-water cutoff test, fault code clearing. A clean boiler runs longer and uses less fuel. We tell you straight what's wear-and-tear vs. what's about to fail."
+        "b": "Combustion check, electrode check, low-water cutoff test, fault code clearing. A clean boiler runs longer and uses less fuel. You hear straight what is wear and tear and what is about to fail."
       },
       {
-        "h": "No-heat emergency",
-        "b": "Pilot out, ignitor failed, circulator stuck, zone valve, aquastat, low water. Most fixes are same-visit."
+        "h": "No-heat calls",
+        "b": "Ignitor, flame sensor, circulator, zone valve, aquastat, low water. The no-heat page has the safe checks to try before you call."
       },
       {
-        "h": "Full replacement",
-        "b": "Cast iron pull-and-swap, mod-con upgrade, Combi conversion. We size based on a Manual-J load, not the nameplate of the unit that died."
+        "h": "Combi boiler repair",
+        "b": "On a Lynn Navien combi, a failed three-way diverter valve wore out the internal circulator. Both parts were replaced under warranty."
       },
       {
-        "h": "Indirect-fired hot water tank",
-        "b": "Paired with the boiler for unlimited hot water at high efficiency. Better than a standalone tank for most multi-bath homes."
+        "h": "Indirect tank and zone problems",
+        "b": "Hot water but no heat, or heat but no hot water, often comes down to one zone: its valve, its circulator or the tank coil."
       },
       {
-        "h": "Multi-zone systems",
-        "b": "New zone added for an addition or finished basement. Zone valve, thermostat, piping, controls — done right the first time."
+        "h": "When repair stops making sense",
+        "b": "If the boiler keeps failing or leaks at the body, the boiler replacement page covers the options, including switching from oil to gas."
       }
     ],
     "guarantee": "Master plumber installs (MA license 9630040-PL-M). Manufacturer warranties apply to the boilers we install — we go over the warranty and the workmanship in writing before the job.",
@@ -146,14 +152,539 @@
           "Whether you want an indirect hot water tank with it.",
           "Removal of the old boiler, and any permit the job calls for."
         ],
-        "a": "Prices depend on the job, so none is published; ask Shane for a quote. If you have no heat right now, see the {{emergency-plumbing|emergency page}}."
+        "a": "Prices depend on the job, so none is published; ask Shane for a quote. More on replacing a boiler is on the {{boiler-replacement|boiler replacement page}}. If you have no heat right now, see {{no-heat-emergency|no heat}}."
       },
       {
         "q": "How often should a boiler be serviced?",
         "a": "Annual cleaning and service is the usual routine, and it is part of what Shane offers: a clean boiler runs longer and uses less fuel. Book it before the heating season rather than during a cold snap."
       }
     ],
-    "send_for_quote": "Send with your request: a photo of the boiler and its data label, your fuel (gas or oil), roughly how old it is if you know, the number of heating zones, and any fault code or symptom."
+    "send_for_quote": "Send with your request: a photo of the boiler and its data label, your fuel (gas or oil), roughly how old it is if you know, the number of heating zones, and any fault code or symptom.",
+    "hub": "heating",
+    "jobs_title": "Recent boiler repairs",
+    "jobs": [
+      "lynn-navien-combi-repair",
+      "boiler-circulator-and-indirect-zone",
+      "indirect-tank-replacement-80-gallon"
+    ]
+  },
+  {
+    "slug": "oil-to-gas-conversion",
+    "service_id": "boiler-service",
+    "hub": "heating",
+    "title": "Oil to Gas Heating Conversion",
+    "seo_title": "Oil to Gas Conversion, North Shore & Boston MA | S. Meredith",
+    "h1": "Oil to gas heating conversion, Saugus to Boston",
+    "tagline": "Shane's specialty. The boiler, the gas piping, the venting and the permits, explained plainly before you commit.",
+    "meta_desc": "Oil to gas heating conversion from Saugus to Boston by master plumber Shane Meredith: the steps, cost factors, 2026 rebate rules and answers. 781-820-4592.",
+    "intro": "Shane is the heat guy, and switching houses from oil to natural gas is his specialty. A conversion is more than a new boiler: gas has to reach the house, a gas line has to run to the equipment, the venting changes, the hot water may change, and the oil tank has to go. This page goes through each part, what changed in 2025 and 2026, and what moves the price, so you can decide with the facts in front of you.",
+    "scenarios_title": "What a conversion includes",
+    "scenarios": [
+      {
+        "h": "Checking gas on your street",
+        "b": "Whether gas is in front of the house decides the rest of the job. The gas company answers that: National Grid in most of Shane's towns, National Grid or Eversource in Boston and Somerville, and Wakefield Municipal Gas & Light in Wakefield."
+      },
+      {
+        "h": "A new gas boiler",
+        "b": "Many oil-heated houses north of Boston have a boiler. The usual choices are a high-efficiency gas boiler with an indirect tank for hot water, or a combi boiler that makes heat and hot water in one unit."
+      },
+      {
+        "h": "Gas piping inside the house",
+        "b": "From the new gas meter to the boiler, and to a water heater, range or dryer if you want those on gas too. Gas piping is pressure-tested and inspected under a gas permit from your town."
+      },
+      {
+        "h": "Venting and the chimney",
+        "b": "A high-efficiency gas boiler usually vents out the side wall with plastic pipe and does not use the chimney. A gas appliance that does use the chimney may need a liner. The town inspector has the final word."
+      },
+      {
+        "h": "Hot water",
+        "b": "Many oil boilers also make the hot water through a coil. After the switch, hot water comes from an indirect tank on the new boiler, from a combi boiler, or from a separate water heater."
+      },
+      {
+        "h": "The oil burner and tank",
+        "b": "The old equipment comes out. Removing an oil tank takes a permit from your town fire department."
+      }
+    ],
+    "steps_title": "How a conversion goes, step by step",
+    "steps": [
+      {
+        "h": "Send Shane what you have",
+        "b": "A photo of the boiler and its label, the oil tank, and the outside wall where a gas meter could go. Say whether you know if gas is on your street."
+      },
+      {
+        "h": "Confirm gas with the gas company",
+        "b": "National Grid asks homeowners to fill out its {{https://www.nationalgridus.com/MA-Home/Natural-Gas-Service/Connect-to-Natural-Gas|Natural Gas Availability Form}} and an Electrification Options Acknowledgment Form. It then quotes the service line from your meter location to the gas main, and a main extension if gas is not in front of the house."
+      },
+      {
+        "h": "Choose the equipment",
+        "b": "Shane goes through a high-efficiency boiler with an indirect tank, or a combi, for your house and the way you use hot water, then gives you a quote for the whole job."
+      },
+      {
+        "h": "Permits",
+        "b": "The gas piping is done under a gas permit and checked by the town gas inspector. Removing the oil tank is a separate fire department permit."
+      },
+      {
+        "h": "Install and switch over",
+        "b": "The new boiler is piped, vented and wired, the gas piping is pressure-tested, and the gas company sets the meter. Keep the old system working until the new one is ready, so the house is never without heat."
+      },
+      {
+        "h": "Old equipment out",
+        "b": "The oil burner and boiler come out, and the tank is removed under the fire department permit."
+      }
+    ],
+    "sections": [
+      {
+        "h": "Is converting from oil to gas worth it in 2026?",
+        "p": [
+          "It depends on the house, the age of your equipment and fuel prices, and nobody can honestly promise you a savings figure. Here is what is true this winter:"
+        ],
+        "list": [
+          "Heating oil in Massachusetts averaged about $6.23 a gallon in late October 2026, about 75% more than a year earlier ({{https://www.bostonglobe.com/2026/10/27/metro/high-heating-oil-energy-prices-winter-massachusetts/|Boston Globe}}).",
+          "Natural gas rose too: the Massachusetts residential average was $25.77 per thousand cubic feet in January 2026 and $32.10 in August 2026 ({{https://www.eia.gov/dnav/ng/hist/n3010ma3m.htm|U.S. Energy Information Administration}}).",
+          "Gas comes by pipe: no deliveries to schedule and no tank to run dry on a cold night.",
+          "The usual time to convert is when the oil boiler is old or failing anyway, so you pay for one new heating system instead of repairing the old one first."
+        ]
+      },
+      {
+        "h": "Will gas reach my house?",
+        "p": [
+          "Gas has to be in the street, or close to it. In Shane's towns the gas company is National Grid almost everywhere; parts of Boston and Somerville are on Eversource, and Wakefield has its own municipal gas company, Wakefield Municipal Gas & Light ({{https://www.mass.gov/info-details/find-my-electric-gas-and-water-company|state list of gas companies by town}}).",
+          "Lexington is one of the towns in the state's fossil-free building program, so National Grid asks Lexington customers to check with the town building department before asking for a gas connection. The program is aimed at new construction and major renovations ({{https://www.nationalgridus.com/MA-Home/Natural-Gas-Service/Connect-to-Natural-Gas|National Grid}}).",
+          "Connection costs are changing. In August 2025 the state Department of Public Utilities said new gas customers will generally pay the full cost of connecting, ending most free line extensions, once each utility's compliance plan is decided ({{https://commonwealthbeacon.org/energy/massachusetts-signals-new-gas-customers-may-soon-have-to-pay-full-hookup-costs/|CommonWealth Beacon}}). Get the gas company's quote in writing before you sign for the rest of the job."
+        ]
+      },
+      {
+        "h": "What an oil to gas conversion costs",
+        "p": [
+          "Shane prices each job after seeing the house, so there is no price list here. A national cost guide puts most conversions between $6,000 and $20,000: about $6,000 to $12,000 when a gas line already reaches the house, $12,000 to $20,000 when a new one has to be run, and $1,500 to $4,000 or more for a chimney liner ({{https://homeguide.com/costs/cost-to-convert-from-oil-to-gas|HomeGuide, December 2025}}). What moves the price on a real house:"
+        ],
+        "list": [
+          "Whether gas is at the street, and what the gas company charges for the service line or main.",
+          "The boiler: high-efficiency or standard, combi or boiler with a tank, and its size.",
+          "Hot water: an indirect tank, a combi, or a separate water heater.",
+          "Venting: a side-wall vent, or a chimney liner.",
+          "How far the gas piping runs, and whether the range, dryer or water heater go on gas too.",
+          "Heating zones, thermostats and piping changes in the boiler room.",
+          "Removing the oil tank, and the permits."
+        ]
+      }
+    ],
+    "facts": {
+      "title": "Rebates, credits and rules in 2026",
+      "checked": "17 November 2026",
+      "items": [
+        {
+          "t": "Mass Save no longer offers rebates, incentives or financing for natural gas, oil or propane heating equipment. Income-eligible households are the exception: they can still get incentives to upgrade existing fossil fuel equipment to high-efficiency models.",
+          "src": "Mass Save: Boilers & Furnaces",
+          "href": "https://www.masssave.com/residential/rebates-offers-services/heating-and-cooling/boilers-and-furnaces"
+        },
+        {
+          "t": "The federal Energy Efficient Home Improvement Credit (25C) covers improvements made through December 31, 2025, so a boiler installed in 2026 does not qualify.",
+          "src": "IRS",
+          "href": "https://www.irs.gov/credits-deductions/energy-efficient-home-improvement-credit"
+        },
+        {
+          "t": "New gas connections: the state utility regulator (DPU order 20-80-E, August 2025) said new customers will generally pay the full connection cost once utility plans are approved.",
+          "src": "CommonWealth Beacon",
+          "href": "https://commonwealthbeacon.org/energy/massachusetts-signals-new-gas-customers-may-soon-have-to-pay-full-hookup-costs/"
+        },
+        {
+          "t": "National Grid asks for its availability form and an electrification options form before it quotes a service line or main.",
+          "src": "National Grid: Connect to natural gas",
+          "href": "https://www.nationalgridus.com/MA-Home/Natural-Gas-Service/Connect-to-Natural-Gas"
+        },
+        {
+          "t": "Massachusetts law lets a licensed master or journeyman plumber do gas fitting anywhere in the state, under local permit rules.",
+          "src": "M.G.L. chapter 142, section 3",
+          "href": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXX/Chapter142/Section3"
+        },
+        {
+          "t": "Removing an oil tank needs a permit from the local fire department; Saugus has its own application form.",
+          "src": "Town of Saugus tank removal permit (PDF)",
+          "href": "https://www.saugus-ma.gov/sites/g/files/vyhlif1181/f/pages/underground_tank_removal_application_and_permit.pdf"
+        }
+      ]
+    },
+    "guarantee": "Master plumber installs, MA license 9630040-PL-M. Gas piping is done under your town gas permit and inspection.",
+    "qa_title": "Questions homeowners ask about switching from oil to gas",
+    "qa": [
+      {
+        "q": "How long does an oil to gas conversion take?",
+        "a": "The calendar time depends mostly on the gas company: the availability check, the service line and the meter. The work in the house is shorter; when a customer had no heat, Shane piped and wired a new boiler in one Saturday. Start before the old boiler fails, not during a cold snap."
+      },
+      {
+        "q": "Do I need a new boiler to switch from oil to gas?",
+        "a": "Usually, yes. An old oil boiler is often near the end of its life, and a new high-efficiency gas boiler burns less fuel than an old one. Send Shane a photo of your boiler and its label and he will tell you what fits your house."
+      },
+      {
+        "q": "Do I need a chimney liner when I switch to gas?",
+        "a": "It depends on what vents into the chimney. High-efficiency gas boilers vent through the side wall with plastic pipe and do not use the chimney. A gas boiler or water heater that does use the chimney may need a liner, and the town inspector makes the final call. On one of Shane's jobs the homeowner took out an interior chimney altogether, so two power-vent water heaters replaced the two chimney-vented ones."
+      },
+      {
+        "q": "What happens to my oil tank?",
+        "a": "It is removed under a permit from your town fire department. Ask Shane how the tank is handled on your job when you get your quote."
+      },
+      {
+        "q": "Are there rebates for converting from oil to gas in Massachusetts?",
+        "a": "Not for most households in 2026. Mass Save stopped rebates, incentives and financing for gas, oil and propane equipment; income-eligible households can still get help upgrading existing equipment. The federal 25C credit covers improvements made through December 31, 2025. Connection terms are changing too, so get the gas company quote in writing."
+      },
+      {
+        "q": "Who do I call first, the gas company or the plumber?",
+        "a": "Start with the gas company's availability form: it answers whether gas is on your street. National Grid's online application asks for the total gas use of your equipment, so it helps to have your plumber's equipment plan ready when you apply."
+      },
+      {
+        "q": "Combi boiler or a boiler with an indirect tank?",
+        "a": "A combi makes heat and hot water from one wall-hung unit and saves floor space; it suits smaller homes and moderate hot water use. A boiler with an indirect tank stores hot water, which suits bigger households and several bathrooms. See the {{indirect-water-heaters|indirect water heater page}}."
+      },
+      {
+        "q": "Can Shane do the gas piping too?",
+        "a": "Yes. Massachusetts law lets a licensed master plumber do gas fitting (chapter 142, section 3), and Shane is a master plumber, license 9630040-PL-M. Gas piping is pressure-tested and inspected under a gas permit from your town. See {{gas-installation|gas line installation}}."
+      }
+    ],
+    "send_for_quote": "Send with your request: photos of the boiler and its label, the oil tank, and the outside wall where a gas meter could go; whether gas is on your street, if you know; how many bathrooms and heating zones you have; and your town.",
+    "jobs_title": "Recent heating jobs: boilers, combis, indirect tanks",
+    "jobs": [
+      "saturday-emergency-boiler-replacement",
+      "haverhill-five-zone-boiler",
+      "boiler-manifold-room",
+      "indirect-tank-replacement-80-gallon",
+      "lynn-navien-combi-repair",
+      "emergency-water-heater-beside-boiler"
+    ]
+  },
+  {
+    "slug": "no-heat-emergency",
+    "service_id": "emergency-plumbing",
+    "hub": "heating",
+    "title": "No Heat Emergency Repair",
+    "seo_title": "No Heat? 24/7 Boiler & Heating Repair | S. Meredith, Saugus",
+    "h1": "No heat? Call Shane, 24/7",
+    "tagline": "Boiler out, radiators cold, pipes at risk. What to check first, what to tell Shane, and how to keep pipes from freezing while you wait.",
+    "meta_desc": "No heat in the house? 24/7 emergency boiler and heating repair from Saugus to Boston, safe checks to try first, and how to keep pipes from freezing. Call Shane.",
+    "intro": "No heat in a Massachusetts winter is an emergency, and Shane takes emergency calls 24/7. A few safe checks before you call can save a visit, and a few steps keep the pipes from freezing while you wait.",
+    "scenarios_title": "What usually causes no heat",
+    "scenarios": [
+      {
+        "h": "The boiler locked out",
+        "b": "Ignition failures, flame sensors and low water pressure trip the safety controls and shut the boiler down. Write down the code on the display before you reset anything."
+      },
+      {
+        "h": "A circulator pump stopped",
+        "b": "The boiler fires but the heat does not move. On one of Shane's calls a slow drip on an indirect tank zone had burned out the circulator, and the hot water stopped heating."
+      },
+      {
+        "h": "A combi stuck on hot water",
+        "b": "On a Lynn Navien combi, a failed three-way diverter valve kept the heat circulating through the hot water side, so the house got no heat. Shane replaced the valve and the burned-out pump."
+      },
+      {
+        "h": "Out of oil",
+        "b": "On an oil system, an empty tank or a clogged oil filter shuts the burner down."
+      },
+      {
+        "h": "A boiler at the end of its life",
+        "b": "When the boiler itself is done, Shane can replace it. On one Saturday emergency the new boiler was piped and wired as the priority so the customer had heat for the night."
+      }
+    ],
+    "steps_title": "Safe checks before you call",
+    "steps": [
+      {
+        "h": "Thermostat",
+        "b": "Set to heat and a few degrees above the room temperature. If the screen is blank, change the batteries."
+      },
+      {
+        "h": "Power to the boiler",
+        "b": "Check the boiler service switch (often at the top of the basement stairs or on the boiler) and the breaker."
+      },
+      {
+        "h": "Fuel",
+        "b": "Oil: check the tank gauge. Gas: check that the stove or another gas appliance still lights."
+      },
+      {
+        "h": "The display",
+        "b": "Write down any fault code or blinking light. Press reset once; if the boiler locks out again, stop and call."
+      },
+      {
+        "h": "The pressure gauge",
+        "b": "Note the reading on the boiler gauge. Shane will ask for it."
+      }
+    ],
+    "sections": [
+      {
+        "h": "Keep the pipes from freezing while you wait",
+        "p": [
+          "From the {{https://www.redcross.org/get-help/how-to-prepare-for-emergencies/types-of-emergencies/winter-storm/frozen-pipes.html|American Red Cross}} and Shane's own winter tips:"
+        ],
+        "list": [
+          "Open the cabinet doors under sinks on outside walls so warmer air reaches the pipes.",
+          "Let a trickle of cold water run from faucets on outside walls.",
+          "Keep the garage door closed if water pipes run through the garage.",
+          "Shut off and drain outside faucets, and take the hoses off.",
+          "If a pipe has already burst, shut off the main water valve and call."
+        ]
+      },
+      {
+        "h": "If you smell gas",
+        "p": [
+          "Do not work on the heating if you smell gas. The state's guidance: if you smell gas inside, leave the building and call 911 once you are outside; do not switch lights or appliances on or off ({{https://www.mass.gov/info-details/what-to-do-if-you-smell-gas|Mass.gov: what to do if you smell gas}})."
+        ]
+      },
+      {
+        "h": "What to tell Shane when you call",
+        "p": [
+          "It helps the visit start with the right parts:"
+        ],
+        "list": [
+          "Your town and street.",
+          "Gas or oil, and the boiler type if you know it (combi, boiler with a tank).",
+          "The fault code or blinking light.",
+          "What you already checked.",
+          "How long the heat has been off, and whether pipes are at risk."
+        ]
+      }
+    ],
+    "guarantee": "Master plumber, MA license 9630040-PL-M. Emergency calls 24/7.",
+    "qa_title": "Questions people ask when the heat is out",
+    "qa": [
+      {
+        "q": "Is no heat an emergency?",
+        "a": "In freezing weather, yes. Once the house cools, pipes on outside walls can freeze, and a frozen pipe can burst. Shane takes emergency calls 24/7."
+      },
+      {
+        "q": "Should I keep resetting my boiler?",
+        "a": "No. One reset is reasonable. If the boiler locks out again, the safety control is telling you something is wrong, and repeated resets on an oil burner can let unburned oil build up. Call instead."
+      },
+      {
+        "q": "Why do I have hot water but no heat?",
+        "a": "On a combi boiler, a stuck diverter valve is a common cause, like the Lynn Navien Shane repaired. On a boiler with an indirect tank, the heating zone circulator or zone valve may have failed while the hot water zone still works. See {{boiler-service|boiler repair}}."
+      },
+      {
+        "q": "Do plumbers fix heating systems?",
+        "a": "Many do. Shane is a master plumber and heating is his specialty: boilers, combis, indirect tanks, radiators and baseboard, and {{oil-to-gas-conversion|oil to gas conversions}}."
+      },
+      {
+        "q": "What does an emergency heating call cost?",
+        "a": "Shane does not publish prices; ask when you call. Have the boiler type and the fault code ready so the visit starts with the right parts."
+      }
+    ],
+    "send_for_quote": "Text Shane a photo of the boiler display and its label, your town, and what you already checked.",
+    "jobs_title": "No-heat calls Shane has fixed",
+    "jobs": [
+      "saturday-emergency-boiler-replacement",
+      "lynn-navien-combi-repair",
+      "boiler-circulator-and-indirect-zone"
+    ]
+  },
+  {
+    "slug": "boiler-replacement",
+    "service_id": "boiler-service",
+    "hub": "heating",
+    "title": "Boiler Replacement & Installation",
+    "seo_title": "Boiler Replacement & Installation, North Shore MA | S. Meredith",
+    "h1": "Boiler replacement & installation, North Shore to Boston",
+    "tagline": "High-efficiency, combi and standard boilers, with the indirect tank, heating zones and venting done in the same job.",
+    "meta_desc": "Boiler replacement and new boiler installation from Saugus to Boston: high-efficiency and combi boilers, indirect tanks, zones, oil to gas. Call 781-820-4592.",
+    "intro": "A new boiler is a big decision, and it usually comes at a bad time. Shane replaces old cast iron and oil boilers with high-efficiency gas boilers and combis, pipes in indirect hot water tanks and heating zones, and handles the venting and permits. When an old boiler dies in January, replacement is the emergency fix: on one Saturday call Shane piped and wired a new boiler in one shot so the customer had heat for the night.",
+    "scenarios_title": "Boiler replacements Shane does",
+    "scenarios": [
+      {
+        "h": "Straight swap",
+        "b": "Old boiler out, new one in on the same fuel, with new near-boiler piping, expansion tank and controls."
+      },
+      {
+        "h": "High-efficiency upgrade",
+        "b": "A modulating condensing boiler adjusts its output to the weather and recovers heat from its exhaust. It vents through the wall with plastic pipe and needs a condensate drain."
+      },
+      {
+        "h": "Combi boiler",
+        "b": "Heat and hot water from one wall-hung unit, with no separate tank. Good where floor space is tight."
+      },
+      {
+        "h": "Boiler with an indirect tank",
+        "b": "Like the five-zone high-efficiency boiler with an indirect tank Shane installed on a Haverhill remodel."
+      },
+      {
+        "h": "Oil to gas",
+        "b": "Replacing an oil boiler with a gas one, including the gas piping. The full guide is on the oil to gas conversion page."
+      }
+    ],
+    "steps_title": "How a boiler replacement goes",
+    "steps": [
+      {
+        "h": "Send photos",
+        "b": "The old boiler and its label, the piping around it, the chimney or vent, and the water heater."
+      },
+      {
+        "h": "Look at the house",
+        "b": "Shane looks at the radiators or baseboard, the zones and how you use hot water before choosing the boiler."
+      },
+      {
+        "h": "Quote",
+        "b": "Covering the boiler, piping, venting, removal of the old boiler and the permits."
+      },
+      {
+        "h": "Install",
+        "b": "Old boiler out, new boiler piped, vented, wired and filled; the system is purged of air and tested."
+      },
+      {
+        "h": "Inspection",
+        "b": "The town inspects the work under the permit."
+      }
+    ],
+    "guarantee": "Master plumber installs, MA license 9630040-PL-M. Manufacturer warranties apply to the boilers Shane installs; ask him to go over the warranty before the job.",
+    "qa_title": "Questions homeowners ask about replacing a boiler",
+    "qa": [
+      {
+        "q": "How much does it cost to replace a boiler in Massachusetts?",
+        "a": "It depends on the boiler type and size, the venting, the zones and whether an indirect tank goes in, so Shane does not publish a price; ask for a quote. Mass Save no longer gives rebates or financing for gas or oil boilers, except for income-eligible households ({{https://www.masssave.com/residential/rebates-offers-services/heating-and-cooling/boilers-and-furnaces|Mass Save}})."
+      },
+      {
+        "q": "Do you need a permit to replace a boiler in Massachusetts?",
+        "a": "Yes. A gas boiler needs a gas permit and inspection from your town, and oil equipment has its own fire department permit. Shane works under his master plumber license, MA 9630040-PL-M."
+      },
+      {
+        "q": "Is it worth replacing a 20-year-old boiler?",
+        "a": "If it runs safely and parts are available, a repair can make sense. If it keeps breaking down, leaks at the boiler body, or burns oil and you are thinking about gas, replacing it on your own schedule beats replacing it during a January breakdown. See {{boiler-service|boiler repair}}."
+      },
+      {
+        "q": "Combi boiler or boiler with an indirect tank?",
+        "a": "A combi saves space and suits moderate hot water use. An indirect tank stores hot water for bigger households and several bathrooms. See {{indirect-water-heaters|indirect water heaters}}."
+      },
+      {
+        "q": "How long does a boiler replacement take?",
+        "a": "A straight swap can be done in a day: on Shane's Saturday emergency replacement the new boiler was piped and wired in one shot so the customer had heat for the night. An oil to gas conversion takes longer because of the gas connection."
+      }
+    ],
+    "send_for_quote": "Send with your request: photos of the boiler and its data label, the piping around it and the vent or chimney; your fuel; the number of heating zones; and your town.",
+    "jobs_title": "Boilers Shane has installed",
+    "jobs": [
+      "saturday-emergency-boiler-replacement",
+      "haverhill-five-zone-boiler",
+      "boiler-manifold-room",
+      "boiler-room-upgrades"
+    ]
+  },
+  {
+    "slug": "indirect-water-heaters",
+    "service_id": "boiler-service",
+    "hub": "heating",
+    "title": "Indirect Water Heaters & Combi Hot Water",
+    "seo_title": "Indirect Water Heater Repair & Replacement | S. Meredith, MA",
+    "h1": "Indirect water heaters: repair & replacement",
+    "tagline": "Hot water made by your boiler. When the tank leaks, the coil fails or the hot water runs lukewarm, Shane fixes the tank and the boiler zone that feeds it.",
+    "meta_desc": "Indirect water heater repair and replacement on the North Shore and in Boston: ruptured coils, relief valves, circulators and combi boilers. Call 781-820-4592.",
+    "intro": "An indirect water heater is an insulated tank heated by your boiler through a coil, so the boiler makes your hot water too. When the hot water goes lukewarm, the tank leaks or the boiler relief valve starts dripping, the cause can be the tank or the boiler zone that heats it. Shane works on both sides: he replaced an 80-gallon indirect tank whose ruptured coil was pushing house water pressure into the boiler, and a burned-out circulator on another home's indirect zone.",
+    "scenarios_title": "Indirect tank problems Shane fixes",
+    "scenarios": [
+      {
+        "h": "Ruptured coil",
+        "b": "House water leaks into the boiler loop, the boiler pressure climbs and the relief valve discharges. The fix is a new tank."
+      },
+      {
+        "h": "Circulator or zone valve",
+        "b": "The tank is fine but the boiler stops sending heat to it. A drip from a purge valve burned out one customer's circulator."
+      },
+      {
+        "h": "Leaking tank",
+        "b": "A tank leaking at the bottom or at its fittings needs to be replaced."
+      },
+      {
+        "h": "Combi boilers",
+        "b": "A combi makes hot water on demand with no tank. A stuck diverter valve can leave you with hot water but no heat, as on a Lynn Navien Shane repaired."
+      },
+      {
+        "h": "A new indirect with a new boiler",
+        "b": "Paired with a high-efficiency boiler, like the Haverhill install with five heating zones."
+      }
+    ],
+    "guarantee": "Master plumber, MA license 9630040-PL-M.",
+    "qa_title": "Questions homeowners ask about indirect water heaters",
+    "qa": [
+      {
+        "q": "Why is my indirect water heater not making hot water?",
+        "a": "Usually the boiler is not heating it: a failed circulator or zone valve, a control setting, or the boiler itself is down. If your heat works but the hot water does not, the problem is likely on the tank zone."
+      },
+      {
+        "q": "Why is my boiler relief valve dripping?",
+        "a": "One cause is a ruptured coil in an indirect tank letting house water pressure into the boiler, which is what Shane found before the 80-gallon replacement. A failed expansion tank or fill valve can do it too. A dripping relief valve is a warning: call."
+      },
+      {
+        "q": "Indirect water heater or a regular water heater?",
+        "a": "A regular (direct) water heater has its own burner or elements. An indirect has none; the boiler heats it. Indirects suit homes that already run a boiler. For regular tanks, see {{water-heater-replacement|water heater repair and replacement}}."
+      },
+      {
+        "q": "What does an indirect water heater replacement cost?",
+        "a": "It depends on the tank size and the piping, so Shane does not publish a price. Send the tank label and a photo of the piping for a quote."
+      }
+    ],
+    "send_for_quote": "Send with your request: photos of the tank label and the boiler, whether the heat still works, and any dripping valve.",
+    "jobs_title": "Indirect tanks and combis Shane has worked on",
+    "jobs": [
+      "indirect-tank-replacement-80-gallon",
+      "boiler-circulator-and-indirect-zone",
+      "haverhill-five-zone-boiler",
+      "lynn-navien-combi-repair"
+    ]
+  },
+  {
+    "slug": "radiators-baseboard-heat",
+    "service_id": "boiler-service",
+    "hub": "heating",
+    "title": "Radiator, Baseboard & Heating Zone Repair",
+    "seo_title": "Radiator & Baseboard Heat Repair, Heating Zones | S. Meredith",
+    "h1": "Radiators, baseboard heat & heating zones",
+    "tagline": "Cold rooms, gurgling pipes, leaks on the heating loop, and new zones for a finished basement or an addition.",
+    "meta_desc": "Radiator not heating? Baseboard heat repair, leaks on heating pipes, circulators, zone valves and new heating zones from Saugus to Boston. Call 781-820-4592.",
+    "intro": "When one room stays cold, or the baseboard is warm at one end and cold at the other, the problem is usually in the piping between the boiler and the radiators: air in the loop, a stuck zone valve, a failed circulator or a leak. Shane repairs hot water heating loops, adds zones, and fixes the drips people put off until the cold weather comes.",
+    "scenarios_title": "What Shane fixes on the heating loop",
+    "scenarios": [
+      {
+        "h": "Air in the system",
+        "b": "Gurgling, radiators cold at the top, or cold runs of baseboard. The loop is purged or the radiators are bled."
+      },
+      {
+        "h": "Zone valve or thermostat",
+        "b": "One zone never heats, or never shuts off."
+      },
+      {
+        "h": "Circulator pump",
+        "b": "The boiler fires but the heat does not move. Shane replaced a circulator that a slow drip had burned out."
+      },
+      {
+        "h": "Leaks on heating pipes and valves",
+        "b": "Drips at valves, purge draw-offs and old fittings. Small leaks lower the boiler pressure and can ruin a pump."
+      },
+      {
+        "h": "New heating zones",
+        "b": "A zone added for an addition or a finished basement: piping, zone valve or circulator, thermostat and controls."
+      }
+    ],
+    "guarantee": "Master plumber, MA license 9630040-PL-M.",
+    "qa_title": "Questions homeowners ask about radiators and baseboard heat",
+    "qa": [
+      {
+        "q": "Why is my radiator not heating up?",
+        "a": "Common causes are air trapped at the top, a closed or stuck valve, a zone valve that does not open, or a circulator that has stopped. If a radiator stays cold after bleeding, the problem is elsewhere in the loop."
+      },
+      {
+        "q": "Why is only one room cold?",
+        "a": "Usually one zone or one radiator is the problem: a zone valve, its thermostat, air in that run, or a blocked pipe. If the whole house is cold, see {{no-heat-emergency|no heat}}."
+      },
+      {
+        "q": "Can you add heat to a finished basement?",
+        "a": "Yes, by adding a heating zone off the boiler when the boiler has the capacity for it. Shane checks the boiler and plans the piping before quoting."
+      },
+      {
+        "q": "Should I fix a small drip on my heating pipes?",
+        "a": "Yes, before the cold weather. A steady drip lowers the boiler pressure, and on one of Shane's jobs a drip from a purge valve led to a burned-out circulator and a cold shower."
+      }
+    ],
+    "send_for_quote": "Send with your request: which rooms are cold, a photo of the boiler and its zone valves or pumps, and any leak.",
+    "jobs_title": "Heating loop work by Shane",
+    "jobs": [
+      "boiler-circulator-and-indirect-zone",
+      "boiler-manifold-room",
+      "haverhill-five-zone-boiler"
+    ]
   },
   {
     "slug": "gas-installation",
@@ -185,7 +716,18 @@
         "b": "Coordinated with the boiler/water heater swap when you upgrade the heating system."
       }
     ],
-    "guarantee": "Massachusetts master plumber (license 9630040-PL-M), whose license covers gas fitting. All work is permitted and inspected per Massachusetts plumbing & gas code (248 CMR), and pressure-tested before sign-off."
+    "guarantee": "Massachusetts master plumber (license 9630040-PL-M), whose license covers gas fitting. All work is permitted and inspected per Massachusetts plumbing & gas code (248 CMR), and pressure-tested before sign-off.",
+    "qa": [
+      {
+        "q": "Can you run the gas line for an oil to gas conversion?",
+        "a": "Yes. Massachusetts law lets a licensed master plumber do gas fitting (chapter 142, section 3), and Shane is a master plumber, license 9630040-PL-M. The gas piping runs from the new meter to the boiler and any other gas appliances, and is pressure-tested and inspected under a town gas permit. The full process is in the {{oil-to-gas-conversion|oil to gas conversion guide}}."
+      }
+    ],
+    "jobs": [
+      "emergency-water-heater-beside-boiler",
+      "power-vent-water-heater-50-gallon"
+    ],
+    "jobs_title": "Recent gas appliance work"
   },
   {
     "slug": "kitchen-bath-remodels",

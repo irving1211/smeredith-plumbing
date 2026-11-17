@@ -2,7 +2,7 @@
 // One header for every page. Call and request actions stay in the header; on phones the page links
 // live behind a native <details> menu (works without JavaScript; a few lines below add Escape/outside-click closing).
 interface Props {
-  /** Which nav item is the current section: services | work | about | service-area */
+  /** Which nav item is the current section: heating | services | work | about | service-area */
   current?: string;
 }
 const { current = '' } = Astro.props;
@@ -10,6 +10,7 @@ const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const links = [
+  { id: 'heating', href: `${base}heating/`, label: 'Heating' },
   { id: 'services', href: `${base}services/`, label: 'Services' },
   { id: 'work', href: `${base}work/`, label: 'Our work' },
   { id: 'about', href: `${base}about/`, label: 'About' },
@@ -92,5 +93,13 @@ const links = [
   @media (min-width: 900px) and (max-width: 1179px) {
     .header-nav { gap: 1rem; }
     .call-number { display: none; }
+    .brand-wordmark strong { white-space: nowrap; }
+  }
+  /* 900-1023 px: with the fifth link (Heating, 2026-11-17) the wordmark wrapped to "S. / MEREDITH". */
+  @media (min-width: 900px) and (max-width: 1023px) {
+    .header-row { gap: .5rem; }
+    .header-nav { gap: .7rem; }
+    .header-nav a { font-size: .88rem; }
+    .brand-wordmark strong { font-size: 1.3rem; }
   }
 </style>

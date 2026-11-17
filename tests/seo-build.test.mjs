@@ -15,6 +15,7 @@ const areas = JSON.parse(readFileSync(join(root, 'src/areas.json'), 'utf8'));
 
 const INDEXABLE = [
   '/',
+  '/heating/',
   '/services/',
   ...services.map((s) => `/services/${s.slug}/`),
   ...areas.map((a) => `/areas/${a.slug}/`),
@@ -73,6 +74,8 @@ function visibleText(html) {
     html
       .replace(/<script[\s\S]*?<\/script>/g, ' ')
       .replace(/<style[\s\S]*?<\/style>/g, ' ')
+      // Inline tags (links, emphasis) do not break words in a browser, so they add no space; block tags do.
+      .replace(/<\/?(?:a|strong|em|b|i|span)\b[^>]*>/g, '')
       .replace(/<[^>]+>/g, ' '),
   ).replace(/\s+/g, ' ');
 }

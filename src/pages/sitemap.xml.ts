@@ -11,6 +11,7 @@ export const GET: APIRoute = ({ site }) => {
 
   const urls = [
     { loc: `${origin}${base}/`, priority: '1.0', changefreq: 'weekly' },
+    { loc: `${origin}${base}/heating/`, priority: '0.9', changefreq: 'monthly' },
     { loc: `${origin}${base}/services/`, priority: '0.9', changefreq: 'monthly' },
     ...services.map((s) => ({
       loc: `${origin}${base}/services/${s.slug}/`,

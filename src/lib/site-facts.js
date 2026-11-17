@@ -16,7 +16,7 @@ export const BUSINESS = {
   license: 'Massachusetts master plumber license 9630040-PL-M',
   hours: '24/7 emergency service',
   tagline: 'The plumber who answers the phone.',
-  summary: 'Owner-operated plumbing and heating company based in Saugus, MA, serving the North Shore and Boston: water heaters, boilers, gas lines, remodel and new-construction plumbing, and 24/7 emergency service.',
+  summary: 'Owner-operated plumbing and heating company based in Saugus, MA, serving the North Shore and Boston: oil-to-gas heating conversions, boilers, no-heat calls, water heaters, gas lines, remodel and new-construction plumbing, and 24/7 emergency service.',
   // Public Google Business Profile (Maps CID). Checked logged out 2026-11-04: "S. Meredith Plumbing and Heating",
   // (781) 820-4592, Plumber, website smeredithplumbing.com, "Open 24 hours" every day.
   googleProfile: 'https://maps.google.com/?cid=1614689343180159048',
@@ -30,6 +30,6 @@ export const BUSINESS = {
 // Content dates. These are EDITORIAL dates, not the build date (a rebuild is not a content change, the same reason
 // sitemap.xml carries no <lastmod>). Bump UPDATED only when the words or facts on the site change.
 export const PUBLISHED = '2026-10-11'; // production go-live of the redesigned site
-export const UPDATED = '2026-10-24';
+export const UPDATED = '2026-11-17';
 
 export const formatDate = (iso) => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });

@@ -212,10 +212,17 @@ test('priority service pages answer real customer questions without prices, prom
   }
   // marked-up internal links point at real service pages
   const boiler = page('/services/boiler-service');
-  assert.match(boiler, /href="\/services\/emergency-plumbing\/"[^>]*>emergency page</);
+  assert.match(boiler, /href="\/services\/boiler-replacement\/"[^>]*>boiler replacement page</);
+  assert.match(boiler, /href="\/services\/no-heat-emergency\/"[^>]*>no heat</);
   assert.match(page('/services/water-heater-replacement'), /href="\/services\/boiler-service\/"/);
-  // gas and emergency pages are deliberately untouched until their facts are confirmed
-  for (const slug of ['gas-installation', 'emergency-plumbing']) assert.doesNotMatch(page(`/services/${slug}`), /<section class="homeowner-qa"/);
+  // Gas and emergency pages stayed without Q&A until their facts were confirmed. 2026-11-17: the gas answer rests on the
+  // statute (M.G.L. c.142 s.3 lets a master plumber do gas fitting, read verbatim) and the emergency answer only links to
+  // the no-heat page. Neither may claim a separate gas fitter license or add gas-smell safety wording of its own.
+  assert.match(page('/services/gas-installation'), /chapter 142, section 3/);
+  for (const slug of ['gas-installation', 'emergency-plumbing']) {
+    const qaText = (page(`/services/${slug}`).match(/<section class="homeowner-qa"[\s\S]*?<\/section>/)?.[0] || '').replace(/<[^>]+>/g, ' ');
+    assert.doesNotMatch(qaText, /gas ?fitter('s)? licen[cs]e|licensed gas ?fitter|smell gas/i, `${slug} Q&A overclaims`);
+  }
 });
 
 test('the privacy notice is published (approved by Irving for Shane, 2026-10-24): indexable, in the sitemap, linked from the footer of every page and from the request form', () => {

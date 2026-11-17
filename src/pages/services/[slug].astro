@@ -22,18 +22,42 @@ const formId = (service as { service_id?: string }).service_id ?? service.slug;
 const contactHref = `${base}contact/?service=${formId}`;
 const pageUrl = `${origin}${base}services/${service.slug}/`;
 const hubUrl = `${origin}${base}services/`;
-const relatedJobs = jobs.filter((j) => j.service === formId || (j as { tags?: string[] }).tags?.includes(service.slug)).slice(0, 3);
-const relatedServices = services.filter((s) => s.slug !== service.slug);
+type Job = (typeof jobs)[number];
+type Extra = {
+  service_id?: string;
+  hub?: string;
+  scenarios_title?: string;
+  jobs?: string[];
+  jobs_title?: string;
+  steps_title?: string;
+  steps?: Array<{ h: string; b: string }>;
+  sections?: Array<{ h: string; p: string[]; list?: string[] }>;
+  facts?: { title: string; checked: string; intro?: string; items: Array<{ t: string; src: string; href: string }> };
+};
+const extra = service as typeof service & Extra;
+// A page can name its own job photos (src/jobs.json slugs, in order); otherwise jobs with the same form id or tag.
+const relatedJobs: Job[] = extra.jobs
+  ? extra.jobs.map((slug) => jobs.find((j) => j.slug === slug)).filter((j): j is Job => Boolean(j))
+  : jobs.filter((j) => j.service === formId || (j as { tags?: string[] }).tags?.includes(service.slug)).slice(0, 3);
+// Heating pages list the other heating pages first, so the heating cluster links to itself (hub and spokes).
+const inHub = (s: typeof service) => (s as Extra).hub === 'heating';
+const relatedServices = services.filter((s) => s.slug !== service.slug).sort((a, b) => (extra.hub ? Number(inHub(b)) - Number(inHub(a)) : 0));
 const approvedTowns = TOWNS.map((t) => t.name);
 
-// Q&A answers may contain {{service-slug|link text}} markers that become internal links.
-type Part = string | { href: string; text: string };
+// Copy may contain {{target|link text}} markers: a service slug, a site path starting with "/", or an https source.
+type Part = string | { href: string; text: string; external?: boolean };
 const linkify = (text: string): Part[] =>
-  text.split(/(\{\{[a-z-]+\|[^}]+\}\})/).map((part) => {
-    const m = part.match(/^\{\{([a-z-]+)\|([^}]+)\}\}$/);
-    return m ? { href: `${base}services/${m[1]}/`, text: m[2] } : part;
+  text.split(/(\{\{[^|}]+\|[^}]+\}\})/).map((part) => {
+    const m = part.match(/^\{\{([^|}]+)\|([^}]+)\}\}$/);
+    if (!m) return part;
+    if (/^https:\/\//.test(m[1])) return { href: m[1], text: m[2], external: true };
+    if (m[1].startsWith('/')) return { href: `${base}${m[1].replace(/^\//, '')}`, text: m[2] };
+    return { href: `${base}services/${m[1]}/`, text: m[2] };
   });
+const plain = (text: string) => linkify(text).map((p) => (typeof p === 'string' ? p : p.text)).join('');
 const qa = (service as { qa?: Array<{ q: string; a: string; list?: string[] }> }).qa || [];
+// FAQPage schema mirrors the visible questions and answers word for word (a test checks this).
+const faqs = qa.map((item) => ({ q: item.q, a: plain(item.a) }));
 
 const serviceJsonLd = {
   '@context': 'https://schema.org',
@@ -58,13 +82,13 @@ const breadcrumb = {
 };
 ---
 
-<Base title={service.seo_title} description={service.meta_desc} pageType="service" current="services" pageMeta={{ service_type: service.slug }}>
+<Base title={service.seo_title} description={service.meta_desc} pageType="service" current={extra.hub === 'heating' ? 'heating' : 'services'} pageMeta={{ service_type: service.slug }} faqs={faqs}>
   <script type="application/ld+json" set:html={jsonLd(serviceJsonLd)} slot="head" />
   <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
 
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
-      <a href={base}>Home</a> <span aria-hidden="true">›</span> <a href={`${base}services/`}>Services</a> <span aria-hidden="true">›</span> <span class="current" aria-current="page">{service.title}</span>
+      <a href={base}>Home</a> <span aria-hidden="true">›</span> {extra.hub === 'heating' ? <a href={`${base}heating/`}>Heating</a> : <a href={`${base}services/`}>Services</a>} <span aria-hidden="true">›</span> <span class="current" aria-current="page">{service.title}</span>
     </div>
   </nav>
 
@@ -85,7 +109,7 @@ const breadcrumb = {
     <div class="container">
       <p class="intro">{service.intro}</p>
 
-      <h2>What we handle</h2>
+      <h2>{extra.scenarios_title || 'What we handle'}</h2>
       <div class="scenario-list">
         {service.scenarios.map((s) => (
           <div class="scenario">
@@ -94,6 +118,39 @@ const breadcrumb = {
           </div>
         ))}
       </div>
+
+      {extra.steps && (
+        <section class="steps" id="how-it-goes" aria-labelledby="steps-h">
+          <h2 id="steps-h">{extra.steps_title || 'How it goes'}</h2>
+          <ol class="step-list">
+            {extra.steps.map((st) => (
+              <li>
+                <h3>{st.h}</h3>
+                <p>{linkify(st.b).map((p) => (typeof p === 'string' ? p : <a href={p.href} rel={p.external ? 'noopener' : undefined}>{p.text}</a>))}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {extra.sections && extra.sections.map((sec) => (
+        <section class="prose-block">
+          <h2>{sec.h}</h2>
+          {sec.p.map((para) => <p>{linkify(para).map((p) => (typeof p === 'string' ? p : <a href={p.href} rel={p.external ? 'noopener' : undefined}>{p.text}</a>))}</p>)}
+          {sec.list && <ul>{sec.list.map((li) => <li>{linkify(li).map((p) => (typeof p === 'string' ? p : <a href={p.href} rel={p.external ? 'noopener' : undefined}>{p.text}</a>))}</li>)}</ul>}
+        </section>
+      ))}
+
+      {extra.facts && (
+        <section class="facts" id="checked-facts" aria-labelledby="facts-h">
+          <h2 id="facts-h">{extra.facts.title}</h2>
+          <p class="facts-checked">Checked {extra.facts.checked}. Rules and prices change; each line links to its source.</p>
+          {extra.facts.intro && <p>{extra.facts.intro}</p>}
+          <ul>
+            {extra.facts.items.map((it) => <li>{it.t} <a href={it.href} rel="noopener">{it.src}</a></li>)}
+          </ul>
+        </section>
+      )}
 
       <div class="guarantee">
         <strong>Licensed &amp; code-compliant.</strong> {service.guarantee}
@@ -106,7 +163,7 @@ const breadcrumb = {
             <div class="qa-item">
               <h3>{item.q}</h3>
               {item.list && <ul>{item.list.map((li) => <li>{li}</li>)}</ul>}
-              <p>{linkify(item.a).map((p) => (typeof p === 'string' ? p : <a href={p.href}>{p.text}</a>))}</p>
+              <p>{linkify(item.a).map((p) => (typeof p === 'string' ? p : <a href={p.href} rel={p.external ? 'noopener' : undefined}>{p.text}</a>))}</p>
             </div>
           ))}
           {(service as { send_for_quote?: string }).send_for_quote && (
@@ -121,7 +178,7 @@ const breadcrumb = {
 
       {relatedJobs.length > 0 && (
         <section class="related-work" id="related-work" aria-labelledby="related-work-h">
-          <h2 id="related-work-h">Recent jobs like this</h2>
+          <h2 id="related-work-h">{extra.jobs_title || 'Recent jobs like this'}</h2>
           <div class="job-row">
             {relatedJobs.map((job) => (
               <figure class="job-thumb">
@@ -154,6 +211,7 @@ const breadcrumb = {
       </div>
 
       <section class="related-services" id="related-services" aria-labelledby="related-services-h">
+        {extra.hub === 'heating' && <p class="hub-link">All heating help in one place: <a href={`${base}heating/`}>Heating: oil-to-gas, boilers, no-heat calls →</a></p>}
         <h2 id="related-services-h">Related services</h2>
         <ul class="link-pills">
           {relatedServices.map((s) => <li><a href={`${base}services/${s.slug}/`}>{s.title}</a></li>)}
@@ -222,6 +280,20 @@ const breadcrumb = {
     .more-link { margin-top: 1rem; }
     .more-link a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
 
+    .step-list { list-style: none; counter-reset: step; padding: 0; margin: 0 0 3rem; display: grid; gap: 1.1rem; }
+    .step-list li { counter-increment: step; position: relative; padding: 1.2rem 1.4rem 1.2rem 4rem; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
+    .step-list li::before { content: counter(step); position: absolute; left: 1.2rem; top: 1.05rem; font-family: var(--font-display); font-weight: 700; font-size: 1.8rem; line-height: 1; color: var(--color-action); }
+    .step-list h3 { font-size: 1.08rem; margin-bottom: .4rem; }
+    .step-list p, .prose-block p, .prose-block li, .facts li, .facts p { color: var(--ink-soft); line-height: 1.65; }
+    .step-list p { margin: 0; }
+    .prose-block { margin: 0 0 2.5rem; }
+    .prose-block p { margin: 0 0 1rem; }
+    .prose-block ul, .facts ul { padding-left: 1.2rem; display: grid; gap: .45rem; margin: 0 0 1rem; }
+    .prose-block a, .facts a, .step-list a, .hub-link a { color: var(--black); font-weight: 600; text-decoration: underline; text-underline-offset: .18em; }
+    .facts { margin: 0 0 3rem; padding: 1.5rem 1.7rem; background: var(--paper-2); border-left: 3px solid var(--color-action); border-radius: 8px; }
+    .facts h2 { margin-top: 0; }
+    .facts .facts-checked { font-size: .92rem; color: var(--ink-muted); margin: -.8rem 0 1rem; }
+    .hub-link { margin: 2rem 0 0; font-weight: 600; }
     .back-link { text-align: center; color: var(--ink-muted); margin-top: 2rem; }
     .back-link a { color: var(--ink-soft); font-weight: 500; }
     .back-link a:hover { color: var(--red); opacity: 1; }

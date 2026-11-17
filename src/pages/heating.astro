@@ -1,0 +1,239 @@
+---
+// Heating hub ("the heat guy", Shane via Irving 2026-11-17). Every heating page links back here; this page links to
+// each of them, to the oil-to-gas guide and to every town's heating numbers. The signature is the van list reused:
+// "What is your heat doing?" rows that go straight to the right page (or dial).
+import { jsonLd } from '../lib/jsonld.js';
+import Base from '../layouts/Base.astro';
+import services from '../services.json';
+import areas from '../areas.json';
+import jobs from '../jobs.json';
+import reviewsData from '../reviews.json';
+import townHeating from '../town-heating.json';
+import { TOWNS } from '../lib/service-area.js';
+
+const base = import.meta.env.BASE_URL;
+const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+const phone = '781-820-4592';
+const phoneTel = '+17818204592';
+const smsHref = `sms:${phoneTel}?body=${encodeURIComponent('Hi Shane — about my heat: ')}`;
+const contactHref = `${base}contact/?service=boiler-service`;
+const pageUrl = `${origin}${base}heating/`;
+const svc = (slug: string) => `${base}services/${slug}/`;
+const heatingServices = services.filter((s) => (s as { hub?: string }).hub === 'heating');
+
+const picker = [
+  { name: 'No heat at all', note: 'Safe checks to try, keeping pipes from freezing, 24/7 calls', href: svc('no-heat-emergency') },
+  { name: 'Still on oil', note: 'Switching from oil to gas: steps, costs, 2026 rules', href: svc('oil-to-gas-conversion') },
+  { name: 'Old boiler, time to replace', note: 'High-efficiency, combi, boiler with an indirect tank', href: svc('boiler-replacement') },
+  { name: 'Boiler leaking, banging or showing a code', note: 'Repair and yearly service', href: svc('boiler-service') },
+  { name: 'Hot water but no heat, or the reverse', note: 'Indirect tanks, combi diverter valves, zones', href: svc('indirect-water-heaters') },
+  { name: 'Some rooms cold', note: 'Radiators, baseboard, zone valves, circulators', href: svc('radiators-baseboard-heat') },
+];
+
+const photoJobs = ['saturday-emergency-boiler-replacement', 'haverhill-five-zone-boiler', 'lynn-navien-combi-repair']
+  .map((slug) => jobs.find((j) => j.slug === slug))
+  .filter((j): j is (typeof jobs)[number] => Boolean(j));
+const heatReview = reviewsData.reviews.find((r) => r.id === 'review-2');
+const towns = TOWNS.map((t) => ({ ...t, heat: (townHeating.towns as Record<string, { oil: number; oilHomes: number; utility: string }>)[t.slug] }))
+  .filter((t) => t.heat && areas.some((a) => a.slug === t.slug));
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}${base}` },
+    { '@type': 'ListItem', position: 2, name: 'Heating', item: pageUrl },
+  ],
+};
+const heatingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Heating: oil to gas conversions, boiler repair and replacement, no-heat calls',
+  serviceType: 'Heating',
+  url: pageUrl,
+  provider: { '@id': `${origin}/#business` },
+  areaServed: TOWNS.map((t) => ({ '@type': 'City', name: `${t.name}, MA` })),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Heating services',
+    itemListElement: heatingServices.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.title, url: `${origin}${base}services/${s.slug}/` } })),
+  },
+};
+---
+
+<Base
+  title="Heating Plumber: Oil to Gas, Boilers, No Heat | S. Meredith"
+  description="Heating from Saugus to Boston: oil to gas conversions (Shane's specialty), boiler repair and replacement, indirect tanks and 24/7 no-heat calls. 781-820-4592."
+  pageType="service"
+  current="heating"
+  pageMeta={{ service_type: 'heating' }}
+>
+  <script type="application/ld+json" set:html={jsonLd(heatingJsonLd)} slot="head" />
+  <script type="application/ld+json" set:html={jsonLd(breadcrumb)} slot="head" />
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href={base}>Home</a> <span aria-hidden="true">›</span> <span class="current" aria-current="page">Heating</span>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <h1>Heating: oil to gas, boilers, no-heat calls</h1>
+        <p class="tagline">Shane is the heat guy. Switching houses from oil to gas is his specialty, and he takes no-heat calls 24/7 from Saugus to Boston.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href={`tel:${phoneTel}`}>Call {phone}</a>
+          <a class="btn btn-ghost" href={smsHref}>Text Shane a photo</a>
+          <a class="btn btn-ghost" href={contactHref}>Request heating service</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-body">
+      <div class="container">
+        <section id="heat-picker" aria-labelledby="picker-h">
+          <h2 id="picker-h">What is your heat doing?</h2>
+          <p class="section-note">Tap the line that fits. Each one opens the page for that problem; every page has Call at the top.</p>
+          <ul class="vanlist">
+            {picker.map((r) => (
+              <li>
+                <a class="row-main" href={r.href}>
+                  <span class="row-name">{r.name}</span>
+                  <span class="row-note">{r.note}</span>
+                </a>
+              </li>
+            ))}
+            <li>
+              <a class="row-main" href={`tel:${phoneTel}`}>
+                <span class="row-name">Not sure? Just call</span>
+                <span class="row-note">{phone}, 24/7 for emergencies</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="prose-block" id="oil-to-gas" aria-labelledby="o2g-h">
+          <h2 id="o2g-h">Oil to gas, in short</h2>
+          <p>A conversion means gas to the house, a gas line to the equipment, a new gas boiler (usually high-efficiency, or a combi), new venting, and the oil tank out. Three things changed recently:</p>
+          <ul>
+            <li>Mass Save no longer gives rebates or financing for gas, oil or propane equipment, except for income-eligible households.</li>
+            <li>The federal 25C tax credit covers improvements made through December 31, 2025.</li>
+            <li>Under a 2025 state ruling, new gas customers will generally pay the full cost of connecting once each utility's plan is approved.</li>
+          </ul>
+          <p>Sources, the step-by-step process and what moves the price are in the <a href={svc('oil-to-gas-conversion')}>oil to gas conversion guide</a>.</p>
+        </section>
+
+        {heatReview && (
+          <figure class="quote">
+            <blockquote>“{heatReview.body}”</blockquote>
+            <figcaption>{heatReview.name}, Google review: {heatReview.tag.toLowerCase()}</figcaption>
+          </figure>
+        )}
+
+        <section class="related-work" id="heating-work" aria-labelledby="heating-work-h">
+          <h2 id="heating-work-h">Shane's heating work</h2>
+          <div class="job-row">
+            {photoJobs.map((job) => (
+              <figure class="job-thumb">
+                <img src={`${base}${job.photos[0].src.replace(/^\//, '')}`} srcset={`${base}${job.photos[0].src.replace(/^\//, '').replace(/-900\.webp$/, '-480.webp')} 480w, ${base}${job.photos[0].src.replace(/^\//, '')} 900w`} sizes="(min-width: 768px) 236px, 45vw" alt={(job.photos[0] as { alt?: string }).alt || `${job.title} by S. Meredith Plumbing & Heating`} width={job.photos[0].width} height={job.photos[0].height} loading="lazy" decoding="async" />
+                <figcaption><strong>{job.title}</strong> <span>{job.desc}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+          <p class="more-link"><a href={`${base}work/`}>All recent jobs →</a></p>
+        </section>
+
+        <section class="prose-block" id="before-winter" aria-labelledby="winter-h">
+          <h2 id="winter-h">Before the cold comes</h2>
+          <p>Shane's own advice every fall: do not wait until you need the heat to find out it does not work.</p>
+          <ul>
+            <li>Have the boiler serviced before the heating season, not during a cold snap.</li>
+            <li>Fix drips on the heating pipes now. A slow drip on one customer's indirect tank zone burned out the circulator.</li>
+            <li>Shut off and drain outside faucets, take the hoses off, or swap old spigots for frost-free ones.</li>
+            <li>Know where your main water shut-off and the boiler switch are.</li>
+          </ul>
+        </section>
+
+        <section id="heating-towns" aria-labelledby="towns-h">
+          <h2 id="towns-h">How each town heats</h2>
+          <p class="section-note">Share of occupied homes heated with oil, from the U.S. Census (2019-2023). Each town page has the full numbers, the gas company and Shane's work.</p>
+          <ul class="town-heat">
+            {towns.map((t) => (
+              <li><a href={`${base}areas/${t.slug}/`}><span class="t-name">{t.name}</span> <span class="t-oil">{t.heat.oil}% oil</span> <span class="t-homes">about {t.heat.oilHomes.toLocaleString('en-US')} homes</span></a></li>
+            ))}
+          </ul>
+          <p class="source-line">Source: <a href={townHeating.source.census.href} rel="noopener">{townHeating.source.census.label}</a>.</p>
+        </section>
+
+        <section class="all-heating" id="all-heating" aria-labelledby="all-heating-h">
+          <h2 id="all-heating-h">All heating pages</h2>
+          <ul class="link-pills">
+            {heatingServices.map((s) => <li><a href={svc(s.slug)}>{s.title}</a></li>)}
+            <li><a href={svc('gas-installation')}>Gas Line Installation &amp; Repair</a></li>
+            <li><a href={svc('water-heater-replacement')}>Water Heater Repair &amp; Replacement</a></li>
+          </ul>
+        </section>
+
+        <div class="page-cta" id="heating-cta">
+          <h2>Cold house? One number.</h2>
+          <p>Owner answers. 24/7 emergency service. Master plumber, MA license #9630040-PL-M.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary big" href={`tel:${phoneTel}`}>Call {phone}</a>
+            <a class="btn btn-ghost big" href={smsHref}>Text photos for a quote</a>
+            <a class="btn btn-ghost big" href={contactHref}>Request service</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .breadcrumb { padding: 1rem 0; background: var(--paper-2); border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-muted); }
+    .breadcrumb a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: .18em; }
+    .breadcrumb span { margin: 0 .35rem; color: var(--ink-muted); }
+    .breadcrumb .current { color: var(--ink); font-weight: 500; }
+    .page-hero { padding: 5rem 0 3rem; background: var(--paper); }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; max-width: 22ch; }
+    .page-hero .tagline { font-size: 1.15rem; color: var(--ink-soft); margin-bottom: 2rem; max-width: 60ch; }
+    .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .page-body { padding: 2rem 0 7rem; background: var(--paper); }
+    .page-body .container { max-width: 800px; }
+    .page-body h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 2.5rem 0 1rem; letter-spacing: -0.02em; }
+    .section-note { color: var(--ink-soft); margin: 0 0 1rem; }
+    .prose-block p, .prose-block li { color: var(--ink-soft); line-height: 1.65; }
+    .prose-block ul { padding-left: 1.2rem; display: grid; gap: .45rem; margin: 0 0 1rem; }
+    .prose-block a, .source-line a, .more-link a { color: var(--black); font-weight: 600; text-decoration: underline; text-underline-offset: .18em; }
+    .quote { margin: 3rem 0 0; padding: 1.4rem 1.6rem; background: var(--paper-2); border-left: 3px solid var(--color-action); border-radius: 8px; }
+    .quote blockquote { margin: 0 0 .6rem; font-size: 1.1rem; line-height: 1.6; color: var(--ink); }
+    .quote figcaption { color: var(--ink-muted); font-size: .92rem; }
+    .job-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: start; }
+    .job-thumb { margin: 0; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
+    .job-thumb img { width: 100%; height: auto; }
+    .job-thumb figcaption { padding: .7rem .9rem; font-size: .92rem; display: grid; gap: .25rem; }
+    .job-thumb figcaption span { color: var(--ink-soft); line-height: 1.5; }
+    .more-link { margin-top: 1rem; }
+    .town-heat { list-style: none; padding: 0; margin: 0; border-top: 2px solid var(--color-text); }
+    .town-heat li { border-bottom: 1px solid var(--color-border); }
+    .town-heat a { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'name oil' 'homes homes'; gap: 0 1rem; padding: .7rem 0; min-height: 44px; color: var(--color-text); text-decoration: none; }
+    .town-heat .t-name { grid-area: name; font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; text-transform: uppercase; text-decoration: underline; text-decoration-color: var(--color-action); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+    .town-heat .t-oil { grid-area: oil; font-weight: 700; align-self: center; }
+    .town-heat .t-homes { grid-area: homes; color: var(--color-text-muted); font-size: .9rem; }
+    .town-heat a:hover .t-name { background: var(--color-tint); }
+    .source-line { color: var(--ink-muted); font-size: .9rem; margin-top: .8rem; }
+    .link-pills { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .link-pills a { display: inline-block; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-md); padding: .55rem 1rem; font-weight: 600; font-size: .92rem; color: var(--ink); }
+    .link-pills a:hover { border-color: var(--red); color: var(--red); opacity: 1; }
+    .page-cta { background: var(--paper-2); border-radius: var(--radius-md); padding: 3rem 2rem; text-align: center; margin: 4rem 0 2rem; }
+    .page-cta h2 { margin: 0 0 1rem; }
+    .page-cta p { color: var(--ink-soft); margin-bottom: 2rem; }
+    .page-cta .hero-cta { justify-content: center; }
+    .btn.big { font-size: 1.05rem; padding: 1.15rem 2.1rem; }
+    @media (max-width: 900px) {
+      .page-hero { padding: 3rem 0 2rem; }
+      .hero-cta { flex-direction: column; gap: .65rem; }
+      .hero-cta .btn { justify-content: center; width: 100%; }
+      .page-cta { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</Base>

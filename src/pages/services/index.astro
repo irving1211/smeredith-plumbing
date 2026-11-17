@@ -63,6 +63,7 @@ const serviceList = {
 
     <section class="page-body" id="service-list">
       <div class="container">
+        <p class="heat-note">Heating is the specialty: start at <a href={`${base}heating/`}>Heating: oil to gas, boilers, no-heat calls</a>.</p>
         <ul class="hub-grid">
           {services.map((s) => (
             <li>
@@ -112,6 +113,8 @@ const serviceList = {
     .hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; }
 
     .page-body { padding: 2rem 0 7rem; background: var(--paper); }
+    .heat-note { margin: 0 0 1.5rem; font-weight: 600; }
+    .heat-note a { color: var(--black); text-decoration: underline; text-underline-offset: .18em; }
     .hub-grid { list-style: none; margin: 0 0 3rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
     .hub-card { display: flex; flex-direction: column; gap: .6rem; height: 100%; background: var(--color-surface); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.6rem 1.7rem; color: var(--ink); transition: border-color .25s ease; }
     .hub-card:hover { border-color: var(--red); opacity: 1; }
