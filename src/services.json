@@ -190,7 +190,7 @@
       },
       {
         "h": "Gas piping inside the house",
-        "b": "From the new gas meter to the boiler, and to a water heater, range or dryer if you want those on gas too. Gas piping is pressure-tested and inspected under a gas permit from your town."
+        "b": "Shane runs it himself, from the new gas meter to the boiler, and to a water heater, range or dryer if you want those on gas too. Gas piping is pressure-tested and inspected under a gas permit from your town."
       },
       {
         "h": "Venting and the chimney",
@@ -305,7 +305,7 @@
         }
       ]
     },
-    "guarantee": "Master plumber installs, MA license 9630040-PL-M. Gas piping is done under your town gas permit and inspection.",
+    "guarantee": "Master plumber installs, MA license 9630040-PL-M, which covers the gas piping. Gas work is done under your town gas permit and inspection.",
     "qa_title": "Questions homeowners ask about switching from oil to gas",
     "qa": [
       {
@@ -338,7 +338,7 @@
       },
       {
         "q": "Can Shane do the gas piping too?",
-        "a": "Yes. Massachusetts law lets a licensed master plumber do gas fitting (chapter 142, section 3), and Shane is a master plumber, license 9630040-PL-M. Gas piping is pressure-tested and inspected under a gas permit from your town. See {{gas-installation|gas line installation}}."
+        "a": "Yes, Shane does the gas piping himself. In Massachusetts a master plumber license covers gas fitting (chapter 142, section 3), and his is license 9630040-PL-M. Gas piping is pressure-tested and inspected under a gas permit from your town. See {{gas-installation|gas line installation}}."
       }
     ],
     "send_for_quote": "Send with your request: photos of the boiler and its label, the oil tank, and the outside wall where a gas meter could go; whether gas is on your street, if you know; how many bathrooms and heating zones you have; and your town.",
@@ -720,7 +720,7 @@
     "qa": [
       {
         "q": "Can you run the gas line for an oil to gas conversion?",
-        "a": "Yes. Massachusetts law lets a licensed master plumber do gas fitting (chapter 142, section 3), and Shane is a master plumber, license 9630040-PL-M. The gas piping runs from the new meter to the boiler and any other gas appliances, and is pressure-tested and inspected under a town gas permit. The full process is in the {{oil-to-gas-conversion|oil to gas conversion guide}}."
+        "a": "Yes, Shane runs it himself. In Massachusetts a master plumber license covers gas fitting (chapter 142, section 3), and his is license 9630040-PL-M. The gas piping runs from the new meter to the boiler and any other gas appliances, and is pressure-tested and inspected under a town gas permit. The full process is in the {{oil-to-gas-conversion|oil to gas conversion guide}}."
       }
     ],
     "jobs": [
