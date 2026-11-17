@@ -12,6 +12,12 @@
 /data/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
+# Cloudflare's production alias serves the same site and appeared in Google results (2026-11-17). Pages are canonical
+# to smeredithplumbing.com already; this keeps the alias out of the index. Preview URLs (<hash>.smeredithplumbing.pages.dev)
+# are noindexed by Cloudflare itself.
+https://smeredithplumbing.pages.dev/*
+  X-Robots-Tag: noindex
+
 /*
   X-Frame-Options: SAMEORIGIN
   Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'
