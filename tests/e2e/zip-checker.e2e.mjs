@@ -212,7 +212,8 @@ describe('ZIP checker', () => {
     const page = await context.newPage();
     await page.goto(`${origin}/`);
     const links = await page.locator('#area .area-townlist a[href^="/areas/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-    assert.deepEqual(links.sort(), ['/areas/haverhill/', '/areas/lexington/', '/areas/lynn/', '/areas/malden/', '/areas/peabody/', '/areas/revere/', '/areas/saugus/', '/areas/somerville/', '/areas/stoneham/']);
+    // Every confirmed town has a page since 2026-11-17 (Boston, Everett, Melrose, Tewksbury, Wakefield added).
+    assert.deepEqual(links.sort(), ['/areas/boston/', '/areas/everett/', '/areas/haverhill/', '/areas/lexington/', '/areas/lynn/', '/areas/malden/', '/areas/melrose/', '/areas/peabody/', '/areas/revere/', '/areas/saugus/', '/areas/somerville/', '/areas/stoneham/', '/areas/tewksbury/', '/areas/wakefield/']);
     await page.locator('#area .area-townlist summary').click();
     assert.equal(await page.locator('#area .area-townlist a[href="/areas/lynn/"]').isVisible(), true);
     await context.close();

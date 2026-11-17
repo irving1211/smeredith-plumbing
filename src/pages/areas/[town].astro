@@ -5,6 +5,7 @@ import areas from '../../areas.json';
 import services from '../../services.json';
 import jobsRaw from '../../jobs.json';
 import { monthLabel } from '../../lib/job-dates.js';
+import townHeating from '../../town-heating.json';
 
 export function getStaticPaths() {
   return areas.map((a) => ({ params: { town: a.slug }, props: { area: a } }));
@@ -23,6 +24,17 @@ const townJobs = jobsRaw
   .filter((j) => (j as { town?: string }).town === area.slug)
   .map((j) => ({ ...j, photos: j.photos.map((p) => ({ ...p, src: `${base}${p.src.replace(/^\//, '')}` })) }));
 const recent = (area as { recent?: Array<{ when: string; text: string }> }).recent || [];
+// Pages without photos from this town can show Shane's related work from other towns, always labelled with the real
+// town (or none when the post did not name one), never presented as work in this town.
+const townName = (slug?: string) => areas.find((a) => a.slug === slug)?.town;
+const relatedJobs = ((area as { related_jobs?: string[] }).related_jobs || [])
+  .map((slug) => jobsRaw.find((j) => j.slug === slug))
+  .filter((j): j is (typeof jobsRaw)[number] => Boolean(j))
+  .map((j) => ({ ...j, where: townName((j as { town?: string }).town), photo: { ...j.photos[0], src: `${base}${j.photos[0].src.replace(/^\//, '')}` } }));
+// How the town heats: Census shares and the gas company (src/town-heating.json, every number sourced there).
+type Heat = { homes: number; gas: number; oil: number; oilHomes: number; electric: number; pre1940: number; pre1960: number; twoToFour: number; utility: string; note?: string };
+const heat = (townHeating.towns as Record<string, Heat>)[area.slug];
+const n = (x: number) => x.toLocaleString('en-US');
 
 // Breadcrumb schema only references real pages; the visible "Service area" link is a homepage section.
 const breadcrumb = {
@@ -92,10 +104,40 @@ const breadcrumb = {
         </section>
       )}
 
+      {relatedJobs.length > 0 && (
+        <section class="town-jobs" id="related-jobs" aria-labelledby="related-jobs-h">
+          <h2 id="related-jobs-h">{(area as { related_jobs_title?: string }).related_jobs_title || 'Related work by Shane'}</h2>
+          <div class="job-row">
+            {relatedJobs.map((job) => (
+              <figure class="job-thumb">
+                <img src={job.photo.src} srcset={`${job.photo.src.replace(/-900\.webp$/, '-480.webp')} 480w, ${job.photo.src} ${job.photo.width}w`} sizes="(min-width: 800px) 240px, 45vw" alt={(job.photo as { alt?: string }).alt || job.title} width={job.photo.width} height={job.photo.height} loading="lazy" decoding="async" />
+                <figcaption>{job.title}{job.where ? ` (${job.where})` : ''}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p class="more-link"><a href={`${base}work/`}>All recent jobs →</a></p>
+        </section>
+      )}
+
       {recent.length > 0 && (
         <ul class="recent-notes">
           {recent.map((r) => <li><span class="when">{monthLabel(r.when)}</span> {r.text}</li>)}
         </ul>
+      )}
+
+      {heat && (
+        <section class="town-heat-block" id="town-heating" aria-labelledby="town-heating-h">
+          <h2 id="town-heating-h">How {area.town} heats</h2>
+          <p>Of about {n(heat.homes)} occupied homes in {area.town}, {heat.oil}% heat with oil (about {n(heat.oilHomes)} homes), {heat.gas}% with gas and {heat.electric}% with electricity. {heat.pre1940}% were built before 1940 and {heat.pre1960}% before 1960{heat.twoToFour >= 15 ? `; ${heat.twoToFour}% are in buildings with two to four units` : ''}.</p>
+          <p>Gas company: {heat.utility}.{heat.note ? ` ${heat.note}` : ''}</p>
+          <ul class="heat-links">
+            <li><a href={`${base}services/oil-to-gas-conversion/`}>Still on oil? The oil to gas conversion guide</a></li>
+            <li><a href={`${base}services/no-heat-emergency/`}>No heat right now: what to check, 24/7 calls</a></li>
+            <li><a href={`${base}services/boiler-replacement/`}>Boiler replacement</a></li>
+            <li><a href={`${base}heating/`}>All heating help</a></li>
+          </ul>
+          <p class="source-line">Sources: <a href={townHeating.source.census.href} rel="noopener">{townHeating.source.census.label}</a>; <a href={townHeating.source.gas.href} rel="noopener">{townHeating.source.gas.label}</a>{area.slug === 'lexington' && <>; <a href={townHeating.notesSource.href} rel="noopener">{townHeating.notesSource.label}</a></>}.</p>
+        </section>
       )}
 
       <h2>Job types seen in {area.town}</h2>
@@ -185,6 +227,13 @@ const breadcrumb = {
     .more-link { margin-top: 1rem; }
     .more-link a { color: var(--black); font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
 
+    .town-heat-block { margin: 0 0 3rem; padding: 1.5rem 1.7rem; background: var(--color-surface); border: 1px solid var(--line); border-top: 3px solid var(--color-action); border-radius: var(--radius-md); }
+    .town-heat-block h2 { margin-top: 0; }
+    .town-heat-block p { color: var(--ink-soft); line-height: 1.65; }
+    .heat-links { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: .35rem; }
+    .heat-links a, .source-line a { color: var(--black); font-weight: 600; text-decoration: underline; text-underline-offset: .18em; }
+    .heat-links a { display: inline-flex; align-items: center; min-height: 44px; }
+    .source-line { font-size: .88rem; color: var(--ink-muted) !important; margin: 0; }
     .back-link { text-align: center; color: var(--ink-muted); margin-top: 2rem; }
     .back-link a { color: var(--ink-soft); font-weight: 500; }
     .back-link a:hover { color: var(--red); opacity: 1; }

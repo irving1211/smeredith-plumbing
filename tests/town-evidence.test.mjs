@@ -20,11 +20,36 @@ const UNSOURCED = [/\binsured\b/i, /same[- ]day/i, /free (?:written )?(?:quote|e
 // Towns Shane's photos mention that are not on the confirmed 14-town list. They must not be named as places he works.
 const OUT_OF_AREA = ['Georgetown', 'Weston', 'Billerica', 'North Reading'];
 
-test('every town page is backed by at least one real job or a dated note', () => {
+const townHeating = JSON.parse(readFileSync(join(root, 'src/town-heating.json'), 'utf8'));
+
+test('every town page is backed by a real job, a dated note, or sourced local data with three town-specific notes', () => {
+  // Added 2026-11-17 for Boston, Melrose, Wakefield, Everett (Irving's direction; all on the confirmed list): a town
+  // without Shane's own photos still needs its Census heating numbers and gas company (src/town-heating.json, sourced)
+  // and three notes of its own, so the page passes the swap test instead of being a name swap.
   for (const a of areas) {
     const withPhotos = jobs.filter((j) => j.town === a.slug);
-    assert.ok(withPhotos.length > 0 || (a.recent || []).length > 0, `${a.slug} has no job photos and no recent note`);
+    const heat = townHeating.towns[a.slug];
+    const localData = heat && heat.homes > 0 && heat.utility && a.local_hooks.length >= 3;
+    assert.ok(withPhotos.length > 0 || (a.recent || []).length > 0 || localData, `${a.slug} has no job photos, no recent note and no sourced local data`);
   }
+});
+
+test('town heating numbers are sourced, complete for every town page, and shown on the page with their sources', () => {
+  assert.match(townHeating.source.census.href, /^https:\/\/data\.census\.gov\//);
+  assert.match(townHeating.source.gas.href, /^https:\/\/www\.mass\.gov\//);
+  for (const a of areas) {
+    const h = townHeating.towns[a.slug];
+    assert.ok(h, `${a.slug} has no heating row`);
+    for (const k of ['homes', 'gas', 'oil', 'oilHomes', 'electric', 'pre1940', 'pre1960', 'twoToFour']) assert.equal(typeof h[k], 'number', `${a.slug}.${k}`);
+    assert.ok(h.gas + h.oil + h.electric <= 100, `${a.slug} shares add up past 100%`);
+    const body = text(page(`/areas/${a.slug}`));
+    assert.ok(body.includes(`How ${a.town} heats`), `${a.slug} shows its heating block`);
+    assert.ok(body.includes(`${h.oil}% heat with oil`), `${a.slug} shows its oil share`);
+    assert.ok(body.includes('American Community Survey'), `${a.slug} names the Census source`);
+  }
+  // Pages written from local data must not borrow another town's numbers: no two town pages share an intro.
+  const intros = new Set(areas.map((a) => a.intro));
+  assert.equal(intros.size, areas.length, 'every town intro is its own');
 });
 
 test('every town with a page is on the confirmed service-area list, and every job town has a page', () => {

@@ -105,7 +105,87 @@
       "Bathroom remodel plumbing",
       "Shower valve replacement",
       "Frost-free hose bibs"
-    ]
+    ],
+    "related_jobs": [
+      "saturday-emergency-boiler-replacement",
+      "emergency-water-heater-beside-boiler",
+      "somerville-remodel-turned-over"
+    ],
+    "related_jobs_title": "Related work by Shane"
+  },
+  {
+    "slug": "melrose",
+    "town": "Melrose",
+    "seo_title": "Plumber & Heating in Melrose, MA | S. Meredith",
+    "h1": "Plumber in Melrose, MA: boilers, oil to gas, water heaters",
+    "tagline": "Right next to Saugus. Old houses, older heating pipes, and more oil heat than most of the towns Shane serves.",
+    "meta_desc": "Melrose plumber and heating: boiler repair and replacement, oil to gas conversions, water heaters and 24/7 no-heat calls. Master plumber 9630040-PL-M.",
+    "intro": "Melrose borders Saugus, and it has some of the oldest housing Shane serves: 53% of Melrose homes were built before 1940 and 71% before 1960. More than one in five still heat with oil, about 2,700 homes. Gas here comes from National Grid.",
+    "local_hooks": [
+      {
+        "h": "Old houses, original heating pipes",
+        "b": "In a house built before 1940 the boiler may have been replaced more than once, while the heating pipes, radiators and valves are often original. Drips at old valves and air in the loop are worth fixing before winter, not during it."
+      },
+      {
+        "h": "About 2,700 homes still on oil",
+        "b": "With 22% of Melrose homes on oil, the questions come up every fall: is gas on my street, and is switching worth it now that Mass Save has stopped gas equipment rebates? The oil to gas guide has the 2026 facts with sources."
+      },
+      {
+        "h": "Next door to home base",
+        "b": "Melrose shares a border with Saugus, where Shane is based, so it is one of the shortest drives on his list."
+      }
+    ],
+    "recent": [],
+    "common_calls": [
+      "Boiler repair and replacement",
+      "Oil to gas conversions",
+      "Water heaters",
+      "Leaks on old heating pipes",
+      "No-heat calls"
+    ],
+    "related_jobs": [
+      "saturday-emergency-boiler-replacement",
+      "boiler-circulator-and-indirect-zone",
+      "indirect-tank-replacement-80-gallon"
+    ],
+    "related_jobs_title": "Heating work by Shane"
+  },
+  {
+    "slug": "wakefield",
+    "town": "Wakefield",
+    "seo_title": "Plumber & Heating in Wakefield, MA | S. Meredith",
+    "h1": "Plumber in Wakefield, MA: heating, oil to gas, water heaters",
+    "tagline": "A third of Wakefield still heats with oil, and the town has its own gas company.",
+    "meta_desc": "Wakefield plumber and heating: oil to gas conversions with Wakefield Municipal Gas & Light, boiler repair and replacement, water heaters. Call 781-820-4592.",
+    "intro": "Wakefield is different from the other towns Shane serves in two ways. It has the most oil heat on his list: 34% of homes, about 3,800 houses. And gas can come from the town's own utility, Wakefield Municipal Gas & Light Department.",
+    "local_hooks": [
+      {
+        "h": "Wakefield Municipal Gas & Light",
+        "b": "For an oil to gas switch, ask Wakefield Municipal Gas & Light (9 Albion Street, 781-246-6363) whether gas is on your street and what the connection costs. The state list also names National Grid for Wakefield, so confirm which one serves your address."
+      },
+      {
+        "h": "The most oil heat on Shane's list",
+        "b": "34% oil, 47% gas and 15% electric (Census, 2019-2023). If your oil boiler is getting old, the oil to gas guide explains the steps and what changed with rebates in 2026."
+      },
+      {
+        "h": "Mostly single-family houses",
+        "b": "55% of Wakefield homes are detached single-family houses and 58% were built before 1960. That usually means one boiler, one water heater and one owner making the call."
+      }
+    ],
+    "recent": [],
+    "common_calls": [
+      "Oil to gas conversions",
+      "Boiler repair and replacement",
+      "Indirect water heaters",
+      "Water heaters",
+      "No-heat calls"
+    ],
+    "related_jobs": [
+      "haverhill-five-zone-boiler",
+      "saturday-emergency-boiler-replacement",
+      "indirect-tank-replacement-80-gallon"
+    ],
+    "related_jobs_title": "Heating work by Shane"
   },
   {
     "slug": "peabody",
@@ -132,6 +212,74 @@
       "Boiler repair",
       "Bathroom fixtures"
     ]
+  },
+  {
+    "slug": "stoneham",
+    "town": "Stoneham",
+    "seo_title": "Plumber in Stoneham, MA | S. Meredith Plumbing & Heating",
+    "h1": "Plumber in Stoneham, MA: remodel plumbing",
+    "tagline": "A new bathroom and laundry stack, and a repiped kitchen, in a Stoneham second-floor remodel.",
+    "meta_desc": "Stoneham plumber for remodels: new bathroom and laundry stacks, kitchen repipes, water heaters and repairs. Owner-operated, in Saugus. License 9630040-PL-M.",
+    "intro": "Shane has plumbed two remodels in Stoneham: a second-floor apartment (photos from June 2025) and a house that was wrapped up and ready for new homeowners (shared March 2026). Photos of the first one are below.",
+    "local_hooks": [
+      {
+        "h": "A new bathroom and a laundry on the second floor",
+        "b": "The existing bathroom stayed where it was. Shane added a new full bathroom and its stack at the front of the house, run up from the basement. He also ran a new laundry stack so the second-floor apartment could have a washer and dryer."
+      },
+      {
+        "h": "A kitchen kept in place and repiped",
+        "b": "The kitchen location stayed the same. Shane repiped it to bring it up to date and up to code."
+      }
+    ],
+    "recent": [
+      {
+        "when": "2026-03",
+        "text": "A second Stoneham remodel wrapped up, ready for the new homeowners to move in."
+      }
+    ],
+    "common_calls": [
+      "New bathroom on an existing stack run",
+      "Laundry stack for a washer and dryer",
+      "Kitchen repipe",
+      "Remodel plumbing"
+    ]
+  },
+  {
+    "slug": "everett",
+    "town": "Everett",
+    "seo_title": "Plumber & Heating in Everett, MA | S. Meredith",
+    "h1": "Plumber in Everett, MA: boilers, water heaters, two-families",
+    "tagline": "Two- and three-family houses, old basements, and a heating system for each unit.",
+    "meta_desc": "Everett plumber and heating for two- and three-family houses: boilers, water heaters for each unit, water mains, no-heat calls. Master plumber 9630040-PL-M.",
+    "intro": "Everett is a city of two-families: 31% of homes are in buildings with two to four units, and 53% were built before 1940 (Census). Most heat with gas (66%, from National Grid); about 2,200 homes still use oil.",
+    "local_hooks": [
+      {
+        "h": "One system per unit",
+        "b": "In a two- or three-family, each floor usually has its own boiler and water heater, side by side in the basement. Shane has done this work in a Somerville two-family, giving the first floor its own water heater."
+      },
+      {
+        "h": "Old water mains",
+        "b": "In houses built before 1940 the water main and the piping behind the walls are often decades old. On that Somerville two-family remodel Shane upsized the water main to feed both units."
+      },
+      {
+        "h": "Oil to gas in a multi-family",
+        "b": "Switching a two-family from oil to gas can mean a gas meter and a boiler for each unit. Start with National Grid's availability check; the oil to gas guide has the steps."
+      }
+    ],
+    "recent": [],
+    "common_calls": [
+      "Water heaters, one per unit",
+      "Boiler repair",
+      "Water mains and old piping",
+      "Remodel plumbing in multi-family houses",
+      "No-heat calls"
+    ],
+    "related_jobs": [
+      "somerville-two-family-remodel-rough-in",
+      "emergency-water-heater-beside-boiler",
+      "saturday-emergency-boiler-replacement"
+    ],
+    "related_jobs_title": "Two-family and heating work by Shane"
   },
   {
     "slug": "somerville",
@@ -170,35 +318,41 @@
     ]
   },
   {
-    "slug": "stoneham",
-    "town": "Stoneham",
-    "seo_title": "Plumber in Stoneham, MA | S. Meredith Plumbing & Heating",
-    "h1": "Plumber in Stoneham, MA: remodel plumbing",
-    "tagline": "A new bathroom and laundry stack, and a repiped kitchen, in a Stoneham second-floor remodel.",
-    "meta_desc": "Stoneham plumber for remodels: new bathroom and laundry stacks, kitchen repipes, water heaters and repairs. Owner-operated, in Saugus. License 9630040-PL-M.",
-    "intro": "Shane has plumbed two remodels in Stoneham: a second-floor apartment (photos from June 2025) and a house that was wrapped up and ready for new homeowners (shared March 2026). Photos of the first one are below.",
+    "slug": "boston",
+    "town": "Boston",
+    "seo_title": "24 Hour Plumber & Heating in Boston, MA | S. Meredith",
+    "h1": "Plumber & heating in Boston, 24/7 for emergencies",
+    "tagline": "No-heat calls, boilers, water heaters and oil to gas from a master plumber based in Saugus. Boston is big: tell Shane your neighborhood when you call.",
+    "meta_desc": "24 hour plumber and heating help in Boston from master plumber Shane Meredith: no-heat calls, boilers, water heaters, oil to gas. Tell him your neighborhood.",
+    "intro": "Shane is based in Saugus and serves Boston with one note: it is a big city, so say your neighborhood when you call. Only about one Boston home in eight is a detached single-family house, and 47% were built before 1940 (Census), so most calls are about old boilers, water heaters in shared basements and one heating system per unit.",
     "local_hooks": [
       {
-        "h": "A new bathroom and a laundry on the second floor",
-        "b": "The existing bathroom stayed where it was. Shane added a new full bathroom and its stack at the front of the house, run up from the basement. He also ran a new laundry stack so the second-floor apartment could have a washer and dryer."
+        "h": "Emergency calls, 24/7",
+        "b": "No heat, a burst pipe or no hot water: Shane takes emergency calls 24/7. Say your neighborhood first."
       },
       {
-        "h": "A kitchen kept in place and repiped",
-        "b": "The kitchen location stayed the same. Shane repiped it to bring it up to date and up to code."
-      }
-    ],
-    "recent": [
+        "h": "Two gas companies",
+        "b": "Depending on the neighborhood, gas in Boston comes from National Grid or Eversource. For an oil to gas switch, the availability check goes to whichever company serves your street."
+      },
       {
-        "when": "2026-03",
-        "text": "A second Stoneham remodel wrapped up, ready for the new homeowners to move in."
+        "h": "Still about 20,000 homes on oil",
+        "b": "Only 7% of Boston homes heat with oil, but in a city this size that is about 20,000 homes. If yours is one, the oil to gas guide covers gas availability, the 2025 connection-cost ruling and the end of gas rebates."
       }
     ],
+    "recent": [],
     "common_calls": [
-      "New bathroom on an existing stack run",
-      "Laundry stack for a washer and dryer",
-      "Kitchen repipe",
-      "Remodel plumbing"
-    ]
+      "No-heat calls",
+      "Boiler repair and replacement",
+      "Water heaters in shared basements",
+      "Oil to gas conversions",
+      "Burst and frozen pipes"
+    ],
+    "related_jobs": [
+      "saturday-emergency-boiler-replacement",
+      "lynn-navien-combi-repair",
+      "somerville-two-family-remodel-rough-in"
+    ],
+    "related_jobs_title": "Heating and multi-family work by Shane"
   },
   {
     "slug": "lexington",
@@ -225,6 +379,48 @@
       "Point-of-use water heater setups",
       "Mixing valves"
     ]
+  },
+  {
+    "slug": "tewksbury",
+    "town": "Tewksbury",
+    "seo_title": "Plumber & Heating in Tewksbury, MA | S. Meredith",
+    "h1": "Plumber in Tewksbury, MA: water heaters, boilers, gas",
+    "tagline": "Younger houses than most of Shane's towns, mostly on gas, and emergencies on weekends too.",
+    "meta_desc": "Tewksbury plumber and heating: gas water heater replacement, boiler service, oil to gas conversions and 24/7 emergency calls. Master plumber 9630040-PL-M.",
+    "intro": "Tewksbury's houses are younger than most on Shane's list: only 7% were built before 1940, and 68% are detached single-family homes. Most heat with gas (69%, from National Grid); about 2,300 homes still use oil. Shane's latest Tewksbury job was a Sunday emergency.",
+    "local_hooks": [
+      {
+        "h": "A Sunday water heater emergency",
+        "b": "In March 2026 Shane replaced a 40-gallon natural gas water heater in Tewksbury on a Sunday."
+      },
+      {
+        "h": "Newer houses",
+        "b": "Only 26% of Tewksbury homes were built before 1960, against 71% in Melrose. Water heaters and boilers wear out on any house; the piping behind them is usually newer here."
+      },
+      {
+        "h": "Oil to gas",
+        "b": "About 2,300 Tewksbury homes still heat with oil. With 69% of homes already on gas, a conversion starts with National Grid's availability check for your street."
+      }
+    ],
+    "recent": [
+      {
+        "when": "2026-03",
+        "text": "Sunday emergency: a 40-gallon natural gas water heater replaced in Tewksbury."
+      }
+    ],
+    "common_calls": [
+      "Gas water heater replacement",
+      "Boiler service",
+      "Oil to gas conversions",
+      "Emergency calls",
+      "General plumbing repair"
+    ],
+    "related_jobs": [
+      "emergency-water-heater-beside-boiler",
+      "power-vent-water-heater-50-gallon",
+      "saturday-emergency-boiler-replacement"
+    ],
+    "related_jobs_title": "Water heater and boiler work by Shane"
   },
   {
     "slug": "haverhill",

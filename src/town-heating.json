@@ -1,0 +1,180 @@
+{
+  "_comment": "How each confirmed town heats. Numbers: U.S. Census Bureau, American Community Survey 2019-2023 5-year estimates, tables B25040 (house heating fuel, occupied homes), B25034 (year built) and B25024 (units in structure), pulled 2026-11-17. Gas company: Mass.gov 'Find my gas company' list (gas-2023.csv), pulled 2026-11-17. Percentages are rounded shares of occupied homes; oilHomes is the estimate itself. Update all rows together when a newer ACS release is used.",
+  "source": {
+    "census": {
+      "label": "U.S. Census Bureau, American Community Survey 2019-2023 (tables B25040, B25034, B25024)",
+      "href": "https://data.census.gov/table/ACSDT5Y2023.B25040"
+    },
+    "gas": {
+      "label": "Mass.gov list of gas companies by town",
+      "href": "https://www.mass.gov/info-details/find-my-electric-gas-and-water-company"
+    },
+    "pulled": "2026-11-17"
+  },
+  "towns": {
+    "saugus": {
+      "homes": 10701,
+      "gas": 51,
+      "oil": 26,
+      "oilHomes": 2771,
+      "electric": 18,
+      "pre1940": 28,
+      "pre1960": 49,
+      "twoToFour": 7,
+      "utility": "National Grid"
+    },
+    "lynn": {
+      "homes": 36328,
+      "gas": 55,
+      "oil": 19,
+      "oilHomes": 6793,
+      "electric": 21,
+      "pre1940": 46,
+      "pre1960": 63,
+      "twoToFour": 22,
+      "utility": "National Grid",
+      "note": "Lynn has the most oil-heated homes of any North Shore town on Shane's list, about 6,800."
+    },
+    "revere": {
+      "homes": 21512,
+      "gas": 59,
+      "oil": 14,
+      "oilHomes": 3003,
+      "electric": 22,
+      "pre1940": 28,
+      "pre1960": 47,
+      "twoToFour": 13,
+      "utility": "National Grid"
+    },
+    "malden": {
+      "homes": 26319,
+      "gas": 61,
+      "oil": 11,
+      "oilHomes": 2825,
+      "electric": 23,
+      "pre1940": 49,
+      "pre1960": 59,
+      "twoToFour": 14,
+      "utility": "National Grid"
+    },
+    "melrose": {
+      "homes": 12368,
+      "gas": 62,
+      "oil": 22,
+      "oilHomes": 2748,
+      "electric": 12,
+      "pre1940": 53,
+      "pre1960": 71,
+      "twoToFour": 7,
+      "utility": "National Grid"
+    },
+    "wakefield": {
+      "homes": 11066,
+      "gas": 47,
+      "oil": 34,
+      "oilHomes": 3776,
+      "electric": 15,
+      "pre1940": 32,
+      "pre1960": 58,
+      "twoToFour": 11,
+      "utility": "Wakefield Municipal Gas & Light Department (the state list also names National Grid)",
+      "note": "For gas on your street, ask Wakefield Municipal Gas & Light, 781-246-6363."
+    },
+    "peabody": {
+      "homes": 22469,
+      "gas": 51,
+      "oil": 25,
+      "oilHomes": 5646,
+      "electric": 18,
+      "pre1940": 22,
+      "pre1960": 39,
+      "twoToFour": 10,
+      "utility": "National Grid",
+      "note": "About 5,600 Peabody homes heat with oil, the second most on Shane's North Shore list after Lynn."
+    },
+    "stoneham": {
+      "homes": 9520,
+      "gas": 44,
+      "oil": 28,
+      "oilHomes": 2649,
+      "electric": 22,
+      "pre1940": 24,
+      "pre1960": 43,
+      "twoToFour": 7,
+      "utility": "National Grid"
+    },
+    "everett": {
+      "homes": 17262,
+      "gas": 66,
+      "oil": 13,
+      "oilHomes": 2160,
+      "electric": 18,
+      "pre1940": 53,
+      "pre1960": 67,
+      "twoToFour": 31,
+      "utility": "National Grid"
+    },
+    "somerville": {
+      "homes": 35427,
+      "gas": 71,
+      "oil": 6,
+      "oilHomes": 2190,
+      "electric": 18,
+      "pre1940": 60,
+      "pre1960": 69,
+      "twoToFour": 35,
+      "utility": "National Grid or Eversource, depending on the street",
+      "note": "Ask which company serves your street before planning an oil to gas switch."
+    },
+    "boston": {
+      "homes": 279216,
+      "gas": 57,
+      "oil": 7,
+      "oilHomes": 19969,
+      "electric": 31,
+      "pre1940": 47,
+      "pre1960": 59,
+      "twoToFour": 35,
+      "utility": "National Grid or Eversource, depending on the neighborhood",
+      "note": "Ask which company serves your street before planning an oil to gas switch."
+    },
+    "lexington": {
+      "homes": 12337,
+      "gas": 49,
+      "oil": 32,
+      "oilHomes": 3925,
+      "electric": 13,
+      "pre1940": 21,
+      "pre1960": 44,
+      "twoToFour": 5,
+      "utility": "National Grid",
+      "note": "Lexington is in the state fossil-free building program, so National Grid asks Lexington customers to check with the town building department before requesting a gas connection; the program is aimed at new construction and major renovations."
+    },
+    "tewksbury": {
+      "homes": 11933,
+      "gas": 69,
+      "oil": 19,
+      "oilHomes": 2259,
+      "electric": 9,
+      "pre1940": 7,
+      "pre1960": 26,
+      "twoToFour": 4,
+      "utility": "National Grid"
+    },
+    "haverhill": {
+      "homes": 26300,
+      "gas": 69,
+      "oil": 11,
+      "oilHomes": 2921,
+      "electric": 15,
+      "pre1940": 37,
+      "pre1960": 47,
+      "twoToFour": 19,
+      "utility": "National Grid"
+    }
+  },
+  "notesSource": {
+    "label": "National Grid: Connect to natural gas (Lexington note)",
+    "href": "https://www.nationalgridus.com/MA-Home/Natural-Gas-Service/Connect-to-Natural-Gas"
+  }
+}

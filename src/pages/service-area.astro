@@ -3,11 +3,17 @@ import { jsonLd } from '../lib/jsonld.js';
 import Base from '../layouts/Base.astro';
 import ServiceAreaChecker from '../components/ServiceAreaChecker.astro';
 import { TOWNS } from '../lib/service-area.js';
+import areas from '../areas.json';
+import townHeating from '../town-heating.json';
 
 const base = import.meta.env.BASE_URL;
 const phone = '781-820-4592';
 const phoneTel = '+17818204592';
 const origin = (Astro.site?.toString() || 'https://smeredithplumbing.com').replace(/\/$/, '');
+
+// Every town page, in the confirmed-list order, with its own one-line summary and its oil-heat share (Census).
+const townPages = TOWNS.map((t) => ({ t, a: areas.find((a) => a.slug === t.slug), h: (townHeating.towns as Record<string, { oil: number; pre1940: number }>)[t.slug] }))
+  .filter((x) => x.a);
 
 const breadcrumb = {
   '@context': 'https://schema.org',
@@ -37,6 +43,24 @@ const breadcrumb = {
       <div class="container">
         <h2 class="section-title" id="area-h">Check your area</h2>
         <ServiceAreaChecker showMap />
+      </div>
+    </section>
+
+    <section class="section" id="town-pages" aria-labelledby="towns-h">
+      <div class="container">
+        <h2 class="section-title" id="towns-h">Town pages</h2>
+        <p class="section-note">Each page has Shane's work in that town where there is some, how the town heats and who supplies its gas.</p>
+        <ul class="vanlist">
+          {townPages.map(({ t, a, h }) => (
+            <li>
+              <a class="row-main" href={`${base}areas/${t.slug}/`}>
+                <span class="row-name">{t.name}</span>
+                <span class="row-note">{a!.tagline}{h ? ` ${h.oil}% of homes heat with oil.` : ''}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="more-link">Heating questions: <a href={`${base}heating/`}>heating help</a> and the <a href={`${base}services/oil-to-gas-conversion/`}>oil to gas conversion guide</a>. Oil shares: <a href={townHeating.source.census.href} rel="noopener">U.S. Census, 2019-2023</a>.</p>
       </div>
     </section>
 
