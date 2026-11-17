@@ -114,7 +114,7 @@ const breadcrumb = {
         {service.scenarios.map((s) => (
           <div class="scenario">
             <h3>{s.h}</h3>
-            <p>{s.b}</p>
+            <p>{linkify(s.b).map((p) => (typeof p === 'string' ? p : <a href={p.href} rel={p.external ? 'noopener' : undefined}>{p.text}</a>))}</p>
           </div>
         ))}
       </div>

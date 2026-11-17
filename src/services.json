@@ -676,6 +676,10 @@
       {
         "q": "Should I fix a small drip on my heating pipes?",
         "a": "Yes, before the cold weather. A steady drip lowers the boiler pressure, and on one of Shane's jobs a drip from a purge valve led to a burned-out circulator and a cold shower."
+      },
+      {
+        "q": "Do you work on steam radiators?",
+        "a": "Yes. Shane diagnoses, repairs, replaces and installs steam systems; steam has its own page: {{steam-boiler-heating|steam heat repair}}."
       }
     ],
     "send_for_quote": "Send with your request: which rooms are cold, a photo of the boiler and its zone valves or pumps, and any leak.",
@@ -684,6 +688,105 @@
       "boiler-circulator-and-indirect-zone",
       "boiler-manifold-room",
       "haverhill-five-zone-boiler"
+    ]
+  },
+  {
+    "slug": "steam-boiler-heating",
+    "service_id": "boiler-service",
+    "hub": "heating",
+    "title": "Steam Boiler & Steam Heat Repair",
+    "seo_title": "Steam Boiler Repair & Replacement, Boston | S. Meredith",
+    "h1": "Steam heat: boiler repair, replacement & radiators",
+    "tagline": "Banging pipes, cold radiators, a boiler that keeps shutting off on low water. Shane diagnoses, repairs, replaces and installs steam systems.",
+    "meta_desc": "Steam boiler repair, replacement and installation in Boston and the North Shore: banging pipes, cold radiators, vents, low-water shutoffs. Call 781-820-4592.",
+    "intro": "Steam heat was the standard in houses built before the 1940s, and a lot of Boston and the older North Shore cities still run on it. Steam works differently from hot water heat: the boiler boils water, the steam rises through the pipes to the radiators, and the condensed water flows back down to the boiler. When the piping pitch, the vents or the water level are wrong, you hear it and feel it. Shane diagnoses, repairs, replaces and installs steam systems.",
+    "scenarios_title": "Steam problems Shane fixes",
+    "scenarios": [
+      {
+        "h": "Banging and knocking pipes",
+        "b": "Usually water sitting where only steam should be: a pipe that lost its pitch, a radiator tilted the wrong way, or a boiler water level that is too high. The bang tells you where to look."
+      },
+      {
+        "h": "Radiators that stay cold",
+        "b": "Steam can only get into a radiator if air can get out. Stuck radiator vents and main vents are the usual cause when some rooms heat and others do not."
+      },
+      {
+        "h": "Boiler shutting off on low water",
+        "b": "The low-water cutoff shuts the burner off to protect the boiler. If you are adding water often, the system is losing it somewhere, in a leaking return line or the boiler itself, and that needs finding."
+      },
+      {
+        "h": "Water level, gauge glass and controls",
+        "b": "A dirty or wrong water level, a clogged pressure control or its pipe, and a failed cutoff all stop a steam boiler from running right."
+      },
+      {
+        "h": "Steam boiler replacement",
+        "b": "A new steam boiler is sized to the radiators in the house, not to the old boiler, and piped to the maker's near-boiler piping diagram. That piping is what makes a new steam boiler quiet and dry."
+      },
+      {
+        "h": "Oil steam boiler to gas",
+        "b": "An oil-fired steam boiler can be replaced with a gas-fired steam boiler. The {{oil-to-gas-conversion|oil to gas guide}} covers gas availability and the 2026 rules."
+      }
+    ],
+    "sections": [
+      {
+        "h": "Where steam heat is common",
+        "p": [
+          "The Census does not count steam systems, but it does count house age, and steam was the standard heat before the 1940s. Share of homes built before 1940 in the towns Shane serves (American Community Survey 2019-2023):"
+        ],
+        "list": [
+          "{{/areas/somerville/|Somerville}}: 60%",
+          "{{/areas/everett/|Everett}} and {{/areas/melrose/|Melrose}}: 53%",
+          "{{/areas/malden/|Malden}}: 49%",
+          "{{/areas/boston/|Boston}}: 47%",
+          "{{/areas/lynn/|Lynn}}: 46%"
+        ]
+      }
+    ],
+    "guarantee": "Master plumber, MA license 9630040-PL-M. Emergency calls 24/7.",
+    "qa_title": "Questions homeowners ask about steam heat",
+    "qa": [
+      {
+        "q": "Why are my steam pipes banging?",
+        "a": "Most banging is water hammer: water collects in a pipe or radiator and the steam slams into it. Common causes are a pipe that sagged and lost its pitch, a radiator that is not tilted back toward its valve, or a boiler water level set too high. Shane finds where the water is sitting and fixes the cause."
+      },
+      {
+        "q": "Why is one steam radiator cold?",
+        "a": "Usually the air vent on that radiator is stuck closed, so steam cannot push the air out, or the radiator valve is partly closed. One-pipe steam radiator valves should be fully open or fully closed. If several rooms on one run are cold, the main vent in the basement may have failed."
+      },
+      {
+        "q": "How often should I add water to my steam boiler?",
+        "a": "A tight steam system loses very little water. If you are adding water every few days, or an automatic water feeder is running a lot, something is leaking, often a buried return line or the boiler itself. Leaks bring in fresh water that wears out a boiler faster, so have it checked."
+      },
+      {
+        "q": "What affects the cost of replacing a steam boiler?",
+        "a": "The size, which comes from the radiators in the house; the near-boiler piping; the fuel and venting; and how much of the old piping needs fixing. Shane does not publish prices; send photos of the boiler, its label and the piping around it for a quote. See also {{boiler-replacement|boiler replacement}}."
+      },
+      {
+        "q": "Should I switch from steam to hot water heat?",
+        "a": "It is possible, but it usually means new piping and often new radiators, so most owners keep steam and fix it. A steam system that is piped and vented right can run quietly for a long time."
+      }
+    ],
+    "send_for_quote": "Send with your request: photos of the boiler and its label, the gauge glass, the piping above the boiler, any radiator that bangs or stays cold, and your town.",
+    "steps_title": "Before you call: what to look at",
+    "steps": [
+      {
+        "h": "The gauge glass",
+        "b": "The glass tube on the side of the boiler shows the water level. Note whether you can see water in it."
+      },
+      {
+        "h": "Which rooms",
+        "b": "Note which radiators bang, which stay cold, and whether they are on the same floor or the same run."
+      },
+      {
+        "h": "How often you add water",
+        "b": "If you or an automatic feeder add water often, say so: it points to a leak."
+      }
+    ],
+    "jobs_title": "Recent boiler work by Shane",
+    "jobs": [
+      "saturday-emergency-boiler-replacement",
+      "emergency-water-heater-beside-boiler",
+      "boiler-circulator-and-indirect-zone"
     ]
   },
   {

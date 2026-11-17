@@ -134,6 +134,7 @@ const breadcrumb = {
             <li><a href={`${base}services/oil-to-gas-conversion/`}>Still on oil? The oil to gas conversion guide</a></li>
             <li><a href={`${base}services/no-heat-emergency/`}>No heat right now: what to check, 24/7 calls</a></li>
             <li><a href={`${base}services/boiler-replacement/`}>Boiler replacement</a></li>
+            {heat.pre1940 >= 40 && <li><a href={`${base}services/steam-boiler-heating/`}>Steam heat: {heat.pre1940}% of homes here predate 1940, when steam was standard</a></li>}
             <li><a href={`${base}heating/`}>All heating help</a></li>
           </ul>
           <p class="source-line">Sources: <a href={townHeating.source.census.href} rel="noopener">{townHeating.source.census.label}</a>; <a href={townHeating.source.gas.href} rel="noopener">{townHeating.source.gas.label}</a>{area.slug === 'lexington' && <>; <a href={townHeating.notesSource.href} rel="noopener">{townHeating.notesSource.label}</a></>}.</p>
