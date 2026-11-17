@@ -138,7 +138,8 @@ describe('live Google reviews', () => {
     assert.equal(await page.evaluate(() => window.__xss), undefined);
     assert.equal(await cards.nth(1).locator('.live-stars').getAttribute('aria-label'), '4 out of 5 stars', 'a 4-star review is shown as 4 stars');
     assert.match(await page.locator('[data-live-meta]').textContent(), /4\.9 out of 5 from 33 reviews on Google/);
-    assert.match(await page.locator('.live-credit a').getAttribute('href'), /^https:\/\/share\.google\//);
+    // The profile link became the public Maps CID in f6e402c (src/lib/site-facts.js); the share.google link is gone.
+    assert.equal(await page.locator('.live-credit a').getAttribute('href'), 'https://maps.google.com/?cid=1614689343180159048');
     assert.match(await page.locator('.curated-h').textContent(), /hand-picked excerpts/);
     assert.deepEqual(named(events, 'reviews_live').map((e) => e.result), ['ok']);
     await context.close();
